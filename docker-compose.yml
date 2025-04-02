@@ -42,6 +42,12 @@ services:
     tty: true
     ports:
       - "3306:3306"
+    deploy:
+      resources:
+        limits:
+          memory: 1g
+        reservations:
+          memory: 512m
     networks:
       - docker.network
     volumes:
