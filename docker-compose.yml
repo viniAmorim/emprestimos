@@ -36,7 +36,7 @@ services:
       - .:/var/www
 
   mysql:
-    image: mysql:5
+    image: mysql:5.7
     restart: unless-stopped
     container_name: docker.mysql
     tty: true
@@ -46,7 +46,7 @@ services:
       - docker.network
     volumes:
       - mysql_data:/var/lib/mysql
-      - "./docker/mysql/mysql.cnf:/etc/mysql/conf.d/custom.cnf:ro"
+    #  - "./docker/mysql/mysql.cnf:/etc/mysql/conf.d/custom.cnf:ro"
     environment:
       MYSQL_DATABASE: ${MYSQL_DATABASE:-development}
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-root}
