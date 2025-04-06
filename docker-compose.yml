@@ -53,11 +53,11 @@ services:
     volumes:
       - mysql_data:/var/lib/mysql
       - "./docker/mysql/mysql.cnf:/etc/mysql/conf.d/custom.cnf:ro"
-    environment:
-      MYSQL_DATABASE: ${MYSQL_DATABASE:-development}
-      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-root}
-      MYSQL_PASSWORD: ${MYSQL_PASSWORD:-mysql}
-      MYSQL_USER: ${MYSQL_USER:-mysql}
+    # environment:
+    #   MYSQL_DATABASE: ${MYSQL_DATABASE:-development}
+    #   MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-root}
+    #   MYSQL_PASSWORD: ${MYSQL_PASSWORD:-mysql}
+    #   MYSQL_USER: ${MYSQL_USER:-mysql}
 
   phpmyadmin:
     image: phpmyadmin
