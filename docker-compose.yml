@@ -52,7 +52,6 @@ services:
     networks:
       - docker.network
     volumes:
-      volumes:
       - ./mysql-data:/var/lib/mysql
       - "./docker/mysql/mysql.cnf:/etc/mysql/conf.d/custom.cnf:ro"
     environment:
