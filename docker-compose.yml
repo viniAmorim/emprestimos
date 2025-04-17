@@ -40,8 +40,8 @@ services:
     restart: unless-stopped
     container_name: docker.mysql
     tty: true
-    ports:
-      - "3306:3306"
+    # ports:
+    #   - "3306:3306"
     mem_limit: 1g
     deploy:
       resources:
@@ -52,13 +52,15 @@ services:
     networks:
       - docker.network
     volumes:
-      - mysql_data:/var/lib/mysql
+      volumes:
+      - ./mysql-data:/var/lib/mysql
       - "./docker/mysql/mysql.cnf:/etc/mysql/conf.d/custom.cnf:ro"
     environment:
       MYSQL_DATABASE: ${MYSQL_DATABASE:-development}
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-root}
       MYSQL_PASSWORD: ${MYSQL_PASSWORD:-mysql}
       MYSQL_USER: ${MYSQL_USER:-mysql}
+    command: --innodb_buffer_pool_size=64M
 
   phpmyadmin:
     image: phpmyadmin
