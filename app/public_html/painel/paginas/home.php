@@ -343,14 +343,9 @@ $emprestimos_finalizados = @count($res);
 			</div>
 		</div>
 	</a>
-		<div class="clearfix"> </div>
-	</div>
 
-
-
-		<?php if($recursos != "Cobranças"){ ?>
-		<div class="col_3">
-		<a href="index.php?pagina=emprestimos">
+	<?php if($recursos != "Cobranças"){ ?>
+	<a href="index.php?pagina=emprestimos">
 		<div class="col-md-3 widget widget1">
 			<div class="r3_counter_box">
 				<i class="pull-left fa fa-dollar icon-rounded"></i>
@@ -405,9 +400,15 @@ $emprestimos_finalizados = @count($res);
 			</div>
 		</div>
 	</a>
+
+	<?php } ?>
 		<div class="clearfix"> </div>
 	</div>
-<?php } ?>
+
+
+
+		
+		
 
 	
 	<div class="row-one widgettable">

@@ -37,8 +37,9 @@ $data = $res[$i]['data'];
 $tipo_juros = $res[$i]['tipo_juros'];
 $status = $res[$i]['status'];
 $cliente = $res[$i]['cliente'];
-$multa = $res[0]['multa'];
-$juros = $res[0]['juros'];
+$multa = $res[$i]['multa'];
+$juros = $res[$i]['juros'];
+
 
 $mostrar_baixa = 'ocultar';
 if($status == ''){
@@ -59,6 +60,9 @@ if($status == 'Perdido'){
 $data_vencF = date('d', strtotime($data_venc));
 $dataF = implode('/', array_reverse(explode('-', $data)));
 $valorF = number_format($valor, 2, ',', '.');
+
+$jurosF = number_format($juros, 2, ',', '.');
+$multaF = number_format($multa, 2, ',', '.');
 
 $classe_deb = '';
 $query2 = $pdo->query("SELECT * FROM receber where referencia = 'Empréstimo' and id_ref = '$id_emp' and data_venc < curDate() and pago != 'Sim'");
@@ -99,7 +103,7 @@ for($i2=0; $i2 < @count($res2); $i2++){
 	$dias_vencido = $dateInterval->days;
 
 
-	$valor_juros = $dias_vencido * ($juros * $valor / 100);
+	$valor_juros = $dias_vencido * ($juros * $valor_pc / 100);
 	
 	}
 
@@ -111,8 +115,10 @@ for($i2=0; $i2 < @count($res2); $i2++){
 
 if($tipo_juros == 'Somente Júros'){
 	$total_a_pagar = $valor + $valor_parc;
+	$icone_somente_juros = '';
 }else{
 	$total_a_pagar = $valor_parc;
+	$icone_somente_juros = 'ocultar';
 }
 
 $total_a_pagarF = number_format($total_a_pagar, 2, ',', '.');
@@ -120,11 +126,14 @@ $total_a_pagarF = number_format($total_a_pagar, 2, ',', '.');
 echo <<<HTML
 			<tr>					
 				<td class="{$classe_deb}">R$ {$valorF} {$classe_finalizado}</td>
-				<td class="esc">{$parcelas} <span style="color:red"><small>{$atrasadas}</small></span></td>				
-				<td class="esc {$classe_deb}">{$data_ultimo_vencF}</td>
-				<td class="esc">{$juros_emp}%</td>
-				<td class="esc">{$dataF}</td>
+				<td class="">{$parcelas} <span style="color:red"><small>{$atrasadas}</small></span></td>				
+				<td class=" {$classe_deb}">{$data_ultimo_vencF}</td>
+				<td class="">{$juros_emp}%</td>
+				<td class="">{$dataF}</td>
 				<td>
+
+
+				<big><a href="#" onclick="editarEmp('{$id_emp}','{$jurosF}','{$multaF}')" title="Editar Dados"><i class="fa fa-edit text-primary"></i></a></big>
 
 
      <form   method="POST" action="rel/detalhamento_emprestimo_class.php" target="_blank" style="display:inline-block">
@@ -135,6 +144,8 @@ echo <<<HTML
 					<big><a class="" href="#" onclick="novaParcela('{$id_emp}', '{$cliente}')" title="Adicionar Parcela"><i class="fa fa-plus text-primary "></i></a></big>
 
 					<big><a href="#" onclick="mostrarParcelasEmp('{$id_emp}')" title="Mostrar Parcelas"><i class="fa fa-money verde"></i></a></big>
+
+					<big><a class="{$mostrar_baixa} {$icone_somente_juros}" href="#" onclick="amortizar('{$id_emp}', '{$cliente}')" title="Amortizar Valor"><i class="fa fa-usd verde "></i></a></big>
 
 					<big><a class="{$mostrar_baixa}" href="#" onclick="baixarEmprestimo('{$id_emp}', '{$total_a_pagarF}', '{$cliente}')" title="Baixar Empréstimo"><i class="fa fa-check verde "></i></a></big>
 				</td>  
@@ -154,6 +165,18 @@ HTML;
 
 
 <script type="text/javascript">
+
+	function editarEmp(id, juros, multa){
+
+		$('#mensagem_empr').text('');
+    	$('#titulo_empr').text('Editar Registro');
+
+    	$('#id_empr').val(id);
+    	$('#juros_empr').val(juros);
+    	$('#multa_empr').val(multa);
+    	    
+    	$('#modalEditar').modal('show');
+	}
 
 	function mostrarParcelasEmp(id_emp){	
 		var mostrar = 'emprestimo';
@@ -193,6 +216,13 @@ function novaParcela(id_emp, cliente){
     
 }
 
+
+function amortizar(id_emp, cliente){	
+	$('#id_amortizar').val(id_emp);
+	$('#id_amortizar_cliente').val(cliente);
+    $('#modalAmortizar').modal('show');	   
+    
+}
 
 </script>
 

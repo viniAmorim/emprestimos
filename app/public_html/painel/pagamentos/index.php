@@ -75,6 +75,11 @@ if($ref_pix != ""){
         }
 }
 
+if($pago == 'Sim'){
+    echo '<div style="text-align: center; margin-top: 100px"> <img src="../img/conta_paga.png" class="imgsistema_mobile"></div>';
+    exit();
+}
+
 $query = $pdo->query("SELECT * FROM clientes where id = '$cliente'");
 $res = $query->fetchAll(PDO::FETCH_ASSOC);
 $nome_cliente =  $res[0]['nome'];

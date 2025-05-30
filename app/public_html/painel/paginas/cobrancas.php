@@ -321,6 +321,67 @@ if($verificar_pagamentos != 'Não'){
 
 
 
+
+
+	<!-- Modal Arquivos Conta-->
+	<div class="modal fade" id="modalArquivos_conta" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" style="z-index: 2000">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h4 class="modal-title" id="tituloModal">Gestão de Arquivos - <span id="nome_arquivo_conta"> </span></h4>
+					<button id="btn-fechar-arquivos_conta" type="button" class="close" data-dismiss="modal" aria-label="Close" style="margin-top: -20px">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<form id="form-arquivos_conta" method="post">
+					<div class="modal-body">
+
+						<div class="row">
+							<div class="col-md-8">						
+								<div class="form-group"> 
+									<label>Arquivo</label> 
+									<input class="form-control" type="file" name="arquivo_conta" onChange="carregarImgArquivos_conta();" id="arquivo_conta_conta">
+								</div>	
+							</div>
+							<div class="col-md-4" style="margin-top:-10px">	
+								<div id="divImgArquivos">
+									<img src="images/arquivos/sem-foto.png"  width="60px" id="target-arquivos_conta">									
+								</div>					
+							</div>
+
+
+
+
+						</div>
+
+						<div class="row" style="margin-top:-40px">
+							<div class="col-md-8">
+								<input type="text" class="form-control" name="nome_arq"  id="nome_arq_conta" placeholder="Nome do Arquivo * " required>
+							</div>
+
+							<div class="col-md-4">										 
+								<button type="submit" class="btn btn-primary">Inserir</button>
+							</div>
+						</div>
+
+						<hr>
+
+						<small><div id="listar_arquivos_conta"></div></small>
+
+						<br>
+						<small><div align="center" id="mensagem_arquivo_conta"></div></small>
+
+						<input type="hidden" class="form-control" name="id_arquivo"  id="id_arquivo_conta">
+
+
+					</div>
+				</form>
+			</div>
+		</div>
+</div>
+
+
+
 <script type="text/javascript">var pag = "<?=$pag?>"</script>
 <script src="js/ajax.js"></script>
 
@@ -548,3 +609,125 @@ $("#form_baixar").submit(function () {
 
 });
 </script>
+
+
+
+
+
+
+<script type="text/javascript">
+			function carregarImgArquivos_conta() {
+				var target = document.getElementById('target-arquivos_conta');
+				var file = document.querySelector("#arquivo_conta_conta").files[0];
+
+				var arquivo = file['name'];
+				resultado = arquivo.split(".", 2);
+
+				if(resultado[1] === 'pdf'){
+					$('#target-arquivos_conta').attr('src', "images/pdf.png");
+					return;
+				}
+
+				if(resultado[1] === 'rar' || resultado[1] === 'zip'){
+					$('#target-arquivos_conta').attr('src', "images/rar.png");
+					return;
+				}
+
+				if(resultado[1] === 'doc' || resultado[1] === 'docx' || resultado[1] === 'txt'){
+					$('#target-arquivos_conta').attr('src', "images/word.png");
+					return;
+				}
+
+
+				if(resultado[1] === 'xlsx' || resultado[1] === 'xlsm' || resultado[1] === 'xls'){
+					$('#target-arquivos_conta').attr('src', "images/excel.png");
+					return;
+				}
+
+
+				if(resultado[1] === 'xml'){
+					$('#target-arquivos_conta').attr('src', "images/xml.png");
+					return;
+				}
+
+
+
+				var reader = new FileReader();
+
+				reader.onloadend = function () {
+					target.src = reader.result;
+				};
+
+				if (file) {
+					reader.readAsDataURL(file);
+
+				} else {
+					target.src = "";
+				}
+			}
+		</script>
+
+
+<script type="text/javascript">
+	function listarArquivosConta(){
+		var id = $('#id_arquivo_conta').val(); 
+
+		 $.ajax({
+	        url: 'paginas/receber/listar_arquivos.php',
+	        method: 'POST',
+	        data: {id},
+	        dataType: "html",
+
+	        success:function(result){
+	            $("#listar_arquivos_conta").html(result);
+	           
+	        }
+	    });
+
+	}
+</script>
+
+
+
+<script type="text/javascript">
+	
+
+$("#form-arquivos_conta").submit(function () {
+
+    event.preventDefault();
+    var formData = new FormData(this);
+
+    $.ajax({
+        url: 'paginas/receber/arquivos.php',
+        type: 'POST',
+        data: formData,
+
+        success: function (mensagem) {
+            $('#mensagem_arquivo_conta').text('');
+            $('#mensagem_arquivo_conta').removeClass()
+            if (mensagem.trim() == "Inserido com Sucesso") {
+
+            	$('#nome_arq_conta').val('');
+				$('#arquivo_conta_conta').val('');
+				$('#target-arquivos_conta').attr('src','images/arquivos/sem-foto.png');
+                //$('#btn-fechar-arquivos').click();
+                listarArquivosConta();          
+
+            } else {
+
+                $('#mensagem_arquivo_conta').addClass('text-danger')
+                $('#mensagem_arquivo_conta').text(mensagem)
+            }
+
+
+        },
+
+        cache: false,
+        contentType: false,
+        processData: false,
+
+    });
+
+});
+</script>
+

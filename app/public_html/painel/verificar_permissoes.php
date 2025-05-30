@@ -10,6 +10,7 @@ $cobrancas = 'ocultar';
 $verificar_pgtos = 'ocultar';
 $gestao_mensagens = 'ocultar';
 $dispositivos = 'ocultar';
+$solicitar_emprestimo = 'ocultar';
 
 //grupo pessoas
 $usuarios = 'ocultar';
@@ -21,6 +22,7 @@ $acessos = 'ocultar';
 $formas_pgto = 'ocultar';
 $frequencias = 'ocultar';
 $feriados = 'ocultar';
+$status_clientes = 'ocultar';
 
 //grupo financeiro
 $pagar = 'ocultar';
@@ -76,6 +78,9 @@ if($total_reg > 0){
 			$dispositivos = '';
 		}
 
+		if($chave == 'solicitar_emprestimo'){
+			$solicitar_emprestimo = '';
+		}
 
 
 
@@ -108,6 +113,11 @@ if($total_reg > 0){
 		if($chave == 'feriados'){
 			$feriados = '';
 		}
+
+		if($chave == 'status_clientes'){
+			$status_clientes = '';
+		}
+
 
 
 
@@ -194,7 +204,7 @@ if($usuarios == 'ocultar' and $clientes == 'ocultar'){
 }
 
 
-if($grupo_acessos == 'ocultar' and $acessos == 'ocultar' and $formas_pgto == 'ocultar' and $frequencias == 'ocultar' and $feriados == 'ocultar'){
+if($grupo_acessos == 'ocultar' and $acessos == 'ocultar' and $formas_pgto == 'ocultar' and $frequencias == 'ocultar' and $feriados == 'ocultar' and $status_clientes == 'ocultar'){
 	$menu_cadastros = 'ocultar';
 }else{
 	$menu_cadastros = '';

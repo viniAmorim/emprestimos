@@ -87,6 +87,19 @@ echo <<<HTML
 <big><a href="#" onclick="ativar('{$id}', '{$acao}')" title="{$titulo_link}"><i class="fa {$icone} text-success"></i></a></big>
 
 
+<li class="dropdown head-dpdn2" style="display: inline-block;">
+		<a title="Redefinir senha" href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><big><i class="fa fa-close text-danger"></i></big></a>
+
+		<ul class="dropdown-menu" style="margin-left:-230px;">
+		<li>
+		<div class="notification_desc2">
+		<p>Redefinir senha para 123? <a href="#" onclick="resetar('{$id}')"><span class="text-danger">Sim</span></a></p>
+		</div>
+		</li>										
+		</ul>
+</li>
+
+
 <big><a class="{$mostrar_adm}" href="#" onclick="permissoes('{$id}', '{$nome}')" title="Dar Permissões"><i class="fa fa-lock text-primary"></i></a></big>
 
 </td>
@@ -206,7 +219,18 @@ HTML;
 	}
 
 	
+function resetar(id){
+	 $.ajax({
+        url: 'paginas/' + pag + "/resetar_senha.php",
+        method: 'POST',
+        data: {id},
+        dataType: "html",
 
+        success:function(result){        	
+           listar();
+        }
+    });
+}
 
 	
 </script>

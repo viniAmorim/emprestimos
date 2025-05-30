@@ -207,7 +207,9 @@ if($token != "" and $instancia != "" and $enviar_whatsapp == 'Sim'){
 		$pcto = 'PCento';
 	}
 
-	$mensagem = '💰_Novo Empréstimo '.$nome_sistema.'_ %0A';
+	$mensagem = '💰 *' . $nome_sistema . '*%0A';
+	$mensagem .= '_Novo Empréstimo_ %0A';
+	
 	$mensagem .= 'Cliente: *'.$nome_cliente.'* %0A';
 	$mensagem .= 'Valor: '.$valorF.' %0A';
 	$mensagem .= 'Júros '.$tipo_juros.': '.$juros_emp.''.$pcto.' %0A';

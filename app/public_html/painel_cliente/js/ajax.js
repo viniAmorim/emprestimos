@@ -112,3 +112,11 @@ function ativar(id, acao){
     });
 }
 
+function mascara_valor(valor) {
+  var valorAlterado = $('#'+valor).val();
+  valorAlterado = valorAlterado.replace(/\D/g, ""); // Remove todos os não dígitos
+  valorAlterado = valorAlterado.replace(/(\d+)(\d{2})$/, "$1,$2"); // Adiciona a parte de centavos
+  valorAlterado = valorAlterado.replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1."); // Adiciona pontos a cada três dígitos
+  valorAlterado = valorAlterado;
+  $('#'+valor).val(valorAlterado);
+}

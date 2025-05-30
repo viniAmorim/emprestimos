@@ -7,7 +7,7 @@ date_default_timezone_set('America/Sao_Paulo');
 $servidor = 'mysql';
 $banco = 'emprestimos';
 $usuario = 'root';
-$senha = 'root';
+$senha = 'ucred2025';
 
 $url_sistema = "https://$_SERVER[HTTP_HOST]/";
 $url = explode("//", $url_sistema);
@@ -75,6 +75,10 @@ $recursos = @$res[0]['recursos'];
 $cobrar_automatico = @$res[0]['cobrar_automatico'];
 $public_key = @$res[0]['public_key'];
 $access_token = @$res[0]['access_token'];
+$entrada_sistema = @$res[0]['entrada_sistema'];
+$logo_site = @$res[0]['logo_site'];
+$fundo_login = @$res[0]['fundo_login'];
+$modo_teste = @$res[0]['modo_teste'];
 
 $instancia_whatsapp = $res[0]['instancia'];
 $token_whatsapp = $res[0]['token'];

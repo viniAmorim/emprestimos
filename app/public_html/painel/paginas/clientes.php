@@ -59,7 +59,31 @@ if($verificar_pagamentos != 'Não'){
 		<input class="form-control" type="text" name="mensagem_whats" id="mensagem_whats"  style="display:none; width:600px !important" value="">
 </li>
 
+<li class="" style="display: inline-block;">
+	 <div id="preview_cor_status_busca" style="width: 17px; height: 17px; border: 1px solid #ccc; border-radius: 4px;"></div>
+</li>
+<li class="" style="display: inline-block;">
+	<select class="form-control mt-2" name="status_cliente_busca" id="status_cliente_busca" onchange="atualizarCorStatus_busca(); buscar()">
+		<option value="" data-cor="">Filtrar Por Status</option>				
+		<?php 
+		$query = $pdo->query("SELECT * from status_clientes order by id asc");
+		$res = $query->fetchAll(PDO::FETCH_ASSOC);
+		$linhas = @count($res);
+		if($linhas > 0){
+			for($i=0; $i<$linhas; $i++){
+				?>
+				<option value="<?php echo $res[$i]['nome'] ?>" data-cor="<?php echo $res[$i]['cor'] ?>">
+					<?php echo $res[$i]['nome'] ?>
+				</option>
+			<?php } } ?>
+		</select>	
+	</li>
 
+
+
+<button type="button" class="btn btn-success" data-toggle="modal" data-target="#importarXlsModal" style="margin-left: 25px">
+  Importar Arquivo XLS
+</button>
 
 <div class="bs-example widget-shadow" style="padding:15px" id="listar">
 
@@ -71,7 +95,7 @@ if($verificar_pagamentos != 'Não'){
 
 <!-- Modal Perfil -->
 <div class="modal fade" id="modalForm" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-	<div class="modal-dialog">
+	<div class="modal-dialog modal-lg">
 		<div class="modal-content">
 			<div class="modal-header">
 				<h4 class="modal-title" id="exampleModalLabel"><span id="titulo_inserir"></span></h4>
@@ -84,14 +108,36 @@ if($verificar_pagamentos != 'Não'){
 				
 
 					<div class="row">
-						<div class="col-md-6">							
+						<div class="col-md-4">							
 								<label>Nome</label>
 								<input type="text" class="form-control" id="nome" name="nome" placeholder="Nome" required>							
 						</div>
 
-						<div class="col-md-6">							
+						<div class="col-md-5">							
 								<label>Email</label>
 								<input type="email" class="form-control" id="email" name="email" placeholder="Email" >							
+						</div>
+
+						<div class="col-md-3">	
+						    <div style="display: flex; align-items: center; gap: 10px;">
+						        <label>Status Cliente</label>
+						        <div id="preview_cor_status" style="width: 17px; height: 17px; border: 1px solid #ccc; border-radius: 4px;"></div>
+						    </div>
+
+						    <select class="form-control mt-2" name="status_cliente" id="status_cliente" onchange="atualizarCorStatus()">
+						        <option value="" data-cor="">Selecionar Status</option>				
+						        <?php 
+						        $query = $pdo->query("SELECT * from status_clientes order by id asc");
+						        $res = $query->fetchAll(PDO::FETCH_ASSOC);
+						        $linhas = @count($res);
+						        if($linhas > 0){
+						            for($i=0; $i<$linhas; $i++){
+						        ?>
+						            <option value="<?php echo $res[$i]['nome'] ?>" data-cor="<?php echo $res[$i]['cor'] ?>">
+						                <?php echo $res[$i]['nome'] ?>
+						            </option>
+						        <?php } } ?>
+						    </select>	
 						</div>
 
 						
@@ -100,12 +146,17 @@ if($verificar_pagamentos != 'Não'){
 
 					<div class="row">
 
-						<div class="col-md-4">							
+						<div class="col-md-3">							
 								<label>Telefone</label>
 								<input type="text" class="form-control" id="telefone" name="telefone" placeholder="Telefone" required>							
 						</div>
 
-						<div class="col-md-4">							
+						<div class="col-md-3">							
+								<label>Telefone2</label>
+								<input type="text" class="form-control" id="telefone2" name="telefone2" placeholder="Outro Telefone" >							
+						</div>
+
+						<div class="col-md-3">							
 								<label>Tipo Pessoa</label>
 								<select class="form-control" name="pessoa" id="pessoa" onchange="mascara_pessoa()">
 									<option value="Física">Física</option>
@@ -114,7 +165,7 @@ if($verificar_pagamentos != 'Não'){
 						</div>
 
 
-						<div class="col-md-4">							
+						<div class="col-md-3">							
 								<label>CPF / CNPJ</label>
 								<input type="text" class="form-control" id="cpf" name="cpf" placeholder="CPF" required>							
 						</div>
@@ -198,7 +249,7 @@ if($verificar_pagamentos != 'Não'){
 					<div class="row">
 
 						<div class="col-md-4">							
-								<label>Chave Pix</label>
+								<label>Chave Pix / Conta Bancária</label>
 								<input type="text" class="form-control" id="pix" name="pix" placeholder="Chave Pix" >							
 						</div>
 
@@ -245,6 +296,44 @@ if($verificar_pagamentos != 'Não'){
 								<label>Grupo (Empresa, outro)</label>
 								<input type="text" class="form-control" id="grupo" name="grupo" placeholder="Local de Identificação do Cliente" >							
 						</div>
+					</div>
+
+
+
+					<div class="row">
+						<div class="col-md-4">							
+								<label>Comprovante Endereço</label>
+								<input type="file" class="form-control" id="comprovante_endereco" name="comprovante_endereco"  onchange="carregarImgComprovanteEndereco()">							
+						</div>
+
+						<div class="col-md-2">								
+							<img src="images/comprovantes/sem-foto.png"  width="70px" id="target-comprovante-endereco">								
+						</div>
+
+
+						<div class="col-md-4">							
+								<label>Comprovante RG / CPF</label>
+								<input type="file" class="form-control" id="comprovante_rg" name="comprovante_rg"  onchange="carregarImgComprovanteRG()">							
+						</div>
+
+						<div class="col-md-2">								
+							<img src="images/comprovantes/sem-foto.png"  width="70px" id="target-comprovante-rg">								
+						</div>
+
+
+					</div>
+
+
+					<div class="row">
+						<div class="col-md-4">							
+								<label>Foto Cliente</label>
+								<input type="file" class="form-control" id="foto" name="foto"  onchange="carregarImg()">							
+						</div>
+
+						<div class="col-md-2">								
+							<img src="images/clientes/sem-foto.jpg"  width="70px" id="target">								
+						</div>
+
 					</div>
 
 
@@ -300,6 +389,9 @@ if($verificar_pagamentos != 'Não'){
 						<span><b>Telefone: </b></span><span id="telefone_dados"></span>
 					</div>
 
+					<div class="col-md-6" style="margin-bottom: 5px">
+						<span><b>Telefone2: </b></span><span id="telefone2_dados"></span>
+					</div>
 					
 					<div class="col-md-6" style="margin-bottom: 5px">
 						<span><b>Email: </b></span><span id="email_dados"></span>
@@ -369,7 +461,34 @@ if($verificar_pagamentos != 'Não'){
 						<span><b>Grupo / Empresa: </b></span><span id="grupo_dados"></span>
 					</div>
 
+					<div class="col-md-12" style="margin-bottom: 5px" id="div_dados_emprestimos_dados">
+						<span><b>Dados Empréstimo: </b></span><span id="dados_emprestimos_dados2"></span>
+					</div>	
 
+					<div class="col-md-6" style="margin-bottom: 5px" id="div_link_comprovante_endereco">	
+						<span><b>Comprovante Endereço: </b></span>
+						<a id="link_comprovante_endereco" target="_blank" title="Clique para abrir o arquivo!">	
+							<img width="75px" id="target_mostrar_comprovante_endereco">
+						</a>	
+					</div>	
+
+
+					<div class="col-md-6" style="margin-bottom: 5px" id="div_link_comprovante_rg">
+						<span><b>Comprovante RG: </b></span>
+						<a id="link_comprovante_rg" target="_blank" title="Clique para abrir o arquivo!">	
+							<img width="75px" id="target_mostrar_comprovante_rg">
+						</a>	
+					</div>	
+
+
+					<div class="col-md-6" style="margin-bottom: 5px" id="div_foto">
+						<span><b>Foto Cliente: </b></span>
+						
+							<img width="75px" id="target_mostrar_foto">
+						
+					</div>	
+
+					
 					
 					<div class="col-md-12" style="margin-bottom: 5px" id="div_obs_dados">
 						<span><b>Obs: </b></span><span id="obs_dados"></span>
@@ -404,6 +523,9 @@ if($verificar_pagamentos != 'Não'){
 						
 					</div></small>
 				</div>
+
+
+				<input type="hidden" id="id_cliente_mostrar">
 
 
 			</div>
@@ -465,6 +587,70 @@ if($verificar_pagamentos != 'Não'){
 						<small><div align="center" id="mensagem_arquivo"></div></small>
 
 						<input type="hidden" class="form-control" name="id_arquivo"  id="id_arquivo">
+
+
+					</div>
+				</form>
+			</div>
+		</div>
+</div>
+
+
+
+
+
+
+
+
+	<!-- Modal Arquivos Conta-->
+	<div class="modal fade" id="modalArquivos_conta" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" style="z-index: 2000">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h4 class="modal-title" id="tituloModal">Gestão de Arquivos - <span id="nome_arquivo_conta"> </span></h4>
+					<button id="btn-fechar-arquivos_conta" type="button" class="close" data-dismiss="modal" aria-label="Close" style="margin-top: -20px">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<form id="form-arquivos_conta" method="post">
+					<div class="modal-body">
+
+						<div class="row">
+							<div class="col-md-8">						
+								<div class="form-group"> 
+									<label>Arquivo</label> 
+									<input class="form-control" type="file" name="arquivo_conta" onChange="carregarImgArquivos_conta();" id="arquivo_conta_conta">
+								</div>	
+							</div>
+							<div class="col-md-4" style="margin-top:-10px">	
+								<div id="divImgArquivos">
+									<img src="images/arquivos/sem-foto.png"  width="60px" id="target-arquivos_conta">									
+								</div>					
+							</div>
+
+
+
+
+						</div>
+
+						<div class="row" style="margin-top:-40px">
+							<div class="col-md-8">
+								<input type="text" class="form-control" name="nome_arq"  id="nome_arq_conta" placeholder="Nome do Arquivo * " required>
+							</div>
+
+							<div class="col-md-4">										 
+								<button type="submit" class="btn btn-primary">Inserir</button>
+							</div>
+						</div>
+
+						<hr>
+
+						<small><div id="listar_arquivos_conta"></div></small>
+
+						<br>
+						<small><div align="center" id="mensagem_arquivo_conta"></div></small>
+
+						<input type="hidden" class="form-control" name="id_arquivo"  id="id_arquivo_conta">
 
 
 					</div>
@@ -679,15 +865,9 @@ if($verificar_pagamentos != 'Não'){
 							<div class="col-md-4">							
 								<label>Data</label>
 								<input type="date" class="form-control" id="data_cob" name="data"  value="<?php echo $data_atual ?>" required>							
-						</div>
-
-					
-						
-
+						</div>	
 						
 					</div>
-
-
 
 				
 
@@ -868,14 +1048,20 @@ if($verificar_pagamentos != 'Não'){
 					</div>
 
 					<div class="row" align="right">
-						<div class="col-md-12">	
-								<input type="checkbox" class="form-checkbox" id="residuo" name="residuo" value="Sim" style="display:inline-block;">
-								<label style="display:inline-block;"><small>Resíduo Próxima Parcela</small></label>
+					<div class="col-md-12">	
+						  <span style="margin-right: 15px">
+						    <input type="checkbox" class="form-checkbox" id="residuo_final" name="residuo_final" value="Sim" style="display:inline-block;">
+						    <label for="residuo_final" style="display:inline-block;"><small>Resíduo Final Empréstimo</small></label>
+						  </span>
+
+						  <span>	
+						    <input type="checkbox" class="form-checkbox" id="residuo" name="residuo" value="Sim" style="display:inline-block;">
+						    <label for="residuo" style="display:inline-block;"><small>Resíduo Próxima Parcela</small></label>
+						  </span>
+						</div>
+
 						
-
-						</div>	
 					</div>
-
 
 					
 
@@ -1055,6 +1241,166 @@ if($verificar_pagamentos != 'Não'){
 		</div>
 	</div>
 </div>
+
+
+
+
+
+
+
+
+<!-- Modal Amortizar -->
+<div class="modal fade" id="modalAmortizar" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h4 class="modal-title" id="exampleModalLabel"><span id="">Amortizar Valor</span></h4>
+				<button id="btn-fechar-amortizar" type="button" class="close" data-dismiss="modal" aria-label="Close" style="margin-top: -25px">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<form id="form_amortizar">
+			<div class="modal-body">							
+
+					<div class="row">
+						<div class="col-md-6">							
+								<label>Valor</label>
+								<input type="text" class="form-control" id="valor_amortizar" name="valor_amortizar" placeholder="Valor">							
+						</div>	
+
+						<div class="col-md-6">							
+								<label>Data</label>
+								<input type="date" class="form-control" id="data_amortizar" name="data_amortizar" placeholder="Data Pagamento" value="<?php echo $data_atual ?>">							
+						</div>	
+						
+					</div>
+
+
+					<div class="row">
+						<div class="col-md-12">							
+								<label>OBS</label>
+								<input type="text" class="form-control" id="obs_amortizar" name="obs_amortizar" placeholder="Observações">							
+						</div>	
+
+											
+					</div>
+
+				
+								
+
+
+					<input type="hidden" class="form-control" id="id_amortizar" name="id">	
+					<input type="hidden" class="form-control" id="id_amortizar_cliente" name="id_cliente">	
+									
+
+				<br>
+				<small><div id="mensagem_amortizar" align="center"></div></small>
+			</div>
+			<div class="modal-footer">       
+				<button id="btn_amortizar" type="submit" class="btn btn-primary">Criar</button>
+			</div>
+			</form>
+		</div>
+	</div>
+</div>
+
+
+
+
+
+<!-- Modal Ediitar Emp -->
+<div class="modal fade" id="modalEditar" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h4 class="modal-title" id="exampleModalLabel"><span id="titulo_empr"></span></h4>
+				<button id="btn-fechar-empr" type="button" class="close" data-dismiss="modal" aria-label="Close" style="margin-top: -25px">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<form id="form_empr">
+			<div class="modal-body">
+				
+
+				<div class="row">
+
+						<div class="col-md-4">							
+								<label>Júros % Dia</label>
+								<input type="text" class="form-control" id="juros_empr" name="juros" placeholder="Júros se Houver"  onkeyup="mascara_valor('juros_empr')">							
+						</div>
+
+
+						<div class="col-md-4">							
+								<label>Multa R$</label>
+								<input type="text" class="form-control" id="multa_empr" name="multa" placeholder="Multa se Houver"  onkeyup="mascara_valor('multa_empr')">							
+						</div>
+
+
+					
+						
+					</div>
+			
+
+
+					<input type="hidden" class="form-control" id="id_empr" name="id">					
+
+				<br>
+				<small><div id="mensagem_empr" align="center"></div></small>
+			</div>
+			<div class="modal-footer">       
+				<button type="submit" class="btn btn-primary">Salvar</button>
+			</div>
+			</form>
+		</div>
+	</div>
+</div>
+
+
+
+
+
+<div class="modal fade" id="importarXlsModal" tabindex="-1" role="dialog" aria-labelledby="importarXlsModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+    
+      <div class="modal-header">
+        <h5 class="modal-title" id="importarXlsModalLabel">Importar Arquivo Excel</h5>
+        <button id="btn-fechar-excel" type="button" class="close" data-dismiss="modal" aria-label="Fechar">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      
+      <div class="modal-body">
+
+      	<form id="form_excel">
+      	<div class="row">
+      		<div class="col-md-9">
+      			<!-- Input de arquivo -->
+        <div class="form-group">
+          <label for="arquivoXls">Selecione o arquivo .xls</label>
+          <input type="file" class="form-control" id="arquivoXls" name="arquivo" accept=".xls,.xlsx">
+        </div>
+      		</div>
+      		<div class="col-md-3" style="margin-top: 23px">
+      			 <button type="submit" class="btn btn-success">Importar</button>
+      		</div>
+      	</div>
+
+      	</form>
+        
+      	<div class="row">
+						<label>Use uma linha acima com o nome das colunas dessa forma  (<i class="fa fa-file-excel-o text-success"></i> <a target="_blank" href="images/modelo.xlsx" style="color:blue">Modelo Anexo</a>)</label> <br>
+						<img src="images/modelo_clientes.jpg" width="100%"><br><br>
+						<label>Caso não tenha todas as colunas, deixe as que não tiver com dados vazio, mas preencha o cabeçalho delas, conforme o modelo acima ou modelo em anexo, as datas precisam estar no modelo americano (ano-mês-dia)</label>
+					</div>
+</div>
+      
+     
+
+    </div>
+  </div>
+</div>
+
 
 
 
@@ -1660,4 +2006,421 @@ $("#form_nova_parcela").submit(function () {
 	    });
 
 	}
+</script>
+
+
+
+
+
+
+
+<script type="text/javascript">
+			function carregarImgArquivos_conta() {
+				var target = document.getElementById('target-arquivos_conta');
+				var file = document.querySelector("#arquivo_conta_conta").files[0];
+
+				var arquivo = file['name'];
+				resultado = arquivo.split(".", 2);
+
+				if(resultado[1] === 'pdf'){
+					$('#target-arquivos_conta').attr('src', "images/pdf.png");
+					return;
+				}
+
+				if(resultado[1] === 'rar' || resultado[1] === 'zip'){
+					$('#target-arquivos_conta').attr('src', "images/rar.png");
+					return;
+				}
+
+				if(resultado[1] === 'doc' || resultado[1] === 'docx' || resultado[1] === 'txt'){
+					$('#target-arquivos_conta').attr('src', "images/word.png");
+					return;
+				}
+
+
+				if(resultado[1] === 'xlsx' || resultado[1] === 'xlsm' || resultado[1] === 'xls'){
+					$('#target-arquivos_conta').attr('src', "images/excel.png");
+					return;
+				}
+
+
+				if(resultado[1] === 'xml'){
+					$('#target-arquivos_conta').attr('src', "images/xml.png");
+					return;
+				}
+
+
+
+				var reader = new FileReader();
+
+				reader.onloadend = function () {
+					target.src = reader.result;
+				};
+
+				if (file) {
+					reader.readAsDataURL(file);
+
+				} else {
+					target.src = "";
+				}
+			}
+		</script>
+
+
+<script type="text/javascript">
+	function listarArquivosConta(){
+		var id = $('#id_arquivo_conta').val(); 
+
+		 $.ajax({
+	        url: 'paginas/receber/listar_arquivos.php',
+	        method: 'POST',
+	        data: {id},
+	        dataType: "html",
+
+	        success:function(result){
+	            $("#listar_arquivos_conta").html(result);
+	           
+	        }
+	    });
+
+	}
+</script>
+
+
+
+<script type="text/javascript">
+	
+
+$("#form-arquivos_conta").submit(function () {
+
+    event.preventDefault();
+    var formData = new FormData(this);
+
+    $.ajax({
+        url: 'paginas/receber/arquivos.php',
+        type: 'POST',
+        data: formData,
+
+        success: function (mensagem) {
+            $('#mensagem_arquivo_conta').text('');
+            $('#mensagem_arquivo_conta').removeClass()
+            if (mensagem.trim() == "Inserido com Sucesso") {
+
+            	$('#nome_arq_conta').val('');
+				$('#arquivo_conta_conta').val('');
+				$('#target-arquivos_conta').attr('src','images/arquivos/sem-foto.png');
+                //$('#btn-fechar-arquivos').click();
+                listarArquivosConta();          
+
+            } else {
+
+                $('#mensagem_arquivo_conta').addClass('text-danger')
+                $('#mensagem_arquivo_conta').text(mensagem)
+            }
+
+
+        },
+
+        cache: false,
+        contentType: false,
+        processData: false,
+
+    });
+
+});
+</script>
+
+
+
+
+
+<script type="text/javascript">
+	function carregarImgComprovanteEndereco() {
+		var target = document.getElementById('target-comprovante-endereco');
+		var file = document.querySelector("#comprovante_endereco").files[0];
+
+
+		var arquivo = file['name'];
+		resultado = arquivo.split(".", 2);
+
+		if(resultado[1] === 'pdf'){
+			$('#target-comprovante-endereco').attr('src', "images/pdf.png");
+			return;
+		}
+
+		if(resultado[1] === 'rar' || resultado[1] === 'zip'){
+			$('#target-comprovante-endereco').attr('src', "images/rar.png");
+			return;
+		}
+
+
+
+		var reader = new FileReader();
+
+		reader.onloadend = function () {
+			target.src = reader.result;
+		};
+
+		if (file) {
+			reader.readAsDataURL(file);
+
+		} else {
+			target.src = "";
+		}
+	}
+</script>
+
+
+
+
+<script type="text/javascript">
+	function carregarImgComprovanteRG() {
+		var target = document.getElementById('target-comprovante-rg');
+		var file = document.querySelector("#comprovante_rg").files[0];
+
+
+		var arquivo = file['name'];
+		resultado = arquivo.split(".", 2);
+
+		if(resultado[1] === 'pdf'){
+			$('#target-comprovante-rg').attr('src', "images/pdf.png");
+			return;
+		}
+
+		if(resultado[1] === 'rar' || resultado[1] === 'zip'){
+			$('#target-comprovante-rg').attr('src', "images/rar.png");
+			return;
+		}
+
+
+
+		var reader = new FileReader();
+
+		reader.onloadend = function () {
+			target.src = reader.result;
+		};
+
+		if (file) {
+			reader.readAsDataURL(file);
+
+		} else {
+			target.src = "";
+		}
+	}
+</script>
+
+
+
+
+
+
+<script type="text/javascript">
+	
+
+$("#form_amortizar").submit(function () {
+
+	var id_cliente = $('#id_amortizar_cliente').val();
+	
+
+	$('#mensagem_amortizar').text('Carregando');
+	$('#btn_amortizar').hide();
+
+    event.preventDefault();
+    var formData = new FormData(this);
+
+    $.ajax({
+        url: 'paginas/' + pag + "/amortizar.php",
+        type: 'POST',
+        data: formData,
+
+        success: function (mensagem) {
+            $('#mensagem_amortizar').text('');
+            $('#mensagem_amortizar').removeClass()
+            if (mensagem.trim() == "Salvo com Sucesso") {
+            	
+                $('#btn-fechar-amortizar').click();
+                limparCampos();
+                listarEmprestimos(id_cliente);      
+
+            } else {
+
+                $('#mensagem_amortizar').addClass('text-danger')
+                $('#mensagem_amortizar').text(mensagem)
+            }
+
+            $('#btn_amortizar').show();
+
+        },
+
+        cache: false,
+        contentType: false,
+        processData: false,
+
+    });
+
+});
+</script>
+
+
+
+
+
+<script type="text/javascript">
+	function carregarImg() {
+		var target = document.getElementById('target');
+		var file = document.querySelector("#foto").files[0];
+
+
+		var arquivo = file['name'];
+		resultado = arquivo.split(".", 2);
+
+		var reader = new FileReader();
+
+		reader.onloadend = function () {
+			target.src = reader.result;
+		};
+
+		if (file) {
+			reader.readAsDataURL(file);
+
+		} else {
+			target.src = "";
+		}
+	}
+</script>
+
+
+
+
+<script type="text/javascript">
+	
+
+$("#form_empr").submit(function () {
+
+	var id_cliente = $('#id_cliente_mostrar').val();
+
+    event.preventDefault();
+    var formData = new FormData(this);
+
+    $.ajax({
+        url: 'paginas/clientes/editar_emp.php',
+        type: 'POST',
+        data: formData,
+
+        success: function (mensagem) {  
+                 
+            if (mensagem.trim() == "Editado com Sucesso") {   
+            $('#btn-fechar-empr').click()	
+            listarEmprestimos(id_cliente); 
+            alert(mensagem)         	
+
+            } else {
+
+                $('#mensagem_empr').addClass('text-danger')
+                $('#mensagem_empr').text(mensagem)
+            }
+
+
+        },
+
+        cache: false,
+        contentType: false,
+        processData: false,
+
+    });
+
+});
+</script>
+
+
+<script>
+function atualizarCorStatus() {
+    var select = document.getElementById('status_cliente');
+    var corSelecionada = select.options[select.selectedIndex].getAttribute('data-cor');
+    var preview = document.getElementById('preview_cor_status');
+
+    if(corSelecionada) {
+        preview.style.backgroundColor = corSelecionada;
+    } else {
+        preview.style.backgroundColor = "#ffffff";
+    }
+}
+</script>
+
+<script>
+function atualizarCorStatus_busca() {
+    var select = document.getElementById('status_cliente_busca');
+    var corSelecionada = select.options[select.selectedIndex].getAttribute('data-cor');
+    var preview = document.getElementById('preview_cor_status_busca');
+
+    if(corSelecionada) {
+        preview.style.backgroundColor = corSelecionada;
+    } else {
+        preview.style.backgroundColor = "#ffffff";
+    }
+}
+</script>
+
+
+<script type="text/javascript">
+	function buscar(){
+		var status = $('#status_cliente_busca').val();
+		listar(status)
+	}
+</script>
+
+
+
+<script>
+  const residuoFinal = document.getElementById('residuo_final');
+  const residuo = document.getElementById('residuo');
+
+  residuoFinal.addEventListener('change', function () {
+    if (this.checked) {
+      residuo.checked = false;
+    }
+  });
+
+  residuo.addEventListener('change', function () {
+    if (this.checked) {
+      residuoFinal.checked = false;
+    }
+  });
+</script>
+
+
+
+
+<script type="text/javascript">
+	
+
+$("#form_excel").submit(function () {		
+	
+    event.preventDefault();
+    var formData = new FormData(this);
+
+    $.ajax({
+        url: 'paginas/' + pag + "/importar_excel.php",
+        type: 'POST',
+        data: formData,
+
+        success: function (mensagem) {           
+            if (mensagem.trim() == "Importado com Sucesso") {
+            	
+                $('#btn-fechar-excel').click();
+                buscar();  
+
+            } else {               
+                alertWarning(mensagem)
+            }          
+
+        },
+
+        cache: false,
+        contentType: false,
+        processData: false,
+
+    });
+
+});
 </script>

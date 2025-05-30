@@ -25,10 +25,17 @@ for ($i = 0; $i < $contas_pagar_vencidas; $i++) {
 	$res2 = $query2->fetchAll(PDO::FETCH_ASSOC);
 	if(@count($res2) > 0){
 		$multa = @$res2[0]['multa'];
-		$juros = @$res2[0]['juros'];	
+		$juros = @$res2[0]['juros'];
+		$capital_emprestado = @$res2[0]['valor'];	
+		$data_emprestimo = @$res2[0]['data'];
+		$capital_emprestado = @number_format($capital_emprestado, 2, ',', '.');
+		$data_emprestimo = implode('/', array_reverse(@explode('-', $data_emprestimo)));
+
 	}else{
 		$multa = $multa_sistema;
 		$juros = $juros_sistema;	
+		$capital_emprestado = '';	
+		$data_emprestimo = '';
 	}
 
 	$valor_multa = $multa;
@@ -70,8 +77,10 @@ for ($i = 0; $i < $contas_pagar_vencidas; $i++) {
 	$mensagem = '💰 *' . $nome_sistema . '*%0A';
 	$mensagem .= '_Sua conta Venceu_ %0A';
 
-	$mensagem .= '*Descrição:* '.$descricao.' %0A';
 	$mensagem .= '*Cliente:* '.$nome_cliente.' %0A';
+	$mensagem .= '*Capital Emprestado:* R$ '.$capital_emprestado.' %0A';
+	$mensagem .= '*Data Empréstimo:* '.$data_emprestimo.' %0A';
+	
 
 	if($parcela > 0){
 		$mensagem .= 'Parcela: *'.$parcela.'* %0A';
@@ -103,11 +112,11 @@ for ($i = 0; $i < $contas_pagar_vencidas; $i++) {
 		require('texto.php');
 
 		if(@$status_mensagem == "Mensagem enviada com sucesso." and $seletor_api == 'menuia'){
-			$pdo->query("UPDATE receber SET data_alerta = curDate(), cobrar_sempre = 'Não' where id = '$id'");
+			$pdo->query("UPDATE receber SET data_alerta = curDate(), cobrar_sempre = 'Não', hora_alerta = '$hora_random' where id = '$id'");
 		}
 
 		if($seletor_api != 'menuia'){
-			$pdo->query("UPDATE receber SET data_alerta = curDate(), cobrar_sempre = 'Não' where id = '$id'");
+			$pdo->query("UPDATE receber SET data_alerta = curDate(), cobrar_sempre = 'Não', hora_alerta = '$hora_random' where id = '$id'");
 		}
 
 	}

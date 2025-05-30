@@ -221,6 +221,10 @@ if($linhas > 0){
 									<i class="fa fa-angle-left pull-right"></i>
 								</a>
 								<ul class="treeview-menu">
+
+									<li class="<?php echo @$status_clientes ?>"><a href="status_clientes"><i class="fa fa-angle-right"></i> Status Clientes</a></li>
+
+
 									<li class="<?php echo @$grupo_acessos ?>"><a href="grupo_acessos"><i class="fa fa-angle-right"></i> Grupos</a></li>
 
 									<li class="<?php echo @$acessos ?>"><a href="acessos"><i class="fa fa-angle-right"></i> Acessos</a></li>
@@ -268,6 +272,14 @@ if($linhas > 0){
 							</li>
 
 
+
+							<li class="treeview <?php echo @$solicitar_emprestimo ?>">
+								<a href="solicitar_emprestimo">
+									<i class="fa fa-bell-o"></i> <span>Solicitar Empréstimo</span>
+								</a>
+							</li>
+
+
 							<li class="treeview <?php echo @$verificar_pgtos ?>">
 								<a href="#" onclick="verificarPg()">
 									<i class="fa fa-spinner"></i> <span>Verificar Pagamentos</span>
@@ -311,9 +323,11 @@ if($linhas > 0){
 					 ?>
 					<ul class="nofitications-dropdown">
 						<li class="dropdown head-dpdn">
-							<a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i class="fa fa-envelope"></i><span class="badge"><?php echo $total_parcelas_vencidas ?></span></a>
+							<a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i class="fa fa-money" style="color:#FFF"></i><span class="badge"><?php echo $total_parcelas_vencidas ?></span></a>
+						
 
 							<a href="#" onclick="mostrar_valores()" class="dropdown-toggle" ><i class="fa fa-eye" style="color:#FFF"></i></a>
+
 
 							<ul class="dropdown-menu">
 								<li>
@@ -355,10 +369,89 @@ $nome_cliente = @$res2[0]['nome'];
 								
 								<li>
 									<div class="notification_bottom">
-										<a href="index.php?pagina=receber_vencidas">Ver todas as Parcelas</a>
+										<a href="receber_vencidas">Ver todas as Parcelas</a>
 									</div> 
 								</li>
 							</ul>
+
+
+
+
+
+
+						</li>
+
+
+
+
+
+
+						<?php 
+						//totalizar parcelas em atraso
+						$query = $pdo->query("SELECT * from solicitar_emprestimo where status = 'Pendente' ");
+						$res = $query->fetchAll(PDO::FETCH_ASSOC);
+						$total_solicitacoes_abertas = @count($res);
+					 ?>
+
+						<li class="dropdown head-dpdn">
+							
+
+							<a  href="#" class="dropdown-toggle <?php echo @$solicitar_emprestimo ?>" data-toggle="dropdown" aria-expanded="false"><i class="fa fa-bell-o" style="color:#FFF"></i><span class="badge"><?php echo $total_solicitacoes_abertas ?></span></a>
+
+							<ul class="dropdown-menu">
+								<li>
+									<div class="notification_header">
+										<h3>Existem <?php echo $total_solicitacoes_abertas ?> Solicitações abertas.</h3>
+									</div>
+								</li>
+								<li><a href="#">
+									<div class="user_img"><img src="images/1.jpg" alt=""></div>
+
+									<?php 
+										$query = $pdo->query("SELECT * from solicitar_emprestimo where status = 'Pendente' order by id asc limit 10 ");
+						$res = $query->fetchAll(PDO::FETCH_ASSOC);
+						$linhas = @count($res);
+						for($i=0; $i<$linhas; $i++){
+	$cliente = $res[$i]['cliente'];
+	$valor = $res[$i]['valor'];
+	$data = $res[$i]['data'];
+	$parcelas = $res[$i]['parcelas'];	
+	$obs = $res[$i]['obs'];
+	$garantia = $res[$i]['garantia'];
+	$status = $res[$i]['status'];
+
+	$query2 = $pdo->query("SELECT * from clientes where id = '$cliente'");
+$res2 = $query2->fetchAll(PDO::FETCH_ASSOC);
+$nome_cliente = @$res2[0]['nome'];
+
+	$dataF = implode('/', array_reverse(explode('-', $data)));
+	
+	$valorF = number_format($valor, 2, ',', '.');
+
+									 ?>
+									<div class="notification_desc">
+										<small><span class="text-danger">R$ <?php echo $valorF ?></span> - <?php echo $dataF ?> (<span style="color:blue"><?php echo $nome_cliente ?></span>)</small>
+										
+									</div>
+
+								<?php } ?>
+									<div class="clearfix"></div>	
+								</a></li>
+								
+								
+								
+								<li>
+									<div class="notification_bottom">
+										<a href="solicitar_emprestimos">Ver todas as Solicitações</a>
+									</div> 
+								</li>
+							</ul>
+
+
+
+							
+
+
 						</li>
 						
 
@@ -410,7 +503,7 @@ $nome_cliente = @$res2[0]['nome'];
 		</div>
 
 	
-		<div style="height:100px; background: #f4f4f4; ">a</div>
+		<div style="height:100px; background: #f4f4f4; "></div>
 
 	</div>
 
@@ -463,6 +556,11 @@ $nome_cliente = @$res2[0]['nome'];
 	<!-- //Bootstrap Core JavaScript -->
 
 
+
+	<!-- SweetAlert JS -->
+<script src="js/sweetalert2.all.min.js"></script>
+<script src="js/sweetalert1.min.css"></script>
+<script src="js/alertas.js"></script>
 
 	<!-- Mascaras JS -->
 <script type="text/javascript" src="js/mascaras.js"></script>
@@ -736,6 +834,14 @@ $nome_cliente = @$res2[0]['nome'];
 								</select>							
 						</div>
 
+							<div class="col-md-3">					
+								<label>Entrada Sistema</label>
+								<select class="form-control" name="entrada_sistema">
+									<option value="Login" <?php if(@$entrada_sistema == 'Login'){?> selected <?php } ?> >Login</option>
+									<option value="Site" <?php if(@$entrada_sistema == 'Site'){?> selected <?php } ?> >Site</option>
+								</select>							
+						</div>
+
 					</div>
 
 
@@ -799,6 +905,41 @@ $nome_cliente = @$res2[0]['nome'];
 
 
 
+								<div class="col-md-4">
+							<div class="form-group">
+								<label>Logo da Página Site <small>(png)</small></label>
+								<input class="form-control" type="file" name="logo_site" onChange="carregarLogoSite();"
+									id="logo_site">
+							</div>
+						</div>
+						<div class="col-md-2">
+							<div id="divImg">
+								<img src="../img/<?php echo $logo_site ?>" width="80px" id="target-logo_site">
+								<a title="Excluir Imagem" href="#" onclick="excluirImg('Site')"><i class="fa fa-close text-danger"></i></a>
+							</div>
+						</div>
+
+						
+					</div>		
+
+
+					<div class="row">
+
+						<div class="col-md-4">
+							<div class="form-group">
+								<label>Fundo Login <small>(Imagem) 1920 x 1080</small></label>
+								<input class="form-control" type="file" name="fundo_login" onChange="carregarImgFundo();"
+									id="fundo_login">
+							</div>
+						</div>
+						<div class="col-md-2">
+							<div id="divImg">
+								<img src="../img/<?php echo $fundo_login ?>" width="80px" id="target-fundo">
+								<a title="Excluir Imagem" href="#" onclick="excluirImg('Fundo')"><i class="fa fa-close text-danger"></i></a>
+							</div>
+						</div>
+						
+
 								<div class="col-md-4">						
 								<div class="form-group"> 
 									<label>Assinatura Recibo (*Jpg)</label> 
@@ -812,7 +953,7 @@ $nome_cliente = @$res2[0]['nome'];
 							</div>
 
 						
-					</div>					
+					</div>				
 				
 
 				<br>
@@ -990,6 +1131,50 @@ $nome_cliente = @$res2[0]['nome'];
 					</div>
 
 					
+				</div>
+
+				<hr>
+
+				<div class="row">
+					<div class="col-md-6">	
+						    <div style="display: flex; align-items: center; gap: 10px;">
+						        <label>Todos os Status</label>
+						        <div id="preview_cor_status_index" style="width: 17px; height: 17px; border: 1px solid #ccc; border-radius: 4px;"></div>
+						    </div>
+
+						    <select class="form-control mt-2" name="status_cliente" id="status_cliente_index" onchange="atualizarCorStatusIndex()">
+						        <option value="" data-cor="">Selecionar Status</option>				
+						        <?php 
+						        $query = $pdo->query("SELECT * from status_clientes order by id asc");
+						        $res = $query->fetchAll(PDO::FETCH_ASSOC);
+						        $linhas = @count($res);
+						        if($linhas > 0){
+						            for($i=0; $i<$linhas; $i++){
+						        ?>
+						            <option value="<?php echo $res[$i]['nome'] ?>" data-cor="<?php echo $res[$i]['cor'] ?>">
+						                <?php echo $res[$i]['nome'] ?>
+						            </option>
+						        <?php } } ?>
+						    </select>	
+						</div>
+
+
+						<div class="col-md-6">						
+								<label>Todas as Frequência</label>
+								<select class="form-control" name="frequencia" id="frequencia_index">								
+								<?php 
+									$query = $pdo->query("SELECT * from frequencias order by id asc");
+									$res = $query->fetchAll(PDO::FETCH_ASSOC);
+									$linhas = @count($res);
+									if($linhas > 0){
+									for($i=0; $i<$linhas; $i++){
+								 ?>
+								  <option value="<?php echo $res[$i]['dias'] ?>"><?php echo $res[$i]['frequencia'] ?></option>
+
+								<?php } } ?>
+									
+								</select>	
+						</div>
 				</div>
 
 				<div style="margin-top: 20px" class="row" align="center" id="mensagem_retornos">
@@ -1236,13 +1421,16 @@ $nome_cliente = @$res2[0]['nome'];
 
 <script type="text/javascript">
 	function cobrarTodos(){
+
+		var frequencia_index = $('#frequencia_index').val();
+		var status_cliente_index = $('#status_cliente_index').val();
 		
 		$('#mensagem_retornos').html('Enviando as Cobranças, pode demorar um pouco, aguarde!!');
 		
 		$.ajax({
         url: 'cobrar_todos.php',
         method: 'POST',
-        data: {},
+        data: {frequencia_index, status_cliente_index},
         dataType: "html",
 
         success:function(mensagem){           
@@ -1260,13 +1448,16 @@ $nome_cliente = @$res2[0]['nome'];
 
 <script type="text/javascript">
 	function lembretesTodos(){
+
+		var frequencia_index = $('#frequencia_index').val();
+		var status_cliente_index = $('#status_cliente_index').val();
 		
 		$('#mensagem_retornos').html('Enviando os Lembretes de Vencimentos de Hoje, pode demorar um pouco, aguarde!!');
 		
 		$.ajax({
         url: 'lembretes_todos.php',
         method: 'POST',
-        data: {},
+        data: {frequencia_index, status_cliente_index},
         dataType: "html",
 
         success:function(mensagem){           
@@ -1326,4 +1517,218 @@ $nome_cliente = @$res2[0]['nome'];
             target.src = "";
         }
     }
+</script>
+
+
+
+
+<script type="text/javascript">
+	
+
+	function excluirImg(p){
+
+
+		 const swalWithBootstrapButtons = Swal.mixin({
+        customClass: {
+            confirmButton: "btn btn-success", // Adiciona margem à direita do botão "Sim, Excluir!"
+            cancelButton: "btn btn-danger me-1",
+            container: 'swal-whatsapp-container'
+        },
+        buttonsStyling: false
+    });
+
+    swalWithBootstrapButtons.fire({
+        title: "Deseja Excluir?",
+        text: "Você não conseguirá recuperá-lo novamente!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Sim, Excluir!",
+        cancelButtonText: "Não, Cancelar!",
+        reverseButtons: true
+    }).then((result) => {
+        if (result.isConfirmed) {
+            // Realiza a requisição AJAX para excluir o item
+            $.ajax({
+                url: 'excluir_imagens.php',
+                method: 'POST',
+                data: { p },
+                dataType: "html",
+                success: function (mensagem) {
+                    if (mensagem.trim() == "Excluído com Sucesso") {
+                        // Exibe mensagem de sucesso após a exclusão
+                        swalWithBootstrapButtons.fire({
+                            title: mensagem,
+                            text: 'Fecharei em 1 segundo.',
+                            icon: "success",
+                            timer: 1000,
+                            timerProgressBar: true,
+                            confirmButtonText: 'OK',
+                            customClass: {
+                             container: 'swal-whatsapp-container'
+                             }
+                        });
+                       	location.reload();
+                    } else {
+                        // Exibe mensagem de erro se a requisição falhar
+                        swalWithBootstrapButtons.fire({
+                            title: "Opss!",
+                            text: mensagem,
+                            icon: "error",
+                            confirmButtonText: 'OK',
+                            customClass: {
+                             container: 'swal-whatsapp-container'
+                             }
+                        });
+                    }
+                }
+            });
+        } else if (result.dismiss === Swal.DismissReason.cancel) {
+            swalWithBootstrapButtons.fire({
+                title: "Cancelado",
+                text: "Fecharei em 1 segundo.",
+                icon: "error",
+                timer: 1000,
+                timerProgressBar: true,
+            });
+        }
+    });
+		
+	}
+</script>
+
+
+
+<script type="text/javascript">
+	function carregarImgFundo() {
+		var target = document.getElementById('target-fundo');
+		var file = document.querySelector("#fundo_login").files[0];
+
+		var reader = new FileReader();
+
+		reader.onloadend = function() {
+			target.src = reader.result;
+		};
+
+		if (file) {
+			reader.readAsDataURL(file);
+
+		} else {
+			target.src = "";
+		}
+	}
+</script>
+
+
+
+
+
+<script type="text/javascript">
+	
+
+	function excluirImg(p){
+
+
+		 const swalWithBootstrapButtons = Swal.mixin({
+        customClass: {
+            confirmButton: "btn btn-success", // Adiciona margem à direita do botão "Sim, Excluir!"
+            cancelButton: "btn btn-danger me-1",
+            container: 'swal-whatsapp-container'
+        },
+        buttonsStyling: false
+    });
+
+    swalWithBootstrapButtons.fire({
+        title: "Deseja Excluir?",
+        text: "Você não conseguirá recuperá-lo novamente!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Sim, Excluir!",
+        cancelButtonText: "Não, Cancelar!",
+        reverseButtons: true
+    }).then((result) => {
+        if (result.isConfirmed) {
+            // Realiza a requisição AJAX para excluir o item
+            $.ajax({
+                url: 'excluir_imagens.php',
+                method: 'POST',
+                data: { p },
+                dataType: "html",
+                success: function (mensagem) {
+                    if (mensagem.trim() == "Excluído com Sucesso") {
+                        // Exibe mensagem de sucesso após a exclusão
+                        swalWithBootstrapButtons.fire({
+                            title: mensagem,
+                            text: 'Fecharei em 1 segundo.',
+                            icon: "success",
+                            timer: 1000,
+                            timerProgressBar: true,
+                            confirmButtonText: 'OK',
+                            customClass: {
+                             container: 'swal-whatsapp-container'
+                             }
+                        });
+                       	location.reload();
+                    } else {
+                        // Exibe mensagem de erro se a requisição falhar
+                        swalWithBootstrapButtons.fire({
+                            title: "Opss!",
+                            text: mensagem,
+                            icon: "error",
+                            confirmButtonText: 'OK',
+                            customClass: {
+                             container: 'swal-whatsapp-container'
+                             }
+                        });
+                    }
+                }
+            });
+        } else if (result.dismiss === Swal.DismissReason.cancel) {
+            swalWithBootstrapButtons.fire({
+                title: "Cancelado",
+                text: "Fecharei em 1 segundo.",
+                icon: "error",
+                timer: 1000,
+                timerProgressBar: true,
+            });
+        }
+    });
+		
+	}
+</script>
+
+
+
+<script type="text/javascript">
+	function carregarLogoSite() {
+		var target = document.getElementById('target-logo_site');
+		var file = document.querySelector("#logo_site").files[0];
+
+		var reader = new FileReader();
+
+		reader.onloadend = function() {
+			target.src = reader.result;
+		};
+
+		if (file) {
+			reader.readAsDataURL(file);
+
+		} else {
+			target.src = "";
+		}
+	}
+</script>
+
+
+<script>
+function atualizarCorStatusIndex() {
+    var select = document.getElementById('status_cliente_index');
+    var corSelecionada = select.options[select.selectedIndex].getAttribute('data-cor');
+    var preview = document.getElementById('preview_cor_status_index');
+
+    if(corSelecionada) {
+        preview.style.backgroundColor = corSelecionada;
+    } else {
+        preview.style.backgroundColor = "#ffffff";
+    }
+}
 </script>

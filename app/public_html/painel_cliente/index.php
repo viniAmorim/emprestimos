@@ -220,6 +220,15 @@ $total_cobrancas = @count($res);
 							</li>
 						<?php } ?>
 
+
+
+
+							<li class="treeview">
+								<a href="index.php?pagina=solicitar_emprestimo">
+									<i class="fa fa-bell-o"></i> <span>Solicitar Empréstimo</span>
+								</a>
+							</li>
+
 						
 
 						</ul>
@@ -394,6 +403,19 @@ $total_cobrancas = @count($res);
 						</div>
 
 						
+					</div>
+
+
+					<div class="row">
+						<div class="col-md-6">							
+								<label>Senha</label>
+								<input type="password" class="form-control" id="senha_perfil" name="senha" placeholder="Senha" value="" required>							
+						</div>
+
+						<div class="col-md-6">							
+								<label>Confirmar Senha</label>
+								<input type="password" class="form-control" id="conf_senha_perfil" name="conf_senha" placeholder="Confirmar Senha" value="" required>							
+						</div>
 					</div>
 
 

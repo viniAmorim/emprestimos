@@ -176,7 +176,7 @@ for($i2=0; $i2 < @count($res2); $i2++){
 	$dias_vencido = $dateInterval->days;
 
 
-	$valor_juros = $dias_vencido * ($juros * $valor / 100);
+	$valor_juros = $dias_vencido * ($juros * $valor_pc / 100);
 	
 	}
 
@@ -222,6 +222,7 @@ echo <<<HTML
 <td class="esc {$classe_debito}">{$data_ultimo_vencF}</td>
 <td>
 	
+	<big><a href="#" onclick="editar('{$id}','{$jurosF}','{$multaF}')" title="Editar Dados"><i class="fa fa-edit text-primary"></i></a></big>
 
 	<li class="dropdown head-dpdn2" style="display: inline-block;">
 		<a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><big><i class="fa fa-trash-o text-danger"></i></big></a>
@@ -302,6 +303,17 @@ HTML;
 </script>
 
 <script type="text/javascript">
+
+	function editar(id, juros, multa){
+		$('#mensagem_empr').text('');
+    	$('#titulo_empr').text('Editar Registro');
+
+    	$('#id_empr').val(id);
+    	$('#juros_empr').val(juros);
+    	$('#multa_empr').val(multa);
+    	    
+    	$('#modalEditar').modal('show');
+	}
 	
 	function selecionar(id){
 

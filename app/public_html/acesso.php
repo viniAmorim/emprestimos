@@ -11,15 +11,21 @@ require_once("conexao.php");
 	<link rel="shortcut icon" type="image/x-icon" href="img/icone.png">
 
 </head>
-<body>
+	<?php 
+if($fundo_login != "" and $fundo_login != "sem-foto.png"){ ?>
+<body style="background: url('img/<?php echo $fundo_login ?>') no-repeat center center fixed; background-size: cover;">
+<?php }else{ ?>
+<body >
+<?php } ?>
 	<div class="login">		
 		<div class="form">
 			<img src="img/logo.png" class="imagem">
 			<form method="post" action="autenticar_cliente.php">
 				<input type="text" id="cpf" name="cpf" placeholder="Seu CPF" required>
-				
+				<input type="password" name="senha" placeholder="Senha (123) se você não se cadastrou" required>
 				<button>Entrar</button>
 			</form>	
+			<p align="center"><a href="cadastro" ><button style="background:#858585">Cadastre-se</button></a></p>
 		</div>
 	</div>
 </body>

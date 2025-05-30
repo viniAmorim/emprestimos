@@ -17,6 +17,15 @@ $estado = $_POST['estado'];
 $cep = $_POST['cep'];
 $id = $_POST['id_usuario'];
 
+$senha = $_POST['senha'];
+$conf_senha = $_POST['conf_senha'];
+$senha_crip = password_hash($senha, PASSWORD_DEFAULT);
+
+if($conf_senha != $senha){
+	echo 'As senhas não se coincidem';
+	exit();
+}
+
 
 //validacao email
 $query = $pdo->query("SELECT * from $tabela where email = '$email'");
@@ -37,7 +46,7 @@ if(@count($res) > 0 and $id != $id_reg){
 }
 
 
-$query = $pdo->prepare("UPDATE $tabela SET nome = :nome, email = :email, cpf = :cpf, telefone = :telefone, endereco = :endereco, data_nasc = '$data_nasc', pix = :pix, indicacao = :indicacao, bairro = :bairro, estado = :estado, cidade = :cidade, cep = :cep where id = '$id'");
+$query = $pdo->prepare("UPDATE $tabela SET nome = :nome, email = :email, cpf = :cpf, telefone = :telefone, endereco = :endereco, data_nasc = '$data_nasc', pix = :pix, indicacao = :indicacao, bairro = :bairro, estado = :estado, cidade = :cidade, cep = :cep, senha_crip = '$senha_crip' where id = '$id'");
 
 $query->bindValue(":nome", "$nome");
 $query->bindValue(":email", "$email");

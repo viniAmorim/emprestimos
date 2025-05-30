@@ -10,6 +10,7 @@ $data_baixa = $_POST['data_baixa'];
 $forma_pgto = $_POST['forma_pgto'];
 $valor_final = $_POST['valor_final'];
 $residuo = @$_POST['residuo'];
+$residuo_final = @$_POST['residuo_final'];
 
 $valor_baixar = $_POST['valor_baixar'];
 
@@ -54,6 +55,43 @@ if($residuo == "Sim"){
 	
 	$valor = $valor_parcela + $valor_residuo;
 
+}
+
+if($residuo_final == "Sim"){
+	$valor_residuo = $valor_baixar - $valor_final;
+	if($valor_residuo > 0){
+
+		if($referencia == "Empréstimo"){
+		$query2 = $pdo->query("SELECT * from emprestimos where id = '$id_ref'");
+		$res2 = $query2->fetchAll(PDO::FETCH_ASSOC);
+		$frequencia = @$res2[0]['frequencia'];
+		}else{
+			$query2 = $pdo->query("SELECT * from cobrancas where id = '$id_ref'");
+			$res2 = $query2->fetchAll(PDO::FETCH_ASSOC);
+			$frequencia = @$res2[0]['frequencia'];
+		}		
+
+		$query2 = $pdo->query("SELECT * from frequencias where frequencia = '$frequencia'");
+		$res2 = $query2->fetchAll(PDO::FETCH_ASSOC);
+		$dias_freq_emp = @$res2[0]['dias'];
+
+
+		//buscar a ultima parcela
+		$query2 = $pdo->query("SELECT * from receber where referencia = 'Empréstimo' and id_ref = '$id_ref' order by id desc limit 1");
+		$res2 = $query2->fetchAll(PDO::FETCH_ASSOC);
+		$ultima_parcela = @$res2[0]['parcela'];
+		$nova_parcela = $ultima_parcela + 1;
+		$data_venc_ultima = @$res2[0]['data_venc'];
+		$nova_data_venc = date('Y-m-d', strtotime("+$dias_freq_emp days",strtotime($data_venc_ultima)));
+
+		$i = $nova_parcela;
+
+		$pdo->query("INSERT INTO receber SET cliente = '$cliente', referencia = 'Empréstimo', id_ref = '$id_ref', valor = '$valor_residuo', parcela = '$nova_parcela', usuario_lanc = '$id_usuario', data = curDate(), data_venc = '$nova_data_venc', pago = 'Não', descricao = '$descricao', frequencia = '0', recorrencia = '', hora_alerta = '$hora_random' ");
+		$ult_id_conta = $pdo->lastInsertId();
+
+
+		$pdo->query("UPDATE emprestimos set parcelas = '$nova_parcela' where id = '$id_ref'");
+	}
 }
 
 

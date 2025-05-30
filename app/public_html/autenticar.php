@@ -2,6 +2,7 @@
 @session_set_cookie_params(['httponly' => true]);
 @session_start();
 @session_regenerate_id(true);
+unset($_SESSION['usuario_logado_pagina']);
 require_once("conexao.php");
 $usuario = filter_var(@$_POST['usuario'], @FILTER_SANITIZE_STRING);
 $senha = filter_var(@$_POST['senha'], @FILTER_SANITIZE_STRING);

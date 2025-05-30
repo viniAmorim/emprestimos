@@ -72,17 +72,17 @@ $data_ultimo_vencF = implode('/', array_reverse(explode('-', $data_ultimo_venc))
 echo <<<HTML
 			<tr>					
 				<td class="{$classe_deb}">R$ {$valorF}</td>
-				<td class="esc">{$parcelas_nome} <span style="color:red"><small>{$atrasadas}</small></span></td>				
-				<td class="esc {$classe_deb}">{$data_ultimo_vencF}</td>				
-				<td class="esc">{$dataF}</td>
+				<td class="">{$parcelas_nome} <span style="color:red"><small>{$atrasadas}</small></span></td>				
+				<td class=" {$classe_deb}">{$data_ultimo_vencF}</td>				
+				<td class="">{$dataF}</td>
 				<td>	
 
-				   <form   method="POST" action="rel/detalhamento_cobranca_class.php" target="_blank" style="display:inline-block">
+				   <form  method="POST" action="rel/detalhamento_cobranca_class.php" target="_blank" style="display:inline-block">
 					<input type="hidden" name="id" value="{$id_emp}">
 					<big><button style="background:transparent; border:none; margin:0; padding:0" class="" title="Detalhamento Cobrança"><i class="fa fa-file-pdf-o text-danger"></i></button></big>
 		</form>	
 
-					<big><a href="#" onclick="mostrarParcelas('{$id_emp}')" title="Mostrar Parcelas"><i class="fa fa-money verde"></i></a></big>
+					<big><a class="" href="#" onclick="mostrarParcelas('{$id_emp}')" title="Mostrar Parcelas"><i class="fa fa-money verde"></i></a></big>
 				</td>  
 			</tr> 
 HTML;

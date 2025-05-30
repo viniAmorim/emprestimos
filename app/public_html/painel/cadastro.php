@@ -59,25 +59,45 @@
 
 					<div class="row">
 
-						<div class="col-md-4" style="margin-bottom:10px">							
+						<div class="col-md-3" style="margin-bottom:10px">							
 								<label>Telefone</label>
 								<input type="text" class="form-control" id="telefone" name="telefone" placeholder="Telefone" required>							
 						</div>
 
 
-						<div class="col-md-4 " style="margin-bottom:10px">							
+						<div class="col-md-3 " style="margin-bottom:10px">							
 								<label>CPF</label>
 								<input type="text" class="form-control" id="cpf" name="cpf" placeholder="CPF" required>							
-						</div>
-						
+						</div>	
 
-						<div class="col-md-4 " style="margin-bottom:10px">							
+
+
+							<div class="col-md-2 " style="margin-bottom:10px">							
 								<label>Data Nascimento</label>
 								<input type="text" class="form-control" id="data_nasc" name="data_nasc" placeholder="dd/mm/aaaa">							
+						</div>				
+
+						
+
+
+							<div class="col-md-2 " style="margin-bottom:10px">							
+								<label>Senha</label>
+								<input type="password" class="form-control" id="senha" name="senha" required="">							
 						</div>
 
 
-						
+							<div class="col-md-2 " style="margin-bottom:10px">							
+								<label>Confirmar Senha</label>
+								<input type="password" class="form-control" id="conf_senha" name="conf_senha" placeholder="" required="">							
+						</div>
+
+
+					</div>
+
+
+					<div class="row">
+
+				
 				
 
 						<div class="col-md-3 " style="margin-bottom:10px">							
@@ -145,7 +165,7 @@
 					<div class="row">
 
 						<div class="col-md-6" style="margin-bottom:10px">							
-								<label>Chave Pix</label>
+								<label>Chave Pix ou Conta bancária</label>
 								<input type="text" class="form-control" id="pix" name="pix" placeholder="Chave Pix" >							
 						</div>
 
@@ -168,17 +188,45 @@
 
 
 					
+					<div class="row">
+						<div class="col-md-4">							
+								<label>Comprovante Endereço</label>
+								<input type="file" class="form-control" id="comprovante_endereco" name="comprovante_endereco"  onchange="carregarImgComprovanteEndereco()">							
+						</div>
+
+						<div class="col-md-2">								
+							<img src="painel/images/comprovantes/sem-foto.png"  width="70px" id="target-comprovante-endereco">								
+						</div>
 
 
-					
+						<div class="col-md-4">							
+								<label>Comprovante RG / CPF</label>
+								<input type="file" class="form-control" id="comprovante_rg" name="comprovante_rg"  onchange="carregarImgComprovanteRG()">							
+						</div>
+
+						<div class="col-md-2">								
+							<img src="painel/images/comprovantes/sem-foto.png"  width="70px" id="target-comprovante-rg">								
+						</div>
 
 
-					<input type="hidden" class="form-control" id="id" name="id">					
+					</div>
+
+
+						<div class="row">
+
+						<div class="col-md-12" style="margin-bottom:10px">							
+								<label>Dados do Empréstimo</label>
+								<input type="text" class="form-control" id="dados_emprestimo" name="dados_emprestimo" placeholder="Ex: 2000 mil reais em 10 Parcelas" >							
+						</div>
+					</div>
+
+					<input type="hidden" class="form-control" id="id" name="id">	
+					<input type="hidden" class="form-control" id="cliente_cadastro" name="cliente_cadastro" value="Sim">					
 
 				<br>
 				<small><div id="mensagem" align="center"></div></small>
 
-				<button type="submit" class="btn btn-primary" style="width:150px">Salvar</button>
+				<button type="submit" class="btn btn-primary" style="width:150px">Cadastre-se</button>
 			</div>
 			   
 				
@@ -320,7 +368,8 @@ $("#form").submit(function () {
             $('#mensagem').removeClass()
             if (mensagem.trim() == "Salvo com Sucesso") {
 
-            	alert("Cadastrado com Sucesso!");                
+            	alert("Cadastrado com Sucesso!");   
+            	window.location="acesso";           
 
             } else {
             	alert(mensagem); 
@@ -340,3 +389,83 @@ $("#form").submit(function () {
 });
 
     </script>
+
+
+
+
+
+
+<script type="text/javascript">
+	function carregarImgComprovanteEndereco() {
+		var target = document.getElementById('target-comprovante-endereco');
+		var file = document.querySelector("#comprovante_endereco").files[0];
+
+
+		var arquivo = file['name'];
+		resultado = arquivo.split(".", 2);
+
+		if(resultado[1] === 'pdf'){
+			$('#target-comprovante-endereco').attr('src', "painel/images/pdf.png");
+			return;
+		}
+
+		if(resultado[1] === 'rar' || resultado[1] === 'zip'){
+			$('#target-comprovante-endereco').attr('src', "painel/images/rar.png");
+			return;
+		}
+
+
+
+		var reader = new FileReader();
+
+		reader.onloadend = function () {
+			target.src = reader.result;
+		};
+
+		if (file) {
+			reader.readAsDataURL(file);
+
+		} else {
+			target.src = "";
+		}
+	}
+</script>
+
+
+
+
+<script type="text/javascript">
+	function carregarImgComprovanteRG() {
+		var target = document.getElementById('target-comprovante-rg');
+		var file = document.querySelector("#comprovante_rg").files[0];
+
+
+		var arquivo = file['name'];
+		resultado = arquivo.split(".", 2);
+
+		if(resultado[1] === 'pdf'){
+			$('#target-comprovante-rg').attr('src', "painel/images/pdf.png");
+			return;
+		}
+
+		if(resultado[1] === 'rar' || resultado[1] === 'zip'){
+			$('#target-comprovante-rg').attr('src', "painel/images/rar.png");
+			return;
+		}
+
+
+
+		var reader = new FileReader();
+
+		reader.onloadend = function () {
+			target.src = reader.result;
+		};
+
+		if (file) {
+			reader.readAsDataURL(file);
+
+		} else {
+			target.src = "";
+		}
+	}
+</script>

@@ -34,7 +34,8 @@ $telefone_envio = '55' . preg_replace('/[ ()-]+/', '', $telefone_cliente);
 $link_pgto = $url_sistema.'pagar/'.$id;
 $valorF = @number_format($valor, 2, ',', '.');
 
-$mensagem = '💰_Lembrete de Pagamento '.$nome_sistema.'_ %0A';
+$mensagem = '💰 *' . $nome_sistema . '*%0A';
+$mensagem .= '_Lembrete de Pagamento_ %0A';
 
 if($parcela > 0){
 		$mensagem .= 'Parcela: *'.$parcela.'* %0A';

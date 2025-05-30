@@ -11,7 +11,7 @@ $res = $query->fetchAll(PDO::FETCH_ASSOC);
 $total_reg = @count($res);
 if($total_reg > 0){
 echo <<<HTML
-	<table class="table table-hover" id="tabela_arquivos">
+	<table class="table table-hover" id="">
 		<thead> 
 			<tr> 				
 				<th>Nome</th>
@@ -87,14 +87,6 @@ HTML;
 
 <script type="text/javascript">
 
-
-	$(document).ready( function () {
-	    $('#tabela_arquivos').DataTable({
-	    	"ordering": false,
-	    	"stateSave": true,
-	    });
-	    $('#tabela_filter label input').focus();	    
-	} );
 
 
 	function excluirArquivo(id, nome){

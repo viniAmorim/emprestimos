@@ -184,8 +184,38 @@ echo <<<HTML
 
 				<big><a class="{$editar_contas}" href="#" onclick="editar_contas('{$id_par}')" title="Editar Dados"><i class="fa fa-edit text-primary"></i></a></big>
 
+
+				<big><a href="#" onclick="arquivoConta('{$id_par}','{$descricao}')" title="Inserir / Ver Arquivos"><i class="fa fa-file-archive-o" style="color:#3d1002"></i></a></big>
+
 				
 					<big><a class="{$ocultar_baixar}" href="#" onclick="baixarParcela('{$id_par}', '{$valor}', '{$valor_multa}', '{$valor_juros}')" title="Dar Baixa"><i class="fa fa-check-square verde"></i></a></big>
+
+
+						<li class="dropdown head-dpdn2" style="display: inline-block;">
+		<a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><big><i class="fa fa-trash-o text-danger"></i></big></a>
+
+		<ul class="dropdown-menu" style="margin-left:-230px;">
+		<li>
+		<div class="notification_desc2">
+		<p>Confirmar Exclusão? <a href="#" onclick="excluirParc('{$id_par}')"><span class="text-danger">Sim</span></a></p>
+		</div>
+		</li>										
+		</ul>
+</li>
+
+
+			<li class="dropdown head-dpdn2" style="display: inline-block;">
+		<a title="Cancelar Baixa" href="#" class="dropdown-toggle {$ocultar_pendentes}" data-toggle="dropdown" aria-expanded="false"><big><i class="fa fa-ban text-danger"></i></big></a>
+
+		<ul class="dropdown-menu" style="margin-left:-230px;">
+		<li>
+		<div class="notification_desc2">
+		<p>Cancelar Baixa? <a href="#" onclick="cancelar('{$id_par}')"><span class="text-danger">Sim</span></a></p>
+		</div>
+		</li>										
+		</ul>
+</li>
+
 
 					<big><a class="{$ocultar_baixar}" href="#" onclick="cobrar('{$id}', '{$parcela}', '{$valor_final}', '{$data_venc}', '{$telefone}', '{$valor_multa}', '{$valor_juros}', '{$id_par}', '{$dias_vencido}')" title="Gerar Cobrança"><i class="fa fa-whatsapp verde"></i></a></big>
 
@@ -220,6 +250,11 @@ HTML;
 	$('#valor_baixar').val(valor);
 	$('#multa_baixar').val(multa);
 	$('#juros_baixar').val(juros);
+
+	const residuoFinal = document.getElementById('residuo_final');
+  	const residuo = document.getElementById('residuo');
+   residuo.checked = false;
+   residuoFinal.checked = false;
 
 	calcular();
     $('#modalBaixar').modal('show');
@@ -295,6 +330,98 @@ function editar_contas(id){
 	           
 	        }
 	    });
+}
+
+
+
+function arquivoConta(id, nome){		    	
+    	$('#nome_arquivo_conta').text(nome);    	
+    	$('#id_arquivo_conta').val(id);    	  	
+    	$('#mensagem_arquivo_conta').text(''); 
+
+    	listarArquivosConta();
+    	$('#modalArquivos_conta').modal('show');
+	}
+
+
+function excluirParc(id){	   
+	var id_empr = $('#id_emprestimo').val();
+	var id_cob = $('#id_cobranca').val();
+
+
+    $('#mensagem-excluir').text('Excluindo...')
+    
+    $.ajax({
+        url: 'paginas/receber/excluir.php',
+        method: 'POST',
+        data: {id},
+        dataType: "html",
+
+        success:function(mensagem){
+            if (mensagem.trim() == "Excluído com Sucesso") {            	
+                
+                 if(id_empr != ""){
+                	 
+                	 if (typeof mostrarParcelasEmp === 'function') {
+					  mostrarParcelasEmp(id_empr);
+					} else {						
+					  // Chama outra função ou executa outro código
+					  mostrarParcelas(id_empr)
+					}
+
+                }else{
+                	mostrarParcelas(id_cob);
+                }
+
+                
+
+            } else {
+                $('#mensagem-excluir').addClass('text-danger')
+                $('#mensagem-excluir').text(mensagem)
+            }
+        }
+    });
+}
+
+
+
+function cancelar(id){	   
+	var id_empr = $('#id_emprestimo').val();
+	var id_cob = $('#id_cobranca').val();
+
+
+    $('#mensagem-excluir').text('Excluindo...')
+    
+    $.ajax({
+        url: 'paginas/receber/cancelar_baixa.php',
+        method: 'POST',
+        data: {id},
+        dataType: "html",
+
+        success:function(mensagem){
+            if (mensagem.trim() == "Excluído com Sucesso") {            	
+                
+                 if(id_empr != ""){
+                	 
+                	 if (typeof mostrarParcelasEmp === 'function') {
+					  mostrarParcelasEmp(id_empr);
+					} else {						
+					  // Chama outra função ou executa outro código
+					  mostrarParcelas(id_empr)
+					}
+
+                }else{
+                	mostrarParcelas(id_cob);
+                }
+
+                
+
+            } else {
+                $('#mensagem-excluir').addClass('text-danger')
+                $('#mensagem-excluir').text(mensagem)
+            }
+        }
+    });
 }
 
 </script>

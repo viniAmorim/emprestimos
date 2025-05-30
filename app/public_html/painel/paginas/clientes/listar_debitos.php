@@ -172,6 +172,9 @@ echo <<<HTML
 				
 					<big><a class="{$ocultar_baixar}" href="#" onclick="baixarParcela('{$id_par}', '{$valor}', '{$valor_multa}', '{$valor_juros}', '{$cliente}')" title="Dar Baixa"><i class="fa fa-check-square verde"></i></a></big>
 
+
+
+
 					<big><a class="{$ocultar_baixar}" href="#" onclick="cobrar('{$cliente}', '{$parcela}', '{$valor_final}', '{$data_venc}', '{$telefone}', '{$valor_multa}', '{$valor_juros}', '{$id_par}', '{$dias_vencido}')" title="Gerar Cobrança"><i class="fa fa-whatsapp verde"></i></a></big>
 
 						<form   method="POST" action="rel/recibo_class.php" target="_blank" style="display:inline-block">
@@ -276,6 +279,9 @@ function editar_contas(id){
 	        }
 	    });
 }
+
+
+
 
 </script>
 
