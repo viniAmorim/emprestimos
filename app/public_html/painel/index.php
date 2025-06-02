@@ -479,7 +479,7 @@ $nome_cliente = @$res2[0]['nome'];
 								</div>	
 							</a>
 							<ul class="dropdown-menu drp-mnu">
-								<li class="<?php echo $configuracoes ?>"> <a href="" data-toggle="modal" data-target="#modalConfig"><i class="fa fa-cog"></i> Configurações</a> </li> 
+								<li> <a href="" data-toggle="modal" data-target="#modalConfig"><i class="fa fa-cog"></i> Configurações</a> </li> 
 								<li> <a href="" data-toggle="modal" data-target="#modalPerfil"><i class="fa fa-user"></i> Perfil</a> </li> 								
 								<li> <a href="logout.php"><i class="fa fa-sign-out"></i> Sair</a> </li>
 							</ul>
