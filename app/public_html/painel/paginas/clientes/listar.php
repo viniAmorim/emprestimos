@@ -65,7 +65,7 @@ for($i=0; $i<$linhas; $i++){
 	$foto = @$res[$i]['foto'];
 	$status_cliente = @$res[$i]['status_cliente'];
 
-	$dados_emprestimoF = rawurlencode($dados_emprestimo);
+	$dados_emprestimoF = rawurlencode($dados_emprestimo ?? '');
 
 	$data_nascF = implode('/', array_reverse(explode('-', $data_nasc)));
 	$data_cadF = implode('/', array_reverse(explode('-', $data_cad)));
@@ -150,7 +150,7 @@ if($ext == 'pdf'){
 	$tumb_comprovante_rg = $comprovante_rg;
 }
 
-$enderecoF2 = rawurlencode($endereco);
+$enderecoF2 = rawurlencode($endereco ?? '');
 
 echo <<<HTML
 <tr style="">
