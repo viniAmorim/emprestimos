@@ -194,16 +194,21 @@ body {font-family: 'Tw Cen MT', sans-serif;}
 
 <body>
 
-<?php 
-
-if($marca_dagua == 'Sim'){ ?>
-
-<img class="marca" src="<?php echo $url_sistema ?>img/logo.jpg">	
-
+<?php
+if ($marca_dagua == 'Sim') {
+    $img_path = '../../img/logo.jpg'; 
+    $img_data = base64_encode(file_get_contents($img_path));
+    $src = 'data:image/jpeg;base64,' . $img_data;
+?>
+    <img class="marca" src="<?= $src ?>">
 <?php } ?>
 
 
-
+<?php
+  $img_path = '../../img/logo.jpg'; 
+  $img_data = base64_encode(file_get_contents($img_path));
+  $src_logo = 'data:image/jpeg;base64,' . $img_data;
+?>
 
 
 <div id="header" >
@@ -218,7 +223,7 @@ if($marca_dagua == 'Sim'){ ?>
 
 				<td style="border: 1px; solid #000; width: 40%; text-align: left;">
 
-					<img style="margin-top: 7px; margin-left: 7px;" id="imag" src="<?php echo $url_sistema ?>img/logo.jpg" width="175px">
+					<img style="margin-top: 7px; margin-left: 7px;" id="imag" src="<?= $src_logo ?>" width="175px">
 
 				</td>
 
@@ -503,10 +508,18 @@ $nome_usuario_baixa = @$res2[0]['nome'];
 
   	 ?>
 
-  	 
+<?php
+$caminho_imagem = "../../painel/images/" . $classe_pago;
+
+$src_classe_pago = file_exists($caminho_imagem)
+    ? 'data:image/png;base64,' . base64_encode(file_get_contents($caminho_imagem))
+    : ''; 
+?>
+
+
       <tr>
 <td style="width:15%">
-<img style="margin-top: 0px" src="<?php echo $url_sistema ?>painel/images/<?php echo $classe_pago ?>" width="8px">
+<img style="margin-top: 0px"  src="<?= $src_classe_pago ?>" width="8px">
 	<?php echo $valorF ?></td>
 <td style="width:15%; color:<?php echo $classe_venc ?>"><?php echo $data_vencF ?></td>
 <td style="width:15%; "><?php echo $data_pgtoF ?></td>
