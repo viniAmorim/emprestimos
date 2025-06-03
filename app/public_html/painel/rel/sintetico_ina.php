@@ -31,19 +31,30 @@ body {font-family: 'Tw Cen MT', sans-serif;}
 
 </head>
 <body>
-<?php 
-if($marca_dagua == 'Sim'){ ?>
-<img class="marca" src="<?php echo $url_sistema ?>img/logo.jpg">	
+<?php
+if ($marca_dagua == 'Sim') {
+    $img_path = '../../img/logo.jpg'; 
+    $img_data = base64_encode(file_get_contents($img_path));
+    $src = 'data:image/jpeg;base64,' . $img_data;
+?>
+    <img class="marca" src="<?= $src ?>">
 <?php } ?>
 
 
 <div id="header" >
 
+
+<?php
+$img_path = '../../img/logo.jpg'; 
+$img_data = base64_encode(file_get_contents($img_path));
+$src_logo = 'data:image/jpeg;base64,' . $img_data;
+?>
+
 	<div style="border-style: solid; font-size: 10px; height: 50px;">
 		<table style="width: 100%; border: 0px solid #ccc;">
 			<tr>
 				<td style="border: 1px; solid #000; width: 7%; text-align: left;">
-					<img style="margin-top: 7px; margin-left: 7px;" id="imag" src="<?php echo $url_sistema ?>img/logo.jpg" width="170px">
+					<img style="margin-top: 7px; margin-left: 7px;" id="imag" src="<?= $src_logo ?>" width="170px">
 				</td>
 				<td style="width: 30%; text-align: left; font-size: 13px;">
 					

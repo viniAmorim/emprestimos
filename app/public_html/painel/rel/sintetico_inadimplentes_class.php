@@ -1,39 +1,41 @@
 <?php 
 @session_start();
-$id_usuario = @$_SESSION['id'];
+
+// Pegando o ID da sessão
+$id_usuario = $_SESSION['id'] ?? null;
+
+if (!$id_usuario) {
+    die('Usuário não autenticado.');
+}
+
+// Disponibilizando o ID para o include (caso o script use $_GET['id_usuario'])
+$_GET['id_usuario'] = $id_usuario;
 
 require_once("../../conexao.php");
 
-$html = file_get_contents($url_sistema."painel/rel/sintetico_ina.php?id_usuario=$id_usuario");
+// Captura do HTML renderizado
+ob_start();
+include('sintetico_ina.php');
+$html = ob_get_clean();
 
-//CARREGAR DOMPDF
+// DOMPDF
 require_once '../dompdf/autoload.inc.php';
 use Dompdf\Dompdf;
 use Dompdf\Options;
 
-header("Content-Transfer-Encoding: binary");
-header("Content-Type: image/png");
-
-//INICIALIZAR A CLASSE DO DOMPDF
+// Inicializa o DOMPDF
 $options = new Options();
 $options->set('isRemoteEnabled', TRUE);
-$pdf = new DOMPDF($options);
+$pdf = new Dompdf($options);
 
-
-//Definir o tamanho do papel e orientação da página
+// Configurações do PDF
 $pdf->set_paper('A4', 'portrait');
-
-//CARREGAR O CONTEÚDO HTML
 $pdf->load_html($html);
-
-//RENDERIZAR O PDF
 $pdf->render();
-//NOMEAR O PDF GERADO
 
-
+// Envia o PDF ao navegador (inline)
 $pdf->stream(
 	'inadimplentes.pdf',
 	array("Attachment" => false)
 );
-
- ?>
+?>
