@@ -1,41 +1,40 @@
 <?php 
 require_once("../../conexao.php");
 
-$cliente = $_POST['cliente'];
-$status = $_POST['status'];
+// Receber dados do POST
+$cliente = $_POST['cliente'] ?? '';
+$status = $_POST['status'] ?? '';
 
-$html = file_get_contents($url_sistema."painel/rel/emprestimos.php?cliente=$cliente&status=$status");
+// Garantir que o script incluído receba os POSTs
+$_POST['cliente'] = $cliente;
+$_POST['status']  = $status;
 
-//CARREGAR DOMPDF
+// Capturar a saída HTML do relatório
+ob_start();
+require("emprestimos.php");
+$html = ob_get_clean();
+
+// Carregar DOMPDF
 require_once '../dompdf/autoload.inc.php';
 use Dompdf\Dompdf;
 use Dompdf\Options;
 
-header("Content-Transfer-Encoding: binary");
-header("Content-Type: image/png");
-
-//INICIALIZAR A CLASSE DO DOMPDF
 $options = new Options();
-$options->set('isRemoteEnabled', TRUE);
-$pdf = new DOMPDF($options);
+$options->set('isRemoteEnabled', true); // permite imagens externas
+$pdf = new Dompdf($options);
 
-
-//Definir o tamanho do papel e orientação da página
+// Definir tamanho do papel e orientação
 $pdf->set_paper('A4', 'portrait');
 
-//CARREGAR O CONTEÚDO HTML
+// Carregar HTML no DOMPDF
 $pdf->load_html($html);
 
-//RENDERIZAR O PDF
+// Renderizar PDF
 $pdf->render();
-//NOMEAR O PDF GERADO
 
-
+// Enviar para o navegador
 $pdf->stream(
 	'emprestimos.pdf',
-	array("Attachment" => false)
+	array("Attachment" => false) // true para forçar download
 );
-
-
-
- ?>
+?>

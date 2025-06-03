@@ -4,8 +4,8 @@ include('../../conexao.php');
 include('data_formatada.php');
 
 
-$cliente = $_GET['cliente'];
-$status = $_GET['status'];
+$cliente = isset($_GET['cliente']) ? $_GET['cliente'] : '';
+$status = isset($_GET['status']) ? $_GET['status'] : '';
 
 
 if($status == ""){
@@ -69,19 +69,32 @@ body {font-family: 'Tw Cen MT', sans-serif;}
 
 </head>
 <body>
-<?php 
-if($marca_dagua == 'Sim'){ ?>
-<img class="marca" src="<?php echo $url_sistema ?>img/logo.jpg">	
+
+
+<?php
+if ($marca_dagua == 'Sim') {
+    $img_path = '../../img/logo.jpg'; 
+    $img_data = base64_encode(file_get_contents($img_path));
+    $src = 'data:image/jpeg;base64,' . $img_data;
+?>
+    <img class="marca" src="<?= $src ?>">
 <?php } ?>
 
 
 <div id="header" >
 
+<?php
+$img_path = '../../img/logo.jpg'; 
+$img_data = base64_encode(file_get_contents($img_path));
+$src_logo = 'data:image/jpeg;base64,' . $img_data;
+?>
+
+
 	<div style="border-style: solid; font-size: 10px; height: 50px;">
 		<table style="width: 100%; border: 0px solid #ccc;">
 			<tr>
 				<td style="border: 1px; solid #000; width: 20%; text-align: left;">
-					<img style="margin-top: 5px; margin-left: 7px;" id="imag" src="<?php echo $url_sistema ?>img/logo.jpg" width="160px">
+					<img style="margin-top: 5px; margin-left: 7px;" id="imag" src="<?= $src_logo ?>" width="160px">
 				</td>
 				<td style="width: 20%; text-align: left; font-size: 13px;">
 				
@@ -90,7 +103,7 @@ if($marca_dagua == 'Sim'){ ?>
 				
 				</td>
 				<td style="width: 55%; text-align: right; font-size: 9px;padding-right: 10px;">
-						<b><big>RELATÓRIO DE EMPRÉSTIMOS <?php echo mb_strtoupper($status) ?> </big></b><br>
+						<b><big>RELATÓRIO DE EMPRÉSTIMOS <?php echo mb_strtoupper($status ?? '') ?> </big></b><br>
 						<?php echo mb_strtoupper($nome_cliente) ?>
 						<br>
 						 <?php echo mb_strtoupper($data_hoje) ?>
