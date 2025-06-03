@@ -1,7 +1,12 @@
 <?php 
 require_once("../../conexao.php");
 
-$html = file_get_contents($url_sistema."painel/rel/caixa.php");
+//$html = file_get_contents($url_sistema."painel/rel/caixa.php");
+
+// Capturar a saída HTML do relatório
+ob_start();
+require("caixa.php");
+$html = ob_get_clean();
 
 //CARREGAR DOMPDF
 require_once '../dompdf/autoload.inc.php';

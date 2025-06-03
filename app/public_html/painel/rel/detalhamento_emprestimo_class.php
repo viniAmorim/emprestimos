@@ -8,7 +8,7 @@ $id = $_POST['id'];
 ob_start();
 $_GET['id'] = $id;
 $_GET['token'] = 'A5030';
-include "detalhamento_emprestimo.php"; // você cria esse arquivo com o HTML
+include "detalhamento_emprestimo.php";
 $html = ob_get_clean();
 
 //CARREGAR DOMPDF
