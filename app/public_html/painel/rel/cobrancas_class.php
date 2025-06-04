@@ -1,42 +1,40 @@
 <?php 
+@session_start();
 require_once("../../conexao.php");
 
-$dataInicial = $_POST['dataInicial'];
-$dataFinal = $_POST['dataFinal'];
-$cliente = $_POST['cliente'];
+// Pega os dados do formulário
+$dataInicial = $_POST['dataInicial'] ?? '';
+$dataFinal = $_POST['dataFinal'] ?? '';
+$cliente = $_POST['cliente'] ?? '';
 
-$html = file_get_contents($url_sistema."painel/rel/cobrancas.php?dataInicial=$dataInicial&dataFinal=$dataFinal&cliente=$cliente");
+// Disponibiliza como variáveis GET para o script incluído
+$_GET['dataInicial'] = $dataInicial;
+$_GET['dataFinal'] = $dataFinal;
+$_GET['cliente'] = $cliente;
 
-//CARREGAR DOMPDF
+// Captura o conteúdo HTML renderizado por cobrancas.php
+ob_start();
+include('cobrancas.php');
+$html = ob_get_clean();
+
+// Carrega o DOMPDF
 require_once '../dompdf/autoload.inc.php';
 use Dompdf\Dompdf;
 use Dompdf\Options;
 
-header("Content-Transfer-Encoding: binary");
-header("Content-Type: image/png");
-
-//INICIALIZAR A CLASSE DO DOMPDF
+// Inicializa a classe do DOMPDF
 $options = new Options();
 $options->set('isRemoteEnabled', TRUE);
-$pdf = new DOMPDF($options);
+$pdf = new Dompdf($options);
 
-
-//Definir o tamanho do papel e orientação da página
+// Define o tamanho do papel e orientação
 $pdf->set_paper('A4', 'portrait');
-
-//CARREGAR O CONTEÚDO HTML
 $pdf->load_html($html);
-
-//RENDERIZAR O PDF
 $pdf->render();
-//NOMEAR O PDF GERADO
 
-
+// Envia o PDF ao navegador (inline)
 $pdf->stream(
-	'cobrancas.pdf',
-	array("Attachment" => false)
+    'cobrancas.pdf',
+    array("Attachment" => false)
 );
-
-
-
- ?>
+?>
