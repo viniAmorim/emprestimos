@@ -20,6 +20,18 @@ $id = @$_POST['id'];
 $pessoa = @$_POST['pessoa'];
 $status = @$_POST['status'];
 
+$rg = @$_POST['rg'];
+$ramo = @$_POST['ramo'];
+$quadra = @$_POST['quadra'];
+$lote = @$_POST['lote'];
+$complemento = @$_POST['complemento'];
+$referencia_nome = @$_POST['referencia_nome'];
+$referencia_contato = @$_POST['referencia_contato'];
+$referencia_parentesco = @$_POST['referencia_parentesco'];
+$modelo_veiculo = @$_POST['modelo_veiculo'];
+$status_veiculo = @$_POST['status_veiculo'];
+$placa = @$_POST['placa'];
+
 $nome_sec = @$_POST['nome_sec'];
 $telefone_sec = @$_POST['telefone_sec'];
 $endereco_sec = @$_POST['endereco_sec'];
@@ -282,12 +294,86 @@ if (@$_FILES['foto']['name'] != "") {
 
 
 if($id == ""){
-$query = $pdo->prepare("INSERT INTO $tabela SET nome = :nome, email = :email, cpf = :cpf, telefone = :telefone, data_cad = curDate(), endereco = :endereco, data_nasc = '$data_nasc', obs = :obs, pix = :pix, indicacao = :indicacao, bairro = :bairro, estado = :estado, cidade = :cidade, cep = :cep, pessoa = :pessoa, nome_sec = :nome_sec, telefone_sec = :telefone_sec, endereco_sec = :endereco_sec, grupo = :grupo, status = :status, comprovante_endereco = '$comprovante_endereco', comprovante_rg = '$comprovante_rg', dados_emprestimo = :dados_emprestimo, telefone2 = :telefone2, foto = '$foto', status_cliente = '$status_cliente', senha_crip = '$senha_crip' ");
+$query = $pdo->prepare("INSERT INTO $tabela 
+  SET nome = :nome, 
+  email = :email, 
+  cpf = :cpf, 
+  telefone = :telefone, 
+  data_cad = curDate(), 
+  endereco = :endereco, 
+  data_nasc = '$data_nasc', 
+  obs = :obs, 
+  pix = :pix, 
+  indicacao = :indicacao, 
+  bairro = :bairro, 
+  estado = :estado, 
+  cidade = :cidade, 
+  cep = :cep, 
+  pessoa = :pessoa, 
+  nome_sec = :nome_sec, 
+  telefone_sec = :telefone_sec, 
+  endereco_sec = :endereco_sec, 
+  grupo = :grupo, status = :status, 
+  comprovante_endereco = '$comprovante_endereco', 
+  comprovante_rg = '$comprovante_rg', 
+  dados_emprestimo = :dados_emprestimo, 
+  telefone2 = :telefone2, 
+  foto = '$foto', 
+  status_cliente = '$status_cliente', 
+  senha_crip = '$senha_crip', 
+  rg = :rg, ramo = :ramo, 
+  quadra = :quadra, 
+  lote = :lote, 
+  complemento = :complemento,
+  referencia_nome = :referencia_nome, 
+  referencia_contato = :referencia_contato, 
+  referencia_parentesco = :referencia_parentesco,
+  modelo_veiculo = :modelo_veiculo,
+  status_veiculo = :status_veiculo, 
+  placa = :placa "
+);
 
 $query->bindValue(":dados_emprestimo", "$dados_emprestimo");
 	
 }else{
-$query = $pdo->prepare("UPDATE $tabela SET nome = :nome, email = :email, cpf = :cpf, telefone = :telefone, endereco = :endereco, data_nasc = '$data_nasc', obs = :obs, pix = :pix, indicacao = :indicacao, bairro = :bairro, estado = :estado, cidade = :cidade, cep = :cep, pessoa = :pessoa, nome_sec = :nome_sec, telefone_sec = :telefone_sec, endereco_sec = :endereco_sec, grupo = :grupo, status = :status, comprovante_endereco = '$comprovante_endereco', comprovante_rg = '$comprovante_rg', telefone2 = :telefone2, foto = '$foto', status_cliente = '$status_cliente' where id = '$id'");
+$query = $pdo->prepare("
+  UPDATE $tabela SET 
+    nome = :nome, 
+    email = :email, 
+    cpf = :cpf, 
+    telefone = :telefone, 
+    endereco = :endereco, 
+    data_nasc = '$data_nasc', 
+    obs = :obs, 
+    pix = :pix, 
+    indicacao = :indicacao, 
+    bairro = :bairro, 
+    estado = :estado, 
+    cidade = :cidade, 
+    cep = :cep, 
+    pessoa = :pessoa, 
+    nome_sec = :nome_sec, 
+    telefone_sec = :telefone_sec, 
+    endereco_sec = :endereco_sec, 
+    grupo = :grupo, 
+    status = :status, 
+    comprovante_endereco = '$comprovante_endereco', 
+    comprovante_rg = '$comprovante_rg', 
+    telefone2 = :telefone2, 
+    foto = '$foto', 
+    status_cliente = '$status_cliente',
+    rg = :rg, ramo = :ramo, 
+    quadra = :quadra, 
+    lote = :lote, 
+    complemento = :complemento,
+    referencia_nome = :referencia_nome, 
+    referencia_contato = :referencia_contato, 
+    referencia_parentesco = :referencia_parentesco,
+    modelo_veiculo = :modelo_veiculo,
+    status_veiculo = :status_veiculo, 
+    placa = :placa, 
+    where id = '$id'
+");
 }
 $query->bindValue(":nome", "$nome");
 $query->bindValue(":email", "$email");
@@ -309,6 +395,19 @@ $query->bindValue(":endereco_sec", "$endereco_sec");
 $query->bindValue(":grupo", "$grupo");
 $query->bindValue(":status", "$status");
 $query->bindValue(":telefone2", "$telefone2");
+
+$query->bindValue(":rg", "$rg");
+$query->bindValue(":ramo", "$ramo");
+$query->bindValue(":quadra", "$quadra");
+$query->bindValue(":lote", "$lote");
+$query->bindValue(":complemento", "$complemento");
+$query->bindValue(":referencia_nome", "$referencia_nome");
+$query->bindValue(":referencia_contato", "$referencia_contato");
+$query->bindValue(":referencia_parentesco", "$referencia_parentesco");
+$query->bindValue(":modelo_veiculo", "$modelo_veiculo");
+$query->bindValue(":status_veiculo", "$status_veiculo");
+$query->bindValue(":placa", "$placa");
+
 $query->execute();
 
 echo 'Salvo com Sucesso';

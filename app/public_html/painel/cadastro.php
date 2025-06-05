@@ -11,8 +11,6 @@
 	<!-- Bootstrap Core CSS -->
 	<link href="painel/css/bootstrap.css" rel='stylesheet' type='text/css' />
 
-	
-
 	<!-- font-awesome icons CSS -->
 	<link href="painel/css/font-awesome.css" rel="stylesheet"> 
 	<!-- //font-awesome icons CSS-->
@@ -43,42 +41,38 @@
 				
 
 					<div class="row">
-						<div class="col-md-6" style="margin-bottom:10px">							
+						<div class="col-md-5" style="margin-bottom:10px">							
 								<label>Nome</label>
 								<input type="text" class="form-control" id="nome" name="nome" placeholder="Nome" required>							
 						</div>
 
-						<div class="col-md-6" style="margin-bottom:10px">							
+						<div class="col-md-4" style="margin-bottom:10px">							
 								<label>Email</label>
 								<input type="email" class="form-control" id="email" name="email" placeholder="Email" >							
 						</div>
 
-						
+            <div class="col-md-3" style="margin-bottom:10px">							
+								<label>Telefone</label>
+								<input type="text" class="form-control" id="telefone" name="telefone" placeholder="Telefone" required>							
+						</div>
 					</div>
 
 
 					<div class="row">
-
-						<div class="col-md-3" style="margin-bottom:10px">							
-								<label>Telefone</label>
-								<input type="text" class="form-control" id="telefone" name="telefone" placeholder="Telefone" required>							
-						</div>
-
-
 						<div class="col-md-3 " style="margin-bottom:10px">							
 								<label>CPF</label>
 								<input type="text" class="form-control" id="cpf" name="cpf" placeholder="CPF" required>							
 						</div>	
 
-
+            <div class="col-md-3" style="margin-bottom:10px">
+                <label>RG</label>
+                <input type="text" class="form-control" id="rg" name="rg" placeholder="RG">
+            </div>
 
 							<div class="col-md-2 " style="margin-bottom:10px">							
 								<label>Data Nascimento</label>
 								<input type="text" class="form-control" id="data_nasc" name="data_nasc" placeholder="dd/mm/aaaa">							
 						</div>				
-
-						
-
 
 							<div class="col-md-2 " style="margin-bottom:10px">							
 								<label>Senha</label>
@@ -91,14 +85,10 @@
 								<input type="password" class="form-control" id="conf_senha" name="conf_senha" placeholder="" required="">							
 						</div>
 
-
 					</div>
 
 
 					<div class="row">
-
-				
-				
 
 						<div class="col-md-3 " style="margin-bottom:10px">							
 								<label>CEP</label>
@@ -127,56 +117,119 @@
 								<label>Estado</label>
 								<select class="form-control" id="estado" name="estado">
 									<option value="">Selecionar</option>
-    <option value="AC">Acre</option>
-    <option value="AL">Alagoas</option>
-    <option value="AP">Amapá</option>
-    <option value="AM">Amazonas</option>
-    <option value="BA">Bahia</option>
-    <option value="CE">Ceará</option>
-    <option value="DF">Distrito Federal</option>
-    <option value="ES">Espírito Santo</option>
-    <option value="GO">Goiás</option>
-    <option value="MA">Maranhão</option>
-    <option value="MT">Mato Grosso</option>
-    <option value="MS">Mato Grosso do Sul</option>
-    <option value="MG">Minas Gerais</option>
-    <option value="PA">Pará</option>
-    <option value="PB">Paraíba</option>
-    <option value="PR">Paraná</option>
-    <option value="PE">Pernambuco</option>
-    <option value="PI">Piauí</option>
-    <option value="RJ">Rio de Janeiro</option>
-    <option value="RN">Rio Grande do Norte</option>
-    <option value="RS">Rio Grande do Sul</option>
-    <option value="RO">Rondônia</option>
-    <option value="RR">Roraima</option>
-    <option value="SC">Santa Catarina</option>
-    <option value="SP">São Paulo</option>
-    <option value="SE">Sergipe</option>
-    <option value="TO">Tocantins</option>
-    <option value="EX">Estrangeiro</option>
-</select>						
-						</div>
-
-						
-					</div>
-
-
-					<div class="row">
-
-						<div class="col-md-6" style="margin-bottom:10px">							
-								<label>Chave Pix ou Conta bancária</label>
-								<input type="text" class="form-control" id="pix" name="pix" placeholder="Chave Pix" >							
-						</div>
-
-						<div class="col-md-6" style="margin-bottom:10px">							
-								<label>Indicação</label>
-								<input type="text" class="form-control" id="indicacao" name="indicacao" placeholder="Indicado Por" >							
+                  <option value="AC">Acre</option>
+                  <option value="AL">Alagoas</option>
+                  <option value="AP">Amapá</option>
+                  <option value="AM">Amazonas</option>
+                  <option value="BA">Bahia</option>
+                  <option value="CE">Ceará</option>
+                  <option value="DF">Distrito Federal</option>
+                  <option value="ES">Espírito Santo</option>
+                  <option value="GO">Goiás</option>
+                  <option value="MA">Maranhão</option>
+                  <option value="MT">Mato Grosso</option>
+                  <option value="MS">Mato Grosso do Sul</option>
+                  <option value="MG">Minas Gerais</option>
+                  <option value="PA">Pará</option>
+                  <option value="PB">Paraíba</option>
+                  <option value="PR">Paraná</option>
+                  <option value="PE">Pernambuco</option>
+                  <option value="PI">Piauí</option>
+                  <option value="RJ">Rio de Janeiro</option>
+                  <option value="RN">Rio Grande do Norte</option>
+                  <option value="RS">Rio Grande do Sul</option>
+                  <option value="RO">Rondônia</option>
+                  <option value="RR">Roraima</option>
+                  <option value="SC">Santa Catarina</option>
+                  <option value="SP">São Paulo</option>
+                  <option value="SE">Sergipe</option>
+                  <option value="TO">Tocantins</option>
+                  <option value="EX">Estrangeiro</option>
+                </select>						
 						</div>
 					</div>
 
+          <div class="row">
+            <div class="col-md-8" style="margin-bottom:10px">
+              <label>Complemento</label>
+              <input type="text" class="form-control" id="complemento" name="complemento" placeholder="Complemento do endereço">
+            </div>
+            <div class="col-md-2" style="margin-bottom:10px">
+              <label>Quadra</label>
+              <input type="text" class="form-control" id="quadra" name="quadra" placeholder="Quadra">
+            </div>
 
+            <div class="col-md-2" style="margin-bottom:10px">
+                <label>Lote</label>
+                <input type="text" class="form-control" id="lote" name="lote" placeholder="Lote">
+            </div>
+					</div>
 
+          <div class="row">
+            
+					</div>
+
+          <div class="row">
+            <div class="col-md-4" style="margin-bottom:10px">
+              <label>Contato de Referência</label>
+              <input type="text" class="form-control" id="referencia_contato" name="referencia_contato" placeholder="Contato de referência">
+            </div>
+
+            <div class="col-md-4" style="margin-bottom:10px">
+              <label>Nome completo da referência</label>
+              <input type="text" class="form-control" id="referencia_nome" name="referencia_nome" placeholder="Nome completo da referência">
+            </div>
+
+            <div class="col-md-4" style="margin-bottom:10px">
+              <label>Grau de parentesco</label>
+              <input type="text" class="form-control" id="referencia_parentesco" name="referencia_parentesco" placeholder="Grau de parentesco">
+            </div>
+
+					</div>
+
+          <div class="row">
+            <div class="col-md-4" style="margin-bottom:10px">							
+              <label>Chave Pix ou Conta bancária</label>
+              <input type="text" class="form-control" id="pix" name="pix" placeholder="Chave Pix">							
+            </div>
+
+            <div class="col-md-4" style="margin-bottom:10px">							
+              <label>Indicação</label>
+              <input type="text" class="form-control" id="indicacao" name="indicacao" placeholder="Indicado Por">							
+            </div>
+
+            <div class="col-md-4" style="margin-bottom:10px">
+              <label>Ramo de Atuação</label>
+              <input type="text" class="form-control" id="ramo" name="ramo" placeholder="Ex: Vendas, Construção, Prestador de Serviço...">
+            </div>
+          </div>
+
+          <!-- Campos de veículo agrupados com id para controle -->
+          <div class="row" id="campos_veiculo" style="display: none;">
+            <div class="col-md-4" style="margin-bottom:10px">							
+              <label>Modelo veículo</label>
+              <input type="text" class="form-control" id="modelo_veiculo" name="modelo_veiculo" placeholder="Modelo do veículo">							
+            </div>
+
+            <div class="col-md-3" style="margin-bottom:10px">							
+              <label>Placa</label>
+              <input type="text" class="form-control" id="placa" name="placa" placeholder="Placa do veículo">							
+            </div>
+
+            <div class="col-md-3" style="margin-bottom:10px">							
+              <label>Status do veículo</label>
+              <select class="form-control" id="status_veiculo" name="status_veiculo">
+                <option value="">Selecionar</option>
+                <option value="AC">Próprio</option>
+                <option value="AL">Alugado</option>                  
+              </select>								
+            </div>
+
+            <div class="col-md-2" style="margin-bottom:10px">							
+              <label>Valor do aluguel</label>
+              <input type="text" class="form-control" id="valor_aluguel" name="valor_aluguel" placeholder="Valor do aluguel">							
+            </div>
+          </div>
 
 					<div class="row">
 
@@ -275,6 +328,23 @@
 
 
 <script>
+
+  function verificaRamoAtuacao() {
+      // Pega o valor do campo "ramo", remove espaços e converte para minúsculo
+      const ramo = document.getElementById('ramo').value.trim().toLowerCase();
+
+      // Mostra ou esconde os campos do veículo com base no valor do ramo
+      if (ramo === 'uber') {
+        $('#campos_veiculo').slideDown();
+      } else {
+        $('#campos_veiculo').slideUp();
+      }
+    }
+
+    // Associa a função ao evento de input no campo "ramo"
+    $(document).ready(function() {
+      $('#ramo').on('input', verificaRamoAtuacao);
+    });
     
     function limpa_formulário_cep() {
             //Limpa valores do formulário de cep.
