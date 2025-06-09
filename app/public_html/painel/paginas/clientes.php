@@ -19,8 +19,6 @@ if($verificar_pagamentos != 'Não'){
 	}
 }
 
-
-
  ?>
 
 <div class="main-page margin-mobile">

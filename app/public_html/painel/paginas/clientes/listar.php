@@ -129,26 +129,26 @@ if($recursos == 'Empréstimos'){
 	$ocultar_cobr = 'ocultar';
 }
 
-			//extensão do arquivo
-$ext = pathinfo($comprovante_endereco, PATHINFO_EXTENSION);
-if($ext == 'pdf'){
+// extensão do arquivo (comprovante de endereço)
+$ext = (!empty($comprovante_endereco)) ? pathinfo($comprovante_endereco, PATHINFO_EXTENSION) : '';
+if ($ext === 'pdf') {
 	$tumb_comprovante_endereco = 'pdf.png';
-}else if($ext == 'rar' || $ext == 'zip'){
+} else if ($ext === 'rar' || $ext === 'zip') {
 	$tumb_comprovante_endereco = 'rar.png';
-}else{
-	$tumb_comprovante_endereco = $comprovante_endereco;
+} else {
+	$tumb_comprovante_endereco = $comprovante_endereco ?: 'sem-foto.png';
 }
 
-
-			//extensão do arquivo
-$ext = pathinfo($comprovante_rg, PATHINFO_EXTENSION);
-if($ext == 'pdf'){
+// extensão do arquivo (comprovante de RG)
+$ext = (!empty($comprovante_rg)) ? pathinfo($comprovante_rg, PATHINFO_EXTENSION) : '';
+if ($ext === 'pdf') {
 	$tumb_comprovante_rg = 'pdf.png';
-}else if($ext == 'rar' || $ext == 'zip'){
+} else if ($ext === 'rar' || $ext === 'zip') {
 	$tumb_comprovante_rg = 'rar.png';
-}else{
-	$tumb_comprovante_rg = $comprovante_rg;
+} else {
+	$tumb_comprovante_rg = $comprovante_rg ?: 'sem-foto.png';
 }
+
 
 $enderecoF2 = rawurlencode($endereco ?? '');
 
