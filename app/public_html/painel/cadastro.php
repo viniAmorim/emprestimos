@@ -31,7 +31,10 @@
 	<script src="painel/js/Chart.js"></script>
 	<!-- //chart -->
 
-	
+  <!-- sweet alert -->
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <!-- sweet alert -->
+
 
 	</head> 
 <body class="cbp-spmenu-push">
@@ -421,49 +424,64 @@
 
 
 
-$("#form").submit(function () {
+    $("#form").submit(function (event) {
 
-    $('#mensagem').text('Salvando!!!');
-    
-    event.preventDefault();
-    var formData = new FormData(this);
+event.preventDefault();
+var formData = new FormData(this);
 
-    $.ajax({
-        url: 'painel/paginas/clientes/salvar.php',
-        type: 'POST',
-        data: formData,
-
-        success: function (mensagem) {
-            $('#mensagem').text('');
-            $('#mensagem').removeClass()
-            if (mensagem.trim() == "Salvo com Sucesso") {
-
-            	alert("Cadastrado com Sucesso!");   
-            	window.location="acesso";           
-
-            } else {
-            	alert(mensagem); 
-                $('#mensagem').addClass('text-danger')
-                //$('#mensagem').text(mensagem)
-            }
-
-
-        },
-
-        cache: false,
-        contentType: false,
-        processData: false,
-
-    });
-
+// Exibe alerta de carregamento
+Swal.fire({
+    title: 'Salvando...',
+    text: 'Aguarde um instante.',
+    icon: 'info',
+    showConfirmButton: false,
+    allowOutsideClick: false,
+    allowEscapeKey: false,
+    didOpen: () => {
+        Swal.showLoading()
+    }
 });
 
+$.ajax({
+    url: 'painel/paginas/clientes/salvar.php',
+    type: 'POST',
+    data: formData,
+
+    success: function (mensagem) {
+        $('#mensagem').text('');
+        $('#mensagem').removeClass();
+
+        if (mensagem.trim() == "Salvo com Sucesso") {
+            // Mostra alerta de sucesso com SweetAlert
+            Swal.fire({
+                title: 'Sucesso!',
+                text: 'Cadastrado com sucesso!',
+                icon: 'success',
+                confirmButtonText: 'OK'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location = "acesso";
+                }
+            });
+        } else {
+            // Mostra erro com SweetAlert
+            Swal.fire({
+                title: 'Erro ao cadastrar!',
+                text: mensagem,
+                icon: 'error',
+                confirmButtonText: 'OK'
+            });
+        }
+    },
+
+    cache: false,
+    contentType: false,
+    processData: false,
+});
+});
+
+
     </script>
-
-
-
-
-
 
 <script type="text/javascript">
 	function carregarImgComprovanteEndereco() {
