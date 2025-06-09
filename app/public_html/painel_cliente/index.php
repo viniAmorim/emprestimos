@@ -523,10 +523,12 @@ $total_cobrancas = @count($res);
 	})
 </script>
 
-
-
-
-
+<script>
+$(document).ready(function() {
+    // Desabilita todos os inputs e selects dentro do formulário
+    $('#form-perfil').find('input, select, textarea').not('#senha_perfil, #conf_senha_perfil').prop('disabled', true);
+});
+</script>
 
  <script type="text/javascript">
 	$("#form-perfil").submit(function () {
