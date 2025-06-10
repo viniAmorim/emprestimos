@@ -50,7 +50,7 @@
 
 						<div class="col-md-4" style="margin-bottom:10px">							
 								<label>Email</label>
-								<input type="email" class="form-control" id="email" name="email" placeholder="Email" >							
+								<input type="email" class="form-control" id="email" name="email" placeholder="Email" required>							
 						</div>
 
             <div class="col-md-3" style="margin-bottom:10px">							
@@ -68,12 +68,12 @@
 
             <div class="col-md-3" style="margin-bottom:10px">
                 <label>RG</label>
-                <input type="text" class="form-control" id="rg" name="rg" placeholder="RG">
+                <input type="text" class="form-control" id="rg" name="rg" placeholder="RG" required>
             </div>
 
 							<div class="col-md-2 " style="margin-bottom:10px">							
 								<label>Data Nascimento</label>
-								<input type="text" class="form-control" id="data_nasc" name="data_nasc" placeholder="dd/mm/aaaa">							
+								<input type="text" class="form-control" id="data_nasc" name="data_nasc" placeholder="dd/mm/aaaa" required>							
 						</div>				
 
 							<div class="col-md-2 " style="margin-bottom:10px">							
@@ -94,12 +94,12 @@
 
 						<div class="col-md-3 " style="margin-bottom:10px">							
 								<label>CEP</label>
-								<input type="text" class="form-control" id="cep" name="cep" placeholder="CEP" onblur="pesquisacep(this.value);">							
+								<input type="text" class="form-control" id="cep" name="cep" placeholder="CEP" onblur="pesquisacep(this.value);" required>							
 						</div>
 
 						<div class="col-md-9" style="margin-bottom:10px">							
 								<label>Endereço</label>
-								<input type="text" class="form-control" id="endereco" name="endereco" placeholder="Rua e Número" >							
+								<input type="text" class="form-control" id="endereco" name="endereco" placeholder="Rua e Número" required>							
 						</div>
 					</div>
 
@@ -107,15 +107,15 @@
 					<div class="row">
 						<div class="col-md-5" style="margin-bottom:10px">							
 								<label>Bairro</label>
-								<input type="text" class="form-control" id="bairro" name="bairro" placeholder="Bairro" >							
+								<input type="text" class="form-control" id="bairro" name="bairro" placeholder="Bairro" required>							
 						</div>
 
 						<div class="col-md-4 col-xs-7" style="margin-bottom:10px">							
 								<label>Cidade</label>
-								<input type="text" class="form-control" id="cidade" name="cidade" placeholder="Cidade" >							
+								<input type="text" class="form-control" id="cidade" name="cidade" placeholder="Cidade" required>							
 						</div>
 
-						<div class="col-md-3 col-xs-5" style="margin-bottom:10px">							
+						<div class="col-md-3 col-xs-5" style="margin-bottom:10px" required>							
 								<label>Estado</label>
 								<select class="form-control" id="estado" name="estado">
 									<option value="">Selecionar</option>
@@ -154,16 +154,16 @@
           <div class="row">
             <div class="col-md-8" style="margin-bottom:10px">
               <label>Complemento</label>
-              <input type="text" class="form-control" id="complemento" name="complemento" placeholder="Complemento do endereço">
+              <input type="text" class="form-control" id="complemento" name="complemento" placeholder="Complemento do endereço" required>
             </div>
             <div class="col-md-2" style="margin-bottom:10px">
               <label>Quadra</label>
-              <input type="text" class="form-control" id="quadra" name="quadra" placeholder="Quadra">
+              <input type="text" class="form-control" id="quadra" name="quadra" placeholder="Quadra" required>
             </div>
 
             <div class="col-md-2" style="margin-bottom:10px">
                 <label>Lote</label>
-                <input type="text" class="form-control" id="lote" name="lote" placeholder="Lote">
+                <input type="text" class="form-control" id="lote" name="lote" placeholder="Lote" required>
             </div>
 					</div>
 
@@ -174,15 +174,15 @@
           <div class="row">
             <div class="col-md-4" style="margin-bottom:10px">
               <label>Contato de Referência</label>
-              <input type="text" class="form-control" id="referencia_contato" name="referencia_contato" placeholder="Contato de referência">
+              <input type="text" class="form-control" id="referencia_contato" name="referencia_contato" placeholder="Contato de referência" required>
             </div>
 
             <div class="col-md-4" style="margin-bottom:10px">
               <label>Nome completo da referência</label>
-              <input type="text" class="form-control" id="referencia_nome" name="referencia_nome" placeholder="Nome completo da referência">
+              <input type="text" class="form-control" id="referencia_nome" name="referencia_nome" placeholder="Nome completo da referência" required>
             </div>
 
-            <div class="col-md-4" style="margin-bottom:10px">
+            <div class="col-md-4" style="margin-bottom:10px" required>
               <label>Grau de parentesco</label>
               <select class="form-control" id="referencia_parentesco" name="referencia_parentesco">
                 <option value="">Selecione</option>
@@ -209,18 +209,23 @@
           <div class="row">
             <div class="col-md-4" style="margin-bottom:10px">							
               <label>Chave Pix em sua titularidade</label>
-              <input type="text" class="form-control" id="pix" name="pix" placeholder="Chave Pix">							
+              <input type="text" class="form-control" id="pix" name="pix" placeholder="Chave Pix" required>							
             </div>
 
             <div class="col-md-4" style="margin-bottom:10px">							
               <label>Indicação</label>
-              <input type="text" class="form-control" id="indicacao" name="indicacao" placeholder="Indicado Por">							
+              <input type="text" class="form-control" id="indicacao" name="indicacao" placeholder="Indicado Por" required>							
             </div>
 
             <div class="col-md-4" style="margin-bottom:10px">
-              <label>Ramo de Atuação</label>
-              <input type="text" class="form-control" id="ramo" name="ramo" placeholder="Ex: Vendas, Construção, Prestador de Serviço...">
+              <label for="ramo">Ramo de Atuação</label>
+              <select class="form-control" id="ramo" name="ramo" required>
+                <option value="" disabled selected>Selecione...</option>
+                <option value="uber">Motorista/Entregador App</option>
+                <option value="outros">Outros Ramos</option>
+              </select>
             </div>
+
           </div>
 
           <!-- Campos de veículo agrupados com id para controle -->
@@ -232,7 +237,7 @@
 
             <div class="col-md-3" style="margin-bottom:10px">							
               <label>Placa</label>
-              <input type="text" class="form-control" id="placa" name="placa" placeholder="Placa do veículo">							
+              <input type="text" class="form-control" id="placa" name="placa" placeholder="Placa do veículo" >							
             </div>
 
             <div class="col-md-3" style="margin-bottom:10px">							
@@ -254,7 +259,7 @@
 					<div class="row">
 						<div class="col-md-4">							
 								<label>Comprovante Endereço</label>
-								<input type="file" class="form-control" id="comprovante_endereco" name="comprovante_endereco"  onchange="carregarImgComprovanteEndereco()">							
+								<input type="file" class="form-control" id="comprovante_endereco" name="comprovante_endereco"  onchange="carregarImgComprovanteEndereco()" required>							
 						</div>
 
 						<div class="col-md-2">								
@@ -264,7 +269,7 @@
 
 						<div class="col-md-4">							
 								<label>Comprovante RG / CPF</label>
-								<input type="file" class="form-control" id="comprovante_rg" name="comprovante_rg"  onchange="carregarImgComprovanteRG()">							
+								<input type="file" class="form-control" id="comprovante_rg" name="comprovante_rg"  onchange="carregarImgComprovanteRG()" required>							
 						</div>
 
 						<div class="col-md-2">								
@@ -277,12 +282,12 @@
           <div class="row">
             <div class="col-md-6" style="margin-bottom:10px">
               <label>Valor desejado</label>
-              <input type="text" class="form-control money" id="valor_desejado" name="valor_desejado" placeholder="R$ 0,00">
+              <input type="text" class="form-control money" id="valor_desejado" name="valor_desejado" placeholder="R$ 0,00" required>
             </div>
 
             <div class="col-md-6" style="margin-bottom:10px">
               <label>Valor da parcela desejada</label>
-              <input type="text" class="form-control money" id="valor_parcela_desejada" name="valor_parcela_desejada" placeholder="R$ 0,00">
+              <input type="text" class="form-control money" id="valor_parcela_desejada" name="valor_parcela_desejada" placeholder="R$ 0,00" required>
             </div>
           </div>
 					
@@ -302,9 +307,6 @@
 
 </body>
 </html>
-
-
-
 
 
 <!-- new added graphs chart js-->
@@ -399,16 +401,13 @@
   });
 
   function verificaRamoAtuacao() {
-      // Pega o valor do campo "ramo", remove espaços e converte para minúsculo
-      const ramo = document.getElementById('ramo').value.trim().toLowerCase();
-
-      // Mostra ou esconde os campos do veículo com base no valor do ramo
-      if (ramo === 'uber') {
-        $('#campos_veiculo').slideDown();
-      } else {
-        $('#campos_veiculo').slideUp();
-      }
+    const ramo = document.getElementById('ramo').value.trim().toLowerCase();
+    if (ramo === 'uber') {
+      $('#campos_veiculo').slideDown();
+    } else {
+      $('#campos_veiculo').slideUp();
     }
+  }
 
     // Associa a função ao evento de input no campo "ramo"
     $(document).ready(function() {
