@@ -42,8 +42,8 @@ $status_cliente = @$_POST['status_cliente'];
 $senha = @$_POST['senha'];
 $conf_senha = @$_POST['conf_senha'];
 
-$valor_desejado = @$_POST['valor_desejado'];
-$valor_parcela_desejada = @$_POST['valor_parcela_desejada'];
+$valor_desejado = isset($_POST['valor_desejado']) ? str_replace(',', '.', str_replace(['R$', '.', ' '], '', $_POST['valor_desejado'])) : 0;
+$valor_parcela_desejada = isset($_POST['valor_parcela_desejada']) ? str_replace(',', '.', str_replace(['R$', '.', ' '], '', $_POST['valor_parcela_desejada'])) : 0;
 
 if($cliente_cadastro == "Sim"){
 	if($senha != $conf_senha){

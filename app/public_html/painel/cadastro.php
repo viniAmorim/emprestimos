@@ -172,11 +172,10 @@
 					</div>
 
           <div class="row">
-          <div class="col-md-4" style="margin-bottom:10px">
-            <label>Contato de Referência</label>
-            <input type="text" class="form-control telefone" id="referencia_contato" name="referencia_contato" placeholder="(00) 00000-0000">
-          </div>
-
+            <div class="col-md-4" style="margin-bottom:10px">
+              <label>Contato de Referência</label>
+              <input type="text" class="form-control" id="referencia_contato" name="referencia_contato" placeholder="Contato de referência">
+            </div>
 
             <div class="col-md-4" style="margin-bottom:10px">
               <label>Nome completo da referência</label>
@@ -261,17 +260,14 @@
           <div class="row">
             <div class="col-md-6" style="margin-bottom:10px">
               <label>Valor desejado</label>
-              <input type="text" class="form-control currency" id="valor_desejado" name="valor_desejado" placeholder="R$ 0,00">
+              <input type="text" class="form-control money" id="valor_desejado" name="valor_desejado" placeholder="R$ 0,00">
             </div>
 
             <div class="col-md-6" style="margin-bottom:10px">
               <label>Valor da parcela desejada</label>
-              <input type="text" class="form-control currency" id="valor_parcela_desejada" name="valor_parcela_desejada" placeholder="R$ 0,00">
+              <input type="text" class="form-control money" id="valor_parcela_desejada" name="valor_parcela_desejada" placeholder="R$ 0,00">
             </div>
           </div>
-
-
-
 					
 					<input type="hidden" class="form-control" id="id" name="id">	
 					<input type="hidden" class="form-control" id="cliente_cadastro" name="cliente_cadastro" value="Sim">					
@@ -328,47 +324,61 @@
 
 
 <script>
-  function formatarTelefone(valor) {
-    valor = valor.replace(/\D/g, ''); // Remove tudo que não for número
+ // TELEFONE
+ function formatarTelefone(valor) {
+    valor = valor.replace(/\D/g, '');
+    if (valor.length > 11) valor = valor.slice(0, 11);
 
-    if (valor.length > 11) {
-      valor = valor.slice(0, 11); // Limita a 11 dígitos
-    }
-
-    // Formato celular com 9 dígitos
     if (valor.length > 10) {
       return valor.replace(/^(\d{2})(\d{5})(\d{4})$/, '($1) $2-$3');
-    }
-    // Formato fixo com 8 dígitos
-    if (valor.length > 6) {
+    } else if (valor.length > 6) {
       return valor.replace(/^(\d{2})(\d{4})(\d{0,4})$/, '($1) $2-$3');
-    }
-    if (valor.length > 2) {
+    } else if (valor.length > 2) {
       return valor.replace(/^(\d{2})(\d{0,5})$/, '($1) $2');
+    } else {
+      return valor.replace(/^(\d*)$/, '($1');
     }
-    if (valor.length > 0) {
-      return valor.replace(/^(\d{0,2})$/, '($1');
-    }
-
-    return '';
   }
 
   const telefoneInput = document.getElementById('referencia_contato');
 
   telefoneInput.addEventListener('input', function (e) {
-    const input = e.target;
-    const valorOriginal = input.value;
-    const cursorPosition = input.selectionStart;
+    const valorOriginal = e.target.value;
+    const cursor = e.target.selectionStart;
 
-    // Remove tudo que não for número
     const numeros = valorOriginal.replace(/\D/g, '');
-    const valorFormatado = formatarTelefone(numeros);
+    const formatado = formatarTelefone(numeros);
 
-    input.value = valorFormatado;
+    e.target.value = formatado;
 
-    // Ajusta o cursor (de forma simplificada, sem mover de volta)
-    const diff = valorFormatado.length - valorOriginal.length;
-    input.setSelectionRange(cursorPosition + diff, cursorPosition + diff);
+    const diff = formatado.length - valorOriginal.length;
+    e.target.setSelectionRange(cursor + diff, cursor + diff);
+  });
+
+  // VALORES (R$)
+  function formatarMoeda(valor) {
+    valor = valor.replace(/\D/g, '');
+    valor = (parseInt(valor, 10) / 100).toFixed(2);
+    return 'R$ ' + valor
+      .replace('.', ',')
+      .replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+  }
+
+  const camposMoeda = document.querySelectorAll('.money');
+
+  camposMoeda.forEach(function (campo) {
+    campo.addEventListener('input', function (e) {
+      let cursor = campo.selectionStart;
+      let valorAntigo = campo.value;
+      campo.value = formatarMoeda(campo.value);
+      let diff = campo.value.length - valorAntigo.length;
+      campo.setSelectionRange(cursor + diff, cursor + diff);
+    });
+
+    // Opcional: inicia já formatado se tiver valor
+    campo.addEventListener('blur', function () {
+      campo.value = formatarMoeda(campo.value);
+    });
   });
 
   function verificaRamoAtuacao() {
