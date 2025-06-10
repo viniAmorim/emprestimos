@@ -191,7 +191,7 @@
 
           <div class="row">
             <div class="col-md-4" style="margin-bottom:10px">							
-              <label>Chave Pix ou Conta bancária</label>
+              <label>Chave Pix em sua titularidade</label>
               <input type="text" class="form-control" id="pix" name="pix" placeholder="Chave Pix">							
             </div>
 
@@ -352,7 +352,7 @@
           .trim();
       });
   });
-  
+
   function verificaRamoAtuacao() {
       // Pega o valor do campo "ramo", remove espaços e converte para minúsculo
       const ramo = document.getElementById('ramo').value.trim().toLowerCase();
