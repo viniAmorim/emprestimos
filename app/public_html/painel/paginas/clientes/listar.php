@@ -312,7 +312,6 @@ HTML;
     	$('#telefone_dados').text(telefone);
     	$('#endereco_dados').text(decodeURIComponent(endereco));
     	$('#cpf_dados').text(cpf);
-    	$('#obs_dados').text(obs);
     	$('#data_nasc_dados').text(data_nasc);
     	$('#data_cad_dados').text(data_cad);
     	$('#pix_dados').text(pix);
