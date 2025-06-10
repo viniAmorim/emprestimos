@@ -331,59 +331,44 @@
   function formatarTelefone(valor) {
     valor = valor.replace(/\D/g, ''); // Remove tudo que não for número
 
+    if (valor.length > 11) {
+      valor = valor.slice(0, 11); // Limita a 11 dígitos
+    }
+
     // Formato celular com 9 dígitos
     if (valor.length > 10) {
-      valor = valor.replace(/^(\d{2})(\d{5})(\d{4}).*/, '($1) $2-$3');
-    } 
+      return valor.replace(/^(\d{2})(\d{5})(\d{4})$/, '($1) $2-$3');
+    }
     // Formato fixo com 8 dígitos
-    else if (valor.length > 5) {
-      valor = valor.replace(/^(\d{2})(\d{4})(\d{0,4}).*/, '($1) $2-$3');
-    } 
-    else if (valor.length > 2) {
-      valor = valor.replace(/^(\d{2})(\d{0,5})/, '($1) $2');
-    } 
-    else {
-      valor = valor.replace(/^(\d*)/, '($1');
+    if (valor.length > 6) {
+      return valor.replace(/^(\d{2})(\d{4})(\d{0,4})$/, '($1) $2-$3');
+    }
+    if (valor.length > 2) {
+      return valor.replace(/^(\d{2})(\d{0,5})$/, '($1) $2');
+    }
+    if (valor.length > 0) {
+      return valor.replace(/^(\d{0,2})$/, '($1');
     }
 
-    return valor;
+    return '';
   }
 
-  const inputTelefone = document.getElementById('referencia_contato');
+  const telefoneInput = document.getElementById('referencia_contato');
 
-  inputTelefone.addEventListener('input', function () {
-    this.value = formatarTelefone(this.value);
-  });
+  telefoneInput.addEventListener('input', function (e) {
+    const input = e.target;
+    const valorOriginal = input.value;
+    const cursorPosition = input.selectionStart;
 
-  // Limpa máscara no envio do formulário, se necessário
-  inputTelefone.form.addEventListener('submit', function () {
-    inputTelefone.value = inputTelefone.value.replace(/\D/g, '');
-  });
-  
+    // Remove tudo que não for número
+    const numeros = valorOriginal.replace(/\D/g, '');
+    const valorFormatado = formatarTelefone(numeros);
 
-  function formatarMoeda(input) {
-      let valor = input.value.replace(/\D/g, ''); // remove tudo que não for número
-      valor = (parseInt(valor, 10) / 100).toFixed(2); // divide por 100 para manter os centavos
-      valor = valor
-        .replace('.', ',')
-        .replace(/\B(?=(\d{3})+(?!\d))/g, '.'); // adiciona pontos nos milhares
-      input.value = 'R$ ' + valor;
-    }
+    input.value = valorFormatado;
 
-    document.querySelectorAll('.currency').forEach(input => {
-      // formatação ao digitar
-      input.addEventListener('input', function () {
-        formatarMoeda(this);
-      });
-
-      // remove máscara antes de enviar o formulário
-      input.form.addEventListener('submit', function () {
-        input.value = input.value
-          .replace('R$', '')
-          .replace(/\./g, '')
-          .replace(',', '.')
-          .trim();
-      });
+    // Ajusta o cursor (de forma simplificada, sem mover de volta)
+    const diff = valorFormatado.length - valorOriginal.length;
+    input.setSelectionRange(cursorPosition + diff, cursorPosition + diff);
   });
 
   function verificaRamoAtuacao() {
