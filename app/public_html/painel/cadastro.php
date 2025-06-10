@@ -184,8 +184,25 @@
 
             <div class="col-md-4" style="margin-bottom:10px">
               <label>Grau de parentesco</label>
-              <input type="text" class="form-control" id="referencia_parentesco" name="referencia_parentesco" placeholder="Grau de parentesco">
+              <select class="form-control" id="referencia_parentesco" name="referencia_parentesco">
+                <option value="">Selecione</option>
+                <option value="Pai">Pai</option>
+                <option value="Mãe">Mãe</option>
+                <option value="Filho">Filho</option>
+                <option value="Filha">Filha</option>
+                <option value="Irmão">Irmão</option>
+                <option value="Irmã">Irmã</option>
+                <option value="Tio">Tio</option>
+                <option value="Tia">Tia</option>
+                <option value="Avô">Avô</option>
+                <option value="Avó">Avó</option>
+                <option value="Primo">Primo</option>
+                <option value="Prima">Prima</option>
+                <option value="Sogro">Sogro</option>
+                <option value="Sogra">Sogra</option>
+              </select>
             </div>
+
 
 					</div>
 
