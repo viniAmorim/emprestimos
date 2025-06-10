@@ -234,15 +234,6 @@
             </div>
           </div>
 
-					<div class="row">
-
-						<div class="col-md-12" style="margin-bottom:10px">							
-								<label>Observações</label>
-								<input type="text" class="form-control" id="obs" name="obs" placeholder="Observações" >							
-						</div>
-					</div>
-
-
 					
 					<div class="row">
 						<div class="col-md-4">							

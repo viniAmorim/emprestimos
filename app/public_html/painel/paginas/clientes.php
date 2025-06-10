@@ -384,24 +384,9 @@ if($verificar_pagamentos != 'Não'){
 							<img src="images/clientes/sem-foto.jpg"  width="70px" id="target">								
 						</div>
 
-					</div>
+					</div>				
 
 
-
-
-					<div class="row">
-
-						<div class="col-md-12">							
-								<label>Observações</label>
-								<input type="text" class="form-control" id="obs" name="obs" placeholder="Observações" >							
-						</div>
-					</div>
-
-
-					
-
-
-					
 
 
 					<input type="hidden" class="form-control" id="id" name="id">					
@@ -536,13 +521,7 @@ if($verificar_pagamentos != 'Não'){
 						
 							<img width="75px" id="target_mostrar_foto">
 						
-					</div>	
-
-					
-					
-					<div class="col-md-12" style="margin-bottom: 5px" id="div_obs_dados">
-						<span><b>Obs: </b></span><span id="obs_dados"></span>
-					</div>					
+					</div>			
 
 				</div>
 			</small>
@@ -852,17 +831,7 @@ if($verificar_pagamentos != 'Não'){
 								</select>						
 						</div>
 
-					</div>
-
-					<div class="row">
-						<div class="col-md-12">							
-								<label>Observações</label>
-								<input type="text" class="form-control" id="obs" name="obs" placeholder="Observações" >							
-						</div>
-					</div>
-
-
-					
+					</div>	
 
 
 					<input type="hidden" class="form-control" id="id_emp" name="id">					
