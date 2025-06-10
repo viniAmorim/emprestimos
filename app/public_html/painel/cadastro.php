@@ -35,7 +35,6 @@
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <!-- sweet alert -->
 
-
 	</head> 
 <body class="cbp-spmenu-push">
 	<div class="container" style="margin-top:20px">
@@ -258,9 +257,21 @@
 
 					</div>
 
+          <div class="row">
+            <div class="col-md-6" style="margin-bottom:10px">
+              <label>Valor desejado</label>
+              <input type="text" class="form-control currency" id="valor_desejado" name="valor_desejado" placeholder="R$ 0,00">
+            </div>
+
+            <div class="col-md-6" style="margin-bottom:10px">
+              <label>Valor da parcela desejada</label>
+              <input type="text" class="form-control currency" id="valor_parcela_desejada" name="valor_parcela_desejada" placeholder="R$ 0,00">
+            </div>
+          </div>
+
+
 
 					
-
 					<input type="hidden" class="form-control" id="id" name="id">	
 					<input type="hidden" class="form-control" id="cliente_cadastro" name="cliente_cadastro" value="Sim">					
 
@@ -317,6 +328,31 @@
 
 <script>
 
+  function formatarMoeda(input) {
+      let valor = input.value.replace(/\D/g, ''); // remove tudo que não for número
+      valor = (parseInt(valor, 10) / 100).toFixed(2); // divide por 100 para manter os centavos
+      valor = valor
+        .replace('.', ',')
+        .replace(/\B(?=(\d{3})+(?!\d))/g, '.'); // adiciona pontos nos milhares
+      input.value = 'R$ ' + valor;
+    }
+
+    document.querySelectorAll('.currency').forEach(input => {
+      // formatação ao digitar
+      input.addEventListener('input', function () {
+        formatarMoeda(this);
+      });
+
+      // remove máscara antes de enviar o formulário
+      input.form.addEventListener('submit', function () {
+        input.value = input.value
+          .replace('R$', '')
+          .replace(/\./g, '')
+          .replace(',', '.')
+          .trim();
+      });
+  });
+  
   function verificaRamoAtuacao() {
       // Pega o valor do campo "ramo", remove espaços e converte para minúsculo
       const ramo = document.getElementById('ramo').value.trim().toLowerCase();

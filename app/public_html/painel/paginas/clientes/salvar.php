@@ -8,7 +8,6 @@ $telefone = @$_POST['telefone'];
 $data_nasc = @$_POST['data_nasc'];
 $data_nasc = implode('-', array_reverse(explode('/', $data_nasc)));
 $endereco = @$_POST['endereco'];
-$obs = @$_POST['obs'];
 $cpf = @$_POST['cpf'];
 $pix = @$_POST['pix'];
 $indicacao = @$_POST['indicacao'];
@@ -42,6 +41,9 @@ $status_cliente = @$_POST['status_cliente'];
 
 $senha = @$_POST['senha'];
 $conf_senha = @$_POST['conf_senha'];
+
+$valor_desejado = @$_POST['valor_desejado'];
+$valor_parcela_desejada = @$_POST['valor_parcela_desejada'];
 
 if($cliente_cadastro == "Sim"){
 	if($senha != $conf_senha){
@@ -301,7 +303,6 @@ $query = $pdo->prepare("INSERT INTO $tabela
   data_cad = curDate(), 
   endereco = :endereco, 
   data_nasc = '$data_nasc', 
-  obs = :obs, 
   pix = :pix, 
   indicacao = :indicacao, 
   bairro = :bairro, 
@@ -328,7 +329,11 @@ $query = $pdo->prepare("INSERT INTO $tabela
   referencia_parentesco = :referencia_parentesco,
   modelo_veiculo = :modelo_veiculo,
   status_veiculo = :status_veiculo, 
-  placa = :placa "
+  placa = :placa,
+  valor_desejado = :valor_desejado,
+	valor_parcela_desejada = :valor_parcela_desejada
+  ",
+  
 );
 	
 }else{
@@ -340,7 +345,6 @@ $query = $pdo->prepare("
     telefone = :telefone, 
     endereco = :endereco, 
     data_nasc = '$data_nasc', 
-    obs = :obs, 
     pix = :pix, 
     indicacao = :indicacao, 
     bairro = :bairro, 
@@ -367,7 +371,9 @@ $query = $pdo->prepare("
     referencia_parentesco = :referencia_parentesco,
     modelo_veiculo = :modelo_veiculo,
     status_veiculo = :status_veiculo, 
-    placa = :placa, 
+    placa = :placa,
+    valor_desejado = :valor_desejado,
+	  valor_parcela_desejada = :valor_parcela_desejada
     where id = '$id'
 ");
 }
@@ -376,7 +382,6 @@ $query->bindValue(":email", "$email");
 $query->bindValue(":telefone", "$telefone");
 $query->bindValue(":endereco", "$endereco");
 $query->bindValue(":cpf", "$cpf");
-$query->bindValue(":obs", "$obs");
 $query->bindValue(":pix", "$pix");
 $query->bindValue(":indicacao", "$indicacao");
 $query->bindValue(":bairro", "$bairro");
@@ -403,6 +408,9 @@ $query->bindValue(":referencia_parentesco", "$referencia_parentesco");
 $query->bindValue(":modelo_veiculo", "$modelo_veiculo");
 $query->bindValue(":status_veiculo", "$status_veiculo");
 $query->bindValue(":placa", "$placa");
+
+$query->bindValue(":valor_desejado", "$valor_desejado");
+$query->bindValue(":valor_parcela_desejada", "$valor_parcela_desejada");
 
 $query->execute();
 
