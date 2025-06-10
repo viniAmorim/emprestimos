@@ -172,10 +172,11 @@
 					</div>
 
           <div class="row">
-            <div class="col-md-4" style="margin-bottom:10px">
-              <label>Contato de Referência</label>
-              <input type="text" class="form-control" id="referencia_contato" name="referencia_contato" placeholder="Contato de referência">
-            </div>
+          <div class="col-md-4" style="margin-bottom:10px">
+            <label>Contato de Referência</label>
+            <input type="text" class="form-control telefone" id="referencia_contato" name="referencia_contato" placeholder="(00) 00000-0000">
+          </div>
+
 
             <div class="col-md-4" style="margin-bottom:10px">
               <label>Nome completo da referência</label>
@@ -327,6 +328,38 @@
 
 
 <script>
+  function formatarTelefone(valor) {
+    valor = valor.replace(/\D/g, ''); // Remove tudo que não for número
+
+    // Formato celular com 9 dígitos
+    if (valor.length > 10) {
+      valor = valor.replace(/^(\d{2})(\d{5})(\d{4}).*/, '($1) $2-$3');
+    } 
+    // Formato fixo com 8 dígitos
+    else if (valor.length > 5) {
+      valor = valor.replace(/^(\d{2})(\d{4})(\d{0,4}).*/, '($1) $2-$3');
+    } 
+    else if (valor.length > 2) {
+      valor = valor.replace(/^(\d{2})(\d{0,5})/, '($1) $2');
+    } 
+    else {
+      valor = valor.replace(/^(\d*)/, '($1');
+    }
+
+    return valor;
+  }
+
+  const inputTelefone = document.getElementById('referencia_contato');
+
+  inputTelefone.addEventListener('input', function () {
+    this.value = formatarTelefone(this.value);
+  });
+
+  // Limpa máscara no envio do formulário, se necessário
+  inputTelefone.form.addEventListener('submit', function () {
+    inputTelefone.value = inputTelefone.value.replace(/\D/g, '');
+  });
+  
 
   function formatarMoeda(input) {
       let valor = input.value.replace(/\D/g, ''); // remove tudo que não for número
