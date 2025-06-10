@@ -58,13 +58,10 @@ for($i=0; $i<$linhas; $i++){
 	$status = @$res[$i]['status'];
 	$comprovante_rg = @$res[$i]['comprovante_rg'];
 	$comprovante_endereco = @$res[$i]['comprovante_endereco'];
-	$dados_emprestimo = @$res[$i]['dados_emprestimo'];
 
 	$telefone2 = @$res[$i]['telefone2'];
 	$foto = @$res[$i]['foto'];
 	$status_cliente = @$res[$i]['status_cliente'];
-
-	$dados_emprestimoF = rawurlencode($dados_emprestimo ?? '');
 
 	$data_nascF = implode('/', array_reverse(explode('-', $data_nasc)));
 	$data_cadF = implode('/', array_reverse(explode('-', $data_cad)));
@@ -186,7 +183,7 @@ echo <<<HTML
 		</ul>
 </li>
 
-<big><a href="#" onclick="mostrar('{$id}', '{$nome}','{$telefone}','{$cpf}','{$email}','{$enderecoF2}','{$data_nascF}', '{$data_cadF}', '{$pix}', '{$indicacao}', '{$bairro}', '{$cidade}', '{$estado}', '{$cep}', '{$total_emprestimos}', '{$total_cobrancas}', '{$pessoa}', '{$total_contas}', '{$nome_sec}', '{$telefone_sec}', '{$endereco_sec}', '{$grupo}', '{$dados_emprestimoF}', '{$comprovante_endereco}', '{$comprovante_rg}', '{$tumb_comprovante_endereco}', '{$tumb_comprovante_rg}', '{$telefone2}', '{$foto}')" title="Mostrar Dados"><i class="fa fa-info-circle text-primary"></i></a></big>
+<big><a href="#" onclick="mostrar('{$id}', '{$nome}','{$telefone}','{$cpf}','{$email}','{$enderecoF2}','{$data_nascF}', '{$data_cadF}', '{$pix}', '{$indicacao}', '{$bairro}', '{$cidade}', '{$estado}', '{$cep}', '{$total_emprestimos}', '{$total_cobrancas}', '{$pessoa}', '{$total_contas}', '{$nome_sec}', '{$telefone_sec}', '{$endereco_sec}', '{$grupo}', '{$comprovante_endereco}', '{$comprovante_rg}', '{$tumb_comprovante_endereco}', '{$tumb_comprovante_rg}', '{$telefone2}', '{$foto}')" title="Mostrar Dados"><i class="fa fa-info-circle text-primary"></i></a></big>
 
 <big><a class="" href="http://api.whatsapp.com/send?1=pt_BR&phone={$tel_whatsF}" title="Whatsapp" target="_blank"><i class="fa fa-whatsapp " style="color:green"></i></a></big>
 
@@ -267,13 +264,7 @@ HTML;
 	}
 
 
-	function mostrar(id, nome, telefone, cpf, email, endereco, data_nasc, data_cad, pix, indicacao, bairro, cidade, estado, cep, total_emprestimos, total_cobrancas, pessoa, total_contas, nome_sec, telefone_sec, endereco_sec, grupo, dados_emprestimo, comprovante_endereco, comprovante_rg, tumb_comprovante_endereco, tumb_comprovante_rg, telefone2, foto){
-
-		$('#dados_emprestimos_dados2').text(decodeURIComponent(dados_emprestimo));
-
-		if(dados_emprestimo.trim() == ""){			
-		$('#div_dados_emprestimos_dados').hide();
-		}
+	function mostrar(id, nome, telefone, cpf, email, endereco, data_nasc, data_cad, pix, indicacao, bairro, cidade, estado, cep, total_emprestimos, total_cobrancas, pessoa, total_contas, nome_sec, telefone_sec, endereco_sec, grupo, comprovante_endereco, comprovante_rg, tumb_comprovante_endereco, tumb_comprovante_rg, telefone2, foto){
 
 		if(comprovante_endereco.trim() == "" || comprovante_endereco.trim() == "sem-foto.png"){			
 		$('#div_link_comprovante_endereco').hide();

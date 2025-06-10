@@ -259,13 +259,7 @@
 					</div>
 
 
-						<div class="row">
-
-						<div class="col-md-12" style="margin-bottom:10px">							
-								<label>Dados do Empréstimo</label>
-								<input type="text" class="form-control" id="dados_emprestimo" name="dados_emprestimo" placeholder="Ex: 2000 mil reais em 10 Parcelas" >							
-						</div>
-					</div>
+					
 
 					<input type="hidden" class="form-control" id="id" name="id">	
 					<input type="hidden" class="form-control" id="cliente_cadastro" name="cliente_cadastro" value="Sim">					

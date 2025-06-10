@@ -496,10 +496,6 @@ if($verificar_pagamentos != 'Não'){
 						<span><b>Grupo / Empresa: </b></span><span id="grupo_dados"></span>
 					</div>
 
-					<div class="col-md-12" style="margin-bottom: 5px" id="div_dados_emprestimos_dados">
-						<span><b>Dados Empréstimo: </b></span><span id="dados_emprestimos_dados2"></span>
-					</div>	
-
 					<div class="col-md-6" style="margin-bottom: 5px" id="div_link_comprovante_endereco">	
 						<span><b>Comprovante Endereço: </b></span>
 						<a id="link_comprovante_endereco" target="_blank" title="Clique para abrir o arquivo!">	

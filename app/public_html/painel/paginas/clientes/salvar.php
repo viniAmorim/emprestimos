@@ -36,7 +36,6 @@ $nome_sec = @$_POST['nome_sec'];
 $telefone_sec = @$_POST['telefone_sec'];
 $endereco_sec = @$_POST['endereco_sec'];
 $grupo = @$_POST['grupo'];
-$dados_emprestimo = @$_POST['dados_emprestimo'];
 $cliente_cadastro = @$_POST['cliente_cadastro'];
 $telefone2 = @$_POST['telefone2'];
 $status_cliente = @$_POST['status_cliente'];
@@ -316,7 +315,6 @@ $query = $pdo->prepare("INSERT INTO $tabela
   grupo = :grupo, status = :status, 
   comprovante_endereco = '$comprovante_endereco', 
   comprovante_rg = '$comprovante_rg', 
-  dados_emprestimo = :dados_emprestimo, 
   telefone2 = :telefone2, 
   foto = '$foto', 
   status_cliente = '$status_cliente', 
@@ -332,8 +330,6 @@ $query = $pdo->prepare("INSERT INTO $tabela
   status_veiculo = :status_veiculo, 
   placa = :placa "
 );
-
-$query->bindValue(":dados_emprestimo", "$dados_emprestimo");
 	
 }else{
 $query = $pdo->prepare("
@@ -422,7 +418,6 @@ if($cliente_cadastro == 'Sim' and $token != "" and $instancia != ""){
 	$mensagem .= '_Novo Cliente Cadastrado_ %0A';
 	$mensagem .= 'Cliente: *'.$nome.'* %0A';
 	$mensagem .= 'Telefone: *'.$telefone.'* %0A%0A';
-	$mensagem .= $dados_emprestimo;
 	require('../../apis/texto.php');
 }
 
