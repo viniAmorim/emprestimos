@@ -17,6 +17,7 @@ echo <<<HTML
 	<th>Valor</th>	
 	<th class="esc">Valor Parcelas</th>	
 	<th class="esc">Qtd Parcelas</th>
+  <th class="esc">Tipo de vencimento</th>
 	<th class="esc">Data</th>	
 	<th class="esc">Status</th>	
 	<th class="esc">Garantia</th>	
@@ -32,6 +33,7 @@ for($i=0; $i<$linhas; $i++){
 	$valor = $res[$i]['valor'];
 	$data = $res[$i]['data'];
 	$valor_parcela = $res[$i]['valor_parcela'];	
+  $tipo_vencimento = $res[$i]['tipo_vencimento'];	
 	$obs = $res[$i]['obs'];
 	$garantia = $res[$i]['garantia'];
 	$status = $res[$i]['status'];
@@ -67,6 +69,7 @@ R$ {$valorF}
 </td>
 <td class="esc">R$ {$valor_parcelaF}</td>
 <td class="esc">{$quant_parcelas}</td>
+<td class="esc">{$tipo_vencimento}</td>
 <td class="esc">{$dataF}</td>
 <td class="esc {$classe_square}">{$status}</td>
 <td class="esc">{$garantia}</td>
