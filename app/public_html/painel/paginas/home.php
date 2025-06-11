@@ -471,6 +471,7 @@ $emprestimos_finalizados = @count($res);
 <input type="hidden" id="mostrar_v">
 
 
+
 <script type="text/javascript">
 	$(document).ready(function() {    
     $('.ocultar_valor').addClass('ocultar');

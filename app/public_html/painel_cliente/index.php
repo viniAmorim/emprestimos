@@ -99,6 +99,9 @@ $total_cobrancas = @count($res);
 	<script src="js/Chart.js"></script>
 	<!-- //chart -->
 
+  <!-- SweetAlert2 -->
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 	<!-- Metis Menu -->
 	<script src="js/metisMenu.min.js"></script>
 	<script src="js/custom.js"></script>
