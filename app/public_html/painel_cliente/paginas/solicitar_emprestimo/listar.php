@@ -15,7 +15,7 @@ echo <<<HTML
 	<thead> 
 	<tr> 
 	<th>Valor</th>	
-	<th class="esc">Parcelas</th>	
+	<th class="esc">Valor Parcelas</th>	
 	<th class="esc">Data</th>	
 	<th class="esc">Status</th>	
 	<th class="esc">Garantia</th>	
@@ -30,7 +30,7 @@ for($i=0; $i<$linhas; $i++){
 	$cliente = $res[$i]['cliente'];
 	$valor = $res[$i]['valor'];
 	$data = $res[$i]['data'];
-	$parcelas = $res[$i]['parcelas'];	
+	$valor_parcela = $res[$i]['valor_parcela'];	
 	$obs = $res[$i]['obs'];
 	$garantia = $res[$i]['garantia'];
 	$status = $res[$i]['status'];
@@ -63,25 +63,11 @@ echo <<<HTML
 <i class="fa fa-square {$classe_square}"></i>
 R$ {$valorF}
 </td>
-<td class="esc">{$parcelas}</td>
+<td class="esc">R$ {$valor_parcela}</td>
 <td class="esc">{$dataF}</td>
 <td class="esc {$classe_square}">{$status}</td>
 <td class="esc">{$garantia}</td>
 <td>
-	<!-- <big><a href="#" onclick="editar('{$id}','{$valorF}','{$parcelas}','{$data}','{$obs}','{$garantia}')" title="Editar Dados"><i class="fa fa-edit text-primary"></i></a></big> -->
-
-	<!-- <li class="dropdown head-dpdn2" style="display: inline-block;">
-		<a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><big><i class="fa fa-trash-o text-danger"></i></big></a>
-
-		<ul class="dropdown-menu" style="margin-left:-230px;">
-		<li>
-		<div class="notification_desc2">
-		<p>Confirmar Exclusão? <a href="#" onclick="excluir('{$id}')"><span class="text-danger">Sim</span></a></p>
-		</div>
-		</li>										
-		</ul>
-  </li> -->
-
 
 <li class="dropdown head-dpdn2" style="display: inline-block;">
 		<a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><big><i class="fa fa-info-circle text-primary "></i></big></a>
@@ -139,7 +125,7 @@ HTML;
     	$('#titulo_inserir').text('Editar Registro');
 
     	$('#id').val(id);
-    	$('#parcelas').val(parcela);
+    	$('#valor_parcela').val(valor_parcela);
     	$('#valor').val(valor);
     	$('#data').val(data);
     	$('#garantia').val(garantia);
@@ -152,7 +138,7 @@ HTML;
 
 	function limparCampos(){
 		$('#id').val('');
-    	$('#parcelas').val('');
+    	$('#valor_parcela').val('');
     	$('#valor').val('');
     	$('#garantia').val('');
     	$('#data').val("<?=$data_atual?>");    	
