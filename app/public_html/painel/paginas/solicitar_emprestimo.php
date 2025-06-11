@@ -60,12 +60,12 @@ $pag = 'solicitar_emprestimo';
 
 						<div class="col-md-4">							
 								<label>Parcelas</label>
-								<input type="text" class="form-control" id="parcelas" name="parcelas" placeholder="" required>							
+								<input type="text" class="form-control" id="parcelas" name="parcelas" placeholder=""  required>							
 						</div>
 
 						<div class="col-md-4">							
 								<label>Data</label>
-								<input type="date" class="form-control" id="data" name="data" value="<?php echo $data_atual ?>" required>							
+								<input type="date" class="form-control" id="data" name="data" value="<?php echo $data_atual ?>" disabled required>							
 						</div>
 						
 					</div>

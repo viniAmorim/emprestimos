@@ -48,39 +48,44 @@ $pag = 'solicitar_emprestimo';
 				</button>
 			</div>
 			<form id="form">
-			<div class="modal-body">
-				
-
+			  <div class="modal-body">
 					<div class="row">						
 
-						<div class="col-md-4">							
-								<label>Valor</label>
-								<input type="text" class="form-control" id="valor" name="valor" placeholder="Valor" required onkeyup="mascara_valor('valor')">							
-						</div>
+            <div class="col-md-4">
+              <label>Valor</label>
+              <input type="text" class="form-control money" id="valor" name="valor" placeholder="Valor" required>
+            </div>
 
-						<div class="col-md-4">							
-								<label>Parcelas</label>
-								<input type="text" class="form-control" id="parcelas" name="parcelas" placeholder="" required>							
-						</div>
+            <div class="col-md-4">
+              <label>Valor Parcela</label>
+              <input type="text" class="form-control money" id="valor_parcela" name="valor_parcela" placeholder="Valor Parcela" required>
+            </div>
 
-						<div class="col-md-4">							
-								<label>Data</label>
-								<input type="date" class="form-control" id="data" name="data" value="<?php echo $data_atual ?>" required>							
-						</div>
+            <div class="col-md-4">
+              <label>Tipo de Vencimento</label>
+              <select class="form-control" id="tipo_vencimento" name="tipo_vencimento" required>
+                <option value="" disabled selected>Selecione</option>
+                <option value="diario">Diário</option>
+                <option value="semanal">Semanal</option>
+                <option value="quinzenal">Quinzenal</option>
+                <option value="mensal">Mensal</option>
+              </select>
+            </div>
 						
 					</div>
 
-
-					
 					<div class="row">
 
-						<div class="col-md-12">							
+						<div class="col-md-8">							
 								<label>Observações</label>
 								<input type="text" class="form-control" id="obs" name="obs" placeholder="Observações" >							
 						</div>
+
+            <div class="col-md-4">							
+								<label>Data</label>
+								<input type="date" class="form-control" id="data" name="data" value="<?php echo $data_atual ?>" readonly required>							
+						</div>
 					</div>
-
-
 
 					<div class="row">
 
@@ -89,10 +94,6 @@ $pag = 'solicitar_emprestimo';
 								<input type="text" class="form-control" id="garantia" name="garantia" placeholder="Qual Garantia?" >							
 						</div>
 					</div>
-					
-
-
-					
 
 					<input type="hidden" class="form-control" id="id" name="id" >
 					<input type="hidden" class="form-control" id="cliente" name="cliente" value="<?php echo $id_usuario ?>">					
@@ -108,14 +109,44 @@ $pag = 'solicitar_emprestimo';
 	</div>
 </div>
 
-
-
-
-
-
-
 <script type="text/javascript">var pag = "<?=$pag?>"</script>
 <script src="js/ajax.js"></script>
+
+
+<script>
+  // Função para formatar moeda no formato brasileiro com R$
+  function formatarMoeda(valor) {
+    valor = valor.replace(/\D/g, '');
+    valor = (parseInt(valor, 10) / 100).toFixed(2);
+    return 'R$ ' + valor
+      .replace('.', ',')
+      .replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+  }
+
+  const camposMoeda = document.querySelectorAll('.money');
+
+  camposMoeda.forEach(function (campo) {
+    campo.addEventListener('input', function (e) {
+      let cursor = campo.selectionStart;
+      let valorAntigo = campo.value;
+      campo.value = formatarMoeda(campo.value);
+      let diff = campo.value.length - valorAntigo.length;
+      campo.setSelectionRange(cursor + diff, cursor + diff);
+    });
+
+    // Garante a formatação ao sair do campo
+    campo.addEventListener('blur', function () {
+      campo.value = formatarMoeda(campo.value);
+    });
+
+    // Opcional: inicializa se já houver valor salvo
+    if (campo.value.trim() !== '') {
+      campo.value = formatarMoeda(campo.value);
+    }
+  });
+</script>
+
+
 
 
 

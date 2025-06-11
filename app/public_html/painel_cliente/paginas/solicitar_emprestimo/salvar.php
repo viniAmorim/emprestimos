@@ -4,10 +4,13 @@ require_once("../../../conexao.php");
 @session_start();
 $id_usuario = @$_SESSION['id'];
 
-$valor = $_POST['valor'];
-$valor = str_replace('.', '', $valor);
-$valor = str_replace(',', '.', $valor);
-$parcelas = $_POST['parcelas'];
+function limpar_valor($valor) {
+  return str_replace(',', '.', str_replace(['R$', '.'], '', $valor));
+}
+
+$valor = limpar_valor($_POST['valor']);
+$valor_parcela = limpar_valor($_POST['valor_parcela']);
+$tipo_vencimento = $_POST['tipo_vencimento'];
 $data = $_POST['data'];
 $garantia = $_POST['garantia'];
 $obs = $_POST['obs'];
@@ -15,17 +18,17 @@ $cliente = $_POST['cliente'];
 $id = $_POST['id'];
 
 
-
 if($id == ""){
-$query = $pdo->prepare("INSERT INTO $tabela SET parcelas = :parcelas, valor = :valor, data = '$data', status = 'Pendente', cliente = '$cliente', obs = :obs, garantia = :garantia ");
+$query = $pdo->prepare("INSERT INTO $tabela SET valor_parcela = :valor_parcela, valor = :valor, data = '$data', status = 'Pendente', cliente = '$cliente', obs = :obs, garantia = :garantia, tipo_vencimento = :tipo_vencimento ");
 	
 }else{
-$query = $pdo->prepare("UPDATE $tabela SET parcelas = :parcelas, valor = :valor, data = '$data', status = 'Pendente', cliente = '$cliente', obs = :obs, garantia = :garantia where id = '$id'");
+$query = $pdo->prepare("UPDATE $tabela SET valor_parcela = :valor_parcela, valor = :valor, data = '$data', status = 'Pendente', cliente = '$cliente', obs = :obs, garantia = :garantia, tipo_vencimento = :tipo_vencimento where id = '$id'");
 }
-$query->bindValue(":parcelas", "$parcelas");
+$query->bindValue(":valor_parcela", "$valor_parcela");
 $query->bindValue(":valor", "$valor");
 $query->bindValue(":obs", "$obs");
 $query->bindValue(":garantia", "$garantia");
+$query->bindValue(":tipo_vencimento", $tipo_vencimento);
 $query->execute();
 
 echo 'Salvo com Sucesso';
@@ -49,7 +52,7 @@ if($token != "" and $instancia != ""){
 	$mensagem .= 'Cliente: *'.$nome.'* %0A';
 	$mensagem .= 'Data: *'.$dataF.'* %0A';
 	$mensagem .= 'Valor: *'.$valorF.'* %0A';
-	$mensagem .= 'Parcelas: *'.$parcelas.'* %0A';
+	$mensagem .= 'valor_parcela: *'.$valor_parcela.'* %0A';
 	$mensagem .= 'Garantia: *'.$garantia.'* %0A';
 	$mensagem .= 'Obs: *'.$obs.'* %0A';
 	require('../../../painel/apis/texto.php');

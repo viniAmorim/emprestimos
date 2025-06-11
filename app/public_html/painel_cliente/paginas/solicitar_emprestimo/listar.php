@@ -68,9 +68,9 @@ R$ {$valorF}
 <td class="esc {$classe_square}">{$status}</td>
 <td class="esc">{$garantia}</td>
 <td>
-	<big><a href="#" onclick="editar('{$id}','{$valorF}','{$parcelas}','{$data}','{$obs}','{$garantia}')" title="Editar Dados"><i class="fa fa-edit text-primary"></i></a></big>
+	<!-- <big><a href="#" onclick="editar('{$id}','{$valorF}','{$parcelas}','{$data}','{$obs}','{$garantia}')" title="Editar Dados"><i class="fa fa-edit text-primary"></i></a></big> -->
 
-	<li class="dropdown head-dpdn2" style="display: inline-block;">
+	<!-- <li class="dropdown head-dpdn2" style="display: inline-block;">
 		<a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><big><i class="fa fa-trash-o text-danger"></i></big></a>
 
 		<ul class="dropdown-menu" style="margin-left:-230px;">
@@ -80,7 +80,7 @@ R$ {$valorF}
 		</div>
 		</li>										
 		</ul>
-</li>
+  </li> -->
 
 
 <li class="dropdown head-dpdn2" style="display: inline-block;">
