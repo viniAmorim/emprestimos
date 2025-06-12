@@ -77,6 +77,13 @@ if($verificar_pagamentos != 'Não'){
 		</select>	
 	</li>
 
+  <li class="" style="display: inline-block;">
+    <select class="form-control mt-2" name="validado_busca" id="validado_busca" onchange="buscar()">
+      <option value="">Filtrar Por Validação</option>
+      <option value="1">Validados</option>
+      <option value="0">Não validados</option>
+    </select>
+  </li>
 
 
 <button type="button" class="btn btn-success" data-toggle="modal" data-target="#importarXlsModal" style="margin-left: 25px">
@@ -102,9 +109,7 @@ if($verificar_pagamentos != 'Não'){
 				</button>
 			</div>
 			<form id="form">
-			<div class="modal-body">
-				
-
+			  <div class="modal-body">
 					<div class="row">
 						<div class="col-md-4">							
 								<label>Nome</label>
@@ -2396,7 +2401,8 @@ function atualizarCorStatus_busca() {
 <script type="text/javascript">
 	function buscar(){
 		var status = $('#status_cliente_busca').val();
-		listar(status)
+    var validado = $('#validado_busca').val();    
+		listar(status, validado)
 	}
 </script>
 

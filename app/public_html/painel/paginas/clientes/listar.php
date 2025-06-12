@@ -5,13 +5,22 @@ require_once("../../../conexao.php");
 $data_atual = date('Y-m-d');
 
 $status = @$_POST['p1'];
-if($status == ""){
-	$sql_status = ' ';
-}else{
-	$sql_status = " where status_cliente = '$status' ";
+$validado = @$_POST['p2'];
+
+$filtros = [];
+if ($status != "") {
+  $filtros[] = "status_cliente = '$status'";
+}
+if ($validado != "") {
+  $filtros[] = "validado = '$validado'";
 }
 
-$query = $pdo->query("SELECT * from $tabela $sql_status order by id desc");
+$sql_where = "";
+if (count($filtros) > 0) {
+  $sql_where = "WHERE " . implode(" AND ", $filtros);
+}
+
+$query = $pdo->query("SELECT * from $tabela $sql_where order by id desc");
 $res = $query->fetchAll(PDO::FETCH_ASSOC);
 $linhas = @count($res);
 if($linhas > 0){
@@ -62,6 +71,8 @@ for($i=0; $i<$linhas; $i++){
 	$telefone2 = @$res[$i]['telefone2'];
 	$foto = @$res[$i]['foto'];
 	$status_cliente = @$res[$i]['status_cliente'];
+
+  $validado = $res[$i]['validado'];
 
 	$data_nascF = implode('/', array_reverse(explode('-', $data_nasc)));
 	$data_cadF = implode('/', array_reverse(explode('-', $data_cad)));
@@ -194,6 +205,22 @@ echo <<<HTML
 
 <big><a class="{$ocultar_cobr}" href="#" onclick="cobranca('{$id}','{$nome}')" title="Cobrança Recorrente"><i class="fa fa-money" style="color:green"></i></a></big>
 
+HTML;
+if(!$validado || $validado == '0' || $validado == 'false'){
+echo <<<HTML
+<big>
+  <a 
+     href="#" 
+     onclick="validarCliente('{$id}', '{$nome}')" 
+     title="Validar Cliente">
+    <i class="fa fa-check-circle" style="color:blue"></i>
+  </a>
+</big>
+HTML;
+}
+echo <<<HTML
+
+
 </td>
 </tr>
 HTML;
@@ -214,8 +241,6 @@ HTML;
 	echo '<small>Nenhum Registro Encontrado!</small>';
 }
 ?>
-
-
 
 <script type="text/javascript">
 	$(document).ready( function () {		
@@ -477,6 +502,7 @@ HTML;
     	
     	$('#modalCobranca').modal('show');
 	}
+
 
 
 	
