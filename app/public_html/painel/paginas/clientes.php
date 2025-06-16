@@ -90,6 +90,8 @@ if($verificar_pagamentos != 'Não'){
   Importar Arquivo XLS
 </button>
 
+<button class="btn btn-primary" onclick="exportarClientes()">Exportar Excel</button>
+
 <div class="bs-example widget-shadow" style="padding:15px" id="listar">
 
 </div>
@@ -1379,6 +1381,7 @@ if($verificar_pagamentos != 'Não'){
 
 
 
+
 <div class="modal fade" id="importarXlsModal" tabindex="-1" role="dialog" aria-labelledby="importarXlsModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
@@ -2460,4 +2463,10 @@ $("#form_excel").submit(function () {
     });
 
 });
+</script>
+
+<script>
+function exportarClientes() {
+  window.open('http://localhost/painel/paginas/clientes/exportar_excel.php', '_blank');
+}
 </script>
