@@ -22,7 +22,7 @@ if($verificar_pagamentos != 'Não'){
  ?>
 
 <div class="main-page margin-mobile">
-<a onclick="inserir()" type="button" class="btn btn-primary"><span class="fa fa-plus"></span> Cliente</a>
+<!-- <a onclick="inserir()" type="button" class="btn btn-primary"><span class="fa fa-plus"></span> Cliente</a> -->
 
 
 
