@@ -125,7 +125,7 @@ function validarCliente(id, nome) {
         data: { id },
         dataType: "html",
         success: function (mensagem) {
-          if (mensagem.trim() === "Validado com Sucesso") {
+          if (mensagem.trim() === "Validado com sucesso!") {
             Swal.fire({
               title: "Sucesso!",
               text: mensagem,
