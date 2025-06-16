@@ -54,6 +54,16 @@ if($verificar_pagamentos != 'Não'){
 		</select>
 	</div>
 
+  <div class="col-md-3">
+    <select id="filtro_data" class="form-control" onchange="buscar()">
+      <option value="hoje" selected>Hoje</option>
+      <option value="mes">Este mês</option>
+      <option value="ano">Este ano</option>
+      <option value="todos">Todos</option>
+    </select>
+  </div>
+
+
 	<div class="col-md-1" align="right">
 		<button  type="submit" class="btn btn-success"><span class="fa fa-plus"></span> Relatório</button>
 	</div>
@@ -675,7 +685,8 @@ $("#form-arquivos").submit(function () {
 	function buscar(){		
 		var cliente = $('#clientes').val();
 		var status = $('#status').val();
-		listar(cliente, status)
+    let filtro_data = $('#filtro_data').val(); 
+		listar(cliente, status, filtro_data)
 	}
 </script>
 

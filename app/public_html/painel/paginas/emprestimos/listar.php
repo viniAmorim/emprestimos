@@ -5,6 +5,7 @@ $data_atual = date('Y-m-d');
 
 $cliente = @$_POST['p1'];
 $status = @$_POST['p2'];
+$filtro_data = @$_POST['p3'] ?? 'hoje';
 
 if($status == ""){
 	$sql_status = ' status is null';
@@ -42,35 +43,28 @@ if($mes_atual == '04' || $mes_atual == '06' || $mes_atual == '09' || $mes_atual 
 	$data_final_mes = $ano_atual.'-'.$mes_atual.'-31';
 }
 
+$data_filtro_sql = ''; 
 
-$dataHoje = date('Y-m-d');
-
-// Monta a query padrão com filtro por data de hoje
-if ($cliente == "") {
-    $query = $pdo->query("SELECT * FROM $tabela WHERE $sql_status AND DATE(data) = '$dataHoje' ORDER BY id DESC");
-} else {
-    $query = $pdo->query("SELECT * FROM $tabela WHERE $sql_status AND cliente = '$cliente' AND DATE(data) = '$dataHoje' ORDER BY id DESC");
+if ($filtro_data == 'hoje') {
+    $data_filtro_sql = "AND data = curDate()";
+} elseif ($filtro_data == 'mes') {
+    $data_filtro_sql = "AND MONTH(data) = MONTH(curDate()) AND YEAR(data) = YEAR(curDate())";
+} elseif ($filtro_data == 'ano') {
+    $data_filtro_sql = "AND YEAR(data) = YEAR(curDate())";
+} elseif ($filtro_data == 'todos') {
+    $data_filtro_sql = ""; 
 }
 
-// Verifica se retornou algum registro
-$dadosHoje = $query->fetchAll(PDO::FETCH_ASSOC);
-
-if (count($dadosHoje) == 0) {
-    // Se não houver registros de hoje, busca todos
-    if ($cliente == "") {
-        $query = $pdo->query("SELECT * FROM $tabela WHERE $sql_status ORDER BY id DESC");
-    } else {
-        $query = $pdo->query("SELECT * FROM $tabela WHERE $sql_status AND cliente = '$cliente' ORDER BY id DESC");
-    }
-
-    $dados = $query->fetchAll(PDO::FETCH_ASSOC);
-} else {
-    $dados = $dadosHoje;
+if($cliente == ""){
+	$query = $pdo->query("SELECT * from $tabela where $sql_status $data_filtro_sql order by id desc");
+}else{
+	$query = $pdo->query("SELECT * from $tabela where $sql_status and cliente = '$cliente' $data_filtro_sql order by id desc");
 }
 
 
-$res = $dados;
-$linhas = count($res);
+
+$res = $query->fetchAll(PDO::FETCH_ASSOC);
+$linhas = @count($res);
 if($linhas > 0){
 echo <<<HTML
 <small>
