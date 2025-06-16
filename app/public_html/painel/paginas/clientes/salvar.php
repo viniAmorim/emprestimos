@@ -23,6 +23,7 @@ $rg = @$_POST['rg'];
 $ramo = @$_POST['ramo'];
 $quadra = @$_POST['quadra'];
 $lote = @$_POST['lote'];
+$numero = $_POST['numero'];
 $complemento = @$_POST['complemento'];
 $referencia_nome = @$_POST['referencia_nome'];
 $referencia_contato = @$_POST['referencia_contato'];
@@ -323,6 +324,7 @@ $query = $pdo->prepare("INSERT INTO $tabela
   rg = :rg, ramo = :ramo, 
   quadra = :quadra, 
   lote = :lote, 
+  numero = :numero, 
   complemento = :complemento,
   referencia_nome = :referencia_nome, 
   referencia_contato = :referencia_contato, 
@@ -365,6 +367,7 @@ $query = $pdo->prepare("
     rg = :rg, ramo = :ramo, 
     quadra = :quadra, 
     lote = :lote, 
+    numero = :numero, 
     complemento = :complemento,
     referencia_nome = :referencia_nome, 
     referencia_contato = :referencia_contato, 
@@ -401,6 +404,7 @@ $query->bindValue(":rg", "$rg");
 $query->bindValue(":ramo", "$ramo");
 $query->bindValue(":quadra", "$quadra");
 $query->bindValue(":lote", "$lote");
+$query->bindValue(":numero", "$numero");
 $query->bindValue(":complemento", "$complemento");
 $query->bindValue(":referencia_nome", "$referencia_nome");
 $query->bindValue(":referencia_contato", "$referencia_contato");

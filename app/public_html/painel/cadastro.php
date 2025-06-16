@@ -152,7 +152,7 @@
 					</div>
 
           <div class="row">
-            <div class="col-md-8" style="margin-bottom:10px">
+            <div class="col-md-6" style="margin-bottom:10px">
               <label>Complemento</label>
               <input type="text" class="form-control" id="complemento" name="complemento" placeholder="Complemento do endereço" required>
             </div>
@@ -164,6 +164,10 @@
             <div class="col-md-2" style="margin-bottom:10px">
                 <label>Lote</label>
                 <input type="text" class="form-control" id="lote" name="lote" placeholder="Lote" required>
+            </div>
+            <div class="col-md-2" style="margin-bottom:10px">
+                <label>Número</label>
+                <input type="number" class="form-control" id="numero" name="numero" placeholder="Número" required>
             </div>
 					</div>
 
