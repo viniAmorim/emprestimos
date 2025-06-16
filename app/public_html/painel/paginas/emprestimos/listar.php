@@ -43,14 +43,34 @@ if($mes_atual == '04' || $mes_atual == '06' || $mes_atual == '09' || $mes_atual 
 }
 
 
-if($cliente == ""){
-	$query = $pdo->query("SELECT * from $tabela where $sql_status order by id desc");
-}else{
-	$query = $pdo->query("SELECT * from $tabela where  $sql_status and cliente = '$cliente' order by id desc");
+$dataHoje = date('Y-m-d');
+
+// Monta a query padrão com filtro por data de hoje
+if ($cliente == "") {
+    $query = $pdo->query("SELECT * FROM $tabela WHERE $sql_status AND DATE(data) = '$dataHoje' ORDER BY id DESC");
+} else {
+    $query = $pdo->query("SELECT * FROM $tabela WHERE $sql_status AND cliente = '$cliente' AND DATE(data) = '$dataHoje' ORDER BY id DESC");
 }
 
-$res = $query->fetchAll(PDO::FETCH_ASSOC);
-$linhas = @count($res);
+// Verifica se retornou algum registro
+$dadosHoje = $query->fetchAll(PDO::FETCH_ASSOC);
+
+if (count($dadosHoje) == 0) {
+    // Se não houver registros de hoje, busca todos
+    if ($cliente == "") {
+        $query = $pdo->query("SELECT * FROM $tabela WHERE $sql_status ORDER BY id DESC");
+    } else {
+        $query = $pdo->query("SELECT * FROM $tabela WHERE $sql_status AND cliente = '$cliente' ORDER BY id DESC");
+    }
+
+    $dados = $query->fetchAll(PDO::FETCH_ASSOC);
+} else {
+    $dados = $dadosHoje;
+}
+
+
+$res = $dados;
+$linhas = count($res);
 if($linhas > 0){
 echo <<<HTML
 <small>
