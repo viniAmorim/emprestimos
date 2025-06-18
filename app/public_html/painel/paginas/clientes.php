@@ -427,6 +427,15 @@ if($verificar_pagamentos != 'Não'){
 			<div class="modal-body">
 				<small>
 				<div class="row" style="margin-top: 0px">
+
+          <div class="col-md-12" id="div_foto" style="text-align: center; margin-bottom: 15px;">
+            <img 
+              id="target_mostrar_foto"
+              src=""
+              alt="Foto do Cliente"
+              style="width: 120px; height: 120px; object-fit: cover; border-radius: 50%; border: 2px solid #ccc;">
+          </div>
+
 					<div class="col-md-6" style="margin-bottom: 5px">
 						<span><b>Telefone: </b></span><span id="telefone_dados"></span>
 					</div>
@@ -519,12 +528,9 @@ if($verificar_pagamentos != 'Não'){
 					</div>	
 
 
-					<div class="col-md-6" style="margin-bottom: 5px" id="div_foto">
-						<span><b>Foto Cliente: </b></span>
-						
-							<img width="75px" id="target_mostrar_foto">
-						
-					</div>			
+          <div class="col-md-12" style="margin-top: 10px; text-align: center;" id="div_botao_validar">
+          
+          </div>
 
 				</div>
 			</small>
@@ -558,7 +564,8 @@ if($verificar_pagamentos != 'Não'){
 
 
 				<input type="hidden" id="id_cliente_mostrar">
-
+        
+        
 
 			</div>
 					

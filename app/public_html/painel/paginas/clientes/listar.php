@@ -167,6 +167,21 @@ if ($ext === 'pdf') {
 $enderecoF2 = rawurlencode($endereco ?? '');
 
 echo <<<HTML
+
+<style>
+  .btn-validar-cliente {
+    padding: 12px 24px;
+    font-size: 16px;
+    border-radius: 6px;
+    transition: background-color 0.3s, transform 0.2s;
+  }
+
+  .btn-validar-cliente:hover {
+    background-color: #218838; 
+    transform: scale(1.03);
+  }
+</style>
+
 <tr style="">
 <td>
 <input type="checkbox" id="seletor-{$id}" class="form-check-input" onchange="selecionar('{$id}')">
@@ -194,7 +209,7 @@ echo <<<HTML
 		</ul>
 </li>
 
-<big><a href="#" onclick="mostrar('{$id}', '{$nome}','{$telefone}','{$cpf}','{$email}','{$enderecoF2}','{$data_nascF}', '{$data_cadF}', '{$pix}', '{$indicacao}', '{$bairro}', '{$cidade}', '{$estado}', '{$cep}', '{$total_emprestimos}', '{$total_cobrancas}', '{$pessoa}', '{$total_contas}', '{$nome_sec}', '{$telefone_sec}', '{$endereco_sec}', '{$grupo}', '{$comprovante_endereco}', '{$comprovante_rg}', '{$tumb_comprovante_endereco}', '{$tumb_comprovante_rg}', '{$telefone2}', '{$foto}')" title="Mostrar Dados"><i class="fa fa-info-circle text-primary"></i></a></big>
+<big><a href="#" onclick="mostrar('{$id}', '{$nome}','{$telefone}','{$cpf}','{$email}','{$enderecoF2}','{$data_nascF}', '{$data_cadF}', '{$pix}', '{$indicacao}', '{$bairro}', '{$cidade}', '{$estado}', '{$cep}', '{$total_emprestimos}', '{$total_cobrancas}', '{$pessoa}', '{$total_contas}', '{$nome_sec}', '{$telefone_sec}', '{$endereco_sec}', '{$grupo}', '{$comprovante_endereco}', '{$comprovante_rg}', '{$tumb_comprovante_endereco}', '{$tumb_comprovante_rg}', '{$telefone2}', '{$foto}', '{$validado}')" title="Mostrar Dados"><i class="fa fa-info-circle text-primary"></i></a></big>
 
 <big><a class="" href="http://api.whatsapp.com/send?1=pt_BR&phone={$tel_whatsF}" title="Whatsapp" target="_blank"><i class="fa fa-whatsapp " style="color:green"></i></a></big>
 
@@ -206,18 +221,7 @@ echo <<<HTML
 <big><a class="{$ocultar_cobr}" href="#" onclick="cobranca('{$id}','{$nome}')" title="Cobrança Recorrente"><i class="fa fa-money" style="color:green"></i></a></big>
 
 HTML;
-if(!$validado || $validado == '0' || $validado == 'false'){
-echo <<<HTML
-<big>
-  <a 
-     href="#" 
-     onclick="validarCliente('{$id}', '{$nome}')" 
-     title="Validar Cliente">
-    <i class="fa fa-check-circle" style="color:blue"></i>
-  </a>
-</big>
-HTML;
-}
+
 echo <<<HTML
 
 
@@ -289,7 +293,7 @@ HTML;
 	}
 
 
-	function mostrar(id, nome, telefone, cpf, email, endereco, data_nasc, data_cad, pix, indicacao, bairro, cidade, estado, cep, total_emprestimos, total_cobrancas, pessoa, total_contas, nome_sec, telefone_sec, endereco_sec, grupo, comprovante_endereco, comprovante_rg, tumb_comprovante_endereco, tumb_comprovante_rg, telefone2, foto){
+	function mostrar(id, nome, telefone, cpf, email, endereco, data_nasc, data_cad, pix, indicacao, bairro, cidade, estado, cep, total_emprestimos, total_cobrancas, pessoa, total_contas, nome_sec, telefone_sec, endereco_sec, grupo, comprovante_endereco, comprovante_rg, tumb_comprovante_endereco, tumb_comprovante_rg, telefone2, foto, validado){
 
 		if(comprovante_endereco.trim() == "" || comprovante_endereco.trim() == "sem-foto.png"){			
 		$('#div_link_comprovante_endereco').hide();
@@ -322,6 +326,18 @@ HTML;
 		}else{
 			$('#dados_deb').hide();
 		}
+
+    if (validado === '0' || validado === 'false') {
+      const btnValidar = `
+        <button class="btn btn-success btn-validar-cliente" onclick="validarCliente('${id}', '${nome}')">
+          <i class="fa fa-check-circle"></i> Validar Cliente
+        </button>
+      `;
+      document.getElementById('div_botao_validar').innerHTML = btnValidar;
+    } else {
+      document.getElementById('div_botao_validar').innerHTML = '';
+    }
+
 		    	
     	$('#titulo_dados').text(nome);
     	$('#email_dados').text(email);
@@ -362,7 +378,8 @@ HTML;
 
 		$('#target_mostrar_foto').attr('src','images/clientes/' + foto);
 
-    	$('#modalDados').modal('show');
+    $('#modalDados').modal('show');
+
 	}
 
 	function limparCampos(){

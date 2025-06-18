@@ -92,9 +92,9 @@ function ativar(id, acao) {
 
 function mascara_valor(valor) {
   var valorAlterado = $("#" + valor).val();
-  valorAlterado = valorAlterado.replace(/\D/g, ""); // Remove todos os não dígitos
-  valorAlterado = valorAlterado.replace(/(\d+)(\d{2})$/, "$1,$2"); // Adiciona a parte de centavos
-  valorAlterado = valorAlterado.replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1."); // Adiciona pontos a cada três dígitos
+  valorAlterado = valorAlterado.replace(/\D/g, "");
+  valorAlterado = valorAlterado.replace(/(\d+)(\d{2})$/, "$1,$2");
+  valorAlterado = valorAlterado.replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.");
   valorAlterado = valorAlterado;
   $("#" + valor).val(valorAlterado);
 }
@@ -134,7 +134,10 @@ function validarCliente(id, nome) {
               showConfirmButton: false,
             });
 
-            listar(); // Atualiza a tabela sem reload
+            setTimeout(() => {
+              $("#modalDados").modal("hide");
+              listar();
+            }, 1600);
           } else {
             Swal.fire({
               title: "Erro",
