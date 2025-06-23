@@ -491,7 +491,7 @@ $data_atual = date('Y-m-d');
     <div id="cliente" class="tab-content hidden">
       <form action="autenticar_cliente.php" method="post" class="space-y-4">
         <input type="text" id="cpf" name="cpf" placeholder="Seu CPF" class="form-input w-full" required />
-        <input type="password" name="senha" placeholder="Senha (123) se você não se cadastrou" class="form-input w-full" required />
+        <input type="password" name="senha" placeholder="Senha" class="form-input w-full" required />
         <button type="submit" class="btn-primary w-full">Entrar</button>
         <p class="text-sm text-center text-white mt-4">
           Ainda não possui cadastro?
