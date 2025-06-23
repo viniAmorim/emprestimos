@@ -77,9 +77,14 @@ if(@count($res) > 0 and $id != $id_reg){
 	exit();
 }
 
-
-
-
+//validacao telefone
+$query = $pdo->query("SELECT * from $tabela where referencia_contato = '$referencia_contato'");
+$res = $query->fetchAll(PDO::FETCH_ASSOC);
+$id_reg = @$res[0]['id'];
+if(@count($res) > 0 and $id != $id_reg){
+	echo 'Telefone já Cadastrado!';
+	exit();
+}
 
 //validar troca da foto
 $query = $pdo->query("SELECT * FROM $tabela where id = '$id'");
@@ -226,73 +231,75 @@ if (@$_FILES['comprovante_rg']['name'] != "") {
 	}
 }
 
-
-
-
-
-
 // SCRIPT PARA SUBIR FOTO NO SERVIDOR
-$nome_img = date('d-m-Y H:i:s') . '-' . @$_FILES['foto']['name'];
-$nome_img = preg_replace('/[ :]+/', '-', $nome_img);
+$foto = $foto ?? 'sem-foto.jpg'; // valor atual vindo do banco ou padrão
 
-$caminho = '../../images/clientes/' . $nome_img;
+if (!empty($_FILES['foto']['tmp_name'])) {
+	$nome_original = $_FILES['foto']['name'];
 
-$imagem_temp = @$_FILES['foto']['tmp_name'];
-
-if (@$_FILES['foto']['name'] != "") {
-	$ext = strtolower(pathinfo($nome_img, PATHINFO_EXTENSION)); // Converte a extensão para minúsculas
+	// Garante que o nome do arquivo tenha extensão
+	$ext = strtolower(pathinfo($nome_original, PATHINFO_EXTENSION));
 	$extensoes_permitidas = ['png', 'jpg', 'jpeg', 'gif', 'pdf', 'webp'];
 
-	if (in_array($ext, $extensoes_permitidas)) {
+	if (!in_array($ext, $extensoes_permitidas)) {
+		echo 'Extensão de imagem não permitida!';
+		exit();
+	}
 
-		// EXCLUO A FOTO ANTERIOR
-		if ($foto != "sem-foto.jpg") {
-			@unlink('../../images/clientes/' . $foto);
-		}
+	// Gera nome único padronizado para o arquivo
+	$nome_img = date('Y-m-d_H-i-s') . '.' . $ext;
+	$caminho = '../../images/clientes/' . $nome_img;
+	$imagem_temp = $_FILES['foto']['tmp_name'];
 
-		$foto = $nome_img;
+	// Exclui foto anterior se não for padrão
+	if ($foto != 'sem-foto.jpg' && file_exists('../../images/clientes/' . $foto)) {
+		@unlink('../../images/clientes/' . $foto);
+	}
 
-		// pegar o tamanho da imagem
-		list($largura, $altura) = getimagesize($imagem_temp);
+	// Atualiza variável
+	$foto = $nome_img;
 
-		// Redimensionar a imagem se a largura for maior que 1400
-		if ($largura > 1400) {
-			// Calcular a nova altura mantendo a proporção
-			$nova_largura = 1400;
-			$nova_altura = ($altura / $largura) * $nova_largura;
+	// Redimensionar se largura > 1400px
+	list($largura, $altura) = getimagesize($imagem_temp);
 
-			// Criar uma nova imagem em branco
-			$image = imagecreatetruecolor($nova_largura, $nova_altura);
+	if ($largura > 1400) {
+		$nova_largura = 1400;
+		$nova_altura = intval(($altura / $largura) * $nova_largura);
+		$image = imagecreatetruecolor($nova_largura, $nova_altura);
 
-			// Criar a imagem a partir do arquivo original
-			if ($ext == 'png') {
+		switch ($ext) {
+			case 'png':
 				$imagem_original = imagecreatefrompng($imagem_temp);
 				imagealphablending($image, false);
 				imagesavealpha($image, true);
-			} else if ($ext == 'jpeg' || $ext == 'jpg') {
+				break;
+			case 'jpg':
+			case 'jpeg':
 				$imagem_original = imagecreatefromjpeg($imagem_temp);
-			} else if ($ext == 'gif') {
+				break;
+			case 'gif':
 				$imagem_original = imagecreatefromgif($imagem_temp);
-			} else {
-				die("Formato de imagem não suportado.");
-			}
-
-			// Redimensionar a imagem
-			imagecopyresampled($image, $imagem_original, 0, 0, 0, 0, $nova_largura, $nova_altura, $largura, $altura);
-
-			// Salvar a imagem com qualidade de 20%
-			imagejpeg($image, $caminho, 20);
-			imagedestroy($imagem_original);
-			imagedestroy($image);
-		} else {
-			// Se a largura não for maior que 1400, apenas move o arquivo
-			move_uploaded_file($imagem_temp, $caminho);
+				break;
+			case 'webp':
+				$imagem_original = imagecreatefromwebp($imagem_temp);
+				break;
+			default:
+				echo "Formato de imagem não suportado.";
+				exit();
 		}
+
+		imagecopyresampled($image, $imagem_original, 0, 0, 0, 0, $nova_largura, $nova_altura, $largura, $altura);
+		imagejpeg($image, $caminho, 80);
+		imagedestroy($imagem_original);
+		imagedestroy($image);
 	} else {
-		echo 'Extensão de Imagem não permitida!';
-		exit();
+		move_uploaded_file($imagem_temp, $caminho);
 	}
 }
+
+
+
+
 
 
 if($id == ""){

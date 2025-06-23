@@ -42,7 +42,7 @@ $data_atual = date('Y-m-d');
           colors: {
             primary: {
               DEFAULT: '#2d4c63',
-              dark: '#1a2c3d',
+              dark: '#4689bd',
               light: '#3a6080'
             },
             accent: {
@@ -66,7 +66,7 @@ $data_atual = date('Y-m-d');
     /* Estilos base */
     :root {
       --primary-color: #2d4c63;
-      --secondary-color: #1a2c3d;
+      --secondary-color: #4588bc;
       --accent-color: #ffc107;
       --silver-color: #c0c0c0;
       --gold-color: #ffd700;
@@ -80,7 +80,7 @@ $data_atual = date('Y-m-d');
     }
     body {
       font-family: "Poppins", sans-serif;
-      background: linear-gradient(135deg, var(--secondary-color), var(--primary-color));
+      background: #7c3444;
       color: var(--text-light);
       min-height: 100vh;
       line-height: 1.6;
@@ -291,7 +291,7 @@ $data_atual = date('Y-m-d');
     .btn-primary {
       background-color: var(--accent-color);
       border-color: var(--accent-color);
-      color: var(--text-dark);
+      color: white;
       font-weight: 600;
       padding: 10px 25px;
       border-radius: 30px;
@@ -458,60 +458,60 @@ $data_atual = date('Y-m-d');
     .custom-green-icon {
       color: #2ba304 !important;
     }
+    .hidden { display: none; }
+    .bg-left {
+      background-color: #f9fafb; /* cinza claro */
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 1rem;
+    }
+
   </style>
 </head>
 <body class="font-poppins bg-gradient-to-br from-primary-dark to-primary text-white min-h-screen overflow-x-hidden">
-  <div class="py-12 px-4 sm:px-6 lg:px-8">
-    <div class="container mx-auto">
-      
-      <!-- Bloco CTA Simplificado -->
-      <div class="mb-12 bg-primary-dark p-8 rounded-xl border border-accent/20 shadow-lg">
-        <div class="text-center mb-6" >
-          <!-- Logo adicionada acima do título -->
-          <div class="flex justify-center mb-6" style="padding:0; margin-top:-60px">
-            <img src="img/<?php echo $logo_site ?>" alt="Logo" style="height: 200px; width: auto; padding:0;" />
-          </div>
-          
-          <h1 class="text-2xl md:text-4xl font-bold mb-4">
-            Conheça nossa Corretora <span class="text-accent">HOJE MESMO!</span>
-          </h1>
-          <p class="text-gray-300 text-lg max-w-3xl mx-auto">
-            <small>O <strong class="text-white"><?php echo $nome_sistema ?></strong> é a solução ideal para você que precisa de um empréstimo rápido, seguro e sem burocracia. Com um processo simples e transparente, ajudamos você a conquistar seus objetivos com as melhores condições do mercado.</small>
-          </p>
-        </div>
-        
-        <div class="flex flex-col sm:flex-row justify-center gap-4 mb-6">
-          <a target="_blank" href="cadastro" class="inline-flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-lg shadow-lg text-white bg-customGreen hover:bg-green-700 focus:outline-none animate-pulse-green transition-all duration-300">
-            <i class="fas fa-rocket mr-2"></i> Começar Agora
-          </a>
-          <a href="acesso" class="inline-flex items-center justify-center px-6 py-3 border border-white/20 text-base font-medium rounded-lg shadow-lg text-white hover:bg-white/10 focus:outline-none transition-all duration-300">
-            <i class="fas fa-unlock mr-2"></i> Acesso Cliente
-          </a>
+  <div class="flex flex-col md:flex-row h-screen items-center justify-center">
+    <!-- Lado Esquerdo com Imagem -->
+    <div class="hidden md:block w-full md:w-1/2 h-1/2 md:h-full bg-left">
+      <img src="img/logo2.png" alt="Imagem de Empréstimo" class="object-contain max-h-full max-w-full" />
+    </div>
 
-          <a href="login" class="inline-flex items-center justify-center px-6 py-3 border border-white/20 text-base font-medium rounded-lg shadow-lg text-white hover:bg-white/10 focus:outline-none transition-all duration-300" style="background:#575958">
-            <i class="fas fa-unlock-alt mr-2"></i> Acesso Gestão
-          </a>
-        </div>
-        
-       
-      </div>
-      
-    
-      <!-- Footer -->
-      <footer class="py-4 md:py-6 border-t border-gray-700 gsap-fade-up">
-        <div class="container mx-auto flex flex-col md:flex-row items-center justify-center md:justify-between px-4">
-          <!-- Logo Grande no Footer - ajustado para ser menor em dispositivos móveis -->
-         <div class="flex justify-center mb-4 md:mb-6">
-          <img src="img/<?php echo $logo_site ?>" alt="Logo" style="height: 120px; width: auto;" />
-        </div>
-          <div class="text-center md:text-right">
-            <p class="text-gray-400 text-sm">&copy; <?php echo date('Y'); ?> <?php echo $nome_sistema ?>. </p>
-            <p class="text-gray-500 text-xs md:text-sm mt-1 md:mt-2">Contato <?php echo $telefone_sistema ?></p>
-          </div>
-        </div>
-      </footer>
+
+    <!-- Lado Direito com Botões -->
+    <div class="w-full md:w-1/2 p-8 text-white flex flex-col items-center justify-center space-y-6">
+  <img src="img/logo_ucred.png" alt="Logo" class="h-24 mb-6" />
+
+  <!-- Tabs -->
+  <div class="w-full max-w-md">
+    <div class="flex justify-between mb-6 border-b border-gray-300">
+      <button class="tab-button font-semibold py-2 px-4 text-white hover:text-accent border-b-2 border-transparent hover:border-accent" onclick="showTab('cliente', event)">Login Cliente</button>
+      <button class="tab-button font-semibold py-2 px-4 text-white hover:text-accent border-b-2 border-transparent hover:border-accent" onclick="showTab('gestao', event)">Login Gestão</button>
+    </div>
+
+    <div id="cliente" class="tab-content hidden">
+      <form action="autenticar_cliente.php" method="post" class="space-y-4">
+        <input type="text" id="cpf" name="cpf" placeholder="Seu CPF" class="form-input w-full" required />
+        <input type="password" name="senha" placeholder="Senha (123) se você não se cadastrou" class="form-input w-full" required />
+        <button type="submit" class="btn-primary w-full">Entrar</button>
+        <p class="text-sm text-center text-white mt-4">
+          Ainda não possui cadastro?
+          <a href="cadastro" class="text-accent font-semibold hover:underline">Cadastre-se</a>
+        </p>
+      </form>
+    </div>
+
+    <div id="gestao" class="tab-content hidden">
+      <form action="autenticar.php" method="post" class="space-y-4">
+        <input type="text" name="usuario" placeholder="Seu Email" class="form-input w-full" required />
+        <input type="password" name="senha" placeholder="Senha" class="form-input w-full" required />
+        <button type="submit" class="btn-primary w-full">Entrar</button>
+      </form>
     </div>
   </div>
+</div>
+
+  </div>
+  
   <!-- Scripts -->
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script>
@@ -702,4 +702,33 @@ $data_atual = date('Y-m-d');
   </script>
 </body>
 </html>
+
+<script>
+  $(document).ready(function(){
+    $('#cpf').mask('000.000.000-00');
+  });
+
+  function showTab(tabId, event) {
+    // Esconde todos
+    document.querySelectorAll('.tab-content').forEach(tab => tab.classList.add('hidden'));
+
+    // Mostra o selecionado
+    document.getElementById(tabId).classList.remove('hidden');
+
+    // Ativa visualmente o botão
+    document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('border-accent'));
+    event.target.classList.add('border-accent');
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+  // Exibe conteúdo cliente
+  document.getElementById('cliente').classList.remove('hidden');
+  // Marca botão cliente ativo
+  const btns = document.querySelectorAll('.tab-button');
+  btns.forEach(btn => btn.classList.remove('border-accent'));
+  btns[0].classList.add('border-accent');
+});
+
+
+</script>
 
