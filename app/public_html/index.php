@@ -2,6 +2,9 @@
 @session_start();
 require_once("conexao.php");
 
+// Evita redirecionamento
+$entrada_sistema = 'Public';
+
 if($entrada_sistema == 'Login'){
   // Verifica se o usuário está logado (exemplo: verifica se existe uma sessão)
   if (!isset($_SESSION['usuario_logado_pagina'])) {    
