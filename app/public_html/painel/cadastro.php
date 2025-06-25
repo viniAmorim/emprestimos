@@ -1007,25 +1007,6 @@
     });
   });
 
-  // Máscara para telefone
-  document.addEventListener('DOMContentLoaded', function () {
-    const telefoneInput = document.getElementById('telefone');
-
-    telefoneInput.addEventListener('input', function (e) {
-      let value = e.target.value.replace(/\D/g, '');
-
-      if (value.length > 11) value = value.slice(0, 11);
-
-      if (value.length <= 10) {
-        value = value.replace(/(\d{2})(\d{4})(\d{0,4})/, '($1) $2-$3');
-      } else {
-        value = value.replace(/(\d{2})(\d{5})(\d{0,4})/, '($1) $2-$3');
-      }
-
-      e.target.value = value;
-    });
-  });
-
   // Máscara para RG
   document.addEventListener('DOMContentLoaded', function () {
     const rgInput = document.getElementById('rg');
@@ -1369,3 +1350,28 @@
 </script>
 
 
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const aplicarMascaraTelefone = (input) => {
+      input.addEventListener('input', function (e) {
+        let value = e.target.value.replace(/\D/g, '');
+
+        if (value.length > 11) value = value.slice(0, 11);
+
+        if (value.length <= 10) {
+          value = value.replace(/(\d{2})(\d{4})(\d{0,4})/, '($1) $2-$3');
+        } else {
+          value = value.replace(/(\d{2})(\d{5})(\d{0,4})/, '($1) $2-$3');
+        }
+
+        e.target.value = value;
+      });
+    };
+
+    const telefoneInput = document.getElementById('telefone');
+    const referenciaContatoInput = document.getElementById('referencia_contato');
+
+    if (telefoneInput) aplicarMascaraTelefone(telefoneInput);
+    if (referenciaContatoInput) aplicarMascaraTelefone(referenciaContatoInput);
+  });
+</script>
