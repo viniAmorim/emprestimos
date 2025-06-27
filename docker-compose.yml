@@ -34,14 +34,13 @@ services:
       - docker.network
     volumes:
       - .:/var/www
+      - /etc/letsencrypt:/etc/letsencrypt:ro # <-- Certificados SSL
 
   mysql:
     image: mysql:5.7
     restart: unless-stopped
     container_name: docker.mysql
     tty: true
-    # ports:
-    #   - "3306:3306"
     mem_limit: 1g
     deploy:
       resources:
@@ -59,7 +58,6 @@ services:
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-root}
       MYSQL_PASSWORD: ${MYSQL_PASSWORD:-mysql}
       MYSQL_USER: ${MYSQL_USER:-mysql}
-    command: --innodb_buffer_pool_size=64M
 
   phpmyadmin:
     image: phpmyadmin
