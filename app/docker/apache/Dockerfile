@@ -31,3 +31,5 @@ RUN ln -s ${APP_ROOT}/public_html/index.php ${DOCUMENT_ROOT}
 
 # Copia sua configuração personalizada do Apache
 COPY ./httpd.conf /usr/local/apache2/conf/httpd.conf
+COPY ./localhost.conf /usr/local/apache2/conf/extra/localhost.conf
+
