@@ -33,3 +33,5 @@ RUN ln -s ${APP_ROOT}/public_html/index.php ${DOCUMENT_ROOT}
 COPY ./httpd.conf /usr/local/apache2/conf/httpd.conf
 COPY ./localhost.conf /usr/local/apache2/conf/extra/localhost.conf
 
+RUN a2enmod ssl && a2enmod rewrite
+
