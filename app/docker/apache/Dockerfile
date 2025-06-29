@@ -9,7 +9,7 @@ RUN apk add --no-cache \
     apache2-mod-rewrite \
     apache2-mod-proxy \
     apache2-mod-proxy-fcgi \
-    apache2-mod-headers # Necessário para cabeçalhos HTTP como HSTS
+    apache2-mod-headers
 
 # Define o fuso horário
 ENV TZ=${TZ:-UTC}
@@ -17,9 +17,9 @@ RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
 # Variáveis de ambiente
 ENV APP_ROOT=/var/www/app
-ENV SERVER_NAME=app.ucredcredito.com # Alterado para seu domínio real
+ENV SERVER_NAME=app.ucredcredito.com 
 ENV DOCUMENT_ROOT=${APP_ROOT}/public_html
-ENV APACHE_LOG_DIR=/var/log/apache2 # Alterado para um local padrão de logs, fora de /var/www
+ENV APACHE_LOG_DIR=/var/log/apache2
 ENV APACHE_RUN_GROUP=www-data
 ENV APACHE_RUN_USER=www-data
 
