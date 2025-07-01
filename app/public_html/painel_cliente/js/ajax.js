@@ -18,7 +18,7 @@ function listar(p1, p2, p3, p4, p5, p6) {
 
 function inserir() {
   $("#mensagem").text("");
-  $("#titulo_inserir").text("Inserir Registro");
+  $("#titulo_inserir").text("Novo Empréstimo");
   $("#modalForm").modal("show");
   limparCampos();
 }
