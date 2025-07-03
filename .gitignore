@@ -11,3 +11,5 @@
 !/**/docker/nginx/logs/.gitkeep
 
 .env
+
+/mysql-data

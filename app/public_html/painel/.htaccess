@@ -2,6 +2,7 @@ RewriteEngine On
 
 RewriteRule ^clientes(.*)$ index.php?pagina=clientes [L]
 RewriteRule ^emprestimos(.*)$ index.php?pagina=emprestimos [L]
+RewriteRule ^produtos(.*)$ index.php?pagina=produtos [L]
 RewriteRule ^cobrancas(.*)$ index.php?pagina=cobrancas [L]
 RewriteRule ^grupo_acessos(.*)$ index.php?pagina=grupo_acessos [L]
 RewriteRule ^acessos(.*)$ index.php?pagina=acessos [L]

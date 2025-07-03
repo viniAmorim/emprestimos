@@ -201,6 +201,14 @@ if($linhas > 0){
 							</li>
 						<?php } ?>
 
+            <?php if($recursos != "Empréstimos"){ ?>
+							<li class="treeview <?php echo @$produtos ?>">
+								<a href="produtos">
+									<i class="fa fa-cubes"></i> <span>Produtos</span>
+								</a>
+							</li>
+						<?php } ?>
+
 							<?php if($recursos != "Empréstimos"){ ?>
 							<li class="treeview <?php echo @$cobrancas ?>">
 								<a href="cobrancas">
