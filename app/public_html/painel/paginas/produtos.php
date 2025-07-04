@@ -186,24 +186,52 @@ if(@$produtos == 'ocultar'){
         $('#modalDados').modal('show'); // Usa o método 'modal' do Bootstrap
     }
 
-    // Função para deletar um único produto
     function deletar(id) {
-        if (confirm('Deseja realmente excluir este produto?')) {
-            $.ajax({
-                url: 'paginas/' + pag + "/excluir.php",
-                method: 'POST',
-                data: {id: id},
-                dataType: "html",
-                success: function(mensagem) {
-                    if (mensagem.trim() == "Excluído com Sucesso") {
-                        listarProdutos(0);
-                    } else {
-                        alert(mensagem);
+        Swal.fire({
+            title: 'Tem certeza?',
+            text: 'Deseja realmente excluir este produto?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Sim, excluir!',
+            cancelButtonText: 'Cancelar'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    url: 'paginas/' + pag + "/excluir.php",
+                    method: 'POST',
+                    data: {id: id},
+                    dataType: "html",
+                    success: function(mensagem) {
+                        if (mensagem.trim() == "Excluído com Sucesso") {
+                            Swal.fire(
+                                'Excluído!',
+                                'O produto foi excluído com sucesso.',
+                                'success'
+                            );
+                            listarProdutos(0); // Recarrega a lista de produtos
+                        } else {
+                            Swal.fire(
+                                'Erro!',
+                                mensagem,
+                                'error'
+                            );
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        Swal.fire(
+                            'Erro de Conexão!',
+                            'Não foi possível conectar ao servidor para excluir o produto.',
+                            'error'
+                        );
+                        console.error("Erro na requisição AJAX:", status, error);
                     }
-                }
-            });
-        }
+                });
+            }
+        });
     }
+
 
     // Função para deletar produtos selecionados (se você implementar checkboxes)
     function deletarSel() {
