@@ -86,7 +86,7 @@ if($linhas > 0){
 	<!-- //chart -->
 
   <!-- SweetAlert2 -->
-  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <link src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></link>
 
 	<!-- Metis Menu -->
 	<script src="js/metisMenu.min.js"></script>
@@ -141,12 +141,7 @@ if($linhas > 0){
 	</script>
 	<!-- //pie-chart --><!-- index page sales reviews visitors pie chart -->
 
-
 <link rel="stylesheet" type="text/css" href="DataTables/datatables.min.css"/> <script src="DataTables/datatables.min.js"></script>
-
-
-
-
 
 <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
