@@ -14,8 +14,16 @@ if(@$produtos == 'ocultar'){
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gerenciamento de Produtos</title>
 
-    <link rel="stylesheet" href="css/produtos.css">
+    <!-- As inclusões de jQuery, Bootstrap e Font Awesome devem estar no seu index.php principal,
+         conforme discutido anteriormente, para evitar duplicação e conflitos.
+         Se você ainda não fez essa mudança no index.php, faça-a. -->
+    <!-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> -->
+    <!-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"> -->
+    <!-- <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script> -->
+    <!-- <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script> -->
+    <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"> -->
 
+    <link rel="stylesheet" href="css/produtos.css">
     <script src="js/ajax.js"></script>
 
 </head>
@@ -24,7 +32,7 @@ if(@$produtos == 'ocultar'){
 <div class="main-page margin-mobile container">
     <div class="d-flex justify-content-between align-items-center mb-4">
         <a href="#" onclick="abrirModalCadastrar()" class="btn btn-primary">
-           Novo Produto
+            Novo Produto
         </a>
 
         <div class="dropdown">
@@ -43,6 +51,7 @@ if(@$produtos == 'ocultar'){
 
 <input type="hidden" id="ids">
 
+<!-- Modal de Detalhes (modalDados) -->
 <div class="modal fade" id="modalDados" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
@@ -55,6 +64,9 @@ if(@$produtos == 'ocultar'){
             <div class="modal-body">
                 <p><strong>Título:</strong> <span id="titulo_dados"></span></p>
                 <p><strong>Valor:</strong> <span id="valor_dados"></span></p>
+                <!-- NOVOS CAMPOS PARA DETALHES -->
+                <p><strong>Taxa de Juros:</strong> <span id="taxa_juros_dados"></span>%</p>
+                <p><strong>Tipo de Vencimento:</strong> <span id="tipo_vencimento_dados"></span></p>
                 <p><strong>Descrição:</strong> <span id="descricao_dados"></span></p>
             </div>
             <div class="modal-footer">
@@ -64,6 +76,7 @@ if(@$produtos == 'ocultar'){
     </div>
 </div>
 
+<!-- Modal de Formulário (modalForm) -->
 <div class="modal fade" id="modalForm" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
@@ -83,6 +96,24 @@ if(@$produtos == 'ocultar'){
                     <div class="form-group">
                         <label for="valor_produto">Valor</label>
                         <input type="text" class="form-control" id="valor_produto" name="valor" placeholder="Valor Sugerido (Ex: R$ 5.000,00)" onkeyup="mascara_valor('valor_produto')">
+                    </div>
+
+                    <!-- NOVO CAMPO: Taxa de Juros -->
+                    <div class="form-group">
+                        <label for="taxa_juros_produto">Taxa de Juros (%)</label>
+                        <input type="number" step="0.01" class="form-control" id="taxa_juros_produto" name="taxa_juros" placeholder="Ex: 5.25">
+                    </div>
+
+                    <!-- NOVO CAMPO: Tipo de Vencimento -->
+                    <div class="form-group">
+                        <label for="tipo_vencimento_produto">Tipo de Vencimento</label>
+                        <select class="form-control" id="tipo_vencimento_produto" name="tipo_vencimento">
+                            <option value="">Selecione</option>
+                            <option value="Diário">Diário</option>
+                            <option value="Semanal">Semanal</option>
+                            <option value="Quinzenal">Quinzenal</option>
+                            <option value="Mensal">Mensal</option>
+                        </select>
                     </div>
 
                     <div class="form-group">
@@ -131,22 +162,26 @@ if(@$produtos == 'ocultar'){
         $('#modalForm').modal('show'); // Usa o método 'modal' do Bootstrap
     }
 
-    // Função para abrir o modal de edição
-    function editar(id, titulo, valor, descricao) {
+    // Função para abrir o modal de edição (AGORA COM TAXA_JUROS E TIPO_VENCIMENTO)
+    function editar(id, titulo, valor, descricao, taxa_juros, tipo_vencimento) {
         $('#titulo_modal_form').text('Editar Produto de Empréstimo');
         $('#id_produto').val(id);
         $('#titulo_produto').val(titulo);
         $('#valor_produto').val(valor);
+        $('#taxa_juros_produto').val(taxa_juros); // Preenche a taxa de juros
+        $('#tipo_vencimento_produto').val(tipo_vencimento); // Preenche o tipo de vencimento
         $('#descricao_produto').val(descricao);
         $('#mensagem_form').text('');
         $('#modalForm').modal('show'); // Usa o método 'modal' do Bootstrap
     }
 
-    // Função para abrir o modal de detalhes
-    function detalhes(titulo, valor, descricao) {
+    // Função para abrir o modal de detalhes (AGORA COM TAXA_JUROS E TIPO_VENCIMENTO)
+    function detalhes(titulo, valor, descricao, taxa_juros, tipo_vencimento) {
         $('#titulo_modal_dados').text('Detalhes do Produto');
         $('#titulo_dados').text(titulo);
         $('#valor_dados').text(valor);
+        $('#taxa_juros_dados').text(taxa_juros); // Exibe a taxa de juros
+        $('#tipo_vencimento_dados').text(tipo_vencimento); // Exibe o tipo de vencimento
         $('#descricao_dados').text(descricao);
         $('#modalDados').modal('show'); // Usa o método 'modal' do Bootstrap
     }
