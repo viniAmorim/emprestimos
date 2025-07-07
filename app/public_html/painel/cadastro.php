@@ -241,7 +241,7 @@
       color: #000000 !important;
       border: 1px solid #d1d5db !important;
       border-radius: 0.5rem !important;
-      padding: 0.75rem 1rem 0.75rem 2.5rem !important;
+      padding: 0.75rem 1rem 0.75rem 0.75rem !important;
       box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05) !important;
       transition: all 0.2s ease !important;
     }
@@ -453,6 +453,10 @@
       align-items: center;
       padding: 1rem;
     }
+    .form-input.invalid {
+      border-color: red !important; 
+      box-shadow: 0 0 0 10px rgba(239, 68, 68, 0.25) !important; 
+    }
 
   </style>
 </head>
@@ -471,43 +475,43 @@
           <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-3">
             <div>
               <label class="block text-sm font-medium text-white">Nome</label>
-              <input type="text" name="nome" placeholder="Nome completo" class="form-input w-full" required>
+              <input type="text" id="nome" name="nome"  placeholder="Nome completo" class="form-input w-full" required onblur="validateField(this)">
             </div>
             <div>
               <label class="block text-sm font-medium text-white">Email</label>
-              <input type="email" id="email" name="email" placeholder="Email" class="form-input w-full" required>
+              <input type="email" id="email" name="email" placeholder="Email" class="form-input w-full" required onblur="validateField(this)">
             </div>
             <div>
               <label class="block text-sm font-medium text-white">Telefone</label>
-              <input type="text" name="telefone" id="telefone" placeholder="Telefone" class="form-input w-full" required>
+              <input type="text" name="telefone" id="telefone" placeholder="Telefone" class="form-input w-full" required onblur="validateField(this)">
             </div>
           </div>
 
           <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div>
               <label class="block text-sm font-medium text-white">CPF</label>
-              <input type="text" name="cpf" id="cpf" placeholder="CPF" class="form-input w-full" required>
+              <input type="text" name="cpf" id="cpf" placeholder="CPF" class="form-input w-full" required onblur="validarCPF(this)">
             </div>
             <div>
               <label class="block text-sm font-medium text-white">RG</label>
-              <input type="text" name="rg" id="rg" placeholder="RG" class="form-input w-full" required>
+              <input type="text" name="rg" id="rg" placeholder="RG" class="form-input w-full" required onblur="validateField(this)">
             </div>
             <div>
               <label class="block text-sm font-medium text-white">Data de Nascimento</label>
-              <input type="date" id="data_nasc" name="data_nasc" class="form-input w-full" required>
+              <input type="date" id="data_nasc" name="data_nasc" class="form-input w-full" required onblur="validateField(this)">
             </div>
           </div>
 
           <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
             <div>
               <label class="block text-sm font-medium text-white">Chave Pix em sua titularidade</label>
-              <input type="text" name="pix" id="pix" placeholder="CPF, telefone ou e-mail" class="form-input w-full">
+              <input type="text" name="pix" id="pix" placeholder="CPF, telefone ou e-mail" class="form-input w-full" required onblur="validateField(this)">
             </div>
             <!-- Comprovante de Endereço -->
             <div class="flex items-start gap-4">
               <div class="flex-1">
                 <label class="block text-sm font-medium text-white">Comprovante de Endereço</label>
-                <input type="file" name="comprovante_endereco" id="comprovante_endereco" onchange="carregarImgComprovanteEndereco()" accept=".jpg,.jpeg,.png" class="form-input w-full" required>
+                <input type="file" name="comprovante_endereco" id="comprovante_endereco" onchange="carregarImgComprovanteEndereco(); validateField(this)" accept=".jpg,.jpeg,.png" class="form-input w-full" required>
               </div>
               <div class="w-20 h-20 border border-gray-300 rounded overflow-hidden bg-white">
                 <img src="painel/images/comprovantes/sem-foto.png" id="target-comprovante-endereco" class="object-cover w-full h-full">
@@ -518,7 +522,7 @@
             <div class="flex items-start gap-4">
               <div class="flex-1">
                 <label class="block text-sm font-medium text-white">Comprovante CNG ou RG</label>
-                <input type="file" id="comprovante_rg" name="comprovante_rg" onchange="carregarImgComprovanteRG()" accept=".jpg,.jpeg,.png" class="form-input w-full" required>
+                <input type="file" id="comprovante_rg" name="comprovante_rg" onchange="carregarImgComprovanteRG(); validateField(this)" accept=".jpg,.jpeg,.png" class="form-input w-full" required>
               </div>
               <div class="w-20 h-20 border border-gray-300 rounded overflow-hidden bg-white">
                 <img src="painel/images/comprovantes/sem-foto.png" id="target-comprovante-rg" class="object-cover w-full h-full">
@@ -541,11 +545,11 @@
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-4">
             <div>
               <label class="block text-sm font-medium text-white">Senha</label>
-              <input type="password" name="senha" id="senha" class="form-input w-full" required>
+              <input type="password" name="senha" id="senha" class="form-input w-full" required onblur="validateField(this)">
             </div>
             <div>
               <label class="block text-sm font-medium text-white">Confirmar Senha</label>
-              <input type="password" name="conf_senha" id="conf_senha" class="form-input w-full" required>
+              <input type="password" name="conf_senha" id="conf_senha" class="form-input w-full" required onblur="validateField(this)">
             </div>
           </div>
 
@@ -553,7 +557,7 @@
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-4 items-start">
             <div>
               <label class="block text-sm font-medium text-white">Foto do Usuário</label>
-              <input type="file" id="foto_usuario" name="foto_usuario" accept=".jpg,.jpeg,.png" onchange="carregarImg()" class="form-input w-full" required>
+              <input type="file" id="foto_usuario" name="foto_usuario" accept=".jpg,.jpeg,.png" onchange="carregarImg(); validateField(this)" class="form-input w-full" required>
             </div>
             <div class="w-24 h-24 border border-gray-300 rounded overflow-hidden bg-white">
               <img src="painel/images/comprovantes/sem-foto.png" id="foto" name="foto" class="object-cover w-full h-full">
@@ -572,25 +576,25 @@
           <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div>
               <label class="block text-sm font-medium text-white">CEP</label>
-              <input type="text" name="cep" id="cep" class="form-input w-full" onblur="pesquisacep(this.value)" required>
+              <input type="text" name="cep" id="cep" class="form-input w-full" onblur="pesquisacep(this.value); validateField(this)" required onblur="validateField(this)">
             </div>
             <div>
               <label class="block text-sm font-medium text-white">Endereço</label>
-              <input type="text" name="endereco" id="endereco" class="form-input w-full" required>
+              <input type="text" name="endereco" id="endereco" class="form-input w-full" required onblur="validateField(this)"> 
             </div>
             <div>
               <label class="block text-sm font-medium text-white">Bairro</label>
-              <input type="text" name="bairro" id="bairro" class="form-input w-full" required>
+              <input type="text" name="bairro" id="bairro" class="form-input w-full" required onblur="validateField(this)">
             </div>
           </div>
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-4 mb-3">
             <div>
               <label class="block text-sm font-medium text-white">Cidade</label>
-              <input type="text" name="cidade" id="cidade" class="form-input w-full" required>
+              <input type="text" name="cidade" id="cidade" class="form-input w-full" required onblur="validateField(this)">
             </div>
             <div>
               <label for="estado" class="block text-sm font-medium text-white">Estado</label>
-              <select id="estado" name="estado" class="form-input w-full" required>
+              <select id="estado" name="estado" class="form-input w-full" required onblur="validateField(this)"> 
                 <option value="AC">Acre</option>
                 <option value="AL">Alagoas</option>
                 <option value="AP">Amapá</option>
@@ -626,21 +630,21 @@
           <div class="grid grid-cols-1 md:grid-cols-6 gap-4">
             <div class="md:col-span-1">
               <label class="block text-sm font-medium text-white">Quadra</label>
-              <input type="text" name="quadra" class="form-input w-full">
+              <input type="text" name="quadra" id="quadra" class="form-input w-full" required onblur="validateField(this)">
             </div>
 
             <div class="md:col-span-1">
               <label class="block text-sm font-medium text-white">Lote</label>
-              <input type="number" name="lote" class="form-input w-full" min="0">
+              <input type="number" name="lote" id="lote" class="form-input w-full" min="0" required onblur="validateField(this)">
             </div>
             
             <div class="md:col-span-1">
               <label class="block text-sm font-medium text-white">Número</label>
-              <input type="number" name="numero" class="form-input w-full" min="0">
+              <input type="number" name="numero" id="numero" class="form-input w-full" min="0" required onblur="validateField(this)">
             </div>
             <div class="md:col-span-3">
               <label class="block text-sm font-medium text-white">Complemento</label>
-              <input type="text" name="complemento" class="form-input w-full">
+              <input type="text" name="complemento" id="complemento" class="form-input w-full" required onblur="validateField(this)">
             </div>
           </div>
           <div class="pt-4 flex justify-between">
@@ -655,15 +659,15 @@
           <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div>
               <label class="block text-sm font-medium text-white">Contato de referência</label>
-              <input type="text" name="referencia_contato" id="referencia_contato" class="form-input w-full" required>
+              <input type="text" name="referencia_contato" id="referencia_contato" class="form-input w-full" required onblur="validateField(this)">
             </div>
             <div>
               <label class="block text-sm font-medium text-white">Nome Completo da referência</label>
-              <input type="text" id="referencia_nome" name="referencia_nome" class="form-input w-full" required>
+              <input type="text" id="referencia_nome" name="referencia_nome" class="form-input w-full" required onblur="validateField(this)">
             </div>
             <div>
               <label for="referencia_parentesco" class="block text-sm font-medium text-white">Grau de parentesco</label>
-              <select id="referencia_parentesco" name="referencia_parentesco" class="form-input w-full" required>
+              <select id="referencia_parentesco" name="referencia_parentesco" class="form-input w-full" required onblur="validateField(this)">
               <option value="Pai">Pai</option>
                   <option value="Mãe">Mãe</option>
                   <option value="Filho">Filho</option>
@@ -685,11 +689,11 @@
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
               <label class="block text-sm font-medium text-white">Indicação</label>
-              <input type="text" id="indicacao" name="indicacao" placeholder="Indicado por" class="form-input w-full" required>
+              <input type="text" id="indicacao" name="indicacao" placeholder="Indicado por" class="form-input w-full" required onblur="validateField(this)">
             </div>
             <div>
               <label for="ramo" class="block text-sm font-medium text-white">Ramo de Atuação</label>
-              <select id="ramo" name="ramo" class="form-input w-full" required>
+              <select id="ramo" name="ramo" class="form-input w-full" required onblur="validateField(this)">
                 <option value="" disabled selected>Selecione um ramo</option>
                 <option value="comercio">Comércio</option>
                 <option value="uber">Motorista/Entregador App</option>
@@ -722,18 +726,18 @@
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <label class="block text-sm font-medium">Modelo do Veículo</label>
-                <input type="text" name="modelo_veiculo" class="form-input w-full veiculo-obrigatorio">
+                <input type="text" name="modelo_veiculo" id="modelo_veiculo" class="form-input w-full veiculo-obrigatorio" required onblur="validateField(this)">
               </div>
               <div>
                 <label class="block text-sm font-medium">Placa</label>
-                <input type="text" name="placa_veiculo" class="form-input w-full veiculo-obrigatorio" maxlength="7" placeholder="ABC1234">
+                <input type="text" name="placa_veiculo" id="placa_veiculo" class="form-input w-full veiculo-obrigatorio" maxlength="7" placeholder="ABC1234" required onblur="validateField(this)">
               </div>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
               <div>
                 <label class="block text-sm font-medium">Status do Veículo</label>
-                <select name="status_veiculo" class="form-input w-full veiculo-obrigatorio">
+                <select name="status_veiculo" id="status_veiculo" class="form-input w-full veiculo-obrigatorio" required onblur="validateField(this)">
                   <option value="" disabled selected>Selecione</option>
                   <option value="proprio">Próprio</option>
                   <option value="alugado">Alugado</option>
@@ -741,7 +745,7 @@
               </div>
               <div>
                 <label class="block text-sm font-medium">Valor do Aluguel</label>
-                <input type="number" name="valor_aluguel" class="form-input w-full veiculo-obrigatorio" placeholder="R$" min="0" step="0.01">
+                <input type="number" name="valor_aluguel"  id="valor_aluguel" class="form-input w-full veiculo-obrigatorio" placeholder="R$" min="0" step="0.01" required onblur="validateField(this)">
               </div>
             </div>
           </div>
@@ -993,404 +997,311 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.11/jquery.mask.min.js"></script> 
 
 <script>
-  // Máscara para CPF
-  document.addEventListener('DOMContentLoaded', function () {
-    const cpfInput = document.getElementById('cpf');
+let currentStep = 1;
+const formSteps = document.querySelectorAll('.form-step');
 
-    cpfInput.addEventListener('input', function (e) {
-      let value = e.target.value.replace(/\D/g, '');
-
-      if (value.length > 11) value = value.slice(0, 11);
-
-      value = value.replace(/(\d{3})(\d)/, '$1.$2');
-      value = value.replace(/(\d{3})(\d)/, '$1.$2');
-      value = value.replace(/(\d{3})(\d{1,2})$/, '$1-$2');
-
-      e.target.value = value;
-    });
-  });
-
-  // Máscara para RG
-  document.addEventListener('DOMContentLoaded', function () {
-    const rgInput = document.getElementById('rg');
-    if (rgInput) {
-      rgInput.addEventListener('input', function (e) {
-        let value = e.target.value.replace(/\D/g, '');
-
-        if (value.length > 9) value = value.slice(0, 9);
-
-        value = value.replace(/^(\d{2})(\d{3})(\d{3})(\d{0,1})$/, '$1.$2.$3-$4');
-        e.target.value = value;
-      });
-    }
-  });
-
-  // VALORES (R$)
-  function formatarMoeda(valor) {
-    valor = valor.replace(/\D/g, '');
-    valor = (parseInt(valor, 10) / 100).toFixed(2);
-    return 'R$ ' + valor
-      .replace('.', ',')
-      .replace(/\B(?=(\d{3})+(?!\d))/g, '.');
-  }
-
-  const camposMoeda = document.querySelectorAll('.money');
-
-  camposMoeda.forEach(function (campo) {
-    campo.addEventListener('input', function (e) {
-      let cursor = campo.selectionStart;
-      let valorAntigo = campo.value;
-      campo.value = formatarMoeda(campo.value);
-      let diff = campo.value.length - valorAntigo.length;
-      campo.setSelectionRange(cursor + diff, cursor + diff);
+document.addEventListener('DOMContentLoaded', function() {
+    showStep(currentStep);
+    setupMasks();
+    // Adiciona event listeners para validação em tempo real
+    document.querySelectorAll('.form-input').forEach(input => {
+        input.addEventListener('input', function() {
+            validateField(this);
+        });
     });
 
-    // Opcional: inicia já formatado se tiver valor
-    campo.addEventListener('blur', function () {
-      campo.value = formatarMoeda(campo.value);
+    document.querySelectorAll('.form-select').forEach(select => {
+        select.addEventListener('change', function() {
+            validateField(this);
+        });
     });
-  });
-    
-    function meu_callback(conteudo) {
-      if (!("erro" in conteudo)) {
-        //Atualiza os campos com os valores retornados.
-        document.getElementById('endereco').value = conteudo.logradouro;
-        document.getElementById('bairro').value = conteudo.bairro;
-        document.getElementById('cidade').value = conteudo.localidade;
-        document.getElementById('estado').value = conteudo.uf;
-      } else {
-        //CEP não encontrado.
-        limpa_formulário_cep();
-        alert("CEP não encontrado.");
-      }
-    }
 
-    function limpa_formulário_cep() {
-      document.getElementById('endereco').value = "";
-      document.getElementById('bairro').value = "";
-      document.getElementById('cidade').value = "";
-      document.getElementById('estado').value = "";
-    }
+    // Adiciona onblur para campos de arquivo para validação quando saem do foco
+    document.getElementById('comprovante_endereco').addEventListener('blur', function() {
+        validateField(this);
+    });
+    document.getElementById('comprovante_rg').addEventListener('blur', function() {
+        validateField(this);
+    });
+    document.getElementById('foto_usuario').addEventListener('blur', function() {
+        validateField(this);
+    });
+});
 
-        
-    function pesquisacep(valor) {
-      //Nova variável "cep" somente com dígitos.
-      var cep = valor.replace(/\D/g, '');
-
-      //Verifica se campo cep possui valor informado.
-      if (cep != "") {
-        //Expressão regular para validar o CEP.
-        var validacep = /^[0-9]{8}$/;
-
-        //Valida o formato do CEP.
-        if(validacep.test(cep)) {
-          //Preenche os campos com "..." enquanto consulta webservice.
-          document.getElementById('endereco').value="...";
-          document.getElementById('bairro').value="...";
-          document.getElementById('cidade').value="...";
-          document.getElementById('estado').value="...";
-          //document.getElementById('ibge').value="...";
-
-          //Cria um elemento javascript.
-          var script = document.createElement('script');
-
-          //Sincroniza com o callback.
-          script.src = 'https://viacep.com.br/ws/'+ cep + '/json/?callback=meu_callback';
-
-          //Insere script no documento e carrega o conteúdo.
-          document.body.appendChild(script);
-        } else {
-          //cep é inválido.
-          limpa_formulário_cep();
-          alert("Formato de CEP inválido.");
+function showStep(step) {
+    formSteps.forEach((s, index) => {
+        s.classList.add('hidden');
+        if (index + 1 === step) {
+            s.classList.remove('hidden');
         }
-        } //end if.
-        else {
-            //cep sem valor, limpa formulário.
-            limpa_formulário_cep();
+    });
+}
+
+function validateField(field) {
+    // Remove a classe 'invalid' no início da validação para evitar que persista
+    field.classList.remove('invalid');
+
+    if (field.hasAttribute('required') && field.value.trim() === '') {
+        field.classList.add('invalid');
+        return false;
+    }
+
+    // Validação específica para o email
+    if (field.type === 'email') {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (field.value.trim() !== '' && !emailRegex.test(field.value)) {
+            field.classList.add('invalid');
+            return false;
         }
-    };
+    }
 
-    $("#form").submit(function (event) {
+    // Validação para confirmação de senha
+    if (field.id === 'conf_senha') {
+        const senha = document.getElementById('senha').value;
+        if (field.value !== senha) {
+            field.classList.add('invalid');
+            return false;
+        }
+    }
 
-      event.preventDefault();
-      var formData = new FormData(this);
+    // Validação de arquivos (se required e nenhum arquivo selecionado)
+    if (field.type === 'file' && field.hasAttribute('required')) {
+        if (field.files.length === 0) {
+            field.classList.add('invalid');
+            return false;
+        }
+    }
 
-      // Exibe alerta de carregamento
-      Swal.fire({
-          title: 'Salvando...',
-          text: 'Aguarde um instante.',
-          icon: 'info',
-          showConfirmButton: false,
-          allowOutsideClick: false,
-          allowEscapeKey: false,
-          didOpen: () => {
-              Swal.showLoading()
-          }
-      });
+    // Validação de número mínimo para inputs type="number"
+    if (field.type === 'number' && field.hasAttribute('min')) {
+        const minValue = parseFloat(field.getAttribute('min'));
+        if (parseFloat(field.value) < minValue) {
+            field.classList.add('invalid');
+            return false;
+        }
+    }
 
-      $.ajax({
-          url: 'painel/paginas/clientes/salvar.php',
-          type: 'POST',
-          data: formData,
+    // Validação de data de nascimento (exemplo simples: maior de 18 anos)
+    if (field.id === 'data_nasc' && field.value) {
+        const birthDate = new Date(field.value);
+        const today = new Date();
+        let age = today.getFullYear() - birthDate.getFullYear();
+        const m = today.getMonth() - birthDate.getMonth();
+        if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+            age--;
+        }
+        if (age < 18) { // Exemplo: exige que o usuário tenha pelo menos 18 anos
+            field.classList.add('invalid');
+            return false;
+        }
+    }
 
-          success: function (mensagem) {
-              $('#mensagem').text('');
-              $('#mensagem').removeClass();
+    field.classList.remove('invalid'); // Remove a classe 'invalid' se o campo for válido
+    return true;
+}
 
-              if (mensagem.trim() == "Salvo com Sucesso") {
-                  // Mostra alerta de sucesso com SweetAlert
-                  Swal.fire({
-                      title: 'Sucesso!',
-                      text: 'Cadastrado com sucesso!',
-                      icon: 'success',
-                      confirmButtonText: 'OK'
-                  }).then((result) => {
-                      if (result.isConfirmed) {
-                          window.location = "http://localhost/";
-                      }
-                  });
-              } else {
-                  // Mostra erro com SweetAlert
-                  Swal.fire({
-                      title: 'Erro ao cadastrar!',
-                      text: mensagem,
-                      icon: 'error',
-                      confirmButtonText: 'OK'
-                  });
-              }
-          },
-
-          cache: false,
-          contentType: false,
-          processData: false,
-      });
-  });
-
-
-</script>
-
-<script type="text/javascript">
-	function carregarImgComprovanteEndereco() {
-		var target = document.getElementById('target-comprovante-endereco');
-		var file = document.querySelector("#comprovante_endereco").files[0];
-
-
-		var arquivo = file['name'];
-		resultado = arquivo.split(".", 2);
-
-		if(resultado[1] === 'pdf'){
-			$('#target-comprovante-endereco').attr('src', "painel/images/pdf.png");
-			return;
-		}
-
-		if(resultado[1] === 'rar' || resultado[1] === 'zip'){
-			$('#target-comprovante-endereco').attr('src', "painel/images/rar.png");
-			return;
-		}
-
-		var reader = new FileReader();
-
-		reader.onloadend = function () {
-			target.src = reader.result;
-		};
-
-		if (file) {
-			reader.readAsDataURL(file);
-
-		} else {
-			target.src = "";
-		}
-	}
-</script>
-
-<script type="text/javascript">
-	function carregarImgComprovanteRG() {
-		var target = document.getElementById('target-comprovante-rg');
-		var file = document.querySelector("#comprovante_rg").files[0];
-
-
-		var arquivo = file['name'];
-		resultado = arquivo.split(".", 2);
-
-		if(resultado[1] === 'pdf'){
-			$('#target-comprovante-rg').attr('src', "painel/images/pdf.png");
-			return;
-		}
-
-		if(resultado[1] === 'rar' || resultado[1] === 'zip'){
-			$('#target-comprovante-rg').attr('src', "painel/images/rar.png");
-			return;
-		}
-
-		var reader = new FileReader();
-
-		reader.onloadend = function () {
-			target.src = reader.result;
-		};
-
-		if (file) {
-			reader.readAsDataURL(file);
-
-		} else {
-			target.src = "";
-		}
-	}
-</script>
-
-
-<script>
-
-  let currentStep = 1;
-  const totalSteps = 5;
-
-  function showStep(step) {
-    // Oculta todos os steps
-    const steps = document.querySelectorAll('.form-step');
-    steps.forEach((s) => s.classList.add('hidden'));
-
-    // Mostra o step atual
-    const current = document.getElementById(`step-${step}`);
-    if (current) current.classList.remove('hidden');
-  }
-
-  function nextStep() {
-    const currentFormStep = document.getElementById(`step-${currentStep}`);
-    const inputs = currentFormStep.querySelectorAll('input, select, textarea');
-    let valid = true;
+function validateStep(stepId) {
+    let isValid = true;
+    const currentFormStep = document.getElementById(stepId);
+    const inputs = currentFormStep.querySelectorAll('input[required], select[required], input[type="file"][required], textarea[required]'); // Inclui textarea se houver
 
     inputs.forEach(input => {
-      if (!input.checkValidity()) {
-        input.classList.add('border-red-500');
-        valid = false;
-      } else {
-        input.classList.remove('border-red-500');
-      }
-    });
-
-    // Verificação da senha na etapa 2
-    if (valid && currentStep === 2) {
-      const senha = document.getElementById('senha').value;
-      const confSenha = document.getElementById('conf_senha').value;
-
-      if (senha !== confSenha) {
-        Swal.fire({
-          icon: 'error',
-          title: 'Senhas não coincidem',
-          text: 'A senha e a confirmação precisam ser iguais.',
-        });
-
-        document.getElementById('senha').classList.add('border-red-500');
-        document.getElementById('conf_senha').classList.add('border-red-500');
-        return;
-      }
-    }
-
-    // Validação extra na etapa 4 (motorista/entregador)
-    if (currentStep === 4) {
-      const ramo = document.getElementById('ramo').value.toLowerCase();
-      if (ramo.includes('uber') || ramo.includes('entregador')) {
-        const camposVeiculo = document.querySelectorAll('.veiculo-obrigatorio');
-        let camposInvalidos = [];
-
-        camposVeiculo.forEach((campo) => {
-          if (!campo.value.trim()) {
-            campo.classList.add('border-red-500');
-            camposInvalidos.push(campo);
-          } else {
-            campo.classList.remove('border-red-500');
-          }
-        });
-
-        if (camposInvalidos.length > 0) {
-          Swal.fire({
-            icon: 'error',
-            title: 'Campos obrigatórios',
-            text: 'Preencha todos os dados do veículo para continuar.',
-          });
-          return;
+        if (!validateField(input)) {
+            isValid = false;
         }
-      }
-    }
+    });
 
-    if (!valid) {
-      Swal.fire({
-        icon: 'error',
-        title: 'Campos obrigatórios',
-        text: 'Preencha todos os campos corretamente antes de continuar.',
-      });
-      return;
-    }
-
-    if (currentStep < totalSteps) {
-      currentStep++;
-      showStep(currentStep);
-    }
-  }
-
-  function prevStep() {
-    if (currentStep > 1) {
-      currentStep--;
-      showStep(currentStep);
-    }
-  }
-
-  document.addEventListener('DOMContentLoaded', function () {
-    showStep(currentStep); // Exibe o primeiro step ao carregar
+    // Validação adicional para campos de veículo se o ramo for "Motorista/Entregador App"
     const ramoSelect = document.getElementById('ramo');
-    const camposVeiculo = document.getElementById('veiculo-campos');
-
-    ramoSelect.addEventListener('change', function () {
-      const valor = this.value.toLowerCase();
-      if (valor.includes('uber') || valor.includes('entregador')) {
-        camposVeiculo.classList.remove('hidden');
-      } else {
-        camposVeiculo.classList.add('hidden');
-        camposVeiculo.querySelectorAll('input, select').forEach(el => el.value = '');
-      }
-    });
-  });
-</script>
-
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-      const aplicarMascaraTelefone = (input) => {
-        input.addEventListener('input', function (e) {
-          let value = e.target.value.replace(/\D/g, ''); // Remove tudo que não é dígito
-
-          // Se o valor estiver vazio, não aplique máscara e retorne
-          if (value.length === 0) {
-            e.target.value = '';
-            return;
-          }
-
-          if (value.length > 11) {
-            value = value.slice(0, 11);
-          }
-
-          let maskedValue = '';
-          if (value.length <= 2) {
-            // Apenas os dois primeiros dígitos (para o DDD)
-            maskedValue = `(${value}`;
-          } else if (value.length <= 6) {
-            // DDD e os primeiros 4 ou 5 dígitos
-            maskedValue = `(${value.substring(0, 2)}) ${value.substring(2)}`;
-          } else if (value.length <= 10) {
-            // Telefone fixo ou 8 dígitos de celular (9xxxx-xxxx)
-            maskedValue = `(${value.substring(0, 2)}) ${value.substring(2, 6)}-${value.substring(6)}`;
-          } else {
-            // Celular de 9 dígitos
-            maskedValue = `(${value.substring(0, 2)}) ${value.substring(2, 7)}-${value.substring(7, 11)}`;
-          }
-
-          e.target.value = maskedValue;
+    if (ramoSelect && ramoSelect.value === 'uber' && stepId === 'step-4') {
+        const veiculoCampos = document.querySelectorAll('#veiculo-campos .veiculo-obrigatorio');
+        veiculoCampos.forEach(input => {
+            if (!validateField(input)) {
+                isValid = false;
+            }
         });
-      };
+    }
 
-      const telefoneInput = document.getElementById('telefone');
-      const referenciaContatoInput = document.getElementById('referencia_contato'); // Assumindo que este campo existe
+    return isValid;
+}
 
-      if (telefoneInput) aplicarMascaraTelefone(telefoneInput);
-      if (referenciaContatoInput) aplicarMascaraTelefone(referenciaContatoInput);
+function nextStep() {
+    if (validateStep(`step-${currentStep}`)) {
+        if (currentStep < formSteps.length) {
+            currentStep++;
+            showStep(currentStep);
+            window.scrollTo(0, 0); // Rola para o topo da página ao avançar a etapa
+        }
+    } else {
+        Swal.fire({
+            icon: 'error',
+            title: 'Erro de Validação',
+            text: 'Por favor, preencha todos os campos obrigatórios e corrija os erros antes de continuar.'
+        });
+    }
+}
+
+function prevStep() {
+    if (currentStep > 1) {
+        currentStep--;
+        showStep(currentStep);
+        window.scrollTo(0, 0); // Rola para o topo da página ao voltar a etapa
+    }
+}
+
+document.getElementById('ramo').addEventListener('change', function() {
+    const veiculoCampos = document.getElementById('veiculo-campos');
+    if (this.value === 'uber') {
+        veiculoCampos.classList.remove('hidden');
+    } else {
+        veiculoCampos.classList.add('hidden');
+        // Limpa e remove a validação de campos de veículo se não for Uber
+        document.querySelectorAll('#veiculo-campos .veiculo-obrigatorio').forEach(input => {
+            input.value = '';
+            input.classList.remove('invalid');
+        });
+    }
+});
+
+// Funções de Máscara (já existentes no seu código, garantindo que estejam aqui)
+function setupMasks() {
+    $('#cpf').mask('000.000.000-00');
+    $('#telefone').mask('(00) 00000-0000');
+    $('#cep').mask('00000-000');
+    $('#referencia_contato').mask('(00) 00000-0000');
+    $('input[name="valor_desejado"]').mask('000.000.000.000.000,00', {reverse: true});
+    $('input[name="parcela_desejada"]').mask('000.000.000.000.000,00', {reverse: true});
+    $('input[name="valor_aluguel"]').mask('000.000.000.000.000,00', {reverse: true});
+}
+
+// Funções de carregar imagem (já existentes no seu código)
+function carregarImgComprovanteEndereco() {
+    var file = document.getElementById('comprovante_endereco').files[0];
+    if (file) {
+        var reader = new FileReader();
+        reader.onload = function(e) {
+            document.getElementById('target-comprovante-endereco').src = e.target.result;
+        };
+        reader.readAsDataURL(file);
+    } else {
+        document.getElementById('target-comprovante-endereco').src = 'painel/images/comprovantes/sem-foto.png';
+    }
+    validateField(document.getElementById('comprovante_endereco')); // Valida o campo após carregar a imagem
+}
+
+function carregarImgComprovanteRG() {
+    var file = document.getElementById('comprovante_rg').files[0];
+    if (file) {
+        var reader = new FileReader();
+        reader.onload = function(e) {
+            document.getElementById('target-comprovante-rg').src = e.target.result;
+        };
+        reader.readAsDataURL(file);
+    } else {
+        document.getElementById('target-comprovante-rg').src = 'painel/images/comprovantes/sem-foto.png';
+    }
+    validateField(document.getElementById('comprovante_rg')); // Valida o campo após carregar a imagem
+}
+
+function carregarImg() {
+    var file = document.getElementById('foto_usuario').files[0];
+    if (file) {
+        var reader = new FileReader();
+        reader.onload = function(e) {
+            document.getElementById('foto').src = e.target.result;
+        };
+        reader.readAsDataURL(file);
+    } else {
+        document.getElementById('foto').src = 'painel/images/comprovantes/sem-foto.png';
+    }
+    validateField(document.getElementById('foto_usuario')); // Valida o campo após carregar a imagem
+}
+
+// Função para validar CPF (simplificada para o exemplo)
+function validarCPF(field) {
+    const cpf = field.value.replace(/[^\d]/g, ''); // Remove caracteres não numéricos
+    // Basic validation: must be 11 digits
+    if (cpf.length !== 11 || !/^\d{11}$/.test(cpf)) {
+        field.classList.add('invalid');
+        return false;
+    }
+    // Adicione aqui a lógica completa de validação de CPF se necessário,
+    // como a validação dos dígitos verificadores.
+    field.classList.remove('invalid');
+    return true;
+}
+
+// Funções de CEP (já existentes no seu código)
+function pesquisacep(valor) {
+    var cep = valor.replace(/\D/g, '');
+
+    if (cep != "") {
+        var validacep = /^[0-9]{8}$/;
+        if(validacep.test(cep)) {
+            document.getElementById('endereco').value="...";
+            document.getElementById('bairro').value="...";
+            document.getElementById('cidade').value="...";
+            document.getElementById('estado').value="...";
+
+            var script = document.createElement('script');
+            script.src = 'https://viacep.com.br/ws/'+ cep + '/json/?callback=meu_callback';
+            document.head.appendChild(script);
+
+        } else {
+            limpa_formulario_cep();
+            Swal.fire({
+                icon: 'error',
+                title: 'Erro',
+                text: 'Formato de CEP inválido.'
+            });
+            document.getElementById('cep').classList.add('invalid'); // Adiciona borda vermelha ao CEP inválido
+        }
+    } else {
+        limpa_formulario_cep();
+        document.getElementById('cep').classList.add('invalid'); // Adiciona borda vermelha se o CEP estiver vazio
+    }
+}
+
+function meu_callback(conteudo) {
+    if (!("erro" in conteudo)) {
+        document.getElementById('endereco').value=(conteudo.logradouro);
+        document.getElementById('bairro').value=(conteudo.bairro);
+        document.getElementById('cidade').value=(conteudo.localidade);
+        document.getElementById('estado').value=(conteudo.uf);
+        document.getElementById('cep').classList.remove('invalid'); // Remove a borda vermelha se o CEP for válido
+    } else {
+        limpa_formulario_cep();
+        Swal.fire({
+            icon: 'error',
+            title: 'Erro',
+            text: 'CEP não encontrado.'
+        });
+        document.getElementById('cep').classList.add('invalid'); // Adiciona borda vermelha ao CEP não encontrado
+    }
+}
+
+function limpa_formulario_cep() {
+    document.getElementById('endereco').value=("");
+    document.getElementById('bairro').value=("");
+    document.getElementById('cidade').value=("");
+    document.getElementById('estado').value=("");
+}
+
+// GSAP Animations (manter suas animações existentes)
+// Certifique-se de que o GSAP está sendo carregado no HTML antes deste script.
+// Se você está incluindo o GSAP aqui, verifique se está após a inclusão da biblioteca.
+if (typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined') {
+    gsap.registerPlugin(ScrollTrigger);
+    gsap.from(".gsap-fade-up", {
+        opacity: 0,
+        y: 50,
+        duration: 1,
+        stagger: 0.2,
+        ease: "power3.out",
+        scrollTrigger: {
+            trigger: ".gsap-fade-up",
+            start: "top 80%",
+        },
     });
-  </script>
+}
+</script>
