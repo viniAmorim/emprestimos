@@ -459,11 +459,11 @@
 <body class="font-poppins bg-gradient-to-br from-primary-dark to-primary text-white min-h-screen overflow-x-hidden">
   <div class="flex flex-col md:flex-row h-screen items-center justify-center">
     <!-- Lado Esquerdo com Imagem -->
-    <div class="hidden md:block w-full md:w-1/2 h-1/2 md:h-full bg-left">
+    <div class="hidden md:block w-full md:w-1/3 h-1/2 md:h-full bg-left flex items-center justify-center pt-20">
       <img src="img/logo2.png" alt="Imagem de Empréstimo" class="object-contain max-h-full max-w-full" />
     </div>
 
-    <div class="w-full md:w-1/2 p-8 text-white flex items-start justify-center overflow-y-auto">
+    <div class="w-full md:w-2/3 p-8 text-white flex items-start justify-center overflow-y-auto">
       <form id="form" class="w-full max-w-4xl space-y-4" novalidate>
         <!-- Etapa 1: Dados Pessoais -->
         <div class="form-step" id="step-1">
@@ -1349,29 +1349,45 @@
   });
 </script>
 
-
 <script>
-  document.addEventListener('DOMContentLoaded', function () {
-    const aplicarMascaraTelefone = (input) => {
-      input.addEventListener('input', function (e) {
-        let value = e.target.value.replace(/\D/g, '');
+    document.addEventListener('DOMContentLoaded', function () {
+      const aplicarMascaraTelefone = (input) => {
+        input.addEventListener('input', function (e) {
+          let value = e.target.value.replace(/\D/g, ''); // Remove tudo que não é dígito
 
-        if (value.length > 11) value = value.slice(0, 11);
+          // Se o valor estiver vazio, não aplique máscara e retorne
+          if (value.length === 0) {
+            e.target.value = '';
+            return;
+          }
 
-        if (value.length <= 10) {
-          value = value.replace(/(\d{2})(\d{4})(\d{0,4})/, '($1) $2-$3');
-        } else {
-          value = value.replace(/(\d{2})(\d{5})(\d{0,4})/, '($1) $2-$3');
-        }
+          if (value.length > 11) {
+            value = value.slice(0, 11);
+          }
 
-        e.target.value = value;
-      });
-    };
+          let maskedValue = '';
+          if (value.length <= 2) {
+            // Apenas os dois primeiros dígitos (para o DDD)
+            maskedValue = `(${value}`;
+          } else if (value.length <= 6) {
+            // DDD e os primeiros 4 ou 5 dígitos
+            maskedValue = `(${value.substring(0, 2)}) ${value.substring(2)}`;
+          } else if (value.length <= 10) {
+            // Telefone fixo ou 8 dígitos de celular (9xxxx-xxxx)
+            maskedValue = `(${value.substring(0, 2)}) ${value.substring(2, 6)}-${value.substring(6)}`;
+          } else {
+            // Celular de 9 dígitos
+            maskedValue = `(${value.substring(0, 2)}) ${value.substring(2, 7)}-${value.substring(7, 11)}`;
+          }
 
-    const telefoneInput = document.getElementById('telefone');
-    const referenciaContatoInput = document.getElementById('referencia_contato');
+          e.target.value = maskedValue;
+        });
+      };
 
-    if (telefoneInput) aplicarMascaraTelefone(telefoneInput);
-    if (referenciaContatoInput) aplicarMascaraTelefone(referenciaContatoInput);
-  });
-</script>
+      const telefoneInput = document.getElementById('telefone');
+      const referenciaContatoInput = document.getElementById('referencia_contato'); // Assumindo que este campo existe
+
+      if (telefoneInput) aplicarMascaraTelefone(telefoneInput);
+      if (referenciaContatoInput) aplicarMascaraTelefone(referenciaContatoInput);
+    });
+  </script>
