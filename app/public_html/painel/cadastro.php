@@ -545,13 +545,28 @@
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-4">
             <div>
               <label class="block text-sm font-medium text-white">Senha</label>
-              <input type="password" name="senha" id="senha" class="form-input w-full" required onblur="validateField(this)">
+              <div class="relative"> <input type="password" name="senha" id="senha" class="form-input w-full" required onblur="validateField(this)">
+                <button type="button" id="togglePassword" class="absolute inset-y-0 right-0 pr-3 flex items-center text-sm leading-5" onclick="togglePasswordVisibility('senha', 'togglePassword')">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 text-gray-500">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" />
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+                  </svg>
+                </button>
+              </div>
             </div>
+
             <div>
               <label class="block text-sm font-medium text-white">Confirmar Senha</label>
-              <input type="password" name="conf_senha" id="conf_senha" class="form-input w-full" required onblur="validateField(this)">
+              <div class="relative"> <input type="password" name="conf_senha" id="conf_senha" class="form-input w-full" required onblur="validateField(this)">
+                <button type="button" id="toggleConfirmPassword" class="absolute inset-y-0 right-0 pr-3 flex items-center text-sm leading-5" onclick="togglePasswordVisibility('conf_senha', 'toggleConfirmPassword')">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 text-gray-500">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" />
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+                  </svg>
+                </button>
+              </div>
             </div>
-          </div>
+        </div>
 
           <!-- Campo de Upload de Foto -->
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-4 items-start">
@@ -789,6 +804,30 @@
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <!-- JavaScript for FAQ Accordion and Responsive Utilities -->
   <script>
+    function togglePasswordVisibility(fieldId, buttonId) {
+        const passwordField = document.getElementById(fieldId);
+        const toggleButton = document.getElementById(buttonId);
+        const icon = toggleButton.querySelector('svg');
+
+        // Se o campo for do tipo 'password' (ou seja, a senha está OCULTA)
+        if (passwordField.type === 'password') {
+            passwordField.type = 'text'; // Mude para 'text' (MOSTRAR senha)
+            // Defina o ícone de olho ABERTO
+            icon.innerHTML = `
+                <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" />
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+            `;
+        } else { // Se o campo for do tipo 'text' (ou seja, a senha está VISÍVEL)
+            passwordField.type = 'password'; // Mude para 'password' (OCULTAR senha)
+            // Defina o ícone de olho FECHADO (riscado)
+            icon.innerHTML = `
+                <path stroke-linecap="round" stroke-linejoin="round" d="M3.981 8.75C.835 9.771-.24 12.062.003 13.067c.07.291.243.684.588 1.042l1.666 1.667a.75.75 0 0 0 1.06 0l1.667-1.667c.345-.358.518-.751.588-1.042.243-1.005-1.04-3.296-3.136-4.078Z" />
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 9.75a3 3 0 1 0 0 6 3 3 0 0 0 0-6Z" />
+                <path stroke-linecap="round" stroke-linejoin="round" d="M18.019 8.75c3.146 1.021 4.221 3.312 3.978 4.317-.07.291-.243.684-.588 1.042l-1.666 1.667a.75.75 0 0 1-1.06 0l-1.667-1.667c-.345-.358-.518-.751-.588-1.042-.243-1.005 1.04-3.296 3.136-4.078Z" />
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 9.75a3 3 0 1 0 0 6 3 3 0 0 0 0-6Z" />
+            `;
+        }
+    }
     // FAQ Accordion
     function toggleFaq(id) {
       const content = document.getElementById(id);
