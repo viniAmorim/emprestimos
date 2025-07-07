@@ -517,13 +517,17 @@
             <!-- Comprovante RG/CPF -->
             <div class="flex items-start gap-4">
               <div class="flex-1">
-                <label class="block text-sm font-medium text-white">Comprovante RG/CPF</label>
+                <label class="block text-sm font-medium text-white">Comprovante CNG ou RG</label>
                 <input type="file" id="comprovante_rg" name="comprovante_rg" onchange="carregarImgComprovanteRG()" accept=".jpg,.jpeg,.png" class="form-input w-full" required>
               </div>
               <div class="w-20 h-20 border border-gray-300 rounded overflow-hidden bg-white">
                 <img src="painel/images/comprovantes/sem-foto.png" id="target-comprovante-rg" class="object-cover w-full h-full">
               </div>
             </div>
+          </div>
+
+          <div class="text-sm text-gray-300 mt-4 text-right">
+            <p>O comprovante de endereço deve ser em sua titularidade (água ou energia)</p>
           </div>
 
           <div class="pt-4 text-right">
@@ -620,11 +624,6 @@
           </div>
 
           <div class="grid grid-cols-1 md:grid-cols-6 gap-4">
-            <div class="md:col-span-3">
-              <label class="block text-sm font-medium text-white">Complemento</label>
-              <input type="text" name="complemento" class="form-input w-full">
-            </div>
-
             <div class="md:col-span-1">
               <label class="block text-sm font-medium text-white">Quadra</label>
               <input type="text" name="quadra" class="form-input w-full">
@@ -638,6 +637,10 @@
             <div class="md:col-span-1">
               <label class="block text-sm font-medium text-white">Número</label>
               <input type="number" name="numero" class="form-input w-full" min="0">
+            </div>
+            <div class="md:col-span-3">
+              <label class="block text-sm font-medium text-white">Complemento</label>
+              <input type="text" name="complemento" class="form-input w-full">
             </div>
           </div>
           <div class="pt-4 flex justify-between">
