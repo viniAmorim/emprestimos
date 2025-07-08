@@ -67,24 +67,23 @@ if(@count($res) > 0 and $id != $id_reg){
 }
 }
 
+// //validacao telefone
+// $query = $pdo->query("SELECT * from $tabela where telefone = '$telefone'");
+// $res = $query->fetchAll(PDO::FETCH_ASSOC);
+// $id_reg = @$res[0]['id'];
+// if(@count($res) > 0 and $id != $id_reg){
+// 	echo 'Telefone já Cadastrado!';
+// 	exit();
+// }
 
-//validacao telefone
-$query = $pdo->query("SELECT * from $tabela where telefone = '$telefone'");
-$res = $query->fetchAll(PDO::FETCH_ASSOC);
-$id_reg = @$res[0]['id'];
-if(@count($res) > 0 and $id != $id_reg){
-	echo 'Telefone já Cadastrado!';
-	exit();
-}
-
-//validacao telefone
-$query = $pdo->query("SELECT * from $tabela where referencia_contato = '$referencia_contato'");
-$res = $query->fetchAll(PDO::FETCH_ASSOC);
-$id_reg = @$res[0]['id'];
-if(@count($res) > 0 and $id != $id_reg){
-	echo 'Telefone já Cadastrado!';
-	exit();
-}
+// //validacao telefone
+// $query = $pdo->query("SELECT * from $tabela where referencia_contato = '$referencia_contato'");
+// $res = $query->fetchAll(PDO::FETCH_ASSOC);
+// $id_reg = @$res[0]['id'];
+// if(@count($res) > 0 and $id != $id_reg){
+// 	echo 'Telefone já Cadastrado!';
+// 	exit();
+// }
 
 //validar troca da foto
 $query = $pdo->query("SELECT * FROM $tabela where id = '$id'");
@@ -296,10 +295,6 @@ if (!empty($_FILES['foto']['tmp_name'])) {
 		move_uploaded_file($imagem_temp, $caminho);
 	}
 }
-
-
-
-
 
 
 if($id == ""){
