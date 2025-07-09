@@ -661,8 +661,8 @@
                 </div>
 
                 <div class="form-step hidden" id="step-4">
-                    <h2 class="text-xl font-bold mb-4">4. Referência e Ramo de Atuação</h2>
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <h2 class="text-xl font-bold mb-4">4. Referência</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
                             <label class="block text-sm font-medium text-white">Contato de referência</label>
                             <input type="text" name="referencia_contato" id="referencia_contato" class="form-input w-full" required onblur="validateField(this)">
@@ -671,6 +671,15 @@
                             <label class="block text-sm font-medium text-white">Nome Completo da referência</label>
                             <input type="text" id="referencia_nome" name="referencia_nome" class="form-input w-full" required onblur="validateField(this)">
                         </div>
+                       
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-white">Indicação</label>
+                            <input type="text" id="indicacao" name="indicacao" placeholder="Indicado por" class="form-input w-full" onblur="validateField(this)">
+                        </div>
+
                         <div>
                             <label for="referencia_parentesco" class="block text-sm font-medium text-white">Grau de parentesco</label>
                             <select id="referencia_parentesco" name="referencia_parentesco" class="form-input w-full" required onblur="validateField(this)">
@@ -692,69 +701,7 @@
                             </select>
                         </div>
                     </div>
-
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div>
-                            <label class="block text-sm font-medium text-white">Indicação</label>
-                            <input type="text" id="indicacao" name="indicacao" placeholder="Indicado por" class="form-input w-full" onblur="validateField(this)">
-                        </div>
-                        <div>
-                            <label for="ramo" class="block text-sm font-medium text-white">Ramo de Atuação</label>
-                            <select id="ramo" name="ramo" class="form-input w-full" required onchange="handleRamoChange(); validateField(this)">
-                                <option value="" disabled selected>Selecione um ramo</option>
-                                <option value="comercio">Comércio</option>
-                                <option value="uber">Motorista/Entregador App</option>
-                                <option value="servicos">Serviços</option>
-                                <option value="industria">Indústria</option>
-                                <option value="tecnologia">Tecnologia da Informação</option>
-                                <option value="educacao">Educação</option>
-                                <option value="saude">Saúde</option>
-                                <option value="construcao">Construção Civil</option>
-                                <option value="transportes">Transportes</option>
-                                <option value="logistica">Logística</option>
-                                <option value="financeiro">Setor Financeiro</option>
-                                <option value="juridico">Jurídico</option>
-                                <option value="agropecuaria">Agropecuária</option>
-                                <option value="marketing">Marketing e Publicidade</option>
-                                <option value="recursos_humanos">Recursos Humanos</option>
-                                <option value="gastronomia">Gastronomia</option>
-                                <option value="beleza">Beleza e Estética</option>
-                                <option value="seguranca">Segurança</option>
-                                <option value="turismo">Turismo e Hotelaria</option>
-                                <option value="freelancer">Freelancer / Autônomo</option>
-                                <option value="outros">Outros</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div id="veiculo-campos" class="hidden mt-4 border border-yellow-400 p-4 rounded bg-yellow-100 text-black">
-                        <p class="text-sm font-semibold mb-4">Preencha os campos abaixo se você for motorista ou entregador:</p>
-
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <div>
-                                <label class="block text-sm font-medium">Modelo do Veículo</label>
-                                <input type="text" name="modelo_veiculo" id="modelo_veiculo" class="form-input w-full veiculo-obrigatorio" required onblur="validateField(this)">
-                            </div>
-                            <div>
-                                <label class="block text-sm font-medium">Placa</label>
-                                <input type="text" name="placa_veiculo" id="placa_veiculo" class="form-input w-full veiculo-obrigatorio" maxlength="7" placeholder="ABC1234" required onblur="validatePlaca(this)">
-                            </div>
-                        </div>
-
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
-                            <div>
-                                <label class="block text-sm font-medium">Status do Veículo</label>
-                                <select name="status_veiculo" id="status_veiculo" class="form-input w-full veiculo-obrigatorio" required onchange="handleStatusVeiculoChange(); validateField(this)">
-                                    <option value="" disabled selected>Selecione</option>
-                                    <option value="proprio">Próprio</option>
-                                    <option value="alugado">Alugado</option>
-                                </select>
-                            </div>
-                            <div>
-                                <label class="block text-sm font-medium">Valor do Aluguel</label>
-                                <input type="text" name="valor_aluguel" id="valor_aluguel" class="form-input w-full veiculo-obrigatorio" placeholder="R$" min="0" step="0.01" onblur="validateField(this)">
-                            </div>
-                        </div>
-                    </div>
+                  
 
                     <div class="pt-4 flex justify-between">
                         <button type="button" class="btn-primary" onclick="prevStep()">Voltar</button>
@@ -762,8 +709,151 @@
                     </div>
                 </div>
 
-                <div class="form-step hidden" id="step-5">
-                    <h2 class="text-xl font-bold mb-4">5. Informações do Empréstimo</h2>
+
+        <!-- Step 5: Ramo de Atuação e Informações do Veículo/Renda -->
+        <div class="form-step hidden" id="step-5">
+            <h2 class="text-xl font-bold mb-4">5. Ramo de Atuação e Informações de Renda</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <label for="ramo" class="block text-sm font-medium text-white">Ramo de Atuação</label>
+                    <select id="ramo" name="ramo" class="form-input w-full" required onchange="handleRamoChange(); validateField(this)">
+                        <option value="" disabled selected>Selecione um ramo</option>
+                        <option value="autonomo">Autônomo</option>
+                        <option value="uber">Motorista/Entregador App</option>
+                        <option value="assalariado">Assalariado</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Campos para Motorista/Entregador App (Uber) -->
+            <div id="veiculo-campos" class="hidden mt-4 border border-yellow-400 p-4 rounded bg-yellow-100 text-black">
+                <p class="text-sm font-semibold mb-4">Preencha os campos abaixo se você for motorista ou entregador:</p>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium">Modelo do Veículo</label>
+                        <input type="text" name="modelo_veiculo" id="modelo_veiculo" class="form-input w-full uber-obrigatorio" required onblur="validateField(this)">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium">Placa</label>
+                        <input type="text" name="placa_veiculo" id="placa_veiculo" class="form-input w-full uber-obrigatorio" maxlength="7" placeholder="ABC1234" required onblur="validatePlaca(this)">
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                    <div>
+                        <label class="block text-sm font-medium">Status do Veículo</label>
+                        <select name="status_veiculo" id="status_veiculo" class="form-input w-full uber-obrigatorio" required onchange="handleStatusVeiculoChange(); validateField(this)">
+                            <option value="" disabled selected>Selecione</option>
+                            <option value="proprio">Próprio</option>
+                            <option value="alugado">Alugado</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium">Valor do Aluguel</label>
+                        <input type="text" name="valor_aluguel" id="valor_aluguel" class="form-input w-full uber-obrigatorio" placeholder="R$" min="0" step="0.01" onblur="validateField(this)">
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                    <div class="flex items-start gap-4">
+                        <div class="flex-1">
+                            <label class="block text-sm font-medium">Print da Tela de Perfil dos Apps</label>
+                            <input type="file" name="print_perfil_app" id="print_perfil_app" onchange="carregarImgPrintPerfil(); validateField(this)" accept=".jpg,.jpeg,.png,.pdf" class="form-input w-full uber-obrigatorio" required>
+                        </div>
+                        <div class="w-20 h-20 border border-gray-300 rounded overflow-hidden bg-white flex items-center justify-center">
+                            <img src="https://placehold.co/80x80/cccccc/333333?text=Perfil" id="target-print-perfil-app" class="object-cover w-full h-full" onerror="this.src='https://placehold.co/80x80/cccccc/333333?text=Perfil'">
+                        </div>
+                    </div>
+                    <div class="flex items-start gap-4">
+                        <div class="flex-1">
+                            <label class="block text-sm font-medium">Print da Tela de Veículos dos Apps</label>
+                            <input type="file" name="print_veiculo_app" id="print_veiculo_app" onchange="carregarImgPrintVeiculo(); validateField(this)" accept=".jpg,.jpeg,.png,.pdf" class="form-input w-full uber-obrigatorio" required>
+                        </div>
+                        <div class="w-20 h-20 border border-gray-300 rounded overflow-hidden bg-white flex items-center justify-center">
+                            <img src="https://placehold.co/80x80/cccccc/333333?text=Veículo" id="target-print-veiculo-app" class="object-cover w-full h-full" onerror="this.src='https://placehold.co/80x80/cccccc/333333?text=Veículo'">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                    <div class="flex items-start gap-4">
+                        <div class="flex-1">
+                            <label class="block text-sm font-medium">Print dos Ganhos no App (Semana Atual)</label>
+                            <input type="file" name="print_ganhos_hoje" id="print_ganhos_hoje" onchange="carregarImgPrintGanhosHoje(); validateField(this)" accept=".jpg,.jpeg,.png,.pdf" class="form-input w-full uber-obrigatorio" required>
+                        </div>
+                        <div class="w-20 h-20 border border-gray-300 rounded overflow-hidden bg-white flex items-center justify-center">
+                            <img src="https://placehold.co/80x80/cccccc/333333?text=GanhosSemana" id="target-print-ganhos-hoje" class="object-cover w-full h-full" onerror="this.src='https://placehold.co/80x80/cccccc/333333?text=GanhosSemana'">
+                        </div>
+                    </div>
+                    <div class="flex items-start gap-4">
+                        <div class="flex-1">
+                            <label class="block text-sm font-medium">Print dos Ganhos nos Apps (Últimos 30 dias)</label>
+                            <input type="file" name="print_ganhos_30dias" id="print_ganhos_30dias" onchange="carregarImgPrintGanhos30Dias(); validateField(this)" accept=".jpg,.jpeg,.png,.pdf" class="form-input w-full uber-obrigatorio" required>
+                        </div>
+                        <div class="w-20 h-20 border border-gray-300 rounded overflow-hidden bg-white flex items-center justify-center">
+                            <img src="https://placehold.co/80x80/cccccc/333333?text=Ganhos30D" id="target-print-ganhos-30dias" class="object-cover w-full h-full" onerror="this.src='https://placehold.co/80x80/cccccc/333333?text=Ganhos30D'">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Novos Campos para Autônomo -->
+            <div id="autonomo-campos" class="hidden mt-4 border border-blue-400 p-4 rounded bg-blue-100 text-black">
+                <p class="text-sm font-semibold mb-4">Preencha os campos abaixo se você for autônomo:</p>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium">Função Exercida</label>
+                        <input type="text" name="funcao_autonomo" id="funcao_autonomo" class="form-input w-full autonomo-obrigatorio" required onblur="validateField(this)">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium">Nome da Empresa (se houver)</label>
+                        <input type="text" name="empresa_autonomo" id="empresa_autonomo" class="form-input w-full autonomo-obrigatorio" onblur="validateField(this)">
+                    </div>
+                </div>
+                <div class="flex items-start gap-4 mt-4">
+                    <div class="flex-1">
+                        <label class="block text-sm font-medium">Extrato dos Últimos 90 Dias</label>
+                        <input type="file" name="extrato_90dias" id="extrato_90dias" onchange="carregarImgExtrato90Dias(); validateField(this)" accept=".jpg,.jpeg,.png,.pdf" class="form-input w-full autonomo-obrigatorio" required>
+                    </div>
+                    <div class="w-20 h-20 border border-gray-300 rounded overflow-hidden bg-white flex items-center justify-center">
+                        <img src="https://placehold.co/80x80/cccccc/333333?text=Extrato" id="target-extrato-90dias" class="object-cover w-full h-full" onerror="this.src='https://placehold.co/80x80/cccccc/333333?text=Extrato'">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Novos Campos para Assalariado -->
+            <div id="assalariado-campos" class="hidden mt-4 border border-green-400 p-4 rounded bg-green-100 text-black">
+                <p class="text-sm font-semibold mb-4">Preencha os campos abaixo se você for assalariado:</p>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium">Função Exercida</label>
+                        <input type="text" name="funcao_assalariado" id="funcao_assalariado" class="form-input w-full assalariado-obrigatorio" required onblur="validateField(this)">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium">Nome da Empresa</label>
+                        <input type="text" name="empresa_assalariado" id="empresa_assalariado" class="form-input w-full assalariado-obrigatorio" required onblur="validateField(this)">
+                    </div>
+                </div>
+                <div class="flex items-start gap-4 mt-4">
+                    <div class="flex-1">
+                        <label class="block text-sm font-medium">Contracheque</label>
+                        <input type="file" name="contracheque" id="contracheque" onchange="carregarImgContracheque(); validateField(this)" accept=".jpg,.jpeg,.png,.pdf" class="form-input w-full assalariado-obrigatorio" required>
+                    </div>
+                    <div class="w-20 h-20 border border-gray-300 rounded overflow-hidden bg-white flex items-center justify-center">
+                        <img src="https://placehold.co/80x80/cccccc/333333?text=Cheque" id="target-contracheque" class="object-cover w-full h-full" onerror="this.src='https://placehold.co/80x80/cccccc/333333?text=Cheque'">
+                    </div>
+                </div>
+            </div>
+
+            <div class="pt-4 flex justify-between">
+                <button type="button" class="btn-primary" onclick="prevStep()">Voltar</button>
+                <button type="button" class="btn-primary" onclick="nextStep()">Próximo</button>
+            </div>
+        </div>
+
+                <div class="form-step hidden" id="step-6">
+                    <h2 class="text-xl font-bold mb-4">6. Finalização</h2>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
                             <label class="block text-sm font-medium text-white">Valor Desejado</label>
@@ -783,10 +873,9 @@
             </form>
         </div>
     </div>
-
     <script>
         let currentStep = 1;
-        const totalSteps = 5;
+        const totalSteps = 6;
 
         // --- FUNÇÕES DE MÁSCARAS ---
         function setupMasks() {
@@ -794,7 +883,8 @@
             $('#telefone').mask('(00) 00000-0000');
             $('#cep').mask('00000-000');
             $('#referencia_contato').mask('(00) 00000-0000');
-            $('#placa_veiculo').mask('AAA0A00', {
+            // Usando um ARRAY de máscaras para a placa (Mercosul e Antiga)
+            $('#placa_veiculo').mask(['AAA0A00', 'AAA0000'], {
                 translation: {
                     'A': { pattern: /[A-Za-z]/ },
                     '0': { pattern: /[0-9]/ }
@@ -808,6 +898,9 @@
         // Inicializa as máscaras quando o documento estiver pronto
         $(document).ready(function() {
             setupMasks();
+            showStep(currentStep); // Mostra a primeira etapa ao carregar
+            handleRamoChange(); // Inicializa a visibilidade dos campos de ramo
+            handleStatusVeiculoChange(); // Inicializa a visibilidade de valor_aluguel
         });
 
         // --- FUNÇÕES DE VALIDAÇÃO ---
@@ -862,8 +955,8 @@
             const confSenha = $('#conf_senha').val();
 
             if (senha === '' || confSenha === '') {
-                 markInvalid(input, 'Por favor, preencha a senha e a confirmação.');
-                 return false;
+                markInvalid(input, 'Por favor, preencha ambos os campos de senha.');
+                return false;
             }
             if (senha.length < 6) {
                 markInvalid($('#senha')[0], 'A senha deve ter no mínimo 6 caracteres.');
@@ -880,8 +973,7 @@
 
         function validatePlaca(input) {
             const placa = input.value.toUpperCase();
-            // Padrão para placas Mercosul ou antigas (AAA0000 ou AAA0A00)
-            const re = /^[A-Z]{3}\d{4}$|^[A-Z]{3}\d[A-Z]\d{2}$/;
+            const re = /^[A-Z]{3}\d{4}$|^[A-Z]{3}\d[A-Z]\d{2}$/; // Padrão para placas Mercosul ou antigas
             if (!re.test(placa)) {
                 markInvalid(input, 'Formato de placa inválido (ex: ABC1234 ou ABC1A23).');
                 return false;
@@ -890,47 +982,66 @@
             return true;
         }
 
+        // Função para marcar um campo como inválido e exibir mensagem de erro
         function markInvalid(input, message = '') {
             input.classList.add('invalid');
-            input.setAttribute('data-invalid', message);
+            input.style.borderColor = '#fc8181'; // Borda vermelha
+
+            let errorMessageElement = input.nextElementSibling;
+            // Verifica se o próximo irmão é um elemento de mensagem de erro, ou cria um
+            if (!errorMessageElement || !errorMessageElement.classList.contains('error-message')) {
+                errorMessageElement = document.createElement('p');
+                errorMessageElement.classList.add('error-message', 'text-red-400', 'text-sm', 'mt-1');
+                input.parentNode.insertBefore(errorMessageElement, input.nextSibling);
+            }
+            errorMessageElement.textContent = message;
+            errorMessageElement.classList.remove('hidden');
         }
 
+        // Função para marcar um campo como válido e ocultar mensagem de erro
         function markValid(input) {
             input.classList.remove('invalid');
-            input.removeAttribute('data-invalid');
+            input.style.borderColor = '#4a5568'; // Borda padrão
+
+            let errorMessageElement = input.nextElementSibling;
+            if (errorMessageElement && errorMessageElement.classList.contains('error-message')) {
+                errorMessageElement.classList.add('hidden');
+                errorMessageElement.textContent = ''; // Limpa a mensagem
+            }
         }
 
+        // Validação genérica de campo
         function validateField(input) {
+            console.log(`Validando campo: ${input.id || input.name}, Valor: "${input.value}"`);
             const type = input.type;
             const id = input.id;
             let isValid = true;
             let errorMessage = '';
 
-            // Check for required fields first
+            // Verifica campos obrigatórios primeiro
             if (input.hasAttribute('required') && input.value.trim() === '') {
                 isValid = false;
                 errorMessage = 'Este campo é obrigatório.';
             } else {
-                // Specific validations
+                // Validações específicas
                 if (id === 'email') {
                     if (!validateEmail(input.value)) {
                         isValid = false;
                         errorMessage = 'Email inválido.';
                     }
                 } else if (id === 'cpf') {
-                    isValid = validateCPF(input); // validateCPF handles its own marking
+                    isValid = validateCPF(input); // validateCPF já lida com a marcação
                     if (!isValid) errorMessage = input.getAttribute('data-invalid');
-                } else if (id === 'telefone') {
-                     // Basic check for phone, assuming mask covers format
+                } else if (id === 'telefone' || id === 'referencia_contato') {
                     if (input.value.replace(/\D/g, '').length < 11) {
-                         isValid = false;
-                         errorMessage = 'Telefone inválido (mínimo 11 dígitos incluindo DDD).';
+                        isValid = false;
+                        errorMessage = 'Telefone inválido (mínimo 11 dígitos incluindo DDD).';
                     }
                 } else if (id === 'senha' || id === 'conf_senha') {
-                    isValid = validatePassword(input); // validatePassword handles its own marking
+                    isValid = validatePassword(input); // validatePassword já lida com a marcação
                     if (!isValid) errorMessage = input.getAttribute('data-invalid');
                 } else if (id === 'placa_veiculo') {
-                    isValid = validatePlaca(input); // validatePlaca handles its own marking
+                    isValid = validatePlaca(input); // validatePlaca já lida com a marcação
                     if (!isValid) errorMessage = input.getAttribute('data-invalid');
                 } else if (type === 'file') {
                     if (input.hasAttribute('required') && input.files.length === 0) {
@@ -951,60 +1062,101 @@
                 }
             }
 
-
             if (isValid) {
                 markValid(input);
             } else {
                 markInvalid(input, errorMessage);
             }
+            console.log(`Campo ${input.id || input.name} é válido: ${isValid}`);
             return isValid;
         }
 
+        // Validação da etapa atual antes de prosseguir
         function validateCurrentStep() {
+            console.log(`--- Validando Etapa ${currentStep} ---`);
             const currentStepElement = document.getElementById(`step-${currentStep}`);
-            const inputs = currentStepElement.querySelectorAll('[required], .veiculo-obrigatorio'); // Include .veiculo-obrigatorio for dynamic required
+            // Seleciona todos os campos que podem ser obrigatórios nesta etapa
+            const inputs = currentStepElement.querySelectorAll('[required], .uber-obrigatorio, .autonomo-obrigatorio, .assalariado-obrigatorio');
             let allValid = true;
             let firstInvalidField = null;
             let invalidMessages = [];
 
-            // Temporarily disable 'required' for 'veiculo-obrigatorio' fields if not 'uber'
             const ramoSelect = document.getElementById('ramo');
-            const veiculoCamposDiv = document.getElementById('veiculo-campos');
-            const isUberRamo = ramoSelect && ramoSelect.value === 'uber';
+            const selectedRamo = ramoSelect ? ramoSelect.value : '';
 
             inputs.forEach(input => {
-                // Skip validation for .veiculo-obrigatorio if not 'uber'
-                if (input.classList.contains('veiculo-obrigatorio') && !isUberRamo) {
-                    markValid(input); // Ensure they are marked as valid if not required
-                    return;
+                // Lógica condicional para campos obrigatórios baseada no ramo
+                const isUberField = input.classList.contains('uber-obrigatorio');
+                const isAutonomoField = input.classList.contains('autonomo-obrigatorio');
+                const isAssalariadoField = input.classList.contains('assalariado-obrigatorio');
+
+                let shouldValidate = true;
+
+                if (isUberField && selectedRamo !== 'uber') {
+                    shouldValidate = false;
+                } else if (isAutonomoField && selectedRamo !== 'autonomo') {
+                    shouldValidate = false;
+                } else if (isAssalariadoField && selectedRamo !== 'assalariado') {
+                    shouldValidate = false;
                 }
 
-                if (!validateField(input)) {
+                if (!shouldValidate) {
+                    markValid(input); // Garante que campos não obrigatórios sejam marcados como válidos
+                    console.log(`Pulando validação para (ramo diferente): ${input.id || input.name}`);
+                    return; // Pula a validação para este campo
+                }
+
+                const isValidField = validateField(input);
+                if (!isValidField) {
                     allValid = false;
                     const message = input.getAttribute('data-invalid') || 'Campo inválido ou vazio.';
-                    invalidMessages.push(`${input.previousElementSibling ? input.previousElementSibling.textContent.replace(':', '').trim() : input.placeholder || input.id}: ${message}`);
+                    let fieldName = input.previousElementSibling ? input.previousElementSibling.textContent.replace(':', '').trim() : input.placeholder || input.id || input.name;
+                    invalidMessages.push(`${fieldName}: ${message}`);
                     if (!firstInvalidField) {
                         firstInvalidField = input;
                     }
                 }
             });
 
+            // Validação específica para o Step 1 (duplicidade de nome e telefone)
+            if (currentStep === 1) {
+                const nomeInput = document.getElementById('nome');
+                const telefoneInput = document.getElementById('telefone');
+            }
+
+            // Validação específica para o Step 2 (confirmação de senha)
+            if (currentStep === 2) {
+                const senha = document.getElementById('senha');
+                const confSenha = document.getElementById('conf_senha');
+                if (senha.value !== confSenha.value) {
+                    markInvalid(confSenha, 'As senhas não coincidem.');
+                    invalidMessages.push('Confirmação de Senha: As senhas não coincidem.');
+                    allValid = false;
+                    if (!firstInvalidField) firstInvalidField = confSenha;
+                } else {
+                    markValid(confSenha);
+                }
+            }
+
+
             if (!allValid) {
                 let errorMessageHTML = invalidMessages.map(msg => `<li>${msg}</li>`).join('');
-                 Swal.fire({
+                Swal.fire({
                     icon: 'error',
                     title: 'Erro de Validação!',
                     html: `Por favor, corrija os seguintes campos antes de prosseguir:<ul class="text-left mt-2">${errorMessageHTML}</ul>`,
                     confirmButtonText: 'Ok',
                     customClass: {
-                        popup: 'swal2-responsive-popup' // Adicione uma classe personalizada se precisar de responsividade extra no Swal
+                        popup: 'swal2-responsive-popup'
                     }
                 });
                 if (firstInvalidField) {
-                    firstInvalidField.focus(); // Focus on the first invalid field
+                    firstInvalidField.focus(); // Foca no primeiro campo inválido
                 }
+                console.log("Validação falhou para a etapa atual. Campos inválidos:", invalidMessages);
                 return false;
             }
+            console.log("Validação bem-sucedida para a etapa atual.");
             return true;
         }
 
@@ -1014,12 +1166,17 @@
             document.querySelectorAll('.form-step').forEach((step, index) => {
                 if (index + 1 === stepNumber) {
                     step.classList.remove('hidden');
-                    // GSAP animation for showing the step
+                    // Animação GSAP para mostrar a etapa
                     gsap.fromTo(step, { opacity: 0, y: 50 }, { opacity: 1, y: 0, duration: 0.5, ease: "power2.out" });
                 } else {
                     step.classList.add('hidden');
                 }
             });
+            // Garante o estado correto dos campos específicos do ramo ao mostrar a etapa 5
+            if (stepNumber === 5) {
+                handleRamoChange(); // Isso vai esconder/mostrar os campos corretos e setar/remover 'required'
+                handleStatusVeiculoChange(); // Garante que o campo de aluguel esteja correto
+            }
         }
 
         function nextStep() {
@@ -1041,78 +1198,159 @@
         // --- FUNÇÕES DE MANIPULAÇÃO DE IMAGEM ---
         function carregarImg() {
             var file = document.getElementById('foto_usuario').files[0];
+            var img = document.getElementById('foto');
             if (file) {
                 var reader = new FileReader();
                 reader.onload = function(e) {
-                    document.getElementById('foto').src = e.target.result;
+                    img.src = e.target.result;
                 };
                 reader.readAsDataURL(file);
             } else {
-                document.getElementById('foto').src = "painel/images/comprovantes/sem-foto.png";
+                img.src = "https://placehold.co/96x96/cccccc/333333?text=Foto";
             }
         }
 
         function carregarImgComprovanteEndereco() {
             var file = document.getElementById('comprovante_endereco').files[0];
-            if (file) {
+            var img = document.getElementById('target-comprovante-endereco');
+            if (file && file.type.startsWith('image/')) {
                 var reader = new FileReader();
                 reader.onload = function(e) {
-                    document.getElementById('target-comprovante-endereco').src = e.target.result;
+                    img.src = e.target.result;
                 };
                 reader.readAsDataURL(file);
             } else {
-                document.getElementById('target-comprovante-endereco').src = "painel/images/comprovantes/sem-foto.png";
+                img.src = "https://placehold.co/80x80/cccccc/333333?text=Endereço";
             }
         }
 
         function carregarImgComprovanteRG() {
             var file = document.getElementById('comprovante_rg').files[0];
-            if (file) {
+            var img = document.getElementById('target-comprovante-rg');
+            if (file && file.type.startsWith('image/')) {
                 var reader = new FileReader();
                 reader.onload = function(e) {
-                    document.getElementById('target-comprovante-rg').src = e.target.result;
+                    img.src = e.target.result;
                 };
                 reader.readAsDataURL(file);
             } else {
-                document.getElementById('target-comprovante-rg').src = "painel/images/comprovantes/sem-foto.png";
+                img.src = "https://placehold.co/80x80/cccccc/333333?text=CNH/RG";
+            }
+        }
+
+        // Function to load Print Perfil App preview
+        function carregarImgPrintPerfil() {
+            const file = document.getElementById('print_perfil_app').files[0];
+            const img = document.getElementById('target-print-perfil-app');
+            if (file && file.type.startsWith('image/')) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    img.src = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            } else {
+                img.src = "https://placehold.co/80x80/cccccc/333333?text=Perfil";
+            }
+        }
+
+        // Function to load Print Veiculo App preview
+        function carregarImgPrintVeiculo() {
+            const file = document.getElementById('print_veiculo_app').files[0];
+            const img = document.getElementById('target-print-veiculo-app');
+            if (file && file.type.startsWith('image/')) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    img.src = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            } else {
+                img.src = "https://placehold.co/80x80/cccccc/333333?text=Veículo";
+            }
+        }
+
+        // Function to load Print Ganhos Hoje preview
+        function carregarImgPrintGanhosHoje() {
+            const file = document.getElementById('print_ganhos_hoje').files[0];
+            const img = document.getElementById('target-print-ganhos-hoje');
+            if (file && file.type.startsWith('image/')) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    img.src = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            } else {
+                img.src = "https://placehold.co/80x80/cccccc/333333?text=GanhosSemana";
+            }
+        }
+
+        // Function to load Print Ganhos 30 Dias preview
+        function carregarImgPrintGanhos30Dias() {
+            const file = document.getElementById('print_ganhos_30dias').files[0];
+            const img = document.getElementById('target-print-ganhos-30dias');
+            if (file && file.type.startsWith('image/')) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    img.src = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            } else {
+                img.src = "https://placehold.co/80x80/cccccc/333333?text=Ganhos30D";
+            }
+        }
+
+        // NEW: Function to load Extrato 90 Dias preview
+        function carregarImgExtrato90Dias() {
+            const file = document.getElementById('extrato_90dias').files[0];
+            const img = document.getElementById('target-extrato-90dias');
+            if (file && file.type.startsWith('image/')) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    img.src = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            } else {
+                img.src = "https://placehold.co/80x80/cccccc/333333?text=Extrato";
+            }
+        }
+
+        // NEW: Function to load Contracheque preview
+        function carregarImgContracheque() {
+            const file = document.getElementById('contracheque').files[0];
+            const img = document.getElementById('target-contracheque');
+            if (file && file.type.startsWith('image/')) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    img.src = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            } else {
+                img.src = "https://placehold.co/80x80/cccccc/333333?text=Cheque";
             }
         }
 
         // --- FUNÇÃO DE PESQUISA DE CEP ---
         function pesquisacep(valor) {
-            //Remove tudo o que não é dígito
             var cep = valor.replace(/\D/g, '');
 
-            //Verifica se campo cep possui valor informado.
             if (cep != "") {
-                //Expressão regular para validar o CEP.
                 var validacep = /^[0-9]{8}$/;
 
-                //Valida o formato do CEP.
                 if (validacep.test(cep)) {
-                    //Preenche os campos com "..." enquanto consulta webservice.
                     document.getElementById('endereco').value = "...";
                     document.getElementById('bairro').value = "...";
                     document.getElementById('cidade').value = "...";
                     document.getElementById('estado').value = "...";
 
-                    //Cria um elemento javascript.
                     var script = document.createElement('script');
-
-                    //Sincroniza com o callback.
                     script.src = 'https://viacep.com.br/ws/' + cep + '/json/?callback=callbackMeuCep';
-
-                    //Insere script no documento e carrega o conteúdo.
                     document.head.appendChild(script);
 
                 } else {
-                    //cep é inválido.
                     markInvalid(document.getElementById('cep'), 'Formato de CEP inválido.');
                     limpa_formulário_cep();
                 }
             } else {
-                //cep sem valor, limpa formulário.
-                markValid(document.getElementById('cep')); // Mark valid if empty and not required by default
+                markValid(document.getElementById('cep'));
                 limpa_formulário_cep();
             }
         }
@@ -1130,7 +1368,6 @@
 
         function callbackMeuCep(conteudo) {
             if (!("erro" in conteudo)) {
-                //Atualiza os campos com os valores.
                 document.getElementById('endereco').value = (conteudo.logradouro);
                 document.getElementById('bairro').value = (conteudo.bairro);
                 document.getElementById('cidade').value = (conteudo.localidade);
@@ -1141,48 +1378,78 @@
                 markValid(document.getElementById('cidade'));
                 markValid(document.getElementById('estado'));
             } else {
-                //CEP não Encontrado.
                 markInvalid(document.getElementById('cep'), 'CEP não encontrado.');
                 limpa_formulário_cep();
             }
         }
 
-        // --- LÓGICA CONDICIONAL PARA CAMPOS DE VEÍCULO ---
+        // --- LÓGICA CONDICIONAL PARA CAMPOS DE RAMO DE ATUAÇÃO ---
         function handleRamoChange() {
             const ramoSelect = document.getElementById('ramo');
-            const veiculoCampos = document.getElementById('veiculo-campos');
-            const veiculoObrigatorios = veiculoCampos.querySelectorAll('.veiculo-obrigatorio');
+            const selectedRamo = ramoSelect.value;
 
-            if (ramoSelect.value === 'uber') {
+            const veiculoCampos = document.getElementById('veiculo-campos');
+            const autonomoCampos = document.getElementById('autonomo-campos');
+            const assalariadoCampos = document.getElementById('assalariado-campos');
+
+            // Seleciona todos os campos que podem ser condicionalmente obrigatórios
+            const allConditionalInputs = document.querySelectorAll('.uber-obrigatorio, .autonomo-obrigatorio, .assalariado-obrigatorio');
+
+            // Esconde todos os blocos e remove 'required' de todos os campos condicionais
+            veiculoCampos.classList.add('hidden');
+            autonomoCampos.classList.add('hidden');
+            assalariadoCampos.classList.add('hidden');
+
+            allConditionalInputs.forEach(input => {
+                input.removeAttribute('required');
+                input.value = ''; // Limpa o valor
+                if (input.type === 'file') {
+                    // Reseta as pré-visualizações de imagem para os placeholders
+                    if (input.id === 'print_perfil_app') document.getElementById('target-print-perfil-app').src = "https://placehold.co/80x80/cccccc/333333?text=Perfil";
+                    if (input.id === 'print_veiculo_app') document.getElementById('target-print-veiculo-app').src = "https://placehold.co/80x80/cccccc/333333?text=Veículo";
+                    if (input.id === 'print_ganhos_hoje') document.getElementById('target-print-ganhos-hoje').src = "https://placehold.co/80x80/cccccc/333333?text=GanhosSemana";
+                    if (input.id === 'print_ganhos_30dias') document.getElementById('target-print-ganhos-30dias').src = "https://placehold.co/80x80/cccccc/333333?text=Ganhos30D";
+                    if (input.id === 'extrato_90dias') document.getElementById('target-extrato-90dias').src = "https://placehold.co/80x80/cccccc/333333?text=Extrato";
+                    if (input.id === 'contracheque') document.getElementById('target-contracheque').src = "https://placehold.co/80x80/cccccc/333333?text=Cheque";
+                }
+                markValid(input); // Marca como válido
+            });
+
+            // Mostra o bloco correto e define 'required' para seus campos
+            if (selectedRamo === 'uber') {
                 veiculoCampos.classList.remove('hidden');
-                veiculoObrigatorios.forEach(input => {
+                veiculoCampos.querySelectorAll('.uber-obrigatorio').forEach(input => {
                     input.setAttribute('required', 'required');
-                    // Revalidate fields when they become required
                     validateField(input);
                 });
-            } else {
-                veiculoCampos.classList.add('hidden');
-                veiculoObrigatorios.forEach(input => {
-                    input.removeAttribute('required');
-                    input.value = ''; // Clear fields when not applicable
-                    markValid(input); // Mark as valid as they are no longer required
+                handleStatusVeiculoChange(); // Garante que o campo de aluguel esteja correto
+            } else if (selectedRamo === 'autonomo') {
+                autonomoCampos.classList.remove('hidden');
+                autonomoCampos.querySelectorAll('.autonomo-obrigatorio').forEach(input => {
+                    input.setAttribute('required', 'required');
+                    validateField(input);
                 });
-                $('#valor_aluguel_div').hide(); // Hide if not needed
+            } else if (selectedRamo === 'assalariado') {
+                assalariadoCampos.classList.remove('hidden');
+                assalariadoCampos.querySelectorAll('.assalariado-obrigatorio').forEach(input => {
+                    input.setAttribute('required', 'required');
+                    validateField(input);
+                });
             }
         }
 
         function handleStatusVeiculoChange() {
             const statusVeiculoSelect = document.getElementById('status_veiculo');
             const valorAluguelInput = document.getElementById('valor_aluguel');
-            const valorAluguelDiv = valorAluguelInput.closest('div'); // Get the parent div of valor_aluguel
+            const valorAluguelDiv = valorAluguelInput.closest('div');
 
-            if (statusVeiculoSelect.value === 'alugado') {
-                valorAluguelDiv.style.display = 'block'; // Or 'flex' depending on your layout
+            if (statusVeiculoSelect && statusVeiculoSelect.value === 'alugado') {
+                valorAluguelDiv.style.display = 'block';
                 valorAluguelInput.setAttribute('required', 'required');
             } else {
                 valorAluguelDiv.style.display = 'none';
                 valorAluguelInput.removeAttribute('required');
-                valorAluguelInput.value = ''; // Clear value when hidden
+                valorAluguelInput.value = '';
                 markValid(valorAluguelInput);
             }
         }
@@ -1194,11 +1461,9 @@
 
             if (passwordField.type === 'password') {
                 passwordField.type = 'text';
-                // You can change the icon here if you want an "eye-slash" icon
-                toggleButton.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 text-gray-500"><path stroke-linecap="round" stroke-linejoin="round" d="M3.988 5.862a1.01 1.01 0 0 0 .6-.967V4.774A.75.75 0 0 1 5.373 4h13.254a.75.75 0 0 1 .715.774v.121a1.01 1.01 0 0 0 .6.967l1.353.451c.328.109.52.433.52.779V9.5a2.25 2.25 0 0 1-2.25 2.25h-5.467A.75.75 0 0 0 12 12.75h-.008a.75.75 0 0 0-.75.75v.375c0 .414-.336.75-.75.75H10.5a.75.75 0 0 1-.75-.75v-.375a.75.75 0 0 0-.75-.75h-.008a.75.75 0 0 0-.75.75v.375c0 .414-.336.75-.75.75H6.75A2.25 2.25 0 0 1 4.5 9.5V7.162c0-.346.192-.67.52-.779l1.353-.451Zm-.611 11.233a1.01 1.01 0 0 0 .6-.967V17.274A.75.75 0 0 1 5.373 16h13.254a.75.75 0 0 1 .715.774v.121a1.01 1.01 0 0 0 .6.967l1.353.451c.328.109.52.433.52.779V21.5a2.25 2.25 0 0 1-2.25 2.25H4.5A2.25 2.25 0 0 1 2.25 21.5v-2.338c0-.346.192-.67.52-.779l1.353-.451Z" /><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" /></svg>`; // Example eye-slash SVG
+                toggleButton.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 text-gray-500"><path stroke-linecap="round" stroke-linejoin="round" d="M3.988 5.862a1.01 1.01 0 0 0 .6-.967V4.774A.75.75 0 0 1 5.373 4h13.254a.75.75 0 0 1 .715.774v.121a1.01 1.01 0 0 0 .6.967l1.353.451c.328.109.52.433.52.779V9.5a2.25 2.25 0 0 1-2.25 2.25h-5.467A.75.75 0 0 0 12 12.75h-.008a.75.75 0 0 0-.75.75v.375c0 .414-.336.75-.75.75H10.5a.75.75 0 0 1-.75-.75v-.375a.75.75 0 0 0-.75-.75h-.008a.75.75 0 0 0-.75.75v.375c0 .414-.336.75-.75.75H6.75A2.25 2.25 0 0 1 4.5 9.5V7.162c0-.346.192-.67.52-.779l1.353-.451Zm-.611 11.233a1.01 1.01 0 0 0 .6-.967V17.274A.75.75 0 0 1 5.373 16h13.254a.75.75 0 0 1 .715.774v.121a1.01 1.01 0 0 0 .6.967l1.353.451c.328.109.52.433.52.779V21.5a2.25 2.25 0 0 1-2.25 2.25H4.5A2.25 2.25 0 0 1 2.25 21.5v-2.338c0-.346.192-.67.52-.779l1.353-.451Z" /><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" /></svg>`;
             } else {
                 passwordField.type = 'password';
-                // Revert to eye icon
                 toggleButton.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 text-gray-500"><path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" /><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" /></svg>`;
             }
         }
@@ -1221,22 +1486,33 @@
                 contentType: false,
                 processData: false,
                 success: function(response) {
-                    const res = JSON.parse(response);
-                    if (res.success) {
-                        Swal.fire({
-                            icon: 'success',
-                            title: 'Sucesso!',
-                            text: res.message,
-                            confirmButtonText: 'Ok'
-                        }).then(() => {
-                            // Redirecionar ou limpar o formulário
-                            window.location.href = 'localhost'; // Exemplo de redirecionamento
-                        });
-                    } else {
+                    try {
+                        const res = JSON.parse(response);
+                        if (res.success) {
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Sucesso!',
+                                text: res.message,
+                                confirmButtonText: 'Ok'
+                            }).then(() => {
+                                // Redirecionar ou limpar o formulário
+                                window.location.href = 'localhost'; // Exemplo de redirecionamento
+                            });
+                        } else {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Erro no Cadastro!',
+                                text: res.message,
+                                confirmButtonText: 'Ok'
+                            });
+                        }
+                    } catch (e) {
+                        // Se a resposta não for um JSON válido, exiba a resposta bruta
+                        console.error("Erro ao parsear JSON:", e, "Resposta:", response);
                         Swal.fire({
                             icon: 'error',
-                            title: 'Erro no Cadastro!',
-                            text: res.message,
+                            title: 'Erro de Resposta!',
+                            text: 'Ocorreu um erro inesperado. Detalhes: ' + response,
                             confirmButtonText: 'Ok'
                         });
                     }
@@ -1253,13 +1529,6 @@
             });
         });
 
-        // Initial setup
-        $(document).ready(function() {
-            showStep(currentStep); // Show the first step on load
-            setupMasks(); // Apply masks
-            handleRamoChange(); // Initialize visibility of vehicle fields
-            handleStatusVeiculoChange(); // Initialize visibility of valor_aluguel
-        });
     </script>
 </body>
 </html>
