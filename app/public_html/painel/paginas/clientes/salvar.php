@@ -1,12 +1,13 @@
-<?php 
+<?php
 $tabela = 'clientes';
-require_once("../../../conexao.php");
+require_once("../../../conexao.php"); // Inclui o arquivo de conexão com o banco de dados
 
+// Coleta e sanitiza os dados do POST
 $nome = @$_POST['nome'];
 $email = @$_POST['email'];
 $telefone = @$_POST['telefone'];
 $data_nasc = @$_POST['data_nasc'];
-$data_nasc = implode('-', array_reverse(explode('/', $data_nasc)));
+$data_nasc = implode('-', array_reverse(explode('/', $data_nasc))); // Formata a data para YYYY-MM-DD
 $endereco = @$_POST['endereco'];
 $cpf = @$_POST['cpf'];
 $pix = @$_POST['pix'];
@@ -15,7 +16,7 @@ $bairro = @$_POST['bairro'];
 $cidade = @$_POST['cidade'];
 $estado = @$_POST['estado'];
 $cep = @$_POST['cep'];
-$id = @$_POST['id'];
+$id = @$_POST['id']; // ID do registro se for uma edição
 $pessoa = @$_POST['pessoa'];
 $status = @$_POST['status'];
 
@@ -23,7 +24,7 @@ $rg = @$_POST['rg'];
 $ramo = @$_POST['ramo'];
 $quadra = @$_POST['quadra'];
 $lote = @$_POST['lote'];
-$numero = $_POST['numero'];
+$numero = @$_POST['numero']; // Adicionado @ para evitar notice se não vier no POST
 $complemento = @$_POST['complemento'];
 $referencia_nome = @$_POST['referencia_nome'];
 $referencia_contato = @$_POST['referencia_contato'];
@@ -43,345 +44,336 @@ $status_cliente = @$_POST['status_cliente'];
 $senha = @$_POST['senha'];
 $conf_senha = @$_POST['conf_senha'];
 
+// Formata valores monetários, removendo R$, pontos e substituindo vírgula por ponto
 $valor_desejado = isset($_POST['valor_desejado']) ? str_replace(',', '.', str_replace(['R$', '.', ' '], '', $_POST['valor_desejado'])) : 0;
 $valor_parcela_desejada = isset($_POST['valor_parcela_desejada']) ? str_replace(',', '.', str_replace(['R$', '.', ' '], '', $_POST['valor_parcela_desejada'])) : 0;
 
+// Validação de senhas para novo cadastro de cliente
 if($cliente_cadastro == "Sim"){
-	if($senha != $conf_senha){
-		echo 'As senhas não são iguais!';
-		exit();
-	}
+    if($senha != $conf_senha){
+        echo 'As senhas não são iguais!';
+        exit();
+    }
 }else{
-	$senha = '123';
+    $senha = '123'; // Senha padrão se não for um cadastro de cliente
 }
-$senha_crip = password_hash($senha, PASSWORD_DEFAULT);
+$senha_crip = password_hash($senha, PASSWORD_DEFAULT); // Criptografa a senha
 
+// Validação de CPF duplicado (ainda impede o cadastro)
 if($cpf != ""){
-	//validacao cpf
-$query = $pdo->query("SELECT * from $tabela where cpf = '$cpf'");
+    $query = $pdo->query("SELECT * from $tabela where cpf = '$cpf'");
+    $res = $query->fetchAll(PDO::FETCH_ASSOC);
+    $id_reg = @$res[0]['id'];
+    if(@count($res) > 0 && $id != $id_reg){ // Se encontrou e não é o próprio registro sendo editado
+        echo 'CPF já Cadastrado!';
+        error_log("ALERTA ADMINISTRADOR: Tentativa de cadastro/edição com CPF duplicado: " . $cpf . " para o ID: " . $id);
+        exit(); // Impede o cadastro
+    }
+}
+
+// Flag para saber se um alerta de nome duplicado foi gerado
+$alerta_nome_duplicado = false;
+
+// Validação de Nome Completo duplicado (AGORA PERMITE O CADASTRO, APENAS LOGA NO BANCO E NO ARQUIVO)
+if($nome != ""){
+    $query = $pdo->query("SELECT * from $tabela where nome = '$nome'");
+    $res = $query->fetchAll(PDO::FETCH_ASSOC);
+    $id_reg = @$res[0]['id'];
+    if(@count($res) > 0 && $id != $id_reg){ // Se encontrou e não é o próprio registro sendo editado
+        // Define a flag para inserir o alerta após o cadastro/edição do cliente
+        $alerta_nome_duplicado = true;
+        // Log para o arquivo de erro do servidor (mantido para logs imediatos)
+        error_log("ALERTA ADMINISTRADOR: Nome Completo duplicado detectado, mas cadastro permitido: " . $nome . " para o ID: " . $id);
+    }
+}
+
+// Validação de Telefone duplicado (ainda impede o cadastro)
+if($telefone != ""){
+    $query = $pdo->query("SELECT * from $tabela where telefone = '$telefone'");
+    $res = $query->fetchAll(PDO::FETCH_ASSOC);
+    $id_reg = @$res[0]['id'];
+    if(@count($res) > 0 && $id != $id_reg){ // Se encontrou e não é o próprio registro sendo editado
+        echo 'Telefone já Cadastrado!';
+        error_log("ALERTA ADMINISTRADOR: Tentativa de cadastro/edição com Telefone duplicado: " . $telefone . " para o ID: " . $id);
+        exit(); // Impede o cadastro
+    }
+}
+
+// Inicializa variáveis de imagem para evitar erros se não houver upload ou se for um novo registro
+$comprovante_endereco = 'sem-foto.png';
+$comprovante_rg = 'sem-foto.png';
+$foto = 'sem-foto.jpg';
+
+// Busca os nomes de arquivo existentes no banco de dados se for uma edição
+$query = $pdo->query("SELECT comprovante_endereco, comprovante_rg, foto FROM $tabela where id = '$id'");
 $res = $query->fetchAll(PDO::FETCH_ASSOC);
-$id_reg = @$res[0]['id'];
-if(@count($res) > 0 and $id != $id_reg){
-	echo 'CPF já Cadastrado!';
-	exit();
-}
-}
-
-// //validacao telefone
-// $query = $pdo->query("SELECT * from $tabela where telefone = '$telefone'");
-// $res = $query->fetchAll(PDO::FETCH_ASSOC);
-// $id_reg = @$res[0]['id'];
-// if(@count($res) > 0 and $id != $id_reg){
-// 	echo 'Telefone já Cadastrado!';
-// 	exit();
-// }
-
-// //validacao telefone
-// $query = $pdo->query("SELECT * from $tabela where referencia_contato = '$referencia_contato'");
-// $res = $query->fetchAll(PDO::FETCH_ASSOC);
-// $id_reg = @$res[0]['id'];
-// if(@count($res) > 0 and $id != $id_reg){
-// 	echo 'Telefone já Cadastrado!';
-// 	exit();
-// }
-
-//validar troca da foto
-$query = $pdo->query("SELECT * FROM $tabela where id = '$id'");
-$res = $query->fetchAll(PDO::FETCH_ASSOC);
-$total_reg = @count($res);
-if ($total_reg > 0) {
-	$comprovante_endereco = $res[0]['comprovante_endereco'];
-	$comprovante_rg = $res[0]['comprovante_rg'];
-	$foto = $res[0]['foto'];
-} else {
-	$comprovante_endereco = 'sem-foto.png';
-	$comprovante_rg = 'sem-foto.png';
-	$foto = 'sem-foto.jpg';
-	
+if (@count($res) > 0) {
+    $comprovante_endereco = $res[0]['comprovante_endereco'];
+    $comprovante_rg = $res[0]['comprovante_rg'];
+    $foto = $res[0]['foto'];
 }
 
 
-// SCRIPT PARA SUBIR FOTO NO SERVIDOR
-$nome_img = date('d-m-Y H:i:s') . '-' . @$_FILES['comprovante_endereco']['name'];
-$nome_img = preg_replace('/[ :]+/', '-', $nome_img);
+// SCRIPT PARA SUBIR COMPROVANTE DE ENDEREÇO
+if (isset($_FILES['comprovante_endereco']) && $_FILES['comprovante_endereco']['name'] != "") {
+    $nome_img_endereco = date('d-m-Y-H-i-s') . '-' . preg_replace('/[ :]+/', '-', $_FILES['comprovante_endereco']['name']);
+    $caminho_endereco = '../../images/comprovantes/' . $nome_img_endereco;
+    $imagem_temp_endereco = $_FILES['comprovante_endereco']['tmp_name'];
+    $ext_endereco = strtolower(pathinfo($nome_img_endereco, PATHINFO_EXTENSION));
+    $extensoes_permitidas = ['png', 'jpg', 'jpeg', 'gif', 'pdf', 'rar', 'zip', 'doc', 'docx', 'webp', 'xlsx', 'xlsm', 'xls', 'xml'];
 
-$caminho = '../../images/comprovantes/' . $nome_img;
+    if (in_array($ext_endereco, $extensoes_permitidas)) {
+        // Exclui a foto anterior se não for a padrão
+        if ($comprovante_endereco != "sem-foto.png" && file_exists('../../images/comprovantes/' . $comprovante_endereco)) {
+            @unlink('../../images/comprovantes/' . $comprovante_endereco);
+        }
+        $comprovante_endereco = $nome_img_endereco; // Atualiza o nome do arquivo
 
-$imagem_temp = @$_FILES['comprovante_endereco']['tmp_name'];
+        // Move o arquivo ou redimensiona a imagem
+        if (in_array($ext_endereco, ['pdf', 'rar', 'zip', 'doc', 'docx', 'xlsx', 'xlsm', 'xls', 'xml'])) {
+            move_uploaded_file($imagem_temp_endereco, $caminho_endereco);
+        } else {
+            list($largura, $altura) = getimagesize($imagem_temp_endereco);
+            if ($largura > 1400) {
+                $nova_largura = 1400;
+                $nova_altura = ($altura / $largura) * $nova_largura;
+                $image = imagecreatetruecolor($nova_largura, $nova_altura);
 
-if (@$_FILES['comprovante_endereco']['name'] != "") {
-	$ext = strtolower(pathinfo($nome_img, PATHINFO_EXTENSION)); // Converte a extensão para minúsculas
-	$extensoes_permitidas = ['png', 'jpg', 'jpeg', 'gif', 'pdf', 'rar', 'zip', 'doc', 'docx', 'webp', 'xlsx', 'xlsm', 'xls', 'xml'];
+                // Cria a imagem a partir do tipo de arquivo
+                if ($ext_endereco == 'png') {
+                    $imagem_original = imagecreatefrompng($imagem_temp_endereco);
+                    imagealphablending($image, false);
+                    imagesavealpha($image, true);
+                } else if ($ext_endereco == 'jpeg' || $ext_endereco == 'jpg') {
+                    $imagem_original = imagecreatefromjpeg($imagem_temp_endereco);
+                } else if ($ext_endereco == 'gif') {
+                    $imagem_original = imagecreatefromgif($imagem_temp_endereco);
+                } else if ($ext_endereco == 'webp') {
+                    $imagem_original = imagecreatefromwebp($imagem_temp_endereco);
+                } else {
+                    move_uploaded_file($imagem_temp_endereco, $caminho_endereco);
+                    $imagem_original = null;
+                }
 
-	if (in_array($ext, $extensoes_permitidas)) {
-
-		// EXCLUO A FOTO ANTERIOR
-		if ($comprovante_endereco != "sem-foto.png") {
-			@unlink('../../images/comprovantes/' . $comprovante_endereco);
-		}
-
-		$comprovante_endereco = $nome_img;
-
-		// pegar o tamanho da imagem
-		list($largura, $altura) = getimagesize($imagem_temp);
-
-		// Redimensionar a imagem se a largura for maior que 1400
-		if ($largura > 1400) {
-			// Calcular a nova altura mantendo a proporção
-			$nova_largura = 1400;
-			$nova_altura = ($altura / $largura) * $nova_largura;
-
-			// Criar uma nova imagem em branco
-			$image = imagecreatetruecolor($nova_largura, $nova_altura);
-
-			// Criar a imagem a partir do arquivo original
-			if ($ext == 'png') {
-				$imagem_original = imagecreatefrompng($imagem_temp);
-				imagealphablending($image, false);
-				imagesavealpha($image, true);
-			} else if ($ext == 'jpeg' || $ext == 'jpg') {
-				$imagem_original = imagecreatefromjpeg($imagem_temp);
-			} else if ($ext == 'gif') {
-				$imagem_original = imagecreatefromgif($imagem_temp);
-			} else {
-				die("Formato de imagem não suportado.");
-			}
-
-			// Redimensionar a imagem
-			imagecopyresampled($image, $imagem_original, 0, 0, 0, 0, $nova_largura, $nova_altura, $largura, $altura);
-
-			// Salvar a imagem com qualidade de 20%
-			imagejpeg($image, $caminho, 20);
-			imagedestroy($imagem_original);
-			imagedestroy($image);
-		} else {
-			// Se a largura não for maior que 1400, apenas move o arquivo
-			move_uploaded_file($imagem_temp, $caminho);
-		}
-	} else {
-		echo 'Extensão de Imagem não permitida!';
-		exit();
-	}
+                if ($imagem_original) {
+                    imagecopyresampled($image, $imagem_original, 0, 0, 0, 0, $nova_largura, $nova_altura, $largura, $altura);
+                    imagejpeg($image, $caminho_endereco, 20); // Salva com qualidade de 20%
+                    imagedestroy($imagem_original);
+                    imagedestroy($image);
+                }
+            } else {
+                move_uploaded_file($imagem_temp_endereco, $caminho_endereco);
+            }
+        }
+    } else {
+        echo 'Extensão de arquivo de comprovante de endereço não permitida!';
+        exit();
+    }
 }
 
 
+// SCRIPT PARA SUBIR COMPROVANTE DE RG/CNH
+if (isset($_FILES['comprovante_rg']) && $_FILES['comprovante_rg']['name'] != "") {
+    $nome_img_rg = date('d-m-Y-H-i-s') . '-' . preg_replace('/[ :]+/', '-', $_FILES['comprovante_rg']['name']);
+    $caminho_rg = '../../images/comprovantes/' . $nome_img_rg;
+    $imagem_temp_rg = $_FILES['comprovante_rg']['tmp_name'];
+    $ext_rg = strtolower(pathinfo($nome_img_rg, PATHINFO_EXTENSION));
+    $extensoes_permitidas = ['png', 'jpg', 'jpeg', 'gif', 'pdf', 'rar', 'zip', 'doc', 'docx', 'webp', 'xlsx', 'xlsm', 'xls', 'xml'];
 
+    if (in_array($ext_rg, $extensoes_permitidas)) {
+        // Exclui a foto anterior se não for a padrão
+        if ($comprovante_rg != "sem-foto.png" && file_exists('../../images/comprovantes/' . $comprovante_rg)) {
+            @unlink('../../images/comprovantes/' . $comprovante_rg);
+        }
+        $comprovante_rg = $nome_img_rg; // Atualiza o nome do arquivo
 
-// SCRIPT PARA SUBIR FOTO NO SERVIDOR
-$nome_img = date('d-m-Y H:i:s') . '-' . @$_FILES['comprovante_rg']['name'];
-$nome_img = preg_replace('/[ :]+/', '-', $nome_img);
+        // Move o arquivo ou redimensiona a imagem
+        if (in_array($ext_rg, ['pdf', 'rar', 'zip', 'doc', 'docx', 'xlsx', 'xlsm', 'xls', 'xml'])) {
+            move_uploaded_file($imagem_temp_rg, $caminho_rg);
+        } else {
+            list($largura, $altura) = getimagesize($imagem_temp_rg);
+            if ($largura > 1400) {
+                $nova_largura = 1400;
+                $nova_altura = ($altura / $largura) * $nova_largura;
+                $image = imagecreatetruecolor($nova_largura, $nova_altura);
 
-$caminho = '../../images/comprovantes/' . $nome_img;
+                // Cria a imagem a partir do tipo de arquivo
+                if ($ext_rg == 'png') {
+                    $imagem_original = imagecreatefrompng($imagem_temp_rg);
+                    imagealphablending($image, false);
+                    imagesavealpha($image, true);
+                } else if ($ext_rg == 'jpeg' || $ext_rg == 'jpg') {
+                    $imagem_original = imagecreatefromjpeg($imagem_temp_rg);
+                } else if ($ext_rg == 'gif') {
+                    $imagem_original = imagecreatefromgif($imagem_temp_rg);
+                } else if ($ext_rg == 'webp') {
+                    $imagem_original = imagecreatefromwebp($imagem_temp_rg);
+                } else {
+                    move_uploaded_file($imagem_temp_rg, $caminho_rg);
+                    $imagem_original = null;
+                }
 
-$imagem_temp = @$_FILES['comprovante_rg']['tmp_name'];
-
-if (@$_FILES['comprovante_rg']['name'] != "") {
-	$ext = strtolower(pathinfo($nome_img, PATHINFO_EXTENSION)); // Converte a extensão para minúsculas
-	$extensoes_permitidas = ['png', 'jpg', 'jpeg', 'gif', 'pdf', 'rar', 'zip', 'doc', 'docx', 'webp', 'xlsx', 'xlsm', 'xls', 'xml'];
-
-	if (in_array($ext, $extensoes_permitidas)) {
-
-		// EXCLUO A FOTO ANTERIOR
-		if ($comprovante_rg != "sem-foto.png") {
-			@unlink('../../images/comprovantes/' . $comprovante_rg);
-		}
-
-		$comprovante_rg = $nome_img;
-
-		// pegar o tamanho da imagem
-		list($largura, $altura) = getimagesize($imagem_temp);
-
-		// Redimensionar a imagem se a largura for maior que 1400
-		if ($largura > 1400) {
-			// Calcular a nova altura mantendo a proporção
-			$nova_largura = 1400;
-			$nova_altura = ($altura / $largura) * $nova_largura;
-
-			// Criar uma nova imagem em branco
-			$image = imagecreatetruecolor($nova_largura, $nova_altura);
-
-			// Criar a imagem a partir do arquivo original
-			if ($ext == 'png') {
-				$imagem_original = imagecreatefrompng($imagem_temp);
-				imagealphablending($image, false);
-				imagesavealpha($image, true);
-			} else if ($ext == 'jpeg' || $ext == 'jpg') {
-				$imagem_original = imagecreatefromjpeg($imagem_temp);
-			} else if ($ext == 'gif') {
-				$imagem_original = imagecreatefromgif($imagem_temp);
-			} else {
-				die("Formato de imagem não suportado.");
-			}
-
-			// Redimensionar a imagem
-			imagecopyresampled($image, $imagem_original, 0, 0, 0, 0, $nova_largura, $nova_altura, $largura, $altura);
-
-			// Salvar a imagem com qualidade de 20%
-			imagejpeg($image, $caminho, 20);
-			imagedestroy($imagem_original);
-			imagedestroy($image);
-		} else {
-			// Se a largura não for maior que 1400, apenas move o arquivo
-			move_uploaded_file($imagem_temp, $caminho);
-		}
-	} else {
-		echo 'Extensão de Imagem não permitida!';
-		exit();
-	}
+                if ($imagem_original) {
+                    imagecopyresampled($image, $imagem_original, 0, 0, 0, 0, $nova_largura, $nova_altura, $largura, $altura);
+                    imagejpeg($image, $caminho_rg, 20); // Salva com qualidade de 20%
+                    imagedestroy($imagem_original);
+                    imagedestroy($image);
+                }
+            } else {
+                move_uploaded_file($imagem_temp_rg, $caminho_rg);
+            }
+        }
+    } else {
+        echo 'Extensão de arquivo de comprovante RG/CNH não permitida!';
+        exit();
+    }
 }
 
-// SCRIPT PARA SUBIR FOTO NO SERVIDOR
-$foto = $foto ?? 'sem-foto.jpg'; // valor atual vindo do banco ou padrão
+// SCRIPT PARA SUBIR FOTO DO USUÁRIO
+if (isset($_FILES['foto']) && $_FILES['foto']['tmp_name'] != "") {
+    $nome_original_foto = $_FILES['foto']['name'];
+    $ext_foto = strtolower(pathinfo($nome_original_foto, PATHINFO_EXTENSION));
+    $extensoes_permitidas_foto = ['png', 'jpg', 'jpeg', 'gif', 'webp'];
 
-if (!empty($_FILES['foto']['tmp_name'])) {
-	$nome_original = $_FILES['foto']['name'];
+    if (!in_array($ext_foto, $extensoes_permitidas_foto)) {
+        echo 'Extensão de imagem de usuário não permitida!';
+        exit();
+    }
 
-	// Garante que o nome do arquivo tenha extensão
-	$ext = strtolower(pathinfo($nome_original, PATHINFO_EXTENSION));
-	$extensoes_permitidas = ['png', 'jpg', 'jpeg', 'gif', 'pdf', 'webp'];
+    $nome_img_foto = date('Y-m-d_H-i-s') . '.' . $ext_foto;
+    $caminho_foto = '../../images/clientes/' . $nome_img_foto;
+    $imagem_temp_foto = $_FILES['foto']['tmp_name'];
 
-	if (!in_array($ext, $extensoes_permitidas)) {
-		echo 'Extensão de imagem não permitida!';
-		exit();
-	}
+    // Exclui foto anterior se não for padrão
+    if ($foto != 'sem-foto.jpg' && file_exists('../../images/clientes/' . $foto)) {
+        @unlink('../../images/clientes/' . $foto);
+    }
+    $foto = $nome_img_foto; // Atualiza o nome do arquivo
 
-	// Gera nome único padronizado para o arquivo
-	$nome_img = date('Y-m-d_H-i-s') . '.' . $ext;
-	$caminho = '../../images/clientes/' . $nome_img;
-	$imagem_temp = $_FILES['foto']['tmp_name'];
+    list($largura, $altura) = getimagesize($imagem_temp_foto);
 
-	// Exclui foto anterior se não for padrão
-	if ($foto != 'sem-foto.jpg' && file_exists('../../images/clientes/' . $foto)) {
-		@unlink('../../images/clientes/' . $foto);
-	}
+    if ($largura > 1400) {
+        $nova_largura = 1400;
+        $nova_altura = intval(($altura / $largura) * $nova_largura);
+        $image = imagecreatetruecolor($nova_largura, $nova_altura);
 
-	// Atualiza variável
-	$foto = $nome_img;
-
-	// Redimensionar se largura > 1400px
-	list($largura, $altura) = getimagesize($imagem_temp);
-
-	if ($largura > 1400) {
-		$nova_largura = 1400;
-		$nova_altura = intval(($altura / $largura) * $nova_largura);
-		$image = imagecreatetruecolor($nova_largura, $nova_altura);
-
-		switch ($ext) {
-			case 'png':
-				$imagem_original = imagecreatefrompng($imagem_temp);
-				imagealphablending($image, false);
-				imagesavealpha($image, true);
-				break;
-			case 'jpg':
-			case 'jpeg':
-				$imagem_original = imagecreatefromjpeg($imagem_temp);
-				break;
-			case 'gif':
-				$imagem_original = imagecreatefromgif($imagem_temp);
-				break;
-			case 'webp':
-				$imagem_original = imagecreatefromwebp($imagem_temp);
-				break;
-			default:
-				echo "Formato de imagem não suportado.";
-				exit();
-		}
-
-		imagecopyresampled($image, $imagem_original, 0, 0, 0, 0, $nova_largura, $nova_altura, $largura, $altura);
-		imagejpeg($image, $caminho, 80);
-		imagedestroy($imagem_original);
-		imagedestroy($image);
-	} else {
-		move_uploaded_file($imagem_temp, $caminho);
-	}
+        switch ($ext_foto) {
+            case 'png':
+                $imagem_original = imagecreatefrompng($imagem_temp_foto);
+                imagealphablending($image, false);
+                imagesavealpha($image, true);
+                break;
+            case 'jpg':
+            case 'jpeg':
+                $imagem_original = imagecreatefromjpeg($imagem_temp_foto);
+                break;
+            case 'gif':
+                $imagem_original = imagecreatefromgif($imagem_temp_foto);
+                break;
+            case 'webp':
+                $imagem_original = imagecreatefromwebp($imagem_temp_foto);
+                break;
+            default:
+                echo "Formato de imagem não suportado.";
+                exit();
+        }
+        imagecopyresampled($image, $imagem_original, 0, 0, 0, 0, $nova_largura, $nova_altura, $largura, $altura);
+        imagejpeg($image, $caminho_foto, 80); // Salva com qualidade de 80%
+        imagedestroy($imagem_original);
+        imagedestroy($image);
+    } else {
+        move_uploaded_file($imagem_temp_foto, $caminho_foto);
+    }
 }
 
-
+// Prepara a query de INSERT ou UPDATE
 if($id == ""){
-$query = $pdo->prepare("INSERT INTO $tabela 
-  SET nome = :nome, 
-  email = :email, 
-  cpf = :cpf, 
-  telefone = :telefone, 
-  data_cad = curDate(), 
-  endereco = :endereco, 
-  data_nasc = '$data_nasc', 
-  pix = :pix, 
-  indicacao = :indicacao, 
-  bairro = :bairro, 
-  estado = :estado, 
-  cidade = :cidade, 
-  cep = :cep, 
-  pessoa = :pessoa, 
-  nome_sec = :nome_sec, 
-  telefone_sec = :telefone_sec, 
-  endereco_sec = :endereco_sec, 
-  grupo = :grupo, status = :status, 
-  comprovante_endereco = '$comprovante_endereco', 
-  comprovante_rg = '$comprovante_rg', 
-  telefone2 = :telefone2, 
-  foto = '$foto', 
-  status_cliente = '$status_cliente', 
-  senha_crip = '$senha_crip', 
-  rg = :rg, ramo = :ramo, 
-  quadra = :quadra, 
-  lote = :lote, 
-  numero = :numero, 
-  complemento = :complemento,
-  referencia_nome = :referencia_nome, 
-  referencia_contato = :referencia_contato, 
-  referencia_parentesco = :referencia_parentesco,
-  modelo_veiculo = :modelo_veiculo,
-  status_veiculo = :status_veiculo, 
-  placa = :placa,
-  valor_desejado = :valor_desejado,
-	valor_parcela_desejada = :valor_parcela_desejada
-  ",
-  
-);
-	
+    // Query de INSERT para um novo registro
+    $query = $pdo->prepare("INSERT INTO $tabela
+        SET nome = :nome,
+        email = :email,
+        cpf = :cpf,
+        telefone = :telefone,
+        data_cad = curDate(),
+        endereco = :endereco,
+        data_nasc = '$data_nasc',
+        pix = :pix,
+        indicacao = :indicacao,
+        bairro = :bairro,
+        estado = :estado,
+        cidade = :cidade,
+        cep = :cep,
+        pessoa = :pessoa,
+        nome_sec = :nome_sec,
+        telefone_sec = :telefone_sec,
+        endereco_sec = :endereco_sec,
+        grupo = :grupo, status = :status,
+        comprovante_endereco = '$comprovante_endereco',
+        comprovante_rg = '$comprovante_rg',
+        telefone2 = :telefone2,
+        foto = '$foto',
+        status_cliente = '$status_cliente',
+        senha_crip = '$senha_crip',
+        rg = :rg, ramo = :ramo,
+        quadra = :quadra,
+        lote = :lote,
+        numero = :numero,
+        complemento = :complemento,
+        referencia_nome = :referencia_nome,
+        referencia_contato = :referencia_contato,
+        referencia_parentesco = :referencia_parentesco,
+        modelo_veiculo = :modelo_veiculo,
+        status_veiculo = :status_veiculo,
+        placa = :placa,
+        valor_desejado = :valor_desejado,
+        valor_parcela_desejada = :valor_parcela_desejada
+    ");
+
 }else{
-$query = $pdo->prepare("
-  UPDATE $tabela SET 
-    nome = :nome, 
-    email = :email, 
-    cpf = :cpf, 
-    telefone = :telefone, 
-    endereco = :endereco, 
-    data_nasc = '$data_nasc', 
-    pix = :pix, 
-    indicacao = :indicacao, 
-    bairro = :bairro, 
-    estado = :estado, 
-    cidade = :cidade, 
-    cep = :cep, 
-    pessoa = :pessoa, 
-    nome_sec = :nome_sec, 
-    telefone_sec = :telefone_sec, 
-    endereco_sec = :endereco_sec, 
-    grupo = :grupo, 
-    status = :status, 
-    comprovante_endereco = '$comprovante_endereco', 
-    comprovante_rg = '$comprovante_rg', 
-    telefone2 = :telefone2, 
-    foto = '$foto', 
-    status_cliente = '$status_cliente',
-    rg = :rg, ramo = :ramo, 
-    quadra = :quadra, 
-    lote = :lote, 
-    numero = :numero, 
-    complemento = :complemento,
-    referencia_nome = :referencia_nome, 
-    referencia_contato = :referencia_contato, 
-    referencia_parentesco = :referencia_parentesco,
-    modelo_veiculo = :modelo_veiculo,
-    status_veiculo = :status_veiculo, 
-    placa = :placa,
-    valor_desejado = :valor_desejado,
-	  valor_parcela_desejada = :valor_parcela_desejada
-    where id = '$id'
-");
+    // Query de UPDATE para um registro existente
+    $query = $pdo->prepare("
+        UPDATE $tabela SET
+        nome = :nome,
+        email = :email,
+        cpf = :cpf,
+        telefone = :telefone,
+        endereco = :endereco,
+        data_nasc = '$data_nasc',
+        pix = :pix,
+        indicacao = :indicacao,
+        bairro = :bairro,
+        estado = :estado,
+        cidade = :cidade,
+        cep = :cep,
+        pessoa = :pessoa,
+        nome_sec = :nome_sec,
+        telefone_sec = :telefone_sec,
+        endereco_sec = :endereco_sec,
+        grupo = :grupo,
+        status = :status,
+        comprovante_endereco = '$comprovante_endereco',
+        comprovante_rg = '$comprovante_rg',
+        telefone2 = :telefone2,
+        foto = '$foto',
+        status_cliente = '$status_cliente',
+        rg = :rg, ramo = :ramo,
+        quadra = :quadra,
+        lote = :lote,
+        numero = :numero,
+        complemento = :complemento,
+        referencia_nome = :referencia_nome,
+        referencia_contato = :referencia_contato,
+        referencia_parentesco = :referencia_parentesco,
+        modelo_veiculo = :modelo_veiculo,
+        status_veiculo = :status_veiculo,
+        placa = :placa,
+        valor_desejado = :valor_desejado,
+        valor_parcela_desejada = :valor_parcela_desejada
+        where id = '$id'
+    ");
 }
+
+// Binda os parâmetros para a query
 $query->bindValue(":nome", "$nome");
 $query->bindValue(":email", "$email");
 $query->bindValue(":telefone", "$telefone");
@@ -418,45 +410,61 @@ $query->bindValue(":placa", "$placa");
 $query->bindValue(":valor_desejado", "$valor_desejado");
 $query->bindValue(":valor_parcela_desejada", "$valor_parcela_desejada");
 
-$query->execute();
+$query->execute(); // Executa a query
 
-echo 'Salvo com Sucesso';
-
-
-
-$tel_cliente = '55'.preg_replace('/[ ()-]+/' , '' , $telefone_sistema);
-$telefone_envio = $tel_cliente;
-
-if($cliente_cadastro == 'Sim' and $token != "" and $instancia != ""){
-	$mensagem = '*'.$nome_sistema.'* %0A';
-	$mensagem .= '_Novo Cliente Cadastrado_ %0A';
-	$mensagem .= 'Cliente: *'.$nome.'* %0A';
-	$mensagem .= 'Telefone: *'.$telefone.'* %0A%0A';
-	require('../../apis/texto.php');
+// Após a execução do INSERT/UPDATE, obtenha o ID do cliente
+if ($id == "") {
+    // Se foi um INSERT, pega o ID do último registro inserido
+    $novo_cliente_id = $pdo->lastInsertId();
+} else {
+    // Se foi um UPDATE, o ID já é conhecido
+    $novo_cliente_id = $id;
 }
 
-
-
-$tel_cliente = '55'.preg_replace('/[ ()-]+/' , '' , $telefone);
-$telefone_envio = $tel_cliente;
-
-if($token != "" and $instancia != ""){
-	$mensagem = '*'.$nome_sistema.'* %0A';
-	$mensagem .= '_Você foi cadastrado no Sistema_ %0A';
-	$mensagem .= 'Cliente: *'.$nome.'* %0A';
-	$mensagem .= '_Acesse seu Painel_ %0A%0A';
-
-	if($cliente_cadastro == 'Sim'){
-		$sua_senha = ' sua senha de cadastro!';
-	}else{
-		$sua_senha = ' a senha 123';
-	}
-
-	$mensagem .= 'Use seu CPF e '.$sua_senha.' %0A';
-	$mensagem .= $url_sistema.'acesso';
-
-	require('../../apis/texto.php');
+// Se um alerta de nome duplicado foi detectado, insira na tabela de alertas
+if ($alerta_nome_duplicado === true) {
+    $stmt_alerta = $pdo->prepare("INSERT INTO alertas_duplicidade (tipo_alerta, valor_duplicado, id_cliente_cadastrado) VALUES (:tipo, :valor, :cliente_id)");
+    $stmt_alerta->bindValue(":tipo", "Nome Duplicado");
+    $stmt_alerta->bindValue(":valor", "$nome");
+    $stmt_alerta->bindValue(":cliente_id", $novo_cliente_id);
+    $stmt_alerta->execute();
 }
 
+echo 'Salvo com Sucesso'; // Mensagem de sucesso
 
- ?>
+// Envio de mensagem para o administrador (se cliente_cadastro for 'Sim' e variáveis de API existirem)
+$tel_cliente_admin = '55'.preg_replace('/[ ()-]+/' , '' , $telefone_sistema); // Assume $telefone_sistema é definido em conexao.php
+$telefone_envio_admin = $tel_cliente_admin;
+
+if($cliente_cadastro == 'Sim' && isset($token) && $token != "" && isset($instancia) && $instancia != ""){
+    $mensagem_admin = '*'.$nome_sistema.'* %0A';
+    $mensagem_admin .= '_Novo Cliente Cadastrado_ %0A';
+    $mensagem_admin .= 'Cliente: *'.$nome.'* %0A';
+    $mensagem_admin .= 'Telefone: *'.$telefone.'* %0A%0A';
+    // Descomente a linha abaixo quando o arquivo 'apis/texto.php' estiver pronto e configurado
+    // require('../../apis/texto.php');
+}
+
+// Envio de mensagem para o cliente (se variáveis de API existirem)
+$tel_cliente_user = '55'.preg_replace('/[ ()-]+/' , '' , $telefone);
+$telefone_envio_user = $tel_cliente_user;
+
+if(isset($token) && $token != "" && isset($instancia) && $instancia != ""){
+    $mensagem_user = '*'.$nome_sistema.'* %0A';
+    $mensagem_user .= '_Você foi cadastrado no Sistema_ %0A';
+    $mensagem_user .= 'Cliente: *'.$nome.'* %0A';
+    $mensagem_user .= '_Acesse seu Painel_ %0A%0A';
+
+    if($cliente_cadastro == 'Sim'){
+        $sua_senha = ' sua senha de cadastro!';
+    }else{
+        $sua_senha = ' a senha 123';
+    }
+
+    $mensagem_user .= 'Use seu CPF e '.$sua_senha.' %0A';
+    $mensagem_user .= $url_sistema.'acesso'; // Assume $url_sistema é definido em conexao.php
+
+    // Descomente a linha abaixo quando o arquivo 'apis/texto.php' estiver pronto e configurado
+    // require('../../apis/texto.php');
+}
+?>
