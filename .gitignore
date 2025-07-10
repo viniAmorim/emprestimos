@@ -10,6 +10,7 @@
 /**/docker/nginx/logs/*
 !/**/docker/nginx/logs/.gitkeep
 
-.env
+.env.local
+.env.remote
 
 /mysql-data
