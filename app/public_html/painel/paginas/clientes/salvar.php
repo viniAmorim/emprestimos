@@ -162,12 +162,14 @@ $clientes_dir = $base_images_dir . 'clientes/';
 $documentos_renda_dir = $base_images_dir . 'documentos_renda/'; // Novo diretório
 $prints_apps_dir = $base_images_dir . 'prints_apps/';       // Novo diretório
 
-// Cria os diretórios se não existirem
+// !!! ESTE BLOCO FOI REMOVIDO PERMANENTEMENTE. A CRIAÇÃO DE DIRETÓRIOS É FEITA NO entrypoint.sh !!!
+/*
 foreach ([$comprovantes_dir, $clientes_dir, $documentos_renda_dir, $prints_apps_dir] as $dir) {
     if (!is_dir($dir)) {
-        mkdir($dir, 0777, true); // Permissões 0777 para teste, ajuste para mais seguro em produção (ex: 0755)
+        mkdir($dir, 0777, true);
     }
 }
+*/
 
 // --- SCRIPT PARA SUBIR COMPROVANTE DE ENDEREÇO ---
 if (isset($_FILES['comprovante_endereco']) && $_FILES['comprovante_endereco']['name'] != "") {
@@ -177,13 +179,20 @@ if (isset($_FILES['comprovante_endereco']) && $_FILES['comprovante_endereco']['n
     $ext_endereco = strtolower(pathinfo($nome_img_endereco, PATHINFO_EXTENSION));
     $extensoes_permitidas = ['png', 'jpg', 'jpeg', 'gif', 'pdf', 'rar', 'zip', 'doc', 'docx', 'webp', 'xlsx', 'xlsm', 'xls', 'xml'];
 
+    error_log("DIAGNOSTICO: Tentando upload de comprovante_endereco.");
+    error_log("DIAGNOSTICO: Temp file: " . $imagem_temp_endereco . " (exists: " . (file_exists($imagem_temp_endereco) ? 'true' : 'false') . ", is_uploaded_file: " . (is_uploaded_file($imagem_temp_endereco) ? 'true' : 'false') . ")");
+    error_log("DIAGNOSTICO: Dest path: " . $caminho_endereco . " (is_writable: " . (is_writable(dirname($caminho_endereco)) ? 'true' : 'false') . ")");
+
+
     if (in_array($ext_endereco, $extensoes_permitidas)) {
         if ($comprovante_endereco != "sem-foto.png" && file_exists($comprovantes_dir . $comprovante_endereco)) {
             @unlink($comprovantes_dir . $comprovante_endereco);
         }
         $comprovante_endereco = $nome_img_endereco;
         if (in_array($ext_endereco, ['pdf', 'rar', 'zip', 'doc', 'docx', 'xlsx', 'xlsm', 'xls', 'xml'])) {
-            move_uploaded_file($imagem_temp_endereco, $caminho_endereco);
+            if (!move_uploaded_file($imagem_temp_endereco, $caminho_endereco)) {
+                error_log("ERRO: Falha ao mover arquivo de comprovante_endereco (PDF/DOC/etc). Origem: " . $imagem_temp_endereco . ", Destino: " . $caminho_endereco);
+            }
         } else {
             list($largura, $altura) = getimagesize($imagem_temp_endereco);
             if ($largura > 1400) {
@@ -201,17 +210,24 @@ if (isset($_FILES['comprovante_endereco']) && $_FILES['comprovante_endereco']['n
                 } else if ($ext_endereco == 'webp') {
                     $imagem_original = imagecreatefromwebp($imagem_temp_endereco);
                 } else { // Fallback for unsupported image types
-                    move_uploaded_file($imagem_temp_endereco, $caminho_endereco);
+                    if (!move_uploaded_file($imagem_temp_endereco, $caminho_endereco)) {
+                        error_log("ERRO: Falha ao mover arquivo de comprovante_endereco (fallback). Origem: " . $imagem_temp_endereco . ", Destino: " . $caminho_endereco);
+                    }
                     $imagem_original = null;
                 }
                 if ($imagem_original) {
                     imagecopyresampled($image, $imagem_original, 0, 0, 0, 0, $nova_largura, $nova_altura, $largura, $altura);
-                    imagejpeg($image, $caminho_endereco, 20);
+                    if ($ext_endereco == 'png') { imagepng($image, $caminho_endereco, 9); } // PNG quality 0-9
+                    else if ($ext_endereco == 'gif') { imagegif($image, $caminho_endereco); }
+                    else if ($ext_endereco == 'webp') { imagewebp($image, $caminho_endereco, 80); }
+                    else { imagejpeg($image, $caminho_endereco, 80); } // JPEG quality 0-100
                     imagedestroy($imagem_original);
                     imagedestroy($image);
                 }
             } else {
-                move_uploaded_file($imagem_temp_endereco, $caminho_endereco);
+                if (!move_uploaded_file($imagem_temp_endereco, $caminho_endereco)) {
+                    error_log("ERRO: Falha ao mover arquivo de comprovante_endereco (sem redimensionamento). Origem: " . $imagem_temp_endereco . ", Destino: " . $caminho_endereco);
+                }
             }
         }
     } else {
@@ -228,13 +244,19 @@ if (isset($_FILES['comprovante_rg']) && $_FILES['comprovante_rg']['name'] != "")
     $ext_rg = strtolower(pathinfo($nome_img_rg, PATHINFO_EXTENSION));
     $extensoes_permitidas = ['png', 'jpg', 'jpeg', 'gif', 'pdf', 'rar', 'zip', 'doc', 'docx', 'webp', 'xlsx', 'xlsm', 'xls', 'xml'];
 
+    error_log("DIAGNOSTICO: Tentando upload de comprovante_rg.");
+    error_log("DIAGNOSTICO: Temp file: " . $imagem_temp_rg . " (exists: " . (file_exists($imagem_temp_rg) ? 'true' : 'false') . ", is_uploaded_file: " . (is_uploaded_file($imagem_temp_rg) ? 'true' : 'false') . ")");
+    error_log("DIAGNOSTICO: Dest path: " . $caminho_rg . " (is_writable: " . (is_writable(dirname($caminho_rg)) ? 'true' : 'false') . ")");
+
     if (in_array($ext_rg, $extensoes_permitidas)) {
         if ($comprovante_rg != "sem-foto.png" && file_exists($comprovantes_dir . $comprovante_rg)) {
             @unlink($comprovantes_dir . $comprovante_rg);
         }
         $comprovante_rg = $nome_img_rg;
         if (in_array($ext_rg, ['pdf', 'rar', 'zip', 'doc', 'docx', 'xlsx', 'xlsm', 'xls', 'xml'])) {
-            move_uploaded_file($imagem_temp_rg, $caminho_rg);
+            if (!move_uploaded_file($imagem_temp_rg, $caminho_rg)) {
+                error_log("ERRO: Falha ao mover arquivo de comprovante_rg (PDF/DOC/etc). Origem: " . $imagem_temp_rg . ", Destino: " . $caminho_rg);
+            }
         } else {
             list($largura, $altura) = getimagesize($imagem_temp_rg);
             if ($largura > 1400) {
@@ -252,17 +274,24 @@ if (isset($_FILES['comprovante_rg']) && $_FILES['comprovante_rg']['name'] != "")
                 } else if ($ext_rg == 'webp') {
                     $imagem_original = imagecreatefromwebp($imagem_temp_rg);
                 } else {
-                    move_uploaded_file($imagem_temp_rg, $caminho_rg);
+                    if (!move_uploaded_file($imagem_temp_rg, $caminho_rg)) {
+                        error_log("ERRO: Falha ao mover arquivo de comprovante_rg (fallback). Origem: " . $imagem_temp_rg . ", Destino: " . $caminho_rg);
+                    }
                     $imagem_original = null;
                 }
                 if ($imagem_original) {
                     imagecopyresampled($image, $imagem_original, 0, 0, 0, 0, $nova_largura, $nova_altura, $largura, $altura);
-                    imagejpeg($image, $caminho_rg, 20);
+                    if ($ext_rg == 'png') { imagepng($image, $caminho_rg, 9); }
+                    else if ($ext_rg == 'gif') { imagegif($image, $caminho_rg); }
+                    else if ($ext_rg == 'webp') { imagewebp($image, $caminho_rg, 80); }
+                    else { imagejpeg($image, $caminho_rg, 80); }
                     imagedestroy($imagem_original);
                     imagedestroy($image);
                 }
             } else {
-                move_uploaded_file($imagem_temp_rg, $caminho_rg);
+                if (!move_uploaded_file($imagem_temp_rg, $caminho_rg)) {
+                    error_log("ERRO: Falha ao mover arquivo de comprovante_rg (sem redimensionamento). Origem: " . $imagem_temp_rg . ", Destino: " . $caminho_rg);
+                }
             }
         }
     } else {
@@ -276,6 +305,10 @@ if (isset($_FILES['foto_usuario']) && $_FILES['foto_usuario']['tmp_name'] != "")
     $nome_original_foto = $_FILES['foto_usuario']['name'];
     $ext_foto = strtolower(pathinfo($nome_original_foto, PATHINFO_EXTENSION));
     $extensoes_permitidas_foto = ['png', 'jpg', 'jpeg', 'gif', 'webp'];
+
+    error_log("DIAGNOSTICO: Tentando upload de foto_usuario.");
+    error_log("DIAGNOSTICO: Temp file: " . $_FILES['foto_usuario']['tmp_name'] . " (exists: " . (file_exists($_FILES['foto_usuario']['tmp_name']) ? 'true' : 'false') . ", is_uploaded_file: " . (is_uploaded_file($_FILES['foto_usuario']['tmp_name']) ? 'true' : 'false') . ")");
+    error_log("DIAGNOSTICO: Dest path: " . $clientes_dir . $nome_img_foto . " (is_writable: " . (is_writable(dirname($clientes_dir . $nome_img_foto)) ? 'true' : 'false') . ")");
 
     if (!in_array($ext_foto, $extensoes_permitidas_foto)) {
         echo json_encode(['success' => false, 'message' => 'Extensão de imagem de usuário não permitida!']);
@@ -309,21 +342,24 @@ if (isset($_FILES['foto_usuario']) && $_FILES['foto_usuario']['tmp_name'] != "")
                 $imagem_original = imagecreatefromjpeg($imagem_temp_foto);
                 break;
             case 'gif':
-                $imagem_original = imagecreatefromgif($imagem_temp_foto);
-                break;
             case 'webp':
-                $imagem_original = imagecreatefromwebp($imagem_temp_foto);
+                $imagem_original = imagecreatefromgif($imagem_temp_foto);
                 break;
             default:
                 echo json_encode(['success' => false, 'message' => "Formato de imagem de usuário não suportado."]);
                 exit();
         }
         imagecopyresampled($image, $imagem_original, 0, 0, 0, 0, $nova_largura, $nova_altura, $largura, $altura);
-        imagejpeg($image, $caminho_foto, 80);
+        if ($ext_foto == 'png') { imagepng($image, $caminho_foto, 9); }
+        else if ($ext_foto == 'gif') { imagegif($image, $caminho_foto); }
+        else if ($ext_foto == 'webp') { imagewebp($image, $caminho_foto, 80); }
+        else { imagejpeg($image, $caminho_foto, 80); }
         imagedestroy($imagem_original);
         imagedestroy($image);
     } else {
-        move_uploaded_file($imagem_temp_foto, $caminho_foto);
+        if (!move_uploaded_file($imagem_temp_foto, $caminho_foto)) {
+            error_log("ERRO: Falha ao mover arquivo de foto_usuario (sem redimensionamento). Origem: " . $imagem_temp_foto . ", Destino: " . $caminho_foto);
+        }
     }
 }
 
@@ -337,13 +373,19 @@ if (isset($_FILES['print_perfil_app']) && $_FILES['print_perfil_app']['name'] !=
     $ext = strtolower(pathinfo($nome_img, PATHINFO_EXTENSION));
     $extensoes_permitidas = ['png', 'jpg', 'jpeg', 'gif', 'pdf', 'webp'];
 
+    error_log("DIAGNOSTICO: Tentando upload de print_perfil_app.");
+    error_log("DIAGNOSTICO: Temp file: " . $imagem_temp . " (exists: " . (file_exists($imagem_temp) ? 'true' : 'false') . ", is_uploaded_file: " . (is_uploaded_file($imagem_temp) ? 'true' : 'false') . ")");
+    error_log("DIAGNOSTICO: Dest path: " . $caminho . " (is_writable: " . (is_writable(dirname($caminho)) ? 'true' : 'false') . ")");
+
     if (in_array($ext, $extensoes_permitidas)) {
         if ($print_perfil_app != "sem-foto.png" && file_exists($prints_apps_dir . $print_perfil_app)) {
             @unlink($prints_apps_dir . $print_perfil_app);
         }
         $print_perfil_app = $nome_img;
         if ($ext == 'pdf') { // PDFs não são redimensionados
-            move_uploaded_file($imagem_temp, $caminho);
+            if (!move_uploaded_file($imagem_temp, $caminho)) {
+                error_log("ERRO: Falha ao mover arquivo de print_perfil_app (PDF). Origem: " . $imagem_temp . ", Destino: " . $caminho);
+            }
         } else {
             list($largura, $altura) = getimagesize($imagem_temp);
             if ($largura > 1400) {
@@ -356,12 +398,17 @@ if (isset($_FILES['print_perfil_app']) && $_FILES['print_perfil_app']['name'] !=
                 else if ($ext == 'webp') { $imagem_original = imagecreatefromwebp($imagem_temp); }
                 if ($imagem_original) {
                     imagecopyresampled($image, $imagem_original, 0, 0, 0, 0, $nova_largura, $nova_altura, $largura, $altura);
-                    imagejpeg($image, $caminho, 20);
+                    if ($ext == 'png') { imagepng($image, $caminho, 9); }
+                    else if ($ext == 'gif') { imagegif($image, $caminho); }
+                    else if ($ext == 'webp') { imagewebp($image, $caminho, 80); }
+                    else { imagejpeg($image, $caminho, 80); }
                     imagedestroy($imagem_original);
                     imagedestroy($image);
                 }
             } else {
-                move_uploaded_file($imagem_temp, $caminho);
+                if (!move_uploaded_file($imagem_temp, $caminho)) {
+                    error_log("ERRO: Falha ao mover arquivo de print_perfil_app (sem redimensionamento). Origem: " . $imagem_temp . ", Destino: " . $caminho);
+                }
             }
         }
     } else {
@@ -378,13 +425,19 @@ if (isset($_FILES['print_veiculo_app']) && $_FILES['print_veiculo_app']['name'] 
     $ext = strtolower(pathinfo($nome_img, PATHINFO_EXTENSION));
     $extensoes_permitidas = ['png', 'jpg', 'jpeg', 'gif', 'pdf', 'webp'];
 
+    error_log("DIAGNOSTICO: Tentando upload de print_veiculo_app.");
+    error_log("DIAGNOSTICO: Temp file: " . $imagem_temp . " (exists: " . (file_exists($imagem_temp) ? 'true' : 'false') . ", is_uploaded_file: " . (is_uploaded_file($imagem_temp) ? 'true' : 'false') . ")");
+    error_log("DIAGNOSTICO: Dest path: " . $caminho . " (is_writable: " . (is_writable(dirname($caminho)) ? 'true' : 'false') . ")");
+
     if (in_array($ext, $extensoes_permitidas)) {
         if ($print_veiculo_app != "sem-foto.png" && file_exists($prints_apps_dir . $print_veiculo_app)) {
             @unlink($prints_apps_dir . $print_veiculo_app);
         }
         $print_veiculo_app = $nome_img;
         if ($ext == 'pdf') {
-            move_uploaded_file($imagem_temp, $caminho);
+            if (!move_uploaded_file($imagem_temp, $caminho)) {
+                error_log("ERRO: Falha ao mover arquivo de print_veiculo_app (PDF). Origem: " . $imagem_temp . ", Destino: " . $caminho);
+            }
         } else {
             list($largura, $altura) = getimagesize($imagem_temp);
             if ($largura > 1400) {
@@ -397,12 +450,17 @@ if (isset($_FILES['print_veiculo_app']) && $_FILES['print_veiculo_app']['name'] 
                 else if ($ext == 'webp') { $imagem_original = imagecreatefromwebp($imagem_temp); }
                 if ($imagem_original) {
                     imagecopyresampled($image, $imagem_original, 0, 0, 0, 0, $nova_largura, $nova_altura, $largura, $altura);
-                    imagejpeg($image, $caminho, 20);
+                    if ($ext == 'png') { imagepng($image, $caminho, 9); }
+                    else if ($ext == 'gif') { imagegif($image, $caminho); }
+                    else if ($ext == 'webp') { imagewebp($image, $caminho, 80); }
+                    else { imagejpeg($image, $caminho, 80); }
                     imagedestroy($imagem_original);
                     imagedestroy($image);
                 }
             } else {
-                move_uploaded_file($imagem_temp, $caminho);
+                if (!move_uploaded_file($imagem_temp, $caminho)) {
+                    error_log("ERRO: Falha ao mover arquivo de print_veiculo_app (sem redimensionamento). Origem: " . $imagem_temp . ", Destino: " . $caminho);
+                }
             }
         }
     } else {
@@ -419,13 +477,19 @@ if (isset($_FILES['print_ganhos_hoje']) && $_FILES['print_ganhos_hoje']['name'] 
     $ext = strtolower(pathinfo($nome_img, PATHINFO_EXTENSION));
     $extensoes_permitidas = ['png', 'jpg', 'jpeg', 'gif', 'pdf', 'webp'];
 
+    error_log("DIAGNOSTICO: Tentando upload de print_ganhos_hoje.");
+    error_log("DIAGNOSTICO: Temp file: " . $imagem_temp . " (exists: " . (file_exists($imagem_temp) ? 'true' : 'false') . ", is_uploaded_file: " . (is_uploaded_file($imagem_temp) ? 'true' : 'false') . ")");
+    error_log("DIAGNOSTICO: Dest path: " . $caminho . " (is_writable: " . (is_writable(dirname($caminho)) ? 'true' : 'false') . ")");
+
     if (in_array($ext, $extensoes_permitidas)) {
         if ($print_ganhos_hoje != "sem-foto.png" && file_exists($prints_apps_dir . $print_ganhos_hoje)) {
             @unlink($prints_apps_dir . $print_ganhos_hoje);
         }
         $print_ganhos_hoje = $nome_img;
         if ($ext == 'pdf') {
-            move_uploaded_file($imagem_temp, $caminho);
+            if (!move_uploaded_file($imagem_temp, $caminho)) {
+                error_log("ERRO: Falha ao mover arquivo de print_ganhos_hoje (PDF). Origem: " . $imagem_temp . ", Destino: " . $caminho);
+            }
         } else {
             list($largura, $altura) = getimagesize($imagem_temp);
             if ($largura > 1400) {
@@ -438,12 +502,17 @@ if (isset($_FILES['print_ganhos_hoje']) && $_FILES['print_ganhos_hoje']['name'] 
                 else if ($ext == 'webp') { $imagem_original = imagecreatefromwebp($imagem_temp); }
                 if ($imagem_original) {
                     imagecopyresampled($image, $imagem_original, 0, 0, 0, 0, $nova_largura, $nova_altura, $largura, $altura);
-                    imagejpeg($image, $caminho, 20);
+                    if ($ext == 'png') { imagepng($image, $caminho, 9); }
+                    else if ($ext == 'gif') { imagegif($image, $caminho); }
+                    else if ($ext == 'webp') { imagewebp($image, $caminho, 80); }
+                    else { imagejpeg($image, $caminho, 80); }
                     imagedestroy($imagem_original);
                     imagedestroy($image);
                 }
             } else {
-                move_uploaded_file($imagem_temp, $caminho);
+                if (!move_uploaded_file($imagem_temp, $caminho)) {
+                    error_log("ERRO: Falha ao mover arquivo de print_ganhos_hoje (sem redimensionamento). Origem: " . $imagem_temp . ", Destino: " . $caminho);
+                }
             }
         }
     } else {
@@ -460,13 +529,19 @@ if (isset($_FILES['print_ganhos_30dias']) && $_FILES['print_ganhos_30dias']['nam
     $ext = strtolower(pathinfo($nome_img, PATHINFO_EXTENSION));
     $extensoes_permitidas = ['png', 'jpg', 'jpeg', 'gif', 'pdf', 'webp'];
 
+    error_log("DIAGNOSTICO: Tentando upload de print_ganhos_30dias.");
+    error_log("DIAGNOSTICO: Temp file: " . $imagem_temp . " (exists: " . (file_exists($imagem_temp) ? 'true' : 'false') . ", is_uploaded_file: " . (is_uploaded_file($imagem_temp) ? 'true' : 'false') . ")");
+    error_log("DIAGNOSTICO: Dest path: " . $caminho . " (is_writable: " . (is_writable(dirname($caminho)) ? 'true' : 'false') . ")");
+
     if (in_array($ext, $extensoes_permitidas)) {
         if ($print_ganhos_30dias != "sem-foto.png" && file_exists($prints_apps_dir . $print_ganhos_30dias)) {
             @unlink($prints_apps_dir . $print_ganhos_30dias);
         }
         $print_ganhos_30dias = $nome_img;
         if ($ext == 'pdf') {
-            move_uploaded_file($imagem_temp, $caminho);
+            if (!move_uploaded_file($imagem_temp, $caminho)) {
+                error_log("ERRO: Falha ao mover arquivo de print_ganhos_30dias (PDF). Origem: " . $imagem_temp . ", Destino: " . $caminho);
+            }
         } else {
             list($largura, $altura) = getimagesize($imagem_temp);
             if ($largura > 1400) {
@@ -479,12 +554,17 @@ if (isset($_FILES['print_ganhos_30dias']) && $_FILES['print_ganhos_30dias']['nam
                 else if ($ext == 'webp') { $imagem_original = imagecreatefromwebp($imagem_temp); }
                 if ($imagem_original) {
                     imagecopyresampled($image, $imagem_original, 0, 0, 0, 0, $nova_largura, $nova_altura, $largura, $altura);
-                    imagejpeg($image, $caminho, 20);
+                    if ($ext == 'png') { imagepng($image, $caminho, 9); }
+                    else if ($ext == 'gif') { imagegif($image, $caminho); }
+                    else if ($ext == 'webp') { imagewebp($image, $caminho, 80); }
+                    else { imagejpeg($image, $caminho, 80); }
                     imagedestroy($imagem_original);
                     imagedestroy($image);
                 }
             } else {
-                move_uploaded_file($imagem_temp, $caminho);
+                if (!move_uploaded_file($imagem_temp, $caminho)) {
+                    error_log("ERRO: Falha ao mover arquivo de print_ganhos_30dias (sem redimensionamento). Origem: " . $imagem_temp . ", Destino: " . $caminho);
+                }
             }
         }
     } else {
@@ -501,13 +581,19 @@ if (isset($_FILES['extrato_90dias']) && $_FILES['extrato_90dias']['name'] != "")
     $ext = strtolower(pathinfo($nome_img, PATHINFO_EXTENSION));
     $extensoes_permitidas = ['png', 'jpg', 'jpeg', 'gif', 'pdf', 'webp'];
 
+    error_log("DIAGNOSTICO: Tentando upload de extrato_90dias.");
+    error_log("DIAGNOSTICO: Temp file: " . $imagem_temp . " (exists: " . (file_exists($imagem_temp) ? 'true' : 'false') . ", is_uploaded_file: " . (is_uploaded_file($imagem_temp) ? 'true' : 'false') . ")");
+    error_log("DIAGNOSTICO: Dest path: " . $caminho . " (is_writable: " . (is_writable(dirname($caminho)) ? 'true' : 'false') . ")");
+
     if (in_array($ext, $extensoes_permitidas)) {
         if ($extrato_90dias != "sem-foto.png" && file_exists($documentos_renda_dir . $extrato_90dias)) {
             @unlink($documentos_renda_dir . $extrato_90dias);
         }
         $extrato_90dias = $nome_img;
         if ($ext == 'pdf') {
-            move_uploaded_file($imagem_temp, $caminho);
+            if (!move_uploaded_file($imagem_temp, $caminho)) {
+                error_log("ERRO: Falha ao mover arquivo de extrato_90dias (PDF). Origem: " . $imagem_temp . ", Destino: " . $caminho);
+            }
         } else {
             list($largura, $altura) = getimagesize($imagem_temp);
             if ($largura > 1400) {
@@ -520,12 +606,17 @@ if (isset($_FILES['extrato_90dias']) && $_FILES['extrato_90dias']['name'] != "")
                 else if ($ext == 'webp') { $imagem_original = imagecreatefromwebp($imagem_temp); }
                 if ($imagem_original) {
                     imagecopyresampled($image, $imagem_original, 0, 0, 0, 0, $nova_largura, $nova_altura, $largura, $altura);
-                    imagejpeg($image, $caminho, 20);
+                    if ($ext == 'png') { imagepng($image, $caminho, 9); }
+                    else if ($ext == 'gif') { imagegif($image, $caminho); }
+                    else if ($ext == 'webp') { imagewebp($image, $caminho, 80); }
+                    else { imagejpeg($image, $caminho, 80); }
                     imagedestroy($imagem_original);
                     imagedestroy($image);
                 }
             } else {
-                move_uploaded_file($imagem_temp, $caminho);
+                if (!move_uploaded_file($imagem_temp, $caminho)) {
+                    error_log("ERRO: Falha ao mover arquivo de extrato_90dias (sem redimensionamento). Origem: " . $imagem_temp . ", Destino: " . $caminho);
+                }
             }
         }
     } else {
@@ -542,13 +633,19 @@ if (isset($_FILES['contracheque']) && $_FILES['contracheque']['name'] != "") {
     $ext = strtolower(pathinfo($nome_img, PATHINFO_EXTENSION));
     $extensoes_permitidas = ['png', 'jpg', 'jpeg', 'gif', 'pdf', 'webp'];
 
+    error_log("DIAGNOSTICO: Tentando upload de contracheque.");
+    error_log("DIAGNOSTICO: Temp file: " . $imagem_temp . " (exists: " . (file_exists($imagem_temp) ? 'true' : 'false') . ", is_uploaded_file: " . (is_uploaded_file($imagem_temp) ? 'true' : 'false') . ")");
+    error_log("DIAGNOSTICO: Dest path: " . $caminho . " (is_writable: " . (is_writable(dirname($caminho)) ? 'true' : 'false') . ")");
+
     if (in_array($ext, $extensoes_permitidas)) {
         if ($contracheque != "sem-foto.png" && file_exists($documentos_renda_dir . $contracheque)) {
             @unlink($documentos_renda_dir . $contracheque);
         }
         $contracheque = $nome_img;
         if ($ext == 'pdf') {
-            move_uploaded_file($imagem_temp, $caminho);
+            if (!move_uploaded_file($imagem_temp, $caminho)) {
+                error_log("ERRO: Falha ao mover arquivo de contracheque (PDF). Origem: " . $imagem_temp . ", Destino: " . $caminho);
+            }
         } else {
             list($largura, $altura) = getimagesize($imagem_temp);
             if ($largura > 1400) {
@@ -561,12 +658,17 @@ if (isset($_FILES['contracheque']) && $_FILES['contracheque']['name'] != "") {
                 else if ($ext == 'webp') { $imagem_original = imagecreatefromwebp($imagem_temp); }
                 if ($imagem_original) {
                     imagecopyresampled($image, $imagem_original, 0, 0, 0, 0, $nova_largura, $nova_altura, $largura, $altura);
-                    imagejpeg($image, $caminho, 20);
+                    if ($ext == 'png') { imagepng($image, $caminho, 9); }
+                    else if ($ext == 'gif') { imagegif($image, $caminho); }
+                    else if ($ext == 'webp') { imagewebp($image, $caminho, 80); }
+                    else { imagejpeg($image, $caminho, 80); }
                     imagedestroy($imagem_original);
                     imagedestroy($image);
                 }
             } else {
-                move_uploaded_file($imagem_temp, $caminho);
+                if (!move_uploaded_file($imagem_temp, $caminho)) {
+                    error_log("ERRO: Falha ao mover arquivo de contracheque (sem redimensionamento). Origem: " . $imagem_temp . ", Destino: " . $caminho);
+                }
             }
         }
     } else {
