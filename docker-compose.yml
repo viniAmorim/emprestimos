@@ -1,5 +1,5 @@
-# docker-compose.yml
-version: "3.7"
+# Removido o atributo 'version' para evitar o aviso de obsoleto
+# version: "3.7"
 
 networks:
   docker.network:
@@ -7,6 +7,16 @@ networks:
 
 volumes:
   mysql_data:
+  app_data: # Volume nomeado para o código da aplicação (com permissões forçadas)
+    driver: local
+    driver_opts:
+      type: none
+      # uid=33 e gid=33 são os IDs padrão do usuário 'www-data' no Alpine/Debian/Ubuntu
+      # umask=000 permite permissão total para criação de arquivos/diretórios.
+      o: bind,uid=33,gid=33,umask=000
+      device: ${PWD} # Aponta para a raiz do seu projeto no host (WSL2 nativo)
+  app_uploads:
+    # Nenhuma driver_opts ou 'device' aqui! O Docker gerencia o armazenamento.
 
 services:
   php:
@@ -19,7 +29,9 @@ services:
     networks:
       - docker.network
     volumes:
-      - .:/var/www
+      - app_data:/var/www # Monta o código da aplicação
+      # Monta o volume de uploads no diretório 'images'
+      - app_uploads:/var/www/app/public_html/painel/images/
 
   apache:
     build: ./app/docker/apache
@@ -34,10 +46,11 @@ services:
     networks:
       - docker.network
     volumes:
-      - .:/var/www
-      # Monta o diretório para os certificados de app.ucredcredito.com do seu host.
-      # CERTIFIQUE-SE DE QUE ESTA PASTA E OS ARQUIVOS EXISTAM NO SEU HOST!
-      - ./docker/apache/ssl_certs_app:/etc/apache2/ssl_certs_app:ro
+      - app_data:/var/www # Monta o código da aplicação
+      # Monta o volume de uploads no diretório 'images' (Apache também precisa acessar)
+      - app_uploads:/var/www/app/public_html/painel/images/
+      # Monta os certificados SSL autoassinados do seu projeto
+      - ${SSL_CERTS_PATH}:/etc/letsencrypt/live/app.ucredcredito.com/:ro
 
   mysql:
     image: mysql:5.7
@@ -55,8 +68,7 @@ services:
       - docker.network
     volumes:
       - ./mysql-data:/var/lib/mysql
-      #- "./docker/mysql/mysql.cnf:/etc/mysql/conf.d/custom.cnf:ro"
-      - ./docker/apache/ssl_certs_app:/etc/apache2/ssl_certs_app:ro
+      - "./docker/mysql/mysql.cnf:/etc/mysql/conf.d/custom.cnf:ro"
     environment:
       MYSQL_DATABASE: ${MYSQL_DATABASE:-development}
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-root}

@@ -1468,58 +1468,66 @@
             }
         }
 
-// --- SUBMISSÃO DO FORMULÁRIO (AJAX) ---
-$('#form').submit(function(event) {
-    event.preventDefault(); // Impede o envio padrão do formulário
+        // --- SUBMISSÃO DO FORMULÁRIO (AJAX) ---
+        $('#form').submit(function(event) {
+            event.preventDefault(); // Impede o envio padrão do formulário
 
-    if (!validateCurrentStep()) {
-        return; // Se a validação da última etapa falhar, não prossegue.
-    }
-
-    // Se tudo validado, prepare os dados do formulário
-    var formData = new FormData(this);
-
-    $.ajax({
-        url: '../painel/paginas/clientes/salvar.php', // O arquivo PHP que processa o cadastro
-        type: 'POST',
-        data: formData,
-        contentType: false,
-        processData: false,
-        dataType: 'json', // <--- ESSA LINHA É FUNDAMENTAL! Diz ao jQuery para esperar JSON.
-        success: function(response) {
-            // REMOVA O BLOCO TRY/CATCH E O JSON.parse(response) AQUI!
-            // Com 'dataType: "json"', a variável 'response' JÁ É UM OBJETO JAVASCRIPT.
-            if (response.success) { // Agora 'response.success' funcionará diretamente
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Sucesso!',
-                    text: response.message, // 'response.message' funcionará diretamente
-                    confirmButtonText: 'Ok'
-                }).then(() => {
-                    // Redirecionar ou limpar o formulário
-                    window.location.href = '/'; // Exemplo de redirecionamento
-                });
-            } else {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Erro no Cadastro!',
-                    text: response.message, // 'response.message' funcionará diretamente
-                    confirmButtonText: 'Ok'
-                });
+            if (!validateCurrentStep()) {
+                return; // Se a validação da última etapa falhar, não prossegue.
             }
-        },
-        error: function(xhr, status, error) {
-            // Este bloco 'error' é importante para depurar problemas de comunicação HTTP
-            console.error("Erro AJAX:", xhr.responseText); // xhr.responseText conterá a resposta bruta (HTML, JSON de erro, etc.)
-            Swal.fire({
-                icon: 'error',
-                title: 'Erro de Comunicação!',
-                text: 'Não foi possível conectar ao servidor ou houve um erro inesperado. Detalhes: ' + xhr.responseText,
-                confirmButtonText: 'Ok'
+
+            // Se tudo validado, prepare os dados do formulário
+            var formData = new FormData(this);
+
+            $.ajax({
+                url: '../painel/paginas/clientes/salvar.php', // O arquivo PHP que processa o cadastro
+                type: 'POST',
+                data: formData,
+                contentType: false,
+                processData: false,
+                success: function(response) {
+                    try {
+                        const res = JSON.parse(response);
+                        if (res.success) {
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Sucesso!',
+                                text: res.message,
+                                confirmButtonText: 'Ok'
+                            }).then(() => {
+                                // Redirecionar ou limpar o formulário
+                                window.location.href = 'localhost'; // Exemplo de redirecionamento
+                            });
+                        } else {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Erro no Cadastro!',
+                                text: res.message,
+                                confirmButtonText: 'Ok'
+                            });
+                        }
+                    } catch (e) {
+                        // Se a resposta não for um JSON válido, exiba a resposta bruta
+                        console.error("Erro ao parsear JSON:", e, "Resposta:", response);
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Erro de Resposta!',
+                            text: 'Ocorreu um erro inesperado. Detalhes: ' + response,
+                            confirmButtonText: 'Ok'
+                        });
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error("Erro AJAX:", xhr.responseText);
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Erro de Comunicação!',
+                        text: 'Não foi possível conectar ao servidor. Tente novamente mais tarde.',
+                        confirmButtonText: 'Ok'
+                    });
+                }
             });
-        }
-    });
-});
+        });
 
     </script>
 </body>

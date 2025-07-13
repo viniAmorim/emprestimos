@@ -10,28 +10,28 @@ ENV TZ=${TZ:-UTC}
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
 # Install non-dev dependencies
-RUN set -eux \
-  && apk add --no-cache \
+RUN set -eux && \
+  apk add --no-cache \
   git vim zip unzip bash curl tzdata icu-libs \
   c-client make ca-certificates imap gmp gettext libssh2 yaml \
   libintl libxslt libpng libwebp libjpeg-turbo freetype imap \
   linux-headers oniguruma libxslt libpq vips \
-  gmp libzip libxml2 freetds
+  gmp libzip libxml2 freetds \
+  sudo && \
+  rm -rf /var/cache/apk/*
 
-# Install dependencies
-RUN set -eux \
-  && apk add --no-cache --virtual .build_deps \
+# Install dependencies and PHP extensions
+RUN set -eux && \
+  apk add --no-cache --virtual .build_deps \
   libpng-dev libwebp-dev libjpeg-turbo-dev freetype-dev imap-dev \
   linux-headers oniguruma-dev libxslt-dev postgresql-dev vips-dev \
   libssh2-dev gmp-dev libzip-dev libxml2-dev freetds-dev yaml-dev \
-  $PHPIZE_DEPS \
-  \
-  # Php extensions
-  && docker-php-ext-install \
+  $PHPIZE_DEPS && \
+  docker-php-ext-install \
   mysqli \
   pdo_mysql \
   pdo_pgsql \
-  pgsql\
+  pgsql \
   bcmath \
   mbstring \
   xml \
@@ -48,39 +48,23 @@ RUN set -eux \
   sysvshm \
   opcache \
   imap \
-  gmp \
-  \
-  # Install xdebug
-  && pecl install -o -f xdebug \
-  && docker-php-ext-enable xdebug \
-  \
-  # Install YML
-  && pecl install -o -f yaml \
-  && docker-php-ext-enable yaml \
-  \
-  # Install redis
-  && pecl install -o -f redis \
-  && docker-php-ext-enable redis \
-  \
-  # Install mongodb
-  && pecl install -o -f mongodb \
-  && docker-php-ext-enable mongodb \
-  \
-  # Install apcu
-  && pecl install -o -f apcu \
-  && docker-php-ext-enable apcu \
-  \
-  # Install ssh2 \
-  && pecl install -o -f ssh2 \
-  && docker-php-ext-enable ssh2 \
-  \
-  # Clean php extensions
-  && rm -rf /tmp/pear \
-  && docker-php-source delete \
-  \
-  # Clean up
-  && apk del --purge .build_deps \
-  && rm -rf /var/cache/apk/*
+  gmp && \
+  pecl install -o -f xdebug && \
+  docker-php-ext-enable xdebug && \
+  pecl install -o -f yaml && \
+  docker-php-ext-enable yaml && \
+  pecl install -o -f redis && \
+  docker-php-ext-enable redis && \
+  pecl install -o -f mongodb && \
+  docker-php-ext-enable mongodb && \
+  pecl install -o -f apcu && \
+  docker-php-ext-enable apcu && \
+  pecl install -o -f ssh2 && \
+  docker-php-ext-enable ssh2 && \
+  rm -rf /tmp/pear && \
+  docker-php-source delete && \
+  apk del --purge .build_deps && \
+  rm -rf /var/cache/apk/*
 
 # Install composer
 COPY --from=composer:latest /usr/bin/composer /usr/local/bin/composer
@@ -88,9 +72,11 @@ COPY --from=composer:latest /usr/bin/composer /usr/local/bin/composer
 # Copy php settings
 COPY ./php.ini ${PHP_INI_DIR}/conf.d/99-php.ini
 
-# Copy entrypoint
-COPY ./entrypoint /usr/local/bin/docker-entrypoint
-RUN chmod +x /usr/local/bin/docker-entrypoint
+# Copy entrypoint script
+COPY ./entrypoint.sh /usr/local/bin/docker-entrypoint.sh
+
+# Make entrypoint script executable
+RUN chmod +x /usr/local/bin/docker-entrypoint.sh
 
 # Workdir
 ENV WORKDIR=/var/www/app
@@ -100,5 +86,7 @@ WORKDIR ${WORKDIR}
 # Expose port
 EXPOSE 9000
 
-# Run entrypoint
-CMD ["docker-entrypoint"]
+# Define o script como o ENTRYPOINT do container
+ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]
+# O CMD padrão da imagem php-fpm (que será passado para "$@" no entrypoint.sh)
+CMD ["php-fpm"]
