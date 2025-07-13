@@ -1,3 +1,4 @@
+# docker-compose.yml
 version: "3.7"
 
 networks:
@@ -34,7 +35,9 @@ services:
       - docker.network
     volumes:
       - .:/var/www
-      - /etc/letsencrypt:/etc/letsencrypt:ro # <-- Certificados SSL
+      # Monta o diretório para os certificados de app.ucredcredito.com do seu host.
+      # CERTIFIQUE-SE DE QUE ESTA PASTA E OS ARQUIVOS EXISTAM NO SEU HOST!
+      - ./docker/apache/ssl_certs_app:/etc/apache2/ssl_certs_app:ro
 
   mysql:
     image: mysql:5.7
@@ -52,7 +55,8 @@ services:
       - docker.network
     volumes:
       - ./mysql-data:/var/lib/mysql
-      - "./docker/mysql/mysql.cnf:/etc/mysql/conf.d/custom.cnf:ro"
+      #- "./docker/mysql/mysql.cnf:/etc/mysql/conf.d/custom.cnf:ro"
+      - ./docker/apache/ssl_certs_app:/etc/apache2/ssl_certs_app:ro
     environment:
       MYSQL_DATABASE: ${MYSQL_DATABASE:-development}
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-root}

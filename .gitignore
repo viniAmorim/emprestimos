@@ -13,3 +13,8 @@
 .env
 
 /mysql-data
+
+# Ignore SSL private keys and certificates
+docker/apache/ssl_certs_app/server.key
+# You might also want to add .crt files or the whole directory if it contains only certs
+docker/apache/ssl_certs_app/
