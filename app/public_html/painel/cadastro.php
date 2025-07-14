@@ -45,7 +45,7 @@
         }
     </script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.10/jquery.mask.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <style type="text/css">
@@ -494,7 +494,7 @@
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-white">Data de Nascimento</label>
-                            <input type="date" id="data_nasc" name="data_nasc" class="form-input w-full" required onblur="validateField(this)">
+                            <input type="text" id="data_nasc" name="data_nasc" class="form-input w-full" placeholder="DD/MM/AAAA" required onblur="validateField(this)">
                         </div>
                     </div>
 
@@ -503,16 +503,7 @@
                             <label class="block text-sm font-medium text-white">Chave Pix em sua titularidade</label>
                             <input type="text" name="pix" id="pix" placeholder="CPF, telefone ou e-mail" class="form-input w-full" required onblur="validateField(this)">
                         </div>
-                        <div class="flex items-start gap-4">
-                            <div class="flex-1">
-                                <label class="block text-sm font-medium text-white">Comprovante de Endereço</label>
-                                <input type="file" name="comprovante_endereco" id="comprovante_endereco" onchange="carregarImgComprovanteEndereco(); validateField(this)" accept=".jpg,.jpeg,.png" class="form-input w-full" required>
-                            </div>
-                            <div class="w-20 h-20 border border-gray-300 rounded overflow-hidden bg-white">
-                                <img src="painel/images/comprovantes/sem-foto.png" id="target-comprovante-endereco" class="object-cover w-full h-full">
-                            </div>
-                        </div>
-
+                        
                         <div class="flex items-start gap-4">
                             <div class="flex-1">
                                 <label class="block text-sm font-medium text-white">CNG ou RG</label>
@@ -522,9 +513,19 @@
                                 <img src="painel/images/comprovantes/sem-foto.png" id="target-comprovante-rg" class="object-cover w-full h-full">
                             </div>
                         </div>
+
+                        <div class="flex items-start gap-4">
+                            <div class="flex-1">
+                                <label class="block text-sm font-medium text-white">Comprovante de Endereço</label>
+                                <input type="file" name="comprovante_endereco" id="comprovante_endereco" onchange="carregarImgComprovanteEndereco(); validateField(this)" accept=".jpg,.jpeg,.png" class="form-input w-full" required>
+                            </div>
+                            <div class="w-20 h-20 border border-gray-300 rounded overflow-hidden bg-white">
+                                <img src="painel/images/comprovantes/sem-foto.png" id="target-comprovante-endereco" class="object-cover w-full h-full">
+                            </div>
+                        </div>
                     </div>
 
-                    <div class="text-sm text-gray-300 mt-4 text-right">
+                    <div class="text-md text-gray-300 mt-4 text-right">
                         <p>Talão de água ou energia com emissão de no máximo 60 dias </p>
                     </div>
 
@@ -874,599 +875,656 @@
         </div>
     </div>
     <script>
-        let currentStep = 1;
-        const totalSteps = 6;
+    let currentStep = 1;
+    const totalSteps = 6;
 
-        // --- FUNÇÕES DE MÁSCARAS ---
-        function setupMasks() {
-            $('#cpf').mask('000.000.000-00');
-            $('#telefone').mask('(00) 00000-0000');
-            $('#cep').mask('00000-000');
-            $('#referencia_contato').mask('(00) 00000-0000');
-            // Usando um ARRAY de máscaras para a placa (Mercosul e Antiga)
-            $('#placa_veiculo').mask(['AAA0A00', 'AAA0000'], {
-                translation: {
-                    'A': { pattern: /[A-Za-z]/ },
-                    '0': { pattern: /[0-9]/ }
-                }
-            });
-            $('#valor_desejado').mask('000.000.000.000.000,00', {reverse: true});
-            $('#parcela_desejada').mask('000.000.000.000.000,00', {reverse: true});
-            $('#valor_aluguel').mask('000.000.000.000.000,00', {reverse: true});
+    // --- FUNÇÕES DE MÁSCARAS ---
+    function setupMasks() {
+        $('#cpf').mask('000.000.000-00');
+        $('#telefone').mask('(00) 00000-0000');
+        $('#cep').mask('00000-000');
+        $('#data_nasc').mask('00/00/0000');
+        $('#referencia_contato').mask('(00) 00000-0000');
+        // Usando um ARRAY de máscaras para a placa (Mercosul e Antiga)
+        $('#placa_veiculo').mask(['AAA0A00', 'AAA0000'], {
+            translation: {
+                'A': { pattern: /[A-Za-z]/ },
+                '0': { pattern: /[0-9]/ }
+            }
+        });
+        $('#valor_desejado').mask('000.000.000.000.000,00', {reverse: true});
+        $('#parcela_desejada').mask('000.000.000.000.000,00', {reverse: true});
+        $('#valor_aluguel').mask('000.000.000.000.000,00', {reverse: true});
+    }
+
+    // Inicializa as máscaras quando o documento estiver pronto
+    $(document).ready(function() {
+        setupMasks();
+        showStep(currentStep);
+        handleRamoChange();
+        handleStatusVeiculoChange();
+    });
+
+    // --- FUNÇÕES DE VALIDAÇÃO ---
+    function validateEmail(email) {
+        const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        return re.test(String(email).toLowerCase());
+    }
+
+    function validateCPF(input) {
+        const cpf = input.value.replace(/\D/g, '');
+        if (cpf.length !== 11 || /^(\d)\1{10}$/.test(cpf)) {
+            markInvalid(input, 'CPF inválido.');
+            return false;
         }
 
-        // Inicializa as máscaras quando o documento estiver pronto
-        $(document).ready(function() {
-            setupMasks();
-            showStep(currentStep); // Mostra a primeira etapa ao carregar
-            handleRamoChange(); // Inicializa a visibilidade dos campos de ramo
-            handleStatusVeiculoChange(); // Inicializa a visibilidade de valor_aluguel
+        let sum = 0;
+        let remainder;
+
+        for (let i = 1; i <= 9; i++) {
+            sum = sum + parseInt(cpf.substring(i - 1, i)) * (11 - i);
+        }
+        remainder = (sum * 10) % 11;
+
+        if ((remainder === 10) || (remainder === 11)) {
+            remainder = 0;
+        }
+        if (remainder !== parseInt(cpf.substring(9, 10))) {
+            markInvalid(input, 'CPF inválido.');
+            return false;
+        }
+
+        sum = 0;
+        for (let i = 1; i <= 10; i++) {
+            sum = sum + parseInt(cpf.substring(i - 1, i)) * (12 - i);
+        }
+        remainder = (sum * 10) % 11;
+
+        if ((remainder === 10) || (remainder === 11)) {
+            remainder = 0;
+        }
+        if (remainder !== parseInt(cpf.substring(10, 11))) {
+            markInvalid(input, 'CPF inválido.');
+            return false;
+        }
+
+        markValid(input);
+        return true;
+    }
+
+    // NOVA FUNÇÃO DE VALIDAÇÃO DE DATA DE NASCIMENTO
+    function validateDataNascimento(input) {
+        const dateString = input.value;
+        const regex = /^\d{2}\/\d{2}\/\d{4}$/;
+
+        if (!regex.test(dateString)) {
+            markInvalid(input, 'Data inválida. Use o formato DD/MM/AAAA.');
+            return false;
+        }
+
+        const parts = dateString.split('/');
+        const day = parseInt(parts[0], 10);
+        const month = parseInt(parts[1], 10);
+        const year = parseInt(parts[2], 10);
+
+        // Validações básicas de intervalo
+        if (day < 1 || day > 31 || month < 1 || month > 12 || year < 1900 || year > new Date().getFullYear()) {
+            markInvalid(input, 'Data inválida. Verifique dia, mês ou ano.');
+            return false;
+        }
+
+        const date = new Date(year, month - 1, day); // Mês é 0-indexed (0=Jan, 11=Dez)
+        // Verifica se a data é realmente uma data válida (ex: 31/02/2023 não é válida)
+        if (date.getFullYear() !== year || date.getMonth() + 1 !== month || date.getDate() !== day) {
+            markInvalid(input, 'Data inválida. Verifique o dia/mês/ano.');
+            return false;
+        }
+
+        // Validação de idade mínima (ex: mínimo 18 anos)
+        const today = new Date();
+        let age = today.getFullYear() - year;
+        const m = today.getMonth() - (month - 1); // Mês atual - (mês de nasc - 1)
+        if (m < 0 || (m === 0 && today.getDate() < day)) {
+            age--;
+        }
+        if (age < 18) { // Defina a idade mínima necessária
+            markInvalid(input, 'Você deve ter pelo menos 18 anos.');
+            return false;
+        }
+
+        markValid(input);
+        return true;
+    }
+
+    function validatePassword(input) {
+        const senha = $('#senha').val();
+        const confSenha = $('#conf_senha').val();
+
+        if (senha === '' || confSenha === '') {
+            markInvalid(input, 'Por favor, preencha ambos os campos de senha.');
+            return false;
+        }
+        if (senha.length < 6) {
+            markInvalid($('#senha')[0], 'A senha deve ter no mínimo 6 caracteres.');
+            return false;
+        }
+        if (senha !== confSenha) {
+            markInvalid($('#conf_senha')[0], 'As senhas não coincidem.');
+            return false;
+        }
+        markValid($('#senha')[0]);
+        markValid($('#conf_senha')[0]);
+        return true;
+    }
+
+    function validatePlaca(input) {
+        const placa = input.value.toUpperCase();
+        const re = /^[A-Z]{3}\d{4}$|^[A-Z]{3}\d[A-Z]\d{2}$/;
+        if (!re.test(placa)) {
+            markInvalid(input, 'Formato de placa inválido (ex: ABC1234 ou ABC1A23).');
+            return false;
+        }
+        markValid(input);
+        return true;
+    }
+
+    // Função para marcar um campo como inválido e exibir mensagem de erro
+    function markInvalid(input, message = '') {
+        input.classList.add('invalid');
+        input.style.borderColor = '#fc8181';
+
+        let errorMessageElement = input.nextElementSibling;
+        // Verifica se o próximo irmão é um elemento de mensagem de erro, ou cria um
+        if (!errorMessageElement || !errorMessageElement.classList.contains('error-message')) {
+            errorMessageElement = document.createElement('p');
+            errorMessageElement.classList.add('error-message', 'text-red-400', 'text-sm', 'mt-1');
+            input.parentNode.insertBefore(errorMessageElement, input.nextSibling);
+        }
+        errorMessageElement.textContent = message;
+        errorMessageElement.classList.remove('hidden');
+    }
+
+    // Função para marcar um campo como válido e ocultar mensagem de erro
+    function markValid(input) {
+        input.classList.remove('invalid');
+        input.style.borderColor = '#4a5568'; // Borda padrão
+
+        let errorMessageElement = input.nextElementSibling;
+        if (errorMessageElement && errorMessageElement.classList.contains('error-message')) {
+            errorMessageElement.classList.add('hidden');
+            errorMessageElement.textContent = '';
+        }
+    }
+
+    // Validação genérica de campo
+    function validateField(input) {
+        console.log(`Validando campo: ${input.id || input.name}, Valor: "${input.value}"`);
+        const type = input.type;
+        const id = input.id;
+        let isValid = true;
+        let errorMessage = '';
+
+        // Verifica campos obrigatórios primeiro
+        if (input.hasAttribute('required') && input.value.trim() === '') {
+            isValid = false;
+            errorMessage = 'Este campo é obrigatório.';
+        } else {
+            // Validações específicas
+            if (id === 'email') {
+                if (!validateEmail(input.value)) {
+                    isValid = false;
+                    errorMessage = 'Email inválido.';
+                }
+            } else if (id === 'cpf') {
+                isValid = validateCPF(input);
+                if (!isValid) errorMessage = input.getAttribute('data-invalid');
+            } else if (id === 'data_nasc') { // NOVO: VALIDAÇÃO DA DATA DE NASCIMENTO
+                isValid = validateDataNascimento(input);
+                // A função validateDataNascimento já marca como inválido e define a mensagem
+                if (!isValid) {
+                    // Tenta obter a mensagem da própria função de validação de data
+                    let errorMessageElement = input.nextElementSibling;
+                    if (errorMessageElement && errorMessageElement.classList.contains('error-message')) {
+                        errorMessage = errorMessageElement.textContent;
+                    } else {
+                        errorMessage = 'Data de Nascimento inválida.';
+                    }
+                }
+            } else if (id === 'telefone' || id === 'referencia_contato') {
+                if (input.value.replace(/\D/g, '').length < 11) {
+                    isValid = false;
+                    errorMessage = 'Telefone inválido (mínimo 11 dígitos incluindo DDD).';
+                }
+            } else if (id === 'senha' || id === 'conf_senha') {
+                isValid = validatePassword(input);
+                if (!isValid) errorMessage = input.getAttribute('data-invalid');
+            } else if (id === 'placa_veiculo') {
+                isValid = validatePlaca(input);
+                if (!isValid) errorMessage = input.getAttribute('data-invalid');
+            } else if (type === 'file') {
+                if (input.hasAttribute('required') && input.files.length === 0) {
+                    isValid = false;
+                    errorMessage = 'Por favor, anexe o arquivo.';
+                }
+            } else if (type === 'number') {
+                if (input.hasAttribute('required') && input.value.trim() === '') {
+                    isValid = false;
+                    errorMessage = 'Este campo é obrigatório.';
+                } else if (input.min && parseFloat(input.value) < parseFloat(input.min)) {
+                    isValid = false;
+                    errorMessage = `O valor mínimo é ${input.min}.`;
+                }
+            } else if (input.tagName === 'SELECT' && input.value === '') {
+                isValid = false;
+                errorMessage = 'Por favor, selecione uma opção.';
+            }
+        }
+
+        if (isValid) {
+            markValid(input);
+        } else {
+            markInvalid(input, errorMessage);
+        }
+        console.log(`Campo ${input.id || input.name} é válido: ${isValid}`);
+        return isValid;
+    }
+
+    // Validação da etapa atual antes de prosseguir
+    function validateCurrentStep() {
+        console.log(`--- Validando Etapa ${currentStep} ---`);
+        const currentStepElement = document.getElementById(`step-${currentStep}`);
+        // Seleciona todos os campos que podem ser obrigatórios nesta etapa
+        const inputs = currentStepElement.querySelectorAll('[required], .uber-obrigatorio, .autonomo-obrigatorio, .assalariado-obrigatorio');
+        let allValid = true;
+        let firstInvalidField = null;
+        let invalidMessages = [];
+
+        const ramoSelect = document.getElementById('ramo');
+        const selectedRamo = ramoSelect ? ramoSelect.value : '';
+
+        inputs.forEach(input => {
+            // Lógica condicional para campos obrigatórios baseada no ramo
+            const isUberField = input.classList.contains('uber-obrigatorio');
+            const isAutonomoField = input.classList.contains('autonomo-obrigatorio');
+            const isAssalariadoField = input.classList.contains('assalariado-obrigatorio');
+
+            let shouldValidate = true;
+
+            if (isUberField && selectedRamo !== 'uber') {
+                shouldValidate = false;
+            } else if (isAutonomoField && selectedRamo !== 'autonomo') {
+                shouldValidate = false;
+            } else if (isAssalariadoField && selectedRamo !== 'assalariado') {
+                shouldValidate = false;
+            }
+
+            if (!shouldValidate) {
+                markValid(input);
+                console.log(`Pulando validação para (ramo diferente): ${input.id || input.name}`);
+                return;
+            }
+
+            const isValidField = validateField(input);
+            if (!isValidField) {
+                allValid = false;
+                const message = input.getAttribute('data-invalid') || 'Campo inválido ou vazio.';
+                let fieldName = input.previousElementSibling ? input.previousElementSibling.textContent.replace(':', '').trim() : input.placeholder || input.id || input.name;
+                invalidMessages.push(`${fieldName}: ${message}`);
+                if (!firstInvalidField) {
+                    firstInvalidField = input;
+                }
+            }
         });
 
-        // --- FUNÇÕES DE VALIDAÇÃO ---
-        function validateEmail(email) {
-            const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-            return re.test(String(email).toLowerCase());
+        // Validação específica para o Step 1 (duplicidade de nome e telefone)
+        if (currentStep === 1) {
+            const nomeInput = document.getElementById('nome');
+            const telefoneInput = document.getElementById('telefone');
         }
 
-        function validateCPF(input) {
-            const cpf = input.value.replace(/\D/g, ''); // Remove caracteres não numéricos
-            if (cpf.length !== 11 || /^(\d)\1{10}$/.test(cpf)) {
-                markInvalid(input, 'CPF inválido.');
-                return false;
-            }
-
-            let sum = 0;
-            let remainder;
-
-            for (let i = 1; i <= 9; i++) {
-                sum = sum + parseInt(cpf.substring(i - 1, i)) * (11 - i);
-            }
-            remainder = (sum * 10) % 11;
-
-            if ((remainder === 10) || (remainder === 11)) {
-                remainder = 0;
-            }
-            if (remainder !== parseInt(cpf.substring(9, 10))) {
-                markInvalid(input, 'CPF inválido.');
-                return false;
-            }
-
-            sum = 0;
-            for (let i = 1; i <= 10; i++) {
-                sum = sum + parseInt(cpf.substring(i - 1, i)) * (12 - i);
-            }
-            remainder = (sum * 10) % 11;
-
-            if ((remainder === 10) || (remainder === 11)) {
-                remainder = 0;
-            }
-            if (remainder !== parseInt(cpf.substring(10, 11))) {
-                markInvalid(input, 'CPF inválido.');
-                return false;
-            }
-
-            markValid(input);
-            return true;
-        }
-
-        function validatePassword(input) {
-            const senha = $('#senha').val();
-            const confSenha = $('#conf_senha').val();
-
-            if (senha === '' || confSenha === '') {
-                markInvalid(input, 'Por favor, preencha ambos os campos de senha.');
-                return false;
-            }
-            if (senha.length < 6) {
-                markInvalid($('#senha')[0], 'A senha deve ter no mínimo 6 caracteres.');
-                return false;
-            }
-            if (senha !== confSenha) {
-                markInvalid($('#conf_senha')[0], 'As senhas não coincidem.');
-                return false;
-            }
-            markValid($('#senha')[0]);
-            markValid($('#conf_senha')[0]);
-            return true;
-        }
-
-        function validatePlaca(input) {
-            const placa = input.value.toUpperCase();
-            const re = /^[A-Z]{3}\d{4}$|^[A-Z]{3}\d[A-Z]\d{2}$/; // Padrão para placas Mercosul ou antigas
-            if (!re.test(placa)) {
-                markInvalid(input, 'Formato de placa inválido (ex: ABC1234 ou ABC1A23).');
-                return false;
-            }
-            markValid(input);
-            return true;
-        }
-
-        // Função para marcar um campo como inválido e exibir mensagem de erro
-        function markInvalid(input, message = '') {
-            input.classList.add('invalid');
-            input.style.borderColor = '#fc8181'; // Borda vermelha
-
-            let errorMessageElement = input.nextElementSibling;
-            // Verifica se o próximo irmão é um elemento de mensagem de erro, ou cria um
-            if (!errorMessageElement || !errorMessageElement.classList.contains('error-message')) {
-                errorMessageElement = document.createElement('p');
-                errorMessageElement.classList.add('error-message', 'text-red-400', 'text-sm', 'mt-1');
-                input.parentNode.insertBefore(errorMessageElement, input.nextSibling);
-            }
-            errorMessageElement.textContent = message;
-            errorMessageElement.classList.remove('hidden');
-        }
-
-        // Função para marcar um campo como válido e ocultar mensagem de erro
-        function markValid(input) {
-            input.classList.remove('invalid');
-            input.style.borderColor = '#4a5568'; // Borda padrão
-
-            let errorMessageElement = input.nextElementSibling;
-            if (errorMessageElement && errorMessageElement.classList.contains('error-message')) {
-                errorMessageElement.classList.add('hidden');
-                errorMessageElement.textContent = ''; // Limpa a mensagem
-            }
-        }
-
-        // Validação genérica de campo
-        function validateField(input) {
-            console.log(`Validando campo: ${input.id || input.name}, Valor: "${input.value}"`);
-            const type = input.type;
-            const id = input.id;
-            let isValid = true;
-            let errorMessage = '';
-
-            // Verifica campos obrigatórios primeiro
-            if (input.hasAttribute('required') && input.value.trim() === '') {
-                isValid = false;
-                errorMessage = 'Este campo é obrigatório.';
+        // Validação específica para o Step 2 (confirmação de senha)
+        if (currentStep === 2) {
+            const senha = document.getElementById('senha');
+            const confSenha = document.getElementById('conf_senha');
+            if (senha.value !== confSenha.value) {
+                markInvalid(confSenha, 'As senhas não coincidem.');
+                invalidMessages.push('Confirmação de Senha: As senhas não coincidem.');
+                allValid = false;
+                if (!firstInvalidField) firstInvalidField = confSenha;
             } else {
-                // Validações específicas
-                if (id === 'email') {
-                    if (!validateEmail(input.value)) {
-                        isValid = false;
-                        errorMessage = 'Email inválido.';
-                    }
-                } else if (id === 'cpf') {
-                    isValid = validateCPF(input); // validateCPF já lida com a marcação
-                    if (!isValid) errorMessage = input.getAttribute('data-invalid');
-                } else if (id === 'telefone' || id === 'referencia_contato') {
-                    if (input.value.replace(/\D/g, '').length < 11) {
-                        isValid = false;
-                        errorMessage = 'Telefone inválido (mínimo 11 dígitos incluindo DDD).';
-                    }
-                } else if (id === 'senha' || id === 'conf_senha') {
-                    isValid = validatePassword(input); // validatePassword já lida com a marcação
-                    if (!isValid) errorMessage = input.getAttribute('data-invalid');
-                } else if (id === 'placa_veiculo') {
-                    isValid = validatePlaca(input); // validatePlaca já lida com a marcação
-                    if (!isValid) errorMessage = input.getAttribute('data-invalid');
-                } else if (type === 'file') {
-                    if (input.hasAttribute('required') && input.files.length === 0) {
-                        isValid = false;
-                        errorMessage = 'Por favor, anexe o arquivo.';
-                    }
-                } else if (type === 'number') {
-                    if (input.hasAttribute('required') && input.value.trim() === '') {
-                        isValid = false;
-                        errorMessage = 'Este campo é obrigatório.';
-                    } else if (input.min && parseFloat(input.value) < parseFloat(input.min)) {
-                        isValid = false;
-                        errorMessage = `O valor mínimo é ${input.min}.`;
-                    }
-                } else if (input.tagName === 'SELECT' && input.value === '') {
-                    isValid = false;
-                    errorMessage = 'Por favor, selecione uma opção.';
-                }
+                markValid(confSenha);
             }
-
-            if (isValid) {
-                markValid(input);
-            } else {
-                markInvalid(input, errorMessage);
-            }
-            console.log(`Campo ${input.id || input.name} é válido: ${isValid}`);
-            return isValid;
         }
 
-        // Validação da etapa atual antes de prosseguir
-        function validateCurrentStep() {
-            console.log(`--- Validando Etapa ${currentStep} ---`);
-            const currentStepElement = document.getElementById(`step-${currentStep}`);
-            // Seleciona todos os campos que podem ser obrigatórios nesta etapa
-            const inputs = currentStepElement.querySelectorAll('[required], .uber-obrigatorio, .autonomo-obrigatorio, .assalariado-obrigatorio');
-            let allValid = true;
-            let firstInvalidField = null;
-            let invalidMessages = [];
 
-            const ramoSelect = document.getElementById('ramo');
-            const selectedRamo = ramoSelect ? ramoSelect.value : '';
-
-            inputs.forEach(input => {
-                // Lógica condicional para campos obrigatórios baseada no ramo
-                const isUberField = input.classList.contains('uber-obrigatorio');
-                const isAutonomoField = input.classList.contains('autonomo-obrigatorio');
-                const isAssalariadoField = input.classList.contains('assalariado-obrigatorio');
-
-                let shouldValidate = true;
-
-                if (isUberField && selectedRamo !== 'uber') {
-                    shouldValidate = false;
-                } else if (isAutonomoField && selectedRamo !== 'autonomo') {
-                    shouldValidate = false;
-                } else if (isAssalariadoField && selectedRamo !== 'assalariado') {
-                    shouldValidate = false;
-                }
-
-                if (!shouldValidate) {
-                    markValid(input); // Garante que campos não obrigatórios sejam marcados como válidos
-                    console.log(`Pulando validação para (ramo diferente): ${input.id || input.name}`);
-                    return; // Pula a validação para este campo
-                }
-
-                const isValidField = validateField(input);
-                if (!isValidField) {
-                    allValid = false;
-                    const message = input.getAttribute('data-invalid') || 'Campo inválido ou vazio.';
-                    let fieldName = input.previousElementSibling ? input.previousElementSibling.textContent.replace(':', '').trim() : input.placeholder || input.id || input.name;
-                    invalidMessages.push(`${fieldName}: ${message}`);
-                    if (!firstInvalidField) {
-                        firstInvalidField = input;
-                    }
+        if (!allValid) {
+            let errorMessageHTML = invalidMessages.map(msg => `<li>${msg}</li>`).join('');
+            Swal.fire({
+                icon: 'error',
+                title: 'Erro de Validação!',
+                html: `Por favor, corrija os seguintes campos antes de prosseguir:<ul class="text-left mt-2">${errorMessageHTML}</ul>`,
+                confirmButtonText: 'Ok',
+                customClass: {
+                    popup: 'swal2-responsive-popup'
                 }
             });
-
-            // Validação específica para o Step 1 (duplicidade de nome e telefone)
-            if (currentStep === 1) {
-                const nomeInput = document.getElementById('nome');
-                const telefoneInput = document.getElementById('telefone');
+            if (firstInvalidField) {
+                firstInvalidField.focus(); // Foca no primeiro campo inválido
             }
-
-            // Validação específica para o Step 2 (confirmação de senha)
-            if (currentStep === 2) {
-                const senha = document.getElementById('senha');
-                const confSenha = document.getElementById('conf_senha');
-                if (senha.value !== confSenha.value) {
-                    markInvalid(confSenha, 'As senhas não coincidem.');
-                    invalidMessages.push('Confirmação de Senha: As senhas não coincidem.');
-                    allValid = false;
-                    if (!firstInvalidField) firstInvalidField = confSenha;
-                } else {
-                    markValid(confSenha);
-                }
-            }
-
-
-            if (!allValid) {
-                let errorMessageHTML = invalidMessages.map(msg => `<li>${msg}</li>`).join('');
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Erro de Validação!',
-                    html: `Por favor, corrija os seguintes campos antes de prosseguir:<ul class="text-left mt-2">${errorMessageHTML}</ul>`,
-                    confirmButtonText: 'Ok',
-                    customClass: {
-                        popup: 'swal2-responsive-popup'
-                    }
-                });
-                if (firstInvalidField) {
-                    firstInvalidField.focus(); // Foca no primeiro campo inválido
-                }
-                console.log("Validação falhou para a etapa atual. Campos inválidos:", invalidMessages);
-                return false;
-            }
-            console.log("Validação bem-sucedida para a etapa atual.");
-            return true;
+            console.log("Validação falhou para a etapa atual. Campos inválidos:", invalidMessages);
+            return false;
         }
+        console.log("Validação bem-sucedida para a etapa atual.");
+        return true;
+    }
 
 
-        // --- NAVEGAÇÃO ENTRE ETAPAS ---
-        function showStep(stepNumber) {
-            document.querySelectorAll('.form-step').forEach((step, index) => {
-                if (index + 1 === stepNumber) {
-                    step.classList.remove('hidden');
-                    // Animação GSAP para mostrar a etapa
-                    gsap.fromTo(step, { opacity: 0, y: 50 }, { opacity: 1, y: 0, duration: 0.5, ease: "power2.out" });
-                } else {
-                    step.classList.add('hidden');
-                }
-            });
-            // Garante o estado correto dos campos específicos do ramo ao mostrar a etapa 5
-            if (stepNumber === 5) {
-                handleRamoChange(); // Isso vai esconder/mostrar os campos corretos e setar/remover 'required'
-                handleStatusVeiculoChange(); // Garante que o campo de aluguel esteja correto
+    // --- NAVEGAÇÃO ENTRE ETAPAS ---
+    function showStep(stepNumber) {
+        document.querySelectorAll('.form-step').forEach((step, index) => {
+            if (index + 1 === stepNumber) {
+                step.classList.remove('hidden');
+                // Animação GSAP para mostrar a etapa
+                gsap.fromTo(step, { opacity: 0, y: 50 }, { opacity: 1, y: 0, duration: 0.5, ease: "power2.out" });
+            } else {
+                step.classList.add('hidden');
             }
+        });
+        // Garante o estado correto dos campos específicos do ramo ao mostrar a etapa 5
+        if (stepNumber === 5) {
+            handleRamoChange();
+            handleStatusVeiculoChange();
         }
+    }
 
-        function nextStep() {
-            if (validateCurrentStep()) {
-                if (currentStep < totalSteps) {
-                    currentStep++;
-                    showStep(currentStep);
-                }
-            }
-        }
-
-        function prevStep() {
-            if (currentStep > 1) {
-                currentStep--;
+    function nextStep() {
+        if (validateCurrentStep()) {
+            if (currentStep < totalSteps) {
+                currentStep++;
                 showStep(currentStep);
             }
         }
+    }
 
-        // --- FUNÇÕES DE MANIPULAÇÃO DE IMAGEM ---
-        function carregarImg() {
-            var file = document.getElementById('foto_usuario').files[0];
-            var img = document.getElementById('foto');
-            if (file) {
-                var reader = new FileReader();
-                reader.onload = function(e) {
-                    img.src = e.target.result;
-                };
-                reader.readAsDataURL(file);
-            } else {
-                img.src = "https://placehold.co/96x96/cccccc/333333?text=Foto";
-            }
+    function prevStep() {
+        if (currentStep > 1) {
+            currentStep--;
+            showStep(currentStep);
         }
+    }
 
-        function carregarImgComprovanteEndereco() {
-            var file = document.getElementById('comprovante_endereco').files[0];
-            var img = document.getElementById('target-comprovante-endereco');
-            if (file && file.type.startsWith('image/')) {
-                var reader = new FileReader();
-                reader.onload = function(e) {
-                    img.src = e.target.result;
-                };
-                reader.readAsDataURL(file);
-            } else {
-                img.src = "https://placehold.co/80x80/cccccc/333333?text=Endereço";
-            }
+    // --- FUNÇÕES DE MANIPULAÇÃO DE IMAGEM ---
+    function carregarImg() {
+        var file = document.getElementById('foto_usuario').files[0];
+        var img = document.getElementById('foto');
+        if (file) {
+            var reader = new FileReader();
+            reader.onload = function(e) {
+                img.src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+        } else {
+            img.src = "https://placehold.co/96x96/cccccc/333333?text=Foto";
         }
+    }
 
-        function carregarImgComprovanteRG() {
-            var file = document.getElementById('comprovante_rg').files[0];
-            var img = document.getElementById('target-comprovante-rg');
-            if (file && file.type.startsWith('image/')) {
-                var reader = new FileReader();
-                reader.onload = function(e) {
-                    img.src = e.target.result;
-                };
-                reader.readAsDataURL(file);
-            } else {
-                img.src = "https://placehold.co/80x80/cccccc/333333?text=CNH/RG";
-            }
+    function carregarImgComprovanteEndereco() {
+        var file = document.getElementById('comprovante_endereco').files[0];
+        var img = document.getElementById('target-comprovante-endereco');
+        if (file && file.type.startsWith('image/')) {
+            var reader = new FileReader();
+            reader.onload = function(e) {
+                img.src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+        } else {
+            img.src = "https://placehold.co/80x80/cccccc/333333?text=Endereço";
         }
+    }
 
-        // Function to load Print Perfil App preview
-        function carregarImgPrintPerfil() {
-            const file = document.getElementById('print_perfil_app').files[0];
-            const img = document.getElementById('target-print-perfil-app');
-            if (file && file.type.startsWith('image/')) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    img.src = e.target.result;
-                };
-                reader.readAsDataURL(file);
-            } else {
-                img.src = "https://placehold.co/80x80/cccccc/333333?text=Perfil";
-            }
+    function carregarImgComprovanteRG() {
+        var file = document.getElementById('comprovante_rg').files[0];
+        var img = document.getElementById('target-comprovante-rg');
+        if (file && file.type.startsWith('image/')) {
+            var reader = new FileReader();
+            reader.onload = function(e) {
+                img.src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+        } else {
+            img.src = "https://placehold.co/80x80/cccccc/333333?text=CNH/RG";
         }
+    }
 
-        // Function to load Print Veiculo App preview
-        function carregarImgPrintVeiculo() {
-            const file = document.getElementById('print_veiculo_app').files[0];
-            const img = document.getElementById('target-print-veiculo-app');
-            if (file && file.type.startsWith('image/')) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    img.src = e.target.result;
-                };
-                reader.readAsDataURL(file);
-            } else {
-                img.src = "https://placehold.co/80x80/cccccc/333333?text=Veículo";
-            }
+    // Function to load Print Perfil App preview
+    function carregarImgPrintPerfil() {
+        const file = document.getElementById('print_perfil_app').files[0];
+        const img = document.getElementById('target-print-perfil-app');
+        if (file && file.type.startsWith('image/')) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                img.src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+        } else {
+            img.src = "https://placehold.co/80x80/cccccc/333333?text=Perfil";
         }
+    }
 
-        // Function to load Print Ganhos Hoje preview
-        function carregarImgPrintGanhosHoje() {
-            const file = document.getElementById('print_ganhos_hoje').files[0];
-            const img = document.getElementById('target-print-ganhos-hoje');
-            if (file && file.type.startsWith('image/')) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    img.src = e.target.result;
-                };
-                reader.readAsDataURL(file);
-            } else {
-                img.src = "https://placehold.co/80x80/cccccc/333333?text=GanhosSemana";
-            }
+    // Function to load Print Veiculo App preview
+    function carregarImgPrintVeiculo() {
+        const file = document.getElementById('print_veiculo_app').files[0];
+        const img = document.getElementById('target-print-veiculo-app');
+        if (file && file.type.startsWith('image/')) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                img.src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+        } else {
+            img.src = "https://placehold.co/80x80/cccccc/333333?text=Veículo";
         }
+    }
 
-        // Function to load Print Ganhos 30 Dias preview
-        function carregarImgPrintGanhos30Dias() {
-            const file = document.getElementById('print_ganhos_30dias').files[0];
-            const img = document.getElementById('target-print-ganhos-30dias');
-            if (file && file.type.startsWith('image/')) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    img.src = e.target.result;
-                };
-                reader.readAsDataURL(file);
-            } else {
-                img.src = "https://placehold.co/80x80/cccccc/333333?text=Ganhos30D";
-            }
+    // Function to load Print Ganhos Hoje preview
+    function carregarImgPrintGanhosHoje() {
+        const file = document.getElementById('print_ganhos_hoje').files[0];
+        const img = document.getElementById('target-print-ganhos-hoje');
+        if (file && file.type.startsWith('image/')) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                img.src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+        } else {
+            img.src = "https://placehold.co/80x80/cccccc/333333?text=GanhosSemana";
         }
+    }
 
-        // NEW: Function to load Extrato 90 Dias preview
-        function carregarImgExtrato90Dias() {
-            const file = document.getElementById('extrato_90dias').files[0];
-            const img = document.getElementById('target-extrato-90dias');
-            if (file && file.type.startsWith('image/')) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    img.src = e.target.result;
-                };
-                reader.readAsDataURL(file);
-            } else {
-                img.src = "https://placehold.co/80x80/cccccc/333333?text=Extrato";
-            }
+    // Function to load Print Ganhos 30 Dias preview
+    function carregarImgPrintGanhos30Dias() {
+        const file = document.getElementById('print_ganhos_30dias').files[0];
+        const img = document.getElementById('target-print-ganhos-30dias');
+        if (file && file.type.startsWith('image/')) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                img.src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+        } else {
+            img.src = "https://placehold.co/80x80/cccccc/333333?text=Ganhos30D";
         }
+    }
 
-        // NEW: Function to load Contracheque preview
-        function carregarImgContracheque() {
-            const file = document.getElementById('contracheque').files[0];
-            const img = document.getElementById('target-contracheque');
-            if (file && file.type.startsWith('image/')) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    img.src = e.target.result;
-                };
-                reader.readAsDataURL(file);
-            } else {
-                img.src = "https://placehold.co/80x80/cccccc/333333?text=Cheque";
-            }
+    // NEW: Function to load Extrato 90 Dias preview
+    function carregarImgExtrato90Dias() {
+        const file = document.getElementById('extrato_90dias').files[0];
+        const img = document.getElementById('target-extrato-90dias');
+        if (file && file.type.startsWith('image/')) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                img.src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+        } else {
+            img.src = "https://placehold.co/80x80/cccccc/333333?text=Extrato";
         }
+    }
 
-        // --- FUNÇÃO DE PESQUISA DE CEP ---
-        function pesquisacep(valor) {
-            var cep = valor.replace(/\D/g, '');
+    // NEW: Function to load Contracheque preview
+    function carregarImgContracheque() {
+        const file = document.getElementById('contracheque').files[0];
+        const img = document.getElementById('target-contracheque');
+        if (file && file.type.startsWith('image/')) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                img.src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+        } else {
+            img.src = "https://placehold.co/80x80/cccccc/333333?text=Cheque";
+        }
+    }
 
-            if (cep != "") {
-                var validacep = /^[0-9]{8}$/;
+    // --- FUNÇÃO DE PESQUISA DE CEP ---
+    function pesquisacep(valor) {
+        var cep = valor.replace(/\D/g, '');
 
-                if (validacep.test(cep)) {
-                    document.getElementById('endereco').value = "...";
-                    document.getElementById('bairro').value = "...";
-                    document.getElementById('cidade').value = "...";
-                    document.getElementById('estado').value = "...";
+        if (cep != "") {
+            var validacep = /^[0-9]{8}$/;
 
-                    var script = document.createElement('script');
-                    script.src = 'https://viacep.com.br/ws/' + cep + '/json/?callback=callbackMeuCep';
-                    document.head.appendChild(script);
+            if (validacep.test(cep)) {
+                document.getElementById('endereco').value = "...";
+                document.getElementById('bairro').value = "...";
+                document.getElementById('cidade').value = "...";
+                document.getElementById('estado').value = "...";
 
-                } else {
-                    markInvalid(document.getElementById('cep'), 'Formato de CEP inválido.');
-                    limpa_formulário_cep();
-                }
+                var script = document.createElement('script');
+                script.src = 'https://viacep.com.br/ws/' + cep + '/json/?callback=callbackMeuCep';
+                document.head.appendChild(script);
+
             } else {
-                markValid(document.getElementById('cep'));
+                markInvalid(document.getElementById('cep'), 'Formato de CEP inválido.');
                 limpa_formulário_cep();
             }
+        } else {
+            markValid(document.getElementById('cep'));
+            limpa_formulário_cep();
         }
+    }
 
-        function limpa_formulário_cep() {
-            document.getElementById('endereco').value = "";
-            document.getElementById('bairro').value = "";
-            document.getElementById('cidade').value = "";
-            document.getElementById('estado').value = "";
+    function limpa_formulário_cep() {
+        document.getElementById('endereco').value = "";
+        document.getElementById('bairro').value = "";
+        document.getElementById('cidade').value = "";
+        document.getElementById('estado').value = "";
+        markValid(document.getElementById('endereco'));
+        markValid(document.getElementById('bairro'));
+        markValid(document.getElementById('cidade'));
+        markValid(document.getElementById('estado'));
+    }
+
+    function callbackMeuCep(conteudo) {
+        if (!("erro" in conteudo)) {
+            document.getElementById('endereco').value = (conteudo.logradouro);
+            document.getElementById('bairro').value = (conteudo.bairro);
+            document.getElementById('cidade').value = (conteudo.localidade);
+            document.getElementById('estado').value = (conteudo.uf);
+            markValid(document.getElementById('cep'));
             markValid(document.getElementById('endereco'));
             markValid(document.getElementById('bairro'));
             markValid(document.getElementById('cidade'));
             markValid(document.getElementById('estado'));
+        } else {
+            markInvalid(document.getElementById('cep'), 'CEP não encontrado.');
+            limpa_formulário_cep();
         }
+    }
 
-        function callbackMeuCep(conteudo) {
-            if (!("erro" in conteudo)) {
-                document.getElementById('endereco').value = (conteudo.logradouro);
-                document.getElementById('bairro').value = (conteudo.bairro);
-                document.getElementById('cidade').value = (conteudo.localidade);
-                document.getElementById('estado').value = (conteudo.uf);
-                markValid(document.getElementById('cep'));
-                markValid(document.getElementById('endereco'));
-                markValid(document.getElementById('bairro'));
-                markValid(document.getElementById('cidade'));
-                markValid(document.getElementById('estado'));
-            } else {
-                markInvalid(document.getElementById('cep'), 'CEP não encontrado.');
-                limpa_formulário_cep();
+    // --- LÓGICA CONDICIONAL PARA CAMPOS DE RAMO DE ATUAÇÃO ---
+    function handleRamoChange() {
+        const ramoSelect = document.getElementById('ramo');
+        const selectedRamo = ramoSelect.value;
+
+        const veiculoCampos = document.getElementById('veiculo-campos');
+        const autonomoCampos = document.getElementById('autonomo-campos');
+        const assalariadoCampos = document.getElementById('assalariado-campos');
+
+        // Seleciona todos os campos que podem ser condicionalmente obrigatórios
+        const allConditionalInputs = document.querySelectorAll('.uber-obrigatorio, .autonomo-obrigatorio, .assalariado-obrigatorio');
+
+        // Esconde todos os blocos e remove 'required' de todos os campos condicionais
+        veiculoCampos.classList.add('hidden');
+        autonomoCampos.classList.add('hidden');
+        assalariadoCampos.classList.add('hidden');
+
+        allConditionalInputs.forEach(input => {
+            input.removeAttribute('required');
+            input.value = ''; // Limpa o valor
+            if (input.type === 'file') {
+                // Reseta as pré-visualizações de imagem para os placeholders
+                if (input.id === 'print_perfil_app') document.getElementById('target-print-perfil-app').src = "https://placehold.co/80x80/cccccc/333333?text=Perfil";
+                if (input.id === 'print_veiculo_app') document.getElementById('target-print-veiculo-app').src = "https://placehold.co/80x80/cccccc/333333?text=Veículo";
+                if (input.id === 'print_ganhos_hoje') document.getElementById('target-print-ganhos-hoje').src = "https://placehold.co/80x80/cccccc/333333?text=GanhosSemana";
+                if (input.id === 'print_ganhos_30dias') document.getElementById('target-print-ganhos-30dias').src = "https://placehold.co/80x80/cccccc/333333?text=Ganhos30D";
+                if (input.id === 'extrato_90dias') document.getElementById('target-extrato-90dias').src = "https://placehold.co/80x80/cccccc/333333?text=Extrato";
+                if (input.id === 'contracheque') document.getElementById('target-contracheque').src = "https://placehold.co/80x80/cccccc/333333?text=Cheque";
             }
-        }
+            markValid(input); // Marca como válido
+        });
 
-        // --- LÓGICA CONDICIONAL PARA CAMPOS DE RAMO DE ATUAÇÃO ---
-        function handleRamoChange() {
-            const ramoSelect = document.getElementById('ramo');
-            const selectedRamo = ramoSelect.value;
-
-            const veiculoCampos = document.getElementById('veiculo-campos');
-            const autonomoCampos = document.getElementById('autonomo-campos');
-            const assalariadoCampos = document.getElementById('assalariado-campos');
-
-            // Seleciona todos os campos que podem ser condicionalmente obrigatórios
-            const allConditionalInputs = document.querySelectorAll('.uber-obrigatorio, .autonomo-obrigatorio, .assalariado-obrigatorio');
-
-            // Esconde todos os blocos e remove 'required' de todos os campos condicionais
-            veiculoCampos.classList.add('hidden');
-            autonomoCampos.classList.add('hidden');
-            assalariadoCampos.classList.add('hidden');
-
-            allConditionalInputs.forEach(input => {
-                input.removeAttribute('required');
-                input.value = ''; // Limpa o valor
-                if (input.type === 'file') {
-                    // Reseta as pré-visualizações de imagem para os placeholders
-                    if (input.id === 'print_perfil_app') document.getElementById('target-print-perfil-app').src = "https://placehold.co/80x80/cccccc/333333?text=Perfil";
-                    if (input.id === 'print_veiculo_app') document.getElementById('target-print-veiculo-app').src = "https://placehold.co/80x80/cccccc/333333?text=Veículo";
-                    if (input.id === 'print_ganhos_hoje') document.getElementById('target-print-ganhos-hoje').src = "https://placehold.co/80x80/cccccc/333333?text=GanhosSemana";
-                    if (input.id === 'print_ganhos_30dias') document.getElementById('target-print-ganhos-30dias').src = "https://placehold.co/80x80/cccccc/333333?text=Ganhos30D";
-                    if (input.id === 'extrato_90dias') document.getElementById('target-extrato-90dias').src = "https://placehold.co/80x80/cccccc/333333?text=Extrato";
-                    if (input.id === 'contracheque') document.getElementById('target-contracheque').src = "https://placehold.co/80x80/cccccc/333333?text=Cheque";
-                }
-                markValid(input); // Marca como válido
+        // Mostra o bloco correto e define 'required' para seus campos
+        if (selectedRamo === 'uber') {
+            veiculoCampos.classList.remove('hidden');
+            veiculoCampos.querySelectorAll('.uber-obrigatorio').forEach(input => {
+                input.setAttribute('required', 'required');
+                validateField(input);
             });
-
-            // Mostra o bloco correto e define 'required' para seus campos
-            if (selectedRamo === 'uber') {
-                veiculoCampos.classList.remove('hidden');
-                veiculoCampos.querySelectorAll('.uber-obrigatorio').forEach(input => {
-                    input.setAttribute('required', 'required');
-                    validateField(input);
-                });
-                handleStatusVeiculoChange(); // Garante que o campo de aluguel esteja correto
-            } else if (selectedRamo === 'autonomo') {
-                autonomoCampos.classList.remove('hidden');
-                autonomoCampos.querySelectorAll('.autonomo-obrigatorio').forEach(input => {
-                    input.setAttribute('required', 'required');
-                    validateField(input);
-                });
-            } else if (selectedRamo === 'assalariado') {
-                assalariadoCampos.classList.remove('hidden');
-                assalariadoCampos.querySelectorAll('.assalariado-obrigatorio').forEach(input => {
-                    input.setAttribute('required', 'required');
-                    validateField(input);
-                });
-            }
+            handleStatusVeiculoChange(); // Garante que o campo de aluguel esteja correto
+        } else if (selectedRamo === 'autonomo') {
+            autonomoCampos.classList.remove('hidden');
+            autonomoCampos.querySelectorAll('.autonomo-obrigatorio').forEach(input => {
+                input.setAttribute('required', 'required');
+                validateField(input);
+            });
+        } else if (selectedRamo === 'assalariado') {
+            assalariadoCampos.classList.remove('hidden');
+            assalariadoCampos.querySelectorAll('.assalariado-obrigatorio').forEach(input => {
+                input.setAttribute('required', 'required');
+                validateField(input);
+            });
         }
+    }
 
-        function handleStatusVeiculoChange() {
-            const statusVeiculoSelect = document.getElementById('status_veiculo');
-            const valorAluguelInput = document.getElementById('valor_aluguel');
-            const valorAluguelDiv = valorAluguelInput.closest('div');
+    function handleStatusVeiculoChange() {
+        const statusVeiculoSelect = document.getElementById('status_veiculo');
+        const valorAluguelInput = document.getElementById('valor_aluguel');
+        const valorAluguelDiv = valorAluguelInput.closest('div');
 
-            if (statusVeiculoSelect && statusVeiculoSelect.value === 'alugado') {
-                valorAluguelDiv.style.display = 'block';
-                valorAluguelInput.setAttribute('required', 'required');
-            } else {
-                valorAluguelDiv.style.display = 'none';
-                valorAluguelInput.removeAttribute('required');
-                valorAluguelInput.value = '';
-                markValid(valorAluguelInput);
-            }
+        if (statusVeiculoSelect && statusVeiculoSelect.value === 'alugado') {
+            valorAluguelDiv.style.display = 'block';
+            valorAluguelInput.setAttribute('required', 'required');
+        } else {
+            valorAluguelDiv.style.display = 'none';
+            valorAluguelInput.removeAttribute('required');
+            valorAluguelInput.value = '';
+            markValid(valorAluguelInput);
         }
+    }
 
-        // --- TOGGLE VISIBILIDADE DA SENHA ---
-        function togglePasswordVisibility(fieldId, buttonId) {
-            const passwordField = document.getElementById(fieldId);
-            const toggleButton = document.getElementById(buttonId);
+    // --- TOGGLE VISIBILIDADE DA SENHA ---
+    function togglePasswordVisibility(fieldId, buttonId) {
+        const passwordField = document.getElementById(fieldId);
+        const toggleButton = document.getElementById(buttonId);
 
-            if (passwordField.type === 'password') {
-                passwordField.type = 'text';
-                toggleButton.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 text-gray-500"><path stroke-linecap="round" stroke-linejoin="round" d="M3.988 5.862a1.01 1.01 0 0 0 .6-.967V4.774A.75.75 0 0 1 5.373 4h13.254a.75.75 0 0 1 .715.774v.121a1.01 1.01 0 0 0 .6.967l1.353.451c.328.109.52.433.52.779V9.5a2.25 2.25 0 0 1-2.25 2.25h-5.467A.75.75 0 0 0 12 12.75h-.008a.75.75 0 0 0-.75.75v.375c0 .414-.336.75-.75.75H10.5a.75.75 0 0 1-.75-.75v-.375a.75.75 0 0 0-.75-.75h-.008a.75.75 0 0 0-.75.75v.375c0 .414-.336.75-.75.75H6.75A2.25 2.25 0 0 1 4.5 9.5V7.162c0-.346.192-.67.52-.779l1.353-.451Zm-.611 11.233a1.01 1.01 0 0 0 .6-.967V17.274A.75.75 0 0 1 5.373 16h13.254a.75.75 0 0 1 .715.774v.121a1.01 1.01 0 0 0 .6.967l1.353.451c.328.109.52.433.52.779V21.5a2.25 2.25 0 0 1-2.25 2.25H4.5A2.25 2.25 0 0 1 2.25 21.5v-2.338c0-.346.192-.67.52-.779l1.353-.451Z" /><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" /></svg>`;
-            } else {
-                passwordField.type = 'password';
-                toggleButton.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 text-gray-500"><path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" /><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" /></svg>`;
-            }
+        if (passwordField.type === 'password') {
+            passwordField.type = 'text';
+            toggleButton.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 text-gray-500"><path stroke-linecap="round" stroke-linejoin="round" d="M3.988 5.862a1.01 1.01 0 0 0 .6-.967V4.774A.75.75 0 0 1 5.373 4h13.254a.75.75 0 0 1 .715.774v.121a1.01 1.01 0 0 0 .6.967l1.353.451c.328.109.52.433.52.779V9.5a2.25 2.25 0 0 1-2.25 2.25h-5.467A.75.75 0 0 0 12 12.75h-.008a.75.75 0 0 0-.75.75v.375c0 .414-.336.75-.75.75H10.5a.75.75 0 0 1-.75-.75v-.375a.75.75 0 0 0-.75-.75h-.008a.75.75 0 0 0-.75.75v.375c0 .414-.336.75-.75.75H6.75A2.25 2.25 0 0 1 4.5 9.5V7.162c0-.346.192-.67.52-.779l1.353-.451Zm-.611 11.233a1.01 1.01 0 0 0 .6-.967V17.274A.75.75 0 0 1 5.373 16h13.254a.75.75 0 0 1 .715.774v.121a1.01 1.01 0 0 0 .6.967l1.353.451c.328.109.52.433.52.779V21.5a2.25 2.25 0 0 1-2.25 2.25H4.5A2.25 2.25 0 0 1 2.25 21.5v-2.338c0-.346.192-.67.52-.779l1.353-.451Z" /><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" /></svg>`;
+        } else {
+            passwordField.type = 'password';
+            toggleButton.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 text-gray-500"><path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" /><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" /></svg>`;
         }
+    }
 
 // --- SUBMISSÃO DO FORMULÁRIO (AJAX) ---
 $('#form').submit(function(event) {
@@ -1520,7 +1578,6 @@ $('#form').submit(function(event) {
         }
     });
 });
-
-    </script>
+</script>
 </body>
 </html>
