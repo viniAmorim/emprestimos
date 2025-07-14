@@ -470,7 +470,7 @@
                     <h2 class="text-xl font-bold mb-4">1. Dados Pessoais</h2>
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-3">
                         <div>
-                            <label class="block text-sm font-medium text-white">Nome</label>
+                            <label class="block text-sm font-medium text-white">Nome completo</label>
                             <input type="text" id="nome" name="nome" placeholder="Nome completo" class="form-input w-full" required onblur="validateField(this)">
                         </div>
                         <div>
@@ -478,7 +478,7 @@
                             <input type="email" id="email" name="email" placeholder="Email" class="form-input w-full" required onblur="validateField(this)">
                         </div>
                         <div>
-                            <label class="block text-sm font-medium text-white">Telefone</label>
+                            <label class="block text-sm font-medium text-white">Celular(Whatsapp)</label>
                             <input type="text" name="telefone" id="telefone" placeholder="Telefone" class="form-input w-full" required onblur="validateField(this)">
                         </div>
                     </div>
@@ -515,7 +515,7 @@
 
                         <div class="flex items-start gap-4">
                             <div class="flex-1">
-                                <label class="block text-sm font-medium text-white">Comprovante CNG ou RG</label>
+                                <label class="block text-sm font-medium text-white">CNG ou RG</label>
                                 <input type="file" id="comprovante_rg" name="comprovante_rg" onchange="carregarImgComprovanteRG(); validateField(this)" accept=".jpg,.jpeg,.png" class="form-input w-full" required>
                             </div>
                             <div class="w-20 h-20 border border-gray-300 rounded overflow-hidden bg-white">
@@ -525,7 +525,7 @@
                     </div>
 
                     <div class="text-sm text-gray-300 mt-4 text-right">
-                        <p>O comprovante de endereço deve ser em sua titularidade (água ou energia) com emissão de no máximo 60 dias </p>
+                        <p>Talão de água ou energia com emissão de no máximo 60 dias </p>
                     </div>
 
                     <div class="pt-4 text-right">
@@ -661,7 +661,7 @@
                 </div>
 
                 <div class="form-step hidden" id="step-4">
-                    <h2 class="text-xl font-bold mb-4">4. Referência</h2>
+                    <h2 class="text-xl font-bold mb-4">4. Referência(parente de primeiro grau)</h2>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
                             <label class="block text-sm font-medium text-white">Contato de referência</label>
