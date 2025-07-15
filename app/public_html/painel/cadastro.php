@@ -14,6 +14,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
@@ -456,6 +457,19 @@
             border-color: red !important;
             box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.25) !important; /* Mais suave */
         }
+        .btn-camera {
+          background-color:#92b2d9;
+          color: white;
+          padding: 0.75rem 1.5rem;
+          border-radius: 0.5rem; 
+          font-weight: 500;
+          transition: background-color 0.2s ease-in-out;
+          cursor: pointer;
+          border: none; 
+        }
+        .btn-camera:hover {
+            background-color: #5291dd; 
+        }
     </style>
 </head>
 <body class="font-poppins bg-gradient-to-br from-primary-dark to-primary text-white min-h-screen overflow-x-hidden">
@@ -563,18 +577,24 @@
                     </div>
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-4 items-start">
-                        <div>
-                            <label class="block text-sm font-medium text-white">Foto do Usuário</label>
-                            <input type="file" id="foto_usuario" name="foto_usuario" accept=".jpg,.jpeg,.png" onchange="carregarImg(); validateField(this)" class="form-input w-full" required>
-                        </div>
-                        <div class="w-24 h-24 border border-gray-300 rounded overflow-hidden bg-white">
-                            <img src="painel/images/comprovantes/sem-foto.png" id="foto" name="foto" class="object-cover w-full h-full">
-                        </div>
+                      <div>
+                          <label class="block text-sm font-medium text-white">Foto do Usuário</label>
+                          <!-- <button type="button" onclick="tirarFoto()" class="btn-primary w-full mb-2">Tirar Foto</button> -->
+                          <button type="button" onclick="tirarFoto()" class="btn-camera w-full mb-2 flex items-center justify-center space-x-2">
+                            <i class="fas fa-camera"></i> <span>Tirar Foto</span>
+                          </button>
+                          <video id="cameraPreview" autoplay style="width: 100%; max-width: 300px; display: none;"></video>
+                          <canvas id="photoCanvas" style="display: none;"></canvas>
+                          <input type="hidden" id="foto_usuario" name="foto_usuario" onchange="validateField(this)">
+                      </div>
+                      <div class="w-24 h-24 border border-gray-300 rounded overflow-hidden bg-white">
+                          <img src="painel/images/comprovantes/sem-foto.png" id="foto" name="foto" class="object-cover w-full h-full">
+                      </div>
                     </div>
 
                     <div class="pt-4 flex justify-between">
-                        <button type="button" class="btn-primary" onclick="prevStep()">Voltar</button>
-                        <button type="button" class="btn-primary" onclick="nextStep()">Próximo</button>
+                      <button type="button" class="btn-primary" onclick="prevStep()">Voltar</button>
+                      <button type="button" class="btn-primary" onclick="nextStep()">Próximo</button>
                     </div>
                 </div>
 
@@ -875,6 +895,54 @@
         </div>
     </div>
     <script>
+
+    let stream; 
+
+    async function tirarFoto() {
+        const cameraPreview = document.getElementById('cameraPreview');
+        const photoCanvas = document.getElementById('photoCanvas');
+        const photoDisplay = document.getElementById('foto');
+        const fotoUsuarioInput = document.getElementById('foto_usuario');
+
+        if (!stream) { // Se a câmera não estiver ativa, solicita acesso
+            try {
+                // Solicita acesso à câmera do usuário
+                stream = await navigator.mediaDevices.getUserMedia({ video: true });
+                cameraPreview.srcObject = stream;
+                cameraPreview.style.display = 'block'; // Mostra o vídeo da câmera
+            } catch (err) {
+                console.error("Erro ao acessar a câmera:", err);
+                alert("Não foi possível acessar a câmera. Verifique as permissões.");
+                return;
+            }
+        } else { // Se a câmera já estiver ativa, tira a foto
+            const context = photoCanvas.getContext('2d');
+            photoCanvas.width = cameraPreview.videoWidth;
+            photoCanvas.height = cameraPreview.videoHeight;
+            context.drawImage(cameraPreview, 0, 0, photoCanvas.width, photoCanvas.height);
+
+            // Converte a imagem do canvas para Base64
+            const imageDataUrl = photoCanvas.toDataURL('image/png');
+            
+            // Exibe a imagem capturada
+            photoDisplay.src = imageDataUrl;
+            
+            // Armazena a imagem Base64 no input hidden
+            fotoUsuarioInput.value = imageDataUrl;
+
+            // Opcional: Para a câmera após tirar a foto
+            if (stream) {
+                stream.getTracks().forEach(track => track.stop());
+                stream = null;
+                cameraPreview.srcObject = null;
+                cameraPreview.style.display = 'none'; // Esconde o vídeo da câmera
+            }
+
+            // Chama a função de validação, se houver
+            validateField(fotoUsuarioInput);
+        }
+    }
+
     let currentStep = 1;
     const totalSteps = 6;
 
@@ -1059,6 +1127,7 @@
     // Validação genérica de campo
     function validateField(input) {
         console.log(`Validando campo: ${input.id || input.name}, Valor: "${input.value}"`);
+        console.log("Campo validado:", input.id, input.value ? "Com valor" : "Sem valor");
         const type = input.type;
         const id = input.id;
         let isValid = true;

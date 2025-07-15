@@ -253,59 +253,144 @@ processUpload('print_ganhos_30dias', $print_ganhos_30dias, $comprovantes_dir, 'g
 processUpload('extrato_90dias', $extrato_90dias, $comprovantes_dir, 'extrato-90dias', $extensoes_imagens_pdf);
 processUpload('contracheque', $contracheque, $comprovantes_dir, 'contracheque', $extensoes_imagens_pdf);
 
-// O upload da foto do usuário usa uma lógica ligeiramente diferente para o diretório e qualidade
-if (isset($_FILES['foto_usuario']) && $_FILES['foto_usuario']['tmp_name'] != "") {
-    $nome_original_foto = $_FILES['foto_usuario']['name'];
-    $ext_foto = strtolower(pathinfo($nome_original_foto, PATHINFO_EXTENSION));
+// // O upload da foto do usuário usa uma lógica ligeiramente diferente para o diretório e qualidade
+// if (isset($_FILES['foto_usuario']) && $_FILES['foto_usuario']['tmp_name'] != "") {
+//     $nome_original_foto = $_FILES['foto_usuario']['name'];
+//     $ext_foto = strtolower(pathinfo($nome_original_foto, PATHINFO_EXTENSION));
 
-    if (!in_array($ext_foto, $extensoes_imagens_apenas)) { // Apenas imagens para foto de perfil
-        echo json_encode(['success' => false, 'message' => 'Extensão de imagem de usuário não permitida!']);
-        exit();
-    }
+//     if (!in_array($ext_foto, $extensoes_imagens_apenas)) { // Apenas imagens para foto de perfil
+//         echo json_encode(['success' => false, 'message' => 'Extensão de imagem de usuário não permitida!']);
+//         exit();
+//     }
 
-    $nome_img_foto = date('Y-m-d_H-i-s') . '.' . $ext_foto;
-    $caminho_foto = $clientes_dir . $nome_img_foto;
-    $imagem_temp_foto = $_FILES['foto_usuario']['tmp_name'];
+//     $nome_img_foto = date('Y-m-d_H-i-s') . '.' . $ext_foto;
+//     $caminho_foto = $clientes_dir . $nome_img_foto;
+//     $imagem_temp_foto = $_FILES['foto_usuario']['tmp_name'];
 
-    if ($foto != 'sem-foto.jpg' && file_exists($clientes_dir . $foto)) {
-        @unlink($clientes_dir . $foto);
-    }
-    $foto = $nome_img_foto;
+//     if ($foto != 'sem-foto.jpg' && file_exists($clientes_dir . $foto)) {
+//         @unlink($clientes_dir . $foto);
+//     }
+//     $foto = $nome_img_foto;
 
-    list($largura, $altura) = getimagesize($imagem_temp_foto);
+//     list($largura, $altura) = getimagesize($imagem_temp_foto);
 
-    if ($largura > 1400) {
-        $nova_largura = 1400;
-        $nova_altura = intval(($altura / $largura) * $nova_largura);
-        $image = imagecreatetruecolor($nova_largura, $nova_altura);
+//     if ($largura > 1400) {
+//         $nova_largura = 1400;
+//         $nova_altura = intval(($altura / $largura) * $nova_largura);
+//         $image = imagecreatetruecolor($nova_largura, $nova_altura);
 
-        $imagem_original = null;
-        switch ($ext_foto) {
-            case 'png':
-                $imagem_original = imagecreatefrompng($imagem_temp_foto);
-                imagealphablending($image, false);
-                imagesavealpha($image, true);
-                break;
-            case 'jpg':
-            case 'jpeg':
-                $imagem_original = imagecreatefromjpeg($imagem_temp_foto);
-                break;
-            case 'gif':
-                $imagem_original = imagecreatefromgif($imagem_temp_foto);
-                break;
-            case 'webp':
-                $imagem_original = imagecreatefromwebp($imagem_temp_foto);
-                break;
-        }
-        if ($imagem_original) {
-            imagecopyresampled($image, $imagem_original, 0, 0, 0, 0, $nova_largura, $nova_altura, $largura, $altura);
-            imagejpeg($image, $caminho_foto, 80); // Qualidade 80 para fotos de perfil
-            imagedestroy($imagem_original);
-            imagedestroy($image);
-        }
-    } else {
-        move_uploaded_file($imagem_temp_foto, $caminho_foto);
-    }
+//         $imagem_original = null;
+//         switch ($ext_foto) {
+//             case 'png':
+//                 $imagem_original = imagecreatefrompng($imagem_temp_foto);
+//                 imagealphablending($image, false);
+//                 imagesavealpha($image, true);
+//                 break;
+//             case 'jpg':
+//             case 'jpeg':
+//                 $imagem_original = imagecreatefromjpeg($imagem_temp_foto);
+//                 break;
+//             case 'gif':
+//                 $imagem_original = imagecreatefromgif($imagem_temp_foto);
+//                 break;
+//             case 'webp':
+//                 $imagem_original = imagecreatefromwebp($imagem_temp_foto);
+//                 break;
+//         }
+//         if ($imagem_original) {
+//             imagecopyresampled($image, $imagem_original, 0, 0, 0, 0, $nova_largura, $nova_altura, $largura, $altura);
+//             imagejpeg($image, $caminho_foto, 80); // Qualidade 80 para fotos de perfil
+//             imagedestroy($imagem_original);
+//             imagedestroy($image);
+//         }
+//     } else {
+//         move_uploaded_file($imagem_temp_foto, $caminho_foto);
+//     }
+// }
+
+// --- NOVA LÓGICA PARA PROCESSAR A FOTO DO USUÁRIO ENVIADA VIA BASE64 (CÂMERA) ---
+// Verifica se o campo 'foto_usuario' foi enviado via POST (contém a string Base64)
+if (isset($_POST['foto_usuario']) && !empty($_POST['foto_usuario'])) {
+  $imageData = $_POST['foto_usuario'];
+
+  // Verifica se a string Base64 tem o prefixo de dados
+  if (strpos($imageData, 'data:image/') === 0) {
+      // Extrai o tipo de imagem (ex: 'png', 'jpeg') e os dados Base64 puros
+      list($type, $imageData) = explode(';', $imageData);
+      list(, $imageData) = explode(',', $imageData);
+      
+      $ext_foto = str_replace('data:image/', '', $type); // Ex: 'png', 'jpeg'
+      // Garante que a extensão seja 'jpeg' se for 'jpg' (para padronização)
+      if ($ext_foto == 'jpg') $ext_foto = 'jpeg';
+
+      if (!in_array($ext_foto, ['png', 'jpeg', 'gif', 'webp'])) { // Apenas imagens para foto de perfil
+          echo json_encode(['success' => false, 'message' => 'Formato de imagem de usuário não permitido para foto da câmera!']);
+          exit();
+      }
+
+      $decodedImage = base64_decode($imageData);
+
+      if ($decodedImage === false) {
+          echo json_encode(['success' => false, 'message' => 'Erro ao decodificar a imagem Base64.']);
+          exit();
+      }
+
+      $nome_img_foto = date('Y-m-d_H-i-s') . '.' . $ext_foto;
+      $caminho_foto = $clientes_dir . $nome_img_foto;
+
+      // Exclui a foto antiga se existir e não for a padrão
+      if ($foto != 'sem-foto.jpg' && file_exists($clientes_dir . $foto)) {
+          @unlink($clientes_dir . $foto);
+      }
+      $foto = $nome_img_foto; // Atualiza a variável $foto com o novo nome
+
+      // Salva a imagem decodificada no caminho de destino
+      $salvo = file_put_contents($caminho_foto, $decodedImage);
+
+      if ($salvo === false) {
+          echo json_encode(['success' => false, 'message' => 'Erro ao salvar a imagem da câmera no servidor.']);
+          exit();
+      }
+
+      // Tenta otimizar a imagem após salvar
+      // Abre a imagem recém-salva para otimização, se necessário
+      list($largura, $altura) = getimagesize($caminho_foto);
+
+      if ($largura > 1400) {
+          $nova_largura = 1400;
+          $nova_altura = intval(($altura / $largura) * $nova_largura);
+          $image_resampled = imagecreatetruecolor($nova_largura, $nova_altura);
+
+          $imagem_original_from_file = null;
+          switch ($ext_foto) {
+              case 'png':
+                  $imagem_original_from_file = imagecreatefrompng($caminho_foto);
+                  imagealphablending($image_resampled, false);
+                  imagesavealpha($image_resampled, true);
+                  break;
+              case 'jpeg':
+                  $imagem_original_from_file = imagecreatefromjpeg($caminho_foto);
+                  break;
+              case 'gif':
+                  $imagem_original_from_file = imagecreatefromgif($caminho_foto);
+                  break;
+              case 'webp':
+                  $imagem_original_from_file = imagecreatefromwebp($caminho_foto);
+                  break;
+          }
+
+          if ($imagem_original_from_file) {
+              imagecopyresampled($image_resampled, $imagem_original_from_file, 0, 0, 0, 0, $nova_largura, $nova_altura, $largura, $altura);
+              imagejpeg($image_resampled, $caminho_foto, 80); // Qualidade 80 para fotos de perfil
+              imagedestroy($imagem_original_from_file);
+              imagedestroy($image_resampled);
+          }
+      }
+  } else {
+      // Se a string não tiver o formato esperado de Base64, pode ser um erro ou dados inválidos
+      // Opcional: logar para investigação
+      error_log("ALERTA: foto_usuario enviada, mas não é uma string Base64 válida: " . substr($imageData, 0, 50) . "...");
+  }
 }
 
 // --- Lógica Condicional para Dados do Ramo ---

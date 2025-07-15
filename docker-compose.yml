@@ -35,8 +35,6 @@ services:
       - docker.network
     volumes:
       - .:/var/www
-      # Monta o diretório para os certificados de app.ucredcredito.com do seu host.
-      # CERTIFIQUE-SE DE QUE ESTA PASTA E OS ARQUIVOS EXISTAM NO SEU HOST!
       #- ./docker/apache/ssl_certs_app:/etc/apache2/ssl_certs_app:ro
       - ${SSL_CERTS_PATH}:/etc/letsencrypt/live/app.ucredcredito.com/:ro
 
