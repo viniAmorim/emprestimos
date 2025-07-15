@@ -36,7 +36,8 @@ services:
     volumes:
       - .:/var/www
       #- ./docker/apache/ssl_certs_app:/etc/apache2/ssl_certs_app:ro
-      - ${SSL_CERTS_PATH}:/etc/letsencrypt/live/app.ucredcredito.com/:ro
+      #- ${SSL_CERTS_PATH}:/etc/letsencrypt/live/app.ucredcredito.com/:ro
+      - /etc/letsencrypt/live/app.ucredcredito.com/:/etc/letsencrypt/live/app.ucredcredito.com/:ro
 
   mysql:
     image: mysql:5.7

@@ -6,7 +6,7 @@ date_default_timezone_set('America/Sao_Paulo');
 //dados conexão bd local
 $servidor = 'mysql';
 $banco = 'emprestimos';
-$usuario = 'root';
+$usuario = 'emprestimos';
 $senha = 'ucred2025';
 
 $url_sistema = "https://$_SERVER[HTTP_HOST]/";
