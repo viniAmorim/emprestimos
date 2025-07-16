@@ -17,4 +17,4 @@
 /mysql-data
 
 # Ignorar chaves SSL privadas e certificados
-#docker/apache/ssl_certs_app/
+#docker/apache/ssl_certs_app/app/public_html/painel/images/*
