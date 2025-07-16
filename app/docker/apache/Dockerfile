@@ -7,7 +7,7 @@ RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 ENV APP_ROOT=/var/www/app
 ENV SERVER_NAME=app.ucredcredito.com
 ENV DOCUMENT_ROOT=${APP_ROOT}/public_html
-ENV APACHE_LOG_DIR=/var/log/apache2 
+ENV APACHE_LOG_DIR=/var/log/apache2
 ENV APACHE_RUN_GROUP=www-data
 ENV APACHE_RUN_USER=www-data
 
@@ -37,6 +37,10 @@ RUN mkdir -p /etc/apache2/ssl_certs_localhost \
         -out /etc/apache2/ssl_certs_localhost/server.crt \
         -subj "/CN=localhost" \
     && chmod 600 /etc/apache2/ssl_certs_localhost/server.key
+
+# --- Criação do diretório para certificados de desenvolvimento do app.ucredcredito.com ---
+# Este diretório será usado quando o volume externo não for montado (ambiente local)
+RUN mkdir -p /etc/apache2/ssl_certs_app
 
 # Copia os VirtualHosts customizados
 COPY app.ucredcredito.com.conf /etc/apache2/sites-available/app.ucredcredito.com.conf

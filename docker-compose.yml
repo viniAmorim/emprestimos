@@ -35,9 +35,18 @@ services:
       - docker.network
     volumes:
       - .:/var/www
+<<<<<<< Updated upstream
       #- ./docker/apache/ssl_certs_app:/etc/apache2/ssl_certs_app:ro
       #- ${SSL_CERTS_PATH}:/etc/letsencrypt/live/app.ucredcredito.com/:ro
       - /etc/letsencrypt/live/app.ucredcredito.com/:/etc/letsencrypt/live/app.ucredcredito.com/:ro
+=======
+      # O volume dos certificados será definido nos arquivos de override
+      # para o ambiente específico.
+      # Para o ambiente de desenvolvimento, o Dockerfile já prepara um diretório
+      # /etc/apache2/ssl_certs_app, e os certificados de desenvolvimento serão copiados
+      # para lá durante a build ou via volume, dependendo de como você preferir.
+      # Para produção, montaremos o Let's Encrypt diretamente.
+>>>>>>> Stashed changes
 
   mysql:
     image: mysql:5.7
@@ -55,8 +64,6 @@ services:
       - docker.network
     volumes:
       - ./mysql-data:/var/lib/mysql
-      #- "./docker/mysql/mysql.cnf:/etc/mysql/conf.d/custom.cnf:ro"
-      #- ./docker/apache/ssl_certs_app:/etc/apache2/ssl_certs_app:ro
     environment:
       MYSQL_DATABASE: ${MYSQL_DATABASE:-development}
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-root}
