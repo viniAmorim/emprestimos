@@ -1,0 +1,11 @@
+# docker-compose.override.yml
+version: "3.7"
+
+services:
+  apache:
+    volumes:
+      # Monta os certificados de desenvolvimento para app.ucredcredito.com
+      # no local que o app.ucredcredito.com.conf espera
+      - ${SSL_CERTS_PATH_DEV}:/etc/apache2/ssl_certs_app:ro
+      # Não é necessário montar os certificados Let's Encrypt aqui,
+      # pois estamos em desenvolvimento.

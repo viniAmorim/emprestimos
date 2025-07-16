@@ -1,0 +1,13 @@
+# docker-compose.prod.yml
+version: "3.7"
+
+services:
+  apache:
+    volumes:
+      # Monta os certificados do Let's Encrypt para app.ucredcredito.com
+      # no local que o app.ucredcredito.com.conf espera
+      # Note que este caminho está mapeando para /etc/letsencrypt/live/app.ucredcredito.com/
+      # dentro do container, mas o app.ucredcredito.com.conf está esperando em /etc/apache2/ssl_certs_app/.
+      # Precisamos ajustar isso.
+      # O correto seria montar o volume do Let's Encrypt diretamente no caminho usado pelo conf.
+      - ${SSL_CERTS_PATH_PROD}:/etc/apache2/ssl_certs_app:ro
