@@ -683,47 +683,53 @@
 
                 <div class="form-step hidden" id="step-4">
                     <h2 class="text-xl font-bold mb-4">4. Referência(parente de primeiro grau)</h2>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                         <div>
-                            <label class="block text-sm font-medium text-white">Contato de referência</label>
-                            <input type="text" name="referencia_contato" id="referencia_contato" class="form-input w-full" required onblur="validateField(this)">
+                          <label class="block text-sm font-medium text-white">Nome Completo</label>
+                          <input type="text" id="referencia_nome" name="referencia_nome" placeholder="Nome Completo" class="form-input w-full" required onblur="validateField(this)">
                         </div>
                         <div>
-                            <label class="block text-sm font-medium text-white">Nome Completo da referência</label>
-                            <input type="text" id="referencia_nome" name="referencia_nome" class="form-input w-full" required onblur="validateField(this)">
+                          <label class="block text-sm font-medium text-white">Celular(Whatsapp)</label>
+                          <input type="text" name="referencia_contato" id="referencia_contato" placeholder="(XX)XXXX-XXX)" class="form-input w-full" required onblur="validateField(this)">
                         </div>
-                       
-                    </div>
-
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
-                            <label class="block text-sm font-medium text-white">Indicação</label>
-                            <input type="text" id="indicacao" name="indicacao" placeholder="Indicado por" class="form-input w-full" onblur="validateField(this)">
-                        </div>
-
-                        <div>
-                            <label for="referencia_parentesco" class="block text-sm font-medium text-white">Grau de parentesco</label>
+                          <label for="referencia_parentesco" class="block text-sm font-medium text-white">Grau de parentesco</label>
                             <select id="referencia_parentesco" name="referencia_parentesco" class="form-input w-full" required onblur="validateField(this)">
-                                <option value="" disabled selected>Selecione</option>
-                                <option value="Pai">Pai</option>
-                                <option value="Mãe">Mãe</option>
-                                <option value="Filho">Filho</option>
-                                <option value="Filha">Filha</option>
-                                <option value="Irmão">Irmão</option>
-                                <option value="Irmã">Irmã</option>
-                                <option value="Tio">Tio</option>
-                                <option value="Tia">Tia</option>
-                                <option value="Avô">Avô</option>
-                                <option value="Avó">Avó</option>
-                                <option value="Primo">Primo</option>
-                                <option value="Prima">Prima</option>
-                                <option value="Sogro">Sogro</option>
-                                <option value="Sogra">Sogra</option>
+                              <option value="" disabled selected>Selecione</option>
+                              <option value="Pai">Pai</option>
+                              <option value="Mãe">Mãe</option>
+                              <option value="Marido">Marido</option>
+                              <option value="Esposa">Esposa</option>
+                              <option value="Filho">Filho</option>
+                              <option value="Filha">Filha</option>
+                              <option value="Irmão">Irmão</option>
+                              <option value="Irmã">Irmã</option>
+                              <option value="Tio">Tio</option>
+                              <option value="Tia">Tia</option>
+                              <option value="Avô">Avô</option>
+                              <option value="Avó">Avó</option>
+                              <option value="Primo">Primo</option>
+                              <option value="Prima">Prima</option>
+                              <option value="Sogro">Sogro</option>
+                              <option value="Sogra">Sogra</option>
                             </select>
                         </div>
                     </div>
-                  
 
+                    <label class="block text-md font-medium text-white mt-6 mb-6">Quem te indicou?</label>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div>
+                        <label class="block text-sm font-medium text-white">Nome Completo</label>
+                        <input type="text" id="indicacao" name="indicacao" placeholder="Indicado por" class="form-input w-full" onblur="validateField(this)">
+                      </div>
+
+                      <div>
+                        <label class="block text-sm font-medium text-white">Celular(Whatsapp)</label>
+                        <input type="text" id="indicacao_contato" name="indicacao_contato" placeholder="Indicado por" class="form-input w-full" onblur="validateField(this)">
+                      </div>
+                    </div>
+                  
                     <div class="pt-4 flex justify-between">
                         <button type="button" class="btn-primary" onclick="prevStep()">Voltar</button>
                         <button type="button" class="btn-primary" onclick="nextStep()">Próximo</button>
@@ -953,6 +959,7 @@
         $('#cep').mask('00000-000');
         $('#data_nasc').mask('00/00/0000');
         $('#referencia_contato').mask('(00) 00000-0000');
+        $('#indicacao_contato').mask('(00) 00000-0000');
         // Usando um ARRAY de máscaras para a placa (Mercosul e Antiga)
         $('#placa_veiculo').mask(['AAA0A00', 'AAA0000'], {
             translation: {

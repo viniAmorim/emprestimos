@@ -10,11 +10,12 @@ $nome = htmlspecialchars(trim($_POST['nome'] ?? ''));
 $email = htmlspecialchars(trim($_POST['email'] ?? ''));
 $telefone = trim($_POST['telefone'] ?? '');
 $data_nasc = $_POST['data_nasc'] ?? '';
-$data_nasc = implode('-', array_reverse(explode('/', $data_nasc))); // Formata para YYYY-MM-DD
+$data_nasc = implode('-', array_reverse(explode('/', $data_nasc)));
 $endereco = htmlspecialchars(trim($_POST['endereco'] ?? ''));
 $cpf = trim($_POST['cpf'] ?? '');
 $pix = htmlspecialchars(trim($_POST['pix'] ?? ''));
 $indicacao = htmlspecialchars(trim($_POST['indicacao'] ?? ''));
+$indicacao_contato = htmlspecialchars(trim($_POST['indicacao_contato'] ?? ''));
 $bairro = htmlspecialchars(trim($_POST['bairro'] ?? ''));
 $cidade = htmlspecialchars(trim($_POST['cidade'] ?? ''));
 $estado = htmlspecialchars(trim($_POST['estado'] ?? ''));
@@ -421,6 +422,7 @@ if($id == ""){
         data_nasc = :data_nasc,
         pix = :pix,
         indicacao = :indicacao,
+        indicacao_contato = :indicacao_contato,
         bairro = :bairro,
         estado = :estado,
         cidade = :cidade,
@@ -476,6 +478,7 @@ if($id == ""){
         data_nasc = :data_nasc,
         pix = :pix,
         indicacao = :indicacao,
+        indicacao_contato = :indicacao_contato,
         bairro = :bairro,
         estado = :estado,
         cidade = :cidade,
@@ -528,6 +531,7 @@ $query->bindValue(":endereco", $endereco);
 $query->bindValue(":cpf", $cpf);
 $query->bindValue(":pix", $pix);
 $query->bindValue(":indicacao", $indicacao);
+$query->bindValue(":indicacao_contato", $indicacao_contato);
 $query->bindValue(":bairro", $bairro);
 $query->bindValue(":cidade", $cidade);
 $query->bindValue(":estado", $estado);
