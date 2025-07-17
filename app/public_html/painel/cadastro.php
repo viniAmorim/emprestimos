@@ -823,6 +823,7 @@
                         </div>
                     </div>
                 </div>
+                
             </div>
 
             <!-- Novos Campos para Autônomo -->
@@ -847,6 +848,22 @@
                         <img src="https://placehold.co/80x80/cccccc/333333?text=Extrato" id="target-extrato-90dias" class="object-cover w-full h-full" onerror="this.src='https://placehold.co/80x80/cccccc/333333?text=Extrato'">
                     </div>
                 </div>
+
+                <div id="campo-comprovante-extra-autonomo" class="hidden mt-4">
+                  <div class="flex items-start gap-4">
+                      <div class="flex-1">
+                          <label class="block text-sm font-medium">Outro Comprovante (opcional)</label>
+                          <input type="file" name="comprovante_extra_autonomo" id="comprovante_extra_autonomo" onchange="carregarImgComprovanteExtraAutonomo(); validateField(this)" accept=".jpg,.jpeg,.png,.pdf" class="form-input w-full">
+                      </div>
+                      <div class="w-20 h-20 border border-gray-300 rounded overflow-hidden bg-white flex items-center justify-center">
+                          <img src="https://placehold.co/80x80/cccccc/333333?text=Comprovante" id="target-comprovante-extra" class="object-cover w-full h-full" onerror="this.src='https://placehold.co/80x80/cccccc/333333?text=Comprovante'">
+                      </div>
+                  </div>
+                </div>
+
+                <button type="button" id="btn-mostrar-comprovante-extra-autonomo" class="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50">
+                  + Comprovante
+                </button>
             </div>
 
             <!-- Novos Campos para Assalariado -->
@@ -903,6 +920,29 @@
     <script>
 
     let stream; 
+    let currentStep = 1;
+    const totalSteps = 6;
+
+    // Função para carregar a imagem do comprovante extra (se você tiver uma)
+    function carregarImgComprovanteExtraAutonomo() {
+      const input = document.getElementById('comprovante_extra_autonomo');
+      const img = document.getElementById('target-comprovante-extra-autonomo');
+      if (input.files && input.files[0]) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            img.src = e.target.result;
+        };
+        reader.readAsDataURL(input.files[0]);
+      } else {
+        img.src = 'https://placehold.co/80x80/cccccc/333333?text=Comprovante'; 
+      }
+    }
+
+    // Função para alternar a visibilidade do campo extra
+    document.getElementById('btn-mostrar-comprovante-extra-autonomo').addEventListener('click', function() {
+        const campoExtra = document.getElementById('campo-comprovante-extra-autonomo');
+        campoExtra.classList.toggle('hidden'); // Alterna a classe 'hidden'
+    });
 
     async function tirarFoto() {
         const cameraPreview = document.getElementById('cameraPreview');
@@ -949,8 +989,7 @@
         }
     }
 
-    let currentStep = 1;
-    const totalSteps = 6;
+ 
 
     // --- FUNÇÕES DE MÁSCARAS ---
     function setupMasks() {
