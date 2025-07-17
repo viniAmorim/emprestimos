@@ -60,6 +60,7 @@ $foto = 'sem-foto.jpg'; // Foto principal do cliente
 
 // NOVO CAMPO: Inicializa a variável para o comprovante extra do autônomo
 $comprovante_extra_autonomo = 'sem-foto.png';
+$comprovante_extra_assalariado = 'sem-foto.png';
 
 
 $nome_sec = htmlspecialchars(trim($_POST['nome_sec'] ?? ''));
@@ -143,7 +144,8 @@ if ($id != "") {
         comprovante_endereco, comprovante_rg, foto,
         print_perfil_app, print_veiculo_app, print_ganhos_hoje, print_ganhos_30dias,
         extrato_90dias, contracheque,
-        comprovante_extra_autonomo  /* NOVO: Adiciona o novo campo na consulta */
+        comprovante_extra_autonomo,
+        comprovante_extra_assalariado
         FROM $tabela where id = :id");
     $query->bindValue(":id", $id);
     $query->execute();
@@ -160,6 +162,7 @@ if ($id != "") {
         $contracheque = $res[0]['contracheque'];
         // NOVO: Recupera o nome do arquivo existente para o novo campo
         $comprovante_extra_autonomo = $res[0]['comprovante_extra_autonomo'];
+        $comprovante_extra_assalariado = $res[0]['comprovante_extra_assalariado'];
     }
 }
 
@@ -263,6 +266,7 @@ processUpload('contracheque', $contracheque, $comprovantes_dir, 'contracheque', 
 
 // NOVO: Chamada para processar o upload de 'comprovante_extra_autonomo'
 processUpload('comprovante_extra_autonomo', $comprovante_extra_autonomo, $comprovantes_dir, 'extra-autonomo', $extensoes_comprovantes);
+processUpload('comprovante_extra_assalariado', $comprovante_extra_assalariado, $comprovantes_dir, 'extra-assalariado', $extensoes_comprovantes);
 
 
 // --- NOVA LÓGICA PARA PROCESSAR A FOTO DO USUÁRIO ENVIADA VIA BASE64 (CÂMERA) ---
@@ -422,7 +426,8 @@ if($id == ""){
         contracheque = :contracheque,
         valor_desejado = :valor_desejado,
         valor_parcela_desejada = :valor_parcela_desejada,
-        comprovante_extra_autonomo = :comprovante_extra_autonomo /* NOVO: Adiciona o campo no INSERT */
+        comprovante_extra_autonomo = :comprovante_extra_autonomo,
+        comprovante_extra_assalariado = :comprovante_extra_assalariado
     ");
 
 }else{
@@ -478,7 +483,8 @@ if($id == ""){
         contracheque = :contracheque,
         valor_desejado = :valor_desejado,
         valor_parcela_desejada = :valor_parcela_desejada,
-        comprovante_extra_autonomo = :comprovante_extra_autonomo /* NOVO: Adiciona o campo no UPDATE */
+        comprovante_extra_autonomo = :comprovante_extra_autonomo,
+        comprovante_extra_assalariado = :comprovante_extra_assalariado
         where id = :id
     ");
 }
@@ -542,6 +548,8 @@ $query->bindValue(":print_ganhos_30dias", $print_ganhos_30dias);
 
 // NOVO: Binda o valor do comprovante extra do autônomo
 $query->bindValue(":comprovante_extra_autonomo", $comprovante_extra_autonomo);
+
+$query->bindValue(":comprovante_extra_assalariado", $comprovante_extra_assalariado);
 
 // Bind de campos que eram interpolados
 $query->bindValue(":data_nasc", $data_nasc);
