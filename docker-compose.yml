@@ -19,7 +19,7 @@ services:
     networks:
       - docker.network
     volumes:
-      - ./app/public_html:/var/www
+      - .:/var/www
 
   apache:
     build: ./app/docker/apache
@@ -34,7 +34,7 @@ services:
     networks:
       - docker.network
     volumes:
-      - ./app/public_html:/var/www
+      - .:/var/www
       # Este arquivo base não terá o volume de certificados SSL definido aqui.
       # Ele será adicionado pelo docker-compose.override.yml (para dev)
       # ou docker-compose.prod.yml (para prod).
