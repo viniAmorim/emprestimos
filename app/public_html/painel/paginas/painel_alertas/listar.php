@@ -51,13 +51,21 @@ $sql = "SELECT
             c.status_cliente as status_cliente_full,
             c.foto as foto_cliente,
             c.comprovante_rg as foto_cnh_cliente,
+            c.comprovante_endereco,       -- NOVO: Comprovante de Endereço
             c.endereco,
             c.cidade,
             c.valor_desejado as valor_solicitado,
             c.valor_parcela_desejada as parcelamento,
-            a.verificado_nome_cnh,          -- NOVA COLUNA
-            a.verificado_endereco_cnh,      -- NOVA COLUNA
-            a.verificado_cidade_cnh         -- NOVA COLUNA
+            a.verificado_nome_cnh,
+            a.verificado_endereco_cnh,
+            a.verificado_cidade_cnh,
+            a.verificado_foto_cnh,        -- NOVO
+            a.verificado_validade_cnh,    -- NOVO
+            a.verificado_nome_comp,       -- NOVO
+            a.verificado_endereco_comp,   -- NOVO
+            a.verificado_cidade_comp,     -- NOVO
+            a.detalhes_alerta_text,
+            c.referencia_contato
         FROM
             {$tabela} a
         JOIN
@@ -65,7 +73,6 @@ $sql = "SELECT
         " . $whereClause . "
         ORDER BY a.data_alerta DESC
         LIMIT :limit OFFSET :offset";
-
 $stmt = $pdo->prepare($sql);
 $stmt->bindParam(':limit', $registrosPorPagina, PDO::PARAM_INT);
 $stmt->bindParam(':offset', $offset, PDO::PARAM_INT);
@@ -80,25 +87,7 @@ $linhas = count($alertas); // Agora $alertas já vem paginado e filtrado
 
 ?>
 <div class="mb-4">
-    <form action="" method="GET" class="form-inline d-flex flex-grow-1">
-        <div class="input-group flex-grow-1 me-2">
-            <input
-                type="text"
-                name="busca"
-                class="form-control form-control-lg"
-                placeholder="Buscar por tipo, valor ou cliente..."
-                value="<?= htmlspecialchars($termoBusca) ?>"
-                style="min-width: 150px;"
-            >
-        </div>
-        <button type="submit" class="btn btn-primary btn-lg">
-            <i class="fa fa-search"></i> Buscar
-        </button>
-        <?php if (!empty($termoBusca)): ?>
-            <a href="painel-alertas" class="btn btn-danger btn-lg ms-2">Limpar Busca</a>
-        <?php endif; ?>
-    </form>
-</div>
+    </div>
 
 <?php if ($linhas > 0): ?>
 <small>
@@ -129,42 +118,37 @@ $linhas = count($alertas); // Agora $alertas já vem paginado e filtrado
                     <td class="esc"><?= date('d/m/Y H:i:s', strtotime($alerta['data_alerta'])) ?></td>
                     <td>
                         <a href="#" onclick="mostrar(
-                            '<?= htmlspecialchars($alerta['id']) ?>', /* NOVO: ID do Alerta */
-                            '<?= htmlspecialchars($alerta['tipo_alerta']) ?>',
-                            '<?= htmlspecialchars($alerta['valor_duplicado']) ?>',
-                            '<?= date('d/m/Y H:i:s', strtotime($alerta['data_alerta'])) ?>',
-                            '<?= htmlspecialchars($alerta['resolvido']) ?>',
-                            '<?= htmlspecialchars($alerta['nome_cliente']) ?>',
-                            '<?= htmlspecialchars($alerta['cpf_cliente']) ?>',
-                            '<?= htmlspecialchars($alerta['id_cliente_cadastrado']) ?>',
-                            '<?= htmlspecialchars($alerta['status_cliente_full'] ?? 'N/A') ?>',
-                            '<?= htmlspecialchars($alerta['foto_cliente'] ?? 'sem-foto.png') ?>',
-                            '<?= htmlspecialchars($alerta['foto_cnh_cliente'] ?? 'sem-cnh.png') ?>',
-                            '<?= htmlspecialchars($alerta['endereco'] ?? 'N/A') ?>',
-                            '<?= htmlspecialchars($alerta['cidade'] ?? 'N/A') ?>',
-                            '<?= htmlspecialchars($alerta['detalhes_alerta_text'] ?? 'Nenhum detalhe adicional.') ?>',
-                            '<?= htmlspecialchars(number_format($alerta['valor_solicitado'] ?? 0, 2, '.', '')) ?>',
-                            '<?= htmlspecialchars($alerta['parcelamento'] ?? 'N/A') ?>',
-                            '<?= htmlspecialchars($alerta['verificado_nome_cnh'] ?? 0) ?>',        /* NOVO: verificado_nome_cnh */
-                            '<?= htmlspecialchars($alerta['verificado_endereco_cnh'] ?? 0) ?>',     /* NOVO: verificado_endereco_cnh */
-                            '<?= htmlspecialchars($alerta['verificado_cidade_cnh'] ?? 0) ?>'      /* NOVO: verificado_cidade_cnh */
+                                '<?= htmlspecialchars($alerta['id']) ?>',
+                                '<?= htmlspecialchars($alerta['tipo_alerta']) ?>',
+                                '<?= htmlspecialchars($alerta['valor_duplicado']) ?>',
+                                '<?= date('d/m/Y H:i:s', strtotime($alerta['data_alerta'])) ?>',
+                                '<?= htmlspecialchars($alerta['resolvido']) ?>',
+                                '<?= htmlspecialchars($alerta['nome_cliente'] ?? 'N/A') ?>',
+                                '<?= htmlspecialchars($alerta['cpf_cliente'] ?? 'N/A') ?>',
+                                '<?= htmlspecialchars($alerta['id_cliente_cadastrado'] ?? 'N/A') ?>',
+                                '<?= htmlspecialchars($alerta['status_cliente_full'] ?? 'N/A') ?>',
+                                '<?= htmlspecialchars($alerta['foto_cliente'] ?? 'sem-foto.png') ?>',
+                                '<?= htmlspecialchars($alerta['foto_cnh_cliente'] ?? 'sem-cnh.png') ?>',
+                                '<?= htmlspecialchars($alerta['comprovante_endereco'] ?? 'sem-comprovante.png') ?>', /* NOVO: Comprovante Endereço */
+                                '<?= htmlspecialchars($alerta['endereco'] ?? 'N/A') ?>',
+                                '<?= htmlspecialchars($alerta['cidade'] ?? 'N/A') ?>',
+                                '<?= htmlspecialchars($alerta['detalhes_alerta_text'] ?? 'Nenhum detalhe adicional.') ?>',
+                                '<?= htmlspecialchars(number_format($alerta['valor_solicitado'] ?? 0, 2, '.', '')) ?>',
+                                '<?= htmlspecialchars($alerta['parcelamento'] ?? 'N/A') ?>',
+                                '<?= htmlspecialchars($alerta['verificado_nome_cnh'] ?? 0) ?>',
+                                '<?= htmlspecialchars($alerta['verificado_endereco_cnh'] ?? 0) ?>',
+                                '<?= htmlspecialchars($alerta['verificado_cidade_cnh'] ?? 0) ?>',
+                                '<?= htmlspecialchars($alerta['verificado_foto_cnh'] ?? 0) ?>',        /* NOVO: Verificado Foto CNH */
+                                '<?= htmlspecialchars($alerta['verificado_validade_cnh'] ?? 0) ?>',    /* NOVO: Verificado Validade CNH */
+                                '<?= htmlspecialchars($alerta['verificado_nome_comp'] ?? 0) ?>',       /* NOVO: Verificado Nome Comprovante */
+                                '<?= htmlspecialchars($alerta['verificado_endereco_comp'] ?? 0) ?>',   /* NOVO: Verificado Endereço Comprovante */
+                                '<?= htmlspecialchars($alerta['verificado_cidade_comp'] ?? 0) ?>',     /* NOVO: Verificado Cidade Comprovante */
+                                '<?= htmlspecialchars($alerta['telefone_referencia'] ?? 'N/A') ?>'
                         )" title="Ver Detalhes" class="btn btn-sm btn-info ml-1">
                             <i class="fa fa-info-circle"></i> Detalhes
                         </a>
 
-                        <li class="dropdown head-dpdn2" style="display: inline-block;">
-                            <a href="#" class="dropdown-toggle btn btn-sm btn-danger ml-1" data-toggle="dropdown" aria-expanded="false" title="Excluir Alerta">
-                                <i class="fa fa-trash-o"></i>
-                            </a>
-                            <ul class="dropdown-menu" style="margin-left:-230px;">
-                                <li>
-                                    <div class="notification_desc2">
-                                        <p>Confirmar Exclusão? <a href="#" onclick="excluir('<?= htmlspecialchars($alerta['id']) ?>')" class="text-danger">Sim</a></p>
-                                    </div>
-                                </li>
-                            </ul>
-                        </li>
-                    </td>
+                        </td>
                 </tr>
             <?php endforeach; ?>
         </tbody>
