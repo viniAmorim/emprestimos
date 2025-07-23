@@ -84,7 +84,7 @@ if($cliente_cadastro == "Sim"){
         echo json_encode(['success' => false, 'message' => 'As senhas não são iguais!']);
         exit();
     }
-}else{
+} else {
     $senha = '123'; // Senha padrão se não for um cadastro de cliente
 }
 $senha_crip = password_hash($senha, PASSWORD_DEFAULT); // Criptografa a senha
@@ -103,37 +103,35 @@ if($cpf != ""){
     }
 }
 
-// Flag para saber se um alerta de nome duplicado foi gerado
-$alerta_nome_duplicado = false;
+// --- Variáveis para controle de alertas de duplicidade ---
+$alertas_para_inserir = [];
 
-// Validação de Nome Completo duplicado (AGORA PERMITE O CADASTRO, APENAS LOGA NO BANCO E NO ARQUIVO)
+// Validação de Nome Completo duplicado (AGORA GERA ALERTA, NÃO IMPEDE)
 if($nome != ""){
     $query = $pdo->prepare("SELECT id FROM $tabela WHERE nome = :nome");
     $query->bindValue(":nome", $nome);
     $query->execute();
     $res = $query->fetchAll(PDO::FETCH_ASSOC);
-    $id_reg = @$res[0]['id'];
-    if(@count($res) > 0 && $id != $id_reg){ // Se encontrou e não é o próprio registro sendo editado
-        // Define a flag para inserir o alerta após o cadastro/edição do cliente
-        $alerta_nome_duplicado = true;
-        // Log para o arquivo de erro do servidor (mantido para logs imediatos)
-        error_log("ALERTA ADMINISTRADOR: Nome Completo duplicado detectado, mas cadastro permitido: " . $nome . " para o ID: " . $id);
+    $id_reg_nome = @$res[0]['id'];
+    if(@count($res) > 0 && $id != $id_reg_nome){ // Se encontrou e não é o próprio registro sendo editado
+        $alertas_para_inserir[] = ['tipo' => 'Nome Duplicado', 'valor' => $nome];
+        error_log("ALERTA ADMINISTRADOR: Nome Completo duplicado detectado: " . $nome . " para o ID: " . $id);
     }
 }
 
-// Validação de Telefone duplicado (ainda impede o cadastro)
+// Validação de Telefone duplicado (AGORA GERA ALERTA, NÃO IMPEDE)
 if($telefone != ""){
     $query = $pdo->prepare("SELECT id FROM $tabela WHERE telefone = :telefone");
     $query->bindValue(":telefone", $telefone);
     $query->execute();
     $res = $query->fetchAll(PDO::FETCH_ASSOC);
-    $id_reg = @$res[0]['id'];
-    if(@count($res) > 0 && $id != $id_reg){ // Se encontrou e não é o próprio registro sendo editado
-        echo json_encode(['success' => false, 'message' => 'Telefone já Cadastrado!']);
-        error_log("ALERTA ADMINISTRADOR: Tentativa de cadastro/edição com Telefone duplicado: " . $telefone . " para o ID: " . $id);
-        exit(); // Impede o cadastro
+    $id_reg_telefone = @$res[0]['id'];
+    if(@count($res) > 0 && $id != $id_reg_telefone){ // Se encontrou e não é o próprio registro sendo editado
+        $alertas_para_inserir[] = ['tipo' => 'Telefone Duplicado', 'valor' => $telefone];
+        error_log("ALERTA ADMINISTRADOR: Telefone duplicado detectado: " . $telefone . " para o ID: " . $id);
     }
 }
+
 
 // --- Inicializa variáveis de imagem e busca existentes para edição ---
 // As variáveis $comprovante_endereco, $comprovante_rg, $foto, etc., já foram inicializadas acima.
@@ -546,9 +544,8 @@ $query->bindValue(":print_veiculo_app", $print_veiculo_app);
 $query->bindValue(":print_ganhos_hoje", $print_ganhos_hoje);
 $query->bindValue(":print_ganhos_30dias", $print_ganhos_30dias);
 
-// NOVO: Binda o valor do comprovante extra do autônomo
+// NOVO: Binda o valor do comprovante extra do autônomo e assalariado
 $query->bindValue(":comprovante_extra_autonomo", $comprovante_extra_autonomo);
-
 $query->bindValue(":comprovante_extra_assalariado", $comprovante_extra_assalariado);
 
 // Bind de campos que eram interpolados
@@ -557,7 +554,18 @@ $query->bindValue(":foto", $foto);
 $query->bindValue(":comprovante_endereco", $comprovante_endereco);
 $query->bindValue(":comprovante_rg", $comprovante_rg);
 $query->bindValue(":status_cliente", $status_cliente);
-$query->bindValue(":senha_crip", $senha_crip);
+// Se for um UPDATE e a senha não for alterada, mantenha a senha_crip existente.
+// No seu código original, a senha é sempre definida como '123' ou criptografada.
+// Para uma atualização onde a senha não é fornecida no POST, você pode buscar a senha existente do DB.
+if ($id != "" && empty($_POST['senha'])) {
+    $stmt_senha_existente = $pdo->prepare("SELECT senha_crip FROM $tabela WHERE id = :id");
+    $stmt_senha_existente->bindValue(":id", $id);
+    $stmt_senha_existente->execute();
+    $senha_crip_existente = $stmt_senha_existente->fetchColumn();
+    $query->bindValue(":senha_crip", $senha_crip_existente);
+} else {
+    $query->bindValue(":senha_crip", $senha_crip);
+}
 
 
 // Se for uma edição, binda o ID
@@ -570,24 +578,22 @@ try {
     $query->execute();
 
     // Após a execução do INSERT/UPDATE, obtenha o ID do cliente
-    if ($id == "") {
-        // Se foi um INSERT, pega o ID do último registro inserido
-        $novo_cliente_id = $pdo->lastInsertId();
-    } else {
-        // Se foi um UPDATE, o ID já é conhecido
-        $novo_cliente_id = $id;
+    $cliente_id_afetado = ($id == "") ? $pdo->lastInsertId() : $id;
+    $mensagem_sucesso = 'Salvo com Sucesso!';
+
+    // Insere Alertas de Duplicidade APÓS o cliente ter um ID
+    if ($cliente_id_afetado !== null && !empty($alertas_para_inserir)) {
+        foreach ($alertas_para_inserir as $alerta) {
+            $stmt_alerta = $pdo->prepare("INSERT INTO alertas_duplicidade (tipo_alerta, valor_duplicado, id_cliente_cadastrado, data_alerta) VALUES (:tipo, :valor, :id_cliente, CURDATE())");
+            $stmt_alerta->bindValue(":tipo", $alerta['tipo']);
+            $stmt_alerta->bindValue(":valor", $alerta['valor']);
+            $stmt_alerta->bindValue(":id_cliente", $cliente_id_afetado, PDO::PARAM_INT); // Garante que é um INT
+            $stmt_alerta->execute();
+        }
+        $mensagem_sucesso .= ' Alertas de duplicidade registrados.';
     }
 
-    // Se um alerta de nome duplicado foi detectado, insira na tabela de alertas
-    if ($alerta_nome_duplicado === true) {
-        $stmt_alerta = $pdo->prepare("INSERT INTO alertas_duplicidade (tipo_alerta, valor_duplicado, id_cliente_cadastrado) VALUES (:tipo, :valor, :cliente_id)");
-        $stmt_alerta->bindValue(":tipo", "Nome Duplicado");
-        $stmt_alerta->bindValue(":valor", $nome);
-        $stmt_alerta->bindValue(":cliente_id", $novo_cliente_id);
-        $stmt_alerta->execute();
-    }
-
-    echo json_encode(['success' => true, 'message' => 'Salvo com Sucesso']); // Mensagem de sucesso em JSON
+    echo json_encode(['success' => true, 'message' => $mensagem_sucesso]); // Mensagem de sucesso em JSON
 
 } catch (PDOException $e) {
     // Log do erro completo para o servidor (para depuração)
