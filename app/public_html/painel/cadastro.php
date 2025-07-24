@@ -920,7 +920,7 @@
                             <input type="text" name="valor_desejado" id="valor_desejado" class="form-input w-full" placeholder="R$" required onblur="validateField(this)">
                         </div>
                         <div>
-                            <label class="block text-sm font-medium text-white">Valor da Parcela</label>
+                            <label class="block text-sm font-medium text-white">Valor máximo da parcela</label>
                             <input type="text" name="parcela_desejada" id="parcela_desejada" class="form-input w-full" placeholder="R$" required onblur="validateField(this)">
                         </div>
                     </div>

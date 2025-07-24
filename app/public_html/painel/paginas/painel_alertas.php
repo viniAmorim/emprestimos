@@ -17,23 +17,422 @@ if (@$usuarios == 'ocultar') {
 
     <style>
         /* Estilo base para custom-control-input:hidden */
-        .custom-control-input:disabled ~ .custom-control-label::before {
-            background-color: #e9ecef; /* Cor de fundo para desabilitado */
-            border-color: #ced4da; /* Cor da borda para desabilitado */
-            cursor: not-allowed;
-        }
+        /* Estilização Geral do Modal */
+#modalDados .modal-content {
+    border-radius: 12px; /* Bordas mais suaves */
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1); /* Sombra mais pronunciada para o modal */
+    overflow: hidden; /* Garante que o conteúdo não vaze */
+}
 
-        /* Estilo para o checkmark quando o checkbox está disabled e checked */
-        .custom-control-input:checked:disabled ~ .custom-control-label::before {
-            background-color: #28a745; /* Cor de fundo para "checked" e "disabled" (verde de sucesso) */
-            border-color: #28a745;
-            opacity: 0.8; /* Um pouco de opacidade para indicar desabilitado */
-        }
+#modalDados .modal-header {
+    background-color: #f8f9fa; /* Fundo claro para o cabeçalho */
+    border-bottom: 1px solid #e9ecef;
+    padding: 20px 30px;
+    border-top-left-radius: 12px;
+    border-top-right-radius: 12px;
+}
 
-        .custom-control-input:checked:disabled ~ .custom-control-label::after {
-            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 8'%3e%3cpath fill='%23fff' d='M6.564.753l-3.59 3.617-1.481-1.47a.75.75 0 00-1.061 1.06l2.032 2.028a.75.75 0 001.06-.006l4.141-4.182a.75.75 0 10-1.06-1.06z'/%3e%3c/svg%3e"); /* Ícone de check branco */
-        }
-    </style>
+#modalDados .modal-title {
+    color: #343a40;
+    font-weight: 700;
+    font-size: 2.2rem; /* Tamanho maior para o título */
+}
+
+#modalDados .close {
+    font-size: 2.5rem; /* Botão de fechar maior */
+    color: #6c757d;
+    transition: color 0.2s ease-in-out;
+    margin-top: -15px; /* Ajuste para centralizar o X */
+}
+
+#modalDados .close:hover {
+    color: #dc3545;
+}
+
+#modalDados .modal-body {
+    padding: 30px;
+}
+
+#modalDados .modal-footer {
+    border-top: 1px solid #e9ecef;
+    padding: 20px 30px;
+    background-color: #f8f9fa;
+    border-bottom-left-radius: 12px;
+    border-bottom-right-radius: 12px;
+}
+
+/* Sombreamento nas bordas das imagens */
+.img-fluid.rounded-circle.shadow,
+.img-fluid.rounded.shadow-sm {
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2) !important; /* Sombra mais suave e proeminente */
+    transition: transform 0.3s ease-in-out;
+}
+
+.img-fluid.rounded-circle.shadow:hover,
+.img-fluid.rounded.shadow-sm:hover {
+    transform: scale(1.02); /* Leve zoom ao passar o mouse */
+}
+
+
+/* Checkboxes alinhados à esquerda, maiores e com fundo levemente azul */
+.custom-control.custom-checkbox {
+    padding-left: 2.5rem; /* Ajusta o padding para o alinhamento */
+    margin-bottom: 0.75rem; /* Espaçamento entre os checkboxes */
+}
+
+.custom-control-input:checked ~ .custom-control-label::before {
+    background-color: #007bff; /* Cor primária do Bootstrap */
+    border-color: #007bff;
+}
+
+.custom-control-label::before {
+    top: .25rem; /* Alinha verticalmente */
+    left: 0; /* Alinha à esquerda */
+    width: 1.5rem; /* Checkbox maior */
+    height: 1.5rem; /* Checkbox maior */
+    border-radius: 0.25rem; /* Levemente arredondado */
+    background-color: #e9f5ff; /* Fundo levemente azul */
+    border: 1px solid #b3d7ff; /* Borda azul clara */
+}
+
+.custom-control-label::after {
+    top: .25rem; /* Alinha verticalmente */
+    left: 0; /* Alinha à esquerda */
+    width: 1.5rem; /* Marca de check maior */
+    height: 1.5rem; /* Marca de check maior */
+    line-height: 1.5rem; /* Centraliza o ícone */
+}
+
+/* Alertas de duplicidade com fundo levemente vermelho */
+.alert-duplicidade {
+    background-color: #ffebe6; /* Vermelho muito claro, quase um pêssego */
+    color: #8b0000; /* Cor de texto vermelho escuro */
+    border: 1px solid #ffcccb; /* Borda sutil */
+    border-radius: 8px;
+    padding: 15px 20px;
+    margin-bottom: 20px;
+    font-weight: 500;
+    box-shadow: 0 2px 8px rgba(255, 0, 0, 0.1); /* Sombra sutil vermelha */
+}
+
+/* Estilo para as informações dentro do alerta de duplicidade */
+.alert-duplicidade p {
+    margin-bottom: 8px;
+}
+
+.alert-duplicidade strong {
+    color: #dc3545; /* Vermelho mais forte para os títulos */
+}
+
+/* Melhorias gerais para o texto */
+.form-control-plaintext {
+    font-size: 1.1em;
+    padding: 0.25rem 0;
+}
+
+hr.my-4 {
+    border-top: 1px solid #dee2e6;
+    margin-top: 2rem !important;
+    margin-bottom: 2rem !important;
+}
+
+.list-unstyled.mt-2.ml-3 li {
+    padding: 5px 0;
+    border-bottom: 1px dashed #e9ecef;
+}
+
+.list-unstyled.mt-2.ml-3 li:last-child {
+    border-bottom: none;
+}
+/* Container para as informações do cliente */
+.info-cliente-card {
+    background-color: #f8f9fa; /* Um fundo suave */
+    border-radius: 8px; /* Cantos levemente arredondados */
+    padding: 20px 25px; /* Espaçamento interno */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08); /* Sombra sutil para destacar como um "cartão" */
+    margin-bottom: 20px; /* Espaço abaixo do cartão */
+    display: flex; /* Para flexbox */
+    flex-direction: column; /* Itens em coluna */
+    gap: 10px; /* Espaço entre os parágrafos */
+}
+
+/* Estilo para os parágrafos de informação */
+.info-cliente-card p {
+    margin-bottom: 0 !important; /* Remove o margin padrão do Bootstrap */
+    display: flex; /* Para alinhar o label e o valor */
+    align-items: baseline; /* Alinha o texto na linha de base */
+    font-size: 1.1em; /* Fonte um pouco maior */
+}
+
+/* Estilo para os rótulos (Nome, CPF, Cliente ID) */
+.info-cliente-card p strong {
+    color: #495057; /* Cor mais escura para os rótulos */
+    min-width: 90px; /* Garante alinhamento dos rótulos */
+    flex-shrink: 0; /* Impede que o strong encolha */
+    margin-right: 10px; /* Espaço entre o rótulo e o valor */
+}
+
+/* Estilo para os valores (o span com o ID) */
+.info-cliente-card p span.form-control-plaintext {
+    border-bottom: none !important; /* Remove a borda inferior */
+    padding: 0 !important; /* Remove padding desnecessário */
+    color: #212529; /* Cor de texto padrão para o valor */
+    font-weight: 500; /* Levemente mais encorpado */
+    flex-grow: 1; /* Permite que o span ocupe o espaço restante */
+}
+
+/* Estilo para os títulos de seção de imagem */
+.section-title {
+    font-size: 1.6rem; /* Tamanho da fonte maior */
+    font-weight: 600; /* Levemente menos negrito que o padrão `bold` */
+    color: #34495e; /* Uma cor mais profunda e moderna para o título */
+    margin-bottom: 1.5rem; /* Mais espaço abaixo do título */
+    text-align: center; /* Centraliza o título */
+    position: relative; /* Para o pseudo-elemento */
+    padding-bottom: 8px; /* Espaço para a linha abaixo */
+}
+
+/* Adiciona uma linha sutil abaixo dos títulos */
+.section-title::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60px; /* Largura da linha */
+    height: 3px; /* Espessura da linha */
+    background-color: #007bff; /* Cor da linha, pode ser um azul do tema */
+    border-radius: 2px; /* Cantos arredondados para a linha */
+}
+
+/* Estilo para a seção de Alertas de Duplicidade */
+.alert-duplicidade-card {
+    background-color: #fef2f2; /* Um vermelho pastel bem suave */
+    border: 1px solid #fbdada; /* Borda sutil para definir o "cartão" */
+    border-radius: 10px; /* Cantos arredondados */
+    padding: 20px 25px; /* Espaçamento interno */
+    margin-bottom: 30px; /* Espaço para a próxima seção */
+    box-shadow: 0 4px 15px rgba(255, 0, 0, 0.08); /* Sombra sutil com um toque avermelhado */
+}
+
+/* Título dentro do cartão de alerta */
+.alert-duplicidade-card .section-title-alt {
+    font-size: 1.5rem; /* Um pouco menor que os títulos de imagem, mas ainda proeminente */
+    font-weight: 700; /* Mais negrito para chamar atenção */
+    color: #c0392b; /* Um vermelho mais vibrante para o título do alerta */
+    margin-bottom: 15px;
+    position: relative;
+    padding-bottom: 5px;
+    text-align: left; /* Alinha o título à esquerda */
+}
+
+/* Linha sutil abaixo do título do alerta */
+.alert-duplicidade-card .section-title-alt::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0; /* Alinha a linha à esquerda */
+    width: 50px; /* Largura da linha */
+    height: 3px;
+    background-color: #e74c3c; /* Cor da linha */
+    border-radius: 2px;
+}
+
+/* Parágrafos de informações dentro do alerta */
+.alert-duplicidade-card p {
+    margin-bottom: 8px !important; /* Espaço entre as informações */
+    display: flex;
+    align-items: baseline;
+    font-size: 1.05em; /* Tamanho da fonte */
+    line-height: 1.4;
+}
+
+/* Rótulos em negrito dentro do alerta */
+.alert-duplicidade-card p strong {
+    color: #8b0000; /* Vermelho escuro para os rótulos */
+    min-width: 120px; /* Ajuda a alinhar os valores */
+    flex-shrink: 0;
+    margin-right: 10px;
+}
+
+/* Valores dentro do alerta */
+.alert-duplicidade-card p span.form-control-plaintext {
+    border-bottom: none !important; /* Remove a borda inferior */
+    padding: 0 !important;
+    color: #333; /* Cor de texto para o valor */
+    font-weight: 500;
+    flex-grow: 1;
+}
+
+/* Estilo para a lista de alertas de referência */
+#alertas_referencia_lista {
+    margin-top: 10px !important;
+    margin-left: 20px !important; /* Indenta a lista */
+    list-style: disc; /* Estilo de marcador de lista */
+    color: #444;
+}
+
+#alertas_referencia_lista li {
+    padding: 4px 0;
+    border-bottom: 1px dashed #f0c0c0; /* Linha tracejada suave */
+    font-size: 0.95em;
+}
+
+#alertas_referencia_lista li:last-child {
+    border-bottom: none;
+}
+
+/* Estilo para a seção de Detalhes da Solicitação */
+.solicitacao-card {
+    background-color: #f8f9fa; /* Fundo suave, similar ao do cliente */
+    border-radius: 10px;
+    padding: 20px 25px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08); /* Sombra sutil */
+    margin-bottom: 20px;
+}
+
+/* Título dentro do cartão de solicitação */
+.solicitacao-card .section-title-alt {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #2c3e50; /* Azul escuro/cinza para o título */
+    margin-bottom: 15px;
+    position: relative;
+    padding-bottom: 5px;
+    text-align: left;
+}
+
+/* Linha sutil abaixo do título da solicitação */
+.solicitacao-card .section-title-alt::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 50px;
+    height: 3px;
+    background-color: #3498db; /* Azul do tema */
+    border-radius: 2px;
+}
+
+/* Parágrafos de informações dentro da solicitação */
+.solicitacao-card p {
+    margin-bottom: 8px !important;
+    display: flex;
+    align-items: baseline;
+    font-size: 1.05em;
+    line-height: 1.4;
+}
+
+/* Rótulos em negrito dentro da solicitação */
+.solicitacao-card p strong {
+    color: #495057;
+    min-width: 120px; /* Ajuda a alinhar os valores */
+    flex-shrink: 0;
+    margin-right: 10px;
+}
+
+/* Valores dentro da solicitação */
+.solicitacao-card p span.form-control-plaintext {
+    border-bottom: none !important;
+    padding: 0 !important;
+    color: #212529;
+    font-weight: 500;
+    flex-grow: 1;
+}
+/* Container para os grupos de checkbox, garantindo um agrupamento visual */
+.checkbox-group-container {
+    background-color: #f0f8ff; /* Fundo muito levemente azul para as opções */
+    border: 1px solid #cceeff; /* Borda sutil */
+    border-radius: 10px; /* Cantos arredondados, ligeiramente mais que antes */
+    padding: 20px 25px; /* Espaçamento interno mais generoso */
+    margin-top: 25px; /* Espaço entre a imagem e as checkboxes */
+    box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.08); /* Sombra interna sutil para profundidade */
+}
+
+/* Estilo para cada item individual de checkbox */
+.custom-control.custom-checkbox {
+    padding-left: 2.5rem; /* Espaçamento para o checkbox */
+    margin-bottom: 1rem; /* Mais espaçamento entre cada checkbox */
+    cursor: pointer; /* Indica que é clicável */
+    position: relative; /* Necessário para posicionar o checkbox */
+    user-select: none; /* Impede seleção de texto ao clicar */
+    display: flex; /* Para alinhar o input e o label */
+    align-items: center; /* Centraliza verticalmente o checkbox com o texto */
+    padding: 8px 0; /* Aumenta a área de clique */
+    transition: background-color 0.2s ease-in-out, transform 0.1s ease-out; /* Transições suaves */
+    border-radius: 6px; /* Bordas arredondadas para a área de hover */
+}
+
+/* Efeito de hover e active para cada item de checkbox */
+.custom-control.custom-checkbox:hover {
+    background-color: #e6f7ff; /* Fundo suave ao passar o mouse */
+    transform: translateY(-2px); /* Leve levantamento no hover */
+}
+
+.custom-control.custom-checkbox:active {
+    transform: translateY(0); /* Retorna ao normal no clique */
+}
+
+/* Estilo do label (texto) do checkbox */
+.custom-control-label {
+    font-size: 1.05em; /* Fonte um pouco maior para o texto */
+    color: #495057; /* Cor do texto do label */
+    line-height: 1.6rem; /* Ajusta a altura da linha para alinhar com o checkbox maior */
+    margin-left: 0.5rem; /* Espaço entre o checkbox e o texto */
+    padding-top: 2px; /* Ajuste fino para alinhamento vertical */
+    flex-grow: 1; /* Permite que o label ocupe o espaço restante */
+}
+
+/* Estilo do quadrado do checkbox (o ::before) */
+.custom-control-label::before {
+    content: ''; /* Essencial para pseudo-elementos */
+    display: block; /* Garante que se comporta como um bloco */
+    position: absolute; /* Posiciona o checkbox */
+    top: 50%; /* Centraliza verticalmente */
+    left: 0; /* Alinha à esquerda */
+    transform: translateY(-50%); /* Ajuste final para centralização vertical */
+    width: 1.8rem; /* Checkbox MAIOR */
+    height: 1.8rem; /* Checkbox MAIOR */
+    border-radius: 0.4rem; /* Cantos mais arredondados */
+    background-color: #e9f5ff; /* Fundo levemente azul para o checkbox desmarcado */
+    border: 2px solid #a8d6ff; /* Borda azul clara e mais definida */
+    box-shadow: inset 0 1px 4px rgba(0,0,0,0.08); /* Sombra interna sutil para profundidade */
+    transition: background-color 0.2s ease-in-out, border-color 0.2s ease-in-out;
+}
+
+/* Estilo da marca de verificação (o ::after) */
+.custom-control-label::after {
+    content: ''; /* Essencial para pseudo-elementos */
+    display: block; /* Garante que se comporta como um bloco */
+    position: absolute; /* Posiciona a marca de verificação */
+    top: 50%; /* Centraliza verticalmente */
+    left: 0.2rem; /* Ajusta a posição da marca de verificação */
+    transform: translateY(-50%) rotate(45deg); /* Rotaciona para formar o checkmark */
+    width: 0.6rem; /* Largura da marca de verificação */
+    height: 1.2rem; /* Altura da marca de verificação */
+    border: solid white; /* Cor branca para a marca */
+    border-width: 0 4px 4px 0; /* Espessura e formato do "V" */
+    opacity: 0; /* Inicialmente invisível */
+    transition: opacity 0.2s ease-in-out;
+}
+
+/* Estilo do checkbox quando marcado */
+.custom-control-input:checked ~ .custom-control-label::before {
+    background-color: #007bff; /* Azul primário quando marcado */
+    border-color: #007bff;
+    box-shadow: inset 0 1px 4px rgba(0, 0, 0, 0.2), 0 0 0 0.2rem rgba(0, 123, 255, 0.25); /* Sombra interna e externa para destaque */
+}
+
+.custom-control-input:checked ~ .custom-control-label::after {
+    opacity: 1; /* Torna a marca de verificação visível quando marcado */
+}
+
+/* Estilo para o foco (acessibilidade com teclado) */
+.custom-control-input:focus ~ .custom-control-label::before {
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25); /* Anel de foco azul */
+}
+
+</style>
 </head>
 <body>
 
@@ -131,9 +530,11 @@ if (@$usuarios == 'ocultar') {
                             <img src="" id="foto_cliente_dados" alt="Foto do Cliente" class="img-fluid rounded-circle shadow" style="max-width: 120px; max-height: 120px; object-fit: cover; border: 3px solid #eee;">
                         </div>
                         <div class="col-md-7">
-                            <p class="mb-2"><strong>Nome:</strong> <span id="nome_cliente_completo_dados" class="form-control-plaintext border-bottom py-1"></span></p>
-                            <p class="mb-2"><strong>CPF:</strong> <span id="cpf_cliente_dados" class="form-control-plaintext border-bottom py-1"></span></p>
-                            <p class="mb-0"><strong>Cliente ID:</strong> <span id="id_cliente_cadastrado_dados" class="form-control-plaintext border-bottom py-1"></span></p>
+                          <div class="info-cliente-card">
+                              <p class="mb-2"><strong>Nome:</strong> <span id="nome_cliente_completo_dados" class="form-control-plaintext py-1"></span></p>
+                              <p class="mb-2"><strong>CPF:</strong> <span id="cpf_cliente_dados" class="form-control-plaintext py-1"></span></p>
+                              <p class="mb-0"><strong>Cliente ID:</strong> <span id="id_cliente_cadastrado_dados" class="form-control-plaintext py-1"></span></p>
+                          </div>
                         </div>
                         <div class="col-md-2 text-right">
                             <p class="mb-0"><strong>Status:</strong> <br><span id="status_cliente_dados" class="badge badge-primary py-2 px-3 mt-1" style="font-size: 0.9em;"></span></p>
@@ -144,25 +545,25 @@ if (@$usuarios == 'ocultar') {
 
                     <div class="row mb-4">
                         <div class="col-md-6 text-center">
-                            <p class="font-weight-bold mb-2">Foto CNH:</p>
+                            <h5 class="section-title">Foto CNH:</h5>
                             <img src="" id="foto_cnh_dados" alt="Foto CNH" class="img-fluid rounded shadow-sm" style="max-width: 350px; border: 2px solid #ddd; display: block; margin: 0 auto;">
                             <div class="d-flex flex-column align-items-start mt-2">
-                                <div class="form-group custom-control custom-checkbox my-1">
-                                    <input type="checkbox" class="custom-control-input" id="check_cnh_nome">
-                                    <label class="custom-control-label" for="check_cnh_nome">Nome CNH confere</label>
-                                </div>
-                                <div class="form-group custom-control custom-checkbox my-1">
-                                    <input type="checkbox" class="custom-control-input" id="check_cnh_foto">
-                                    <label class="custom-control-label" for="check_cnh_foto">Foto CNH confere</label>
-                                </div>
-                                <div class="form-group custom-control custom-checkbox my-1">
-                                    <input type="checkbox" class="custom-control-input" id="check_cnh_validade">
-                                    <label class="custom-control-label" for="check_cnh_validade">Validade CNH</label>
-                                </div>
-                                </div>
+    <div class="form-group custom-control custom-checkbox my-1">
+        <input type="checkbox" class="custom-control-input" id="check_cnh_nome">
+        <label class="custom-control-label" for="check_cnh_nome">Nome CNH confere</label>
+    </div>
+    <div class="form-group custom-control custom-checkbox my-1">
+        <input type="checkbox" class="custom-control-input" id="check_cnh_foto">
+        <label class="custom-control-label" for="check_cnh_foto">Foto CNH confere</label>
+    </div>
+    <div class="form-group custom-control custom-checkbox my-1">
+        <input type="checkbox" class="custom-control-input" id="check_cnh_validade">
+        <label class="custom-control-label" for="check_cnh_validade">Validade CNH</label>
+    </div>
+</div>
                         </div>
                         <div class="col-md-6 text-center">
-                            <p class="font-weight-bold mb-2">Comprovante de Endereço:</p>
+                            <h5 class="section-title">Comprovante de Endereço:</h5>
                             <img src="" id="foto_comprovante_endereco_dados" alt="Comprovante de Endereço" class="img-fluid rounded shadow-sm" style="max-width: 350px; border: 2px solid #ddd; display: block; margin: 0 auto;">
                             <div class="d-flex flex-column align-items-start mt-2">
                                 <div class="form-group custom-control custom-checkbox my-1">
@@ -185,21 +586,25 @@ if (@$usuarios == 'ocultar') {
 
                     <small><div id="mensagem-verificacao" align="center" class="mt-2 text-success"></div></small>
 
-                    <h5 class="font-weight-bold mb-3">Alertas de Duplicidade:</h5>
-                    <p class="mb-2"><strong>Tipo de Alerta:</strong> <span id="tipo_alerta_dados" class="form-control-plaintext border-bottom py-1"></span></p>
-                    <p class="mb-2"><strong>Valor Duplicado:</strong> <span id="valor_duplicado_dados" class="form-control-plaintext border-bottom py-1"></span></p>
-                    <p class="mb-2"><strong>Data do Alerta:</strong> <span id="data_alerta_dados" class="form-control-plaintext border-bottom py-1"></span></p>
-                    <p class="mt-3">
-                        <strong>Detalhes do Alerta:</strong> <span id="detalhes_alerta_text_dados" class="form-control-plaintext border-bottom py-1"></span>
-                        <ul id="alertas_referencia_lista" class="list-unstyled mt-2 ml-3">
+                    <div class="alert-duplicidade-card">
+                      <h5 class="section-title-alt">Alertas de Duplicidade:</h5>
+                      <p class="mb-2"><strong>Tipo de Alerta:</strong> <span id="tipo_alerta_dados" class="form-control-plaintext py-1"></span></p>
+                      <p class="mb-2"><strong>Valor Duplicado:</strong> <span id="valor_duplicado_dados" class="form-control-plaintext py-1"></span></p>
+                      <p class="mb-2"><strong>Data do Alerta:</strong> <span id="data_alerta_dados" class="form-control-plaintext py-1"></span></p>
+                      <p class="mt-3">
+                          <strong>Detalhes do Alerta:</strong> <span id="detalhes_alerta_text_dados" class="form-control-plaintext py-1"></span>
+                          <ul id="alertas_referencia_lista" class="list-unstyled mt-2 ml-3">
                         </ul>
-                    </p>
+                      </p>
+                  </div>
 
-                    <hr class="my-4">
+                  <hr class="my-4">
 
-                    <h5 class="font-weight-bold mb-3">Detalhes da Solicitação:</h5>
-                    <p class="mb-2"><strong>Valor Solicitado:</strong> R$ <span id="valor_solicitado_dados" class="form-control-plaintext border-bottom py-1"></span></p>
-                    <p class="mb-0"><strong>Parcelamento:</strong> <span id="parcelamento_dados" class="form-control-plaintext border-bottom py-1"></span></p>
+                  <div class="solicitacao-card">
+                      <h5 class="section-title-alt">Detalhes da Solicitação:</h5>
+                      <p class="mb-2"><strong>Valor Solicitado:</strong> R$ <span id="valor_solicitado_dados" class="form-control-plaintext py-1"></span></p>
+                      <p class="mb-0"><strong>Parcelamento:</strong> <span id="parcelamento_dados" class="form-control-plaintext py-1"></span></p>
+                  </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
