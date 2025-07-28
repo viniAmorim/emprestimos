@@ -179,6 +179,37 @@ foreach ([$comprovantes_dir, $clientes_dir] as $dir) {
 // Função auxiliar para processar uploads de imagens/documentos
 function processUpload($file_input_name, &$db_field_variable, $target_dir, $prefix, $allowed_extensions, $quality = 20) {
     global $pdo; // Acesso ao objeto PDO para logging (se necessário)
+    
+    ///============================ debug ==================
+    error_log("--- DEBUG START for file: " . $file_input_name . " ---");
+    if (isset($_FILES[$file_input_name]) && $_FILES[$file_input_name]['error'] == UPLOAD_ERR_OK) {
+      $file = $_FILES[$file_input_name];
+
+      // --- INÍCIO DO BLOCO DE DEBUG PARA LOGAR NO SERVIDOR ---
+      error_log("File Name: " . $file['name']);
+      error_log("File Type (MIME): " . $file['type']);
+      error_log("File Size: " . $file['size'] . " bytes");
+      error_log("Temp Name: " . $file['tmp_name']);
+
+      // Verificar o tipo de imagem usando exif_imagetype()
+      $image_type_name = 'N/A'; // Inicializa a variável
+      if (file_exists($file['tmp_name'])) {
+          $image_type_code = exif_imagetype($file['tmp_name']);
+          // Código para converter o código em nome legível
+          switch ($image_type_code) {
+              case IMAGETYPE_GIF: $image_type_name = 'GIF'; break;
+              case IMAGETYPE_JPEG: $image_type_name = 'JPEG'; break;
+              case IMAGETYPE_PNG: $image_type_name = 'PNG'; break;
+              case IMAGETYPE_WEBP: $image_type_name = 'WEBP'; break;
+              case IMAGETYPE_AVIF: $image_type_name = 'AVIF'; break; // PHP 8.1+
+              default: $image_type_name = 'Desconhecido ou Não-Imagem'; break;
+          }
+          error_log("exif_imagetype() detected: Code " . $image_type_code . " (" . $image_type_name . ")");
+      } else {
+          error_log("Temporary file not found for exif_imagetype(). Path: " . $file['tmp_name']);
+      }
+
+       ///============================ debug ==================
 
     if (isset($_FILES[$file_input_name]) && $_FILES[$file_input_name]['name'] != "") {
         $nome_img = date('d-m-Y-H-i-s') . '-' . $prefix . '-' . preg_replace('/[ :]+/', '-', $_FILES[$file_input_name]['name']);
