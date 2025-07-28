@@ -21,6 +21,179 @@ if($verificar_pagamentos != 'Não'){
 
  ?>
 
+<!DOCTYPE html>
+<html>
+  <head>
+    <style>
+      /* Estilo geral do Modal de Formulário */
+      #modalForm .modal-content {
+          border-radius: 12px;
+          box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15); /* Sombra mais destacada */
+          overflow: hidden;
+      }
+
+      #modalForm .modal-header {
+          background-color: #f0f2f5; /* Fundo mais claro e suave */
+          border-bottom: 1px solid #e0e4e8;
+          padding: 25px 35px; /* Mais padding para um visual espaçoso */
+          border-top-left-radius: 12px;
+          border-top-right-radius: 12px;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+      }
+
+      #modalForm .modal-title {
+          color: #2c3e50; /* Cor escura e sofisticada para o título */
+          font-weight: 700;
+          font-size: 2rem; /* Título grande e impactante */
+          letter-spacing: -0.5px; /* Ajuste para melhor leitura */
+      }
+
+      #modalForm .close {
+          font-size: 2.8rem; /* Botão de fechar grande e visível */
+          color: #7f8c8d; /* Cinza sutil */
+          transition: color 0.2s ease-in-out;
+          margin-top: -10px; /* Ajuste para alinhamento fino */
+          opacity: 0.8; /* Levemente transparente */
+      }
+
+      #modalForm .close:hover {
+          color: #e74c3c; /* Vermelho vibrante no hover */
+          opacity: 1;
+      }
+
+      #modalForm .modal-body {
+          padding: 30px 35px; /* Padding consistente */
+          background-color: #ffffff; /* Fundo branco puro */
+      }
+
+      #modalForm .modal-footer {
+          border-top: 1px solid #e0e4e8;
+          padding: 20px 35px;
+          background-color: #f0f2f5; /* Fundo do rodapé similar ao cabeçalho */
+          border-bottom-left-radius: 12px;
+          border-bottom-right-radius: 12px;
+          display: flex;
+          justify-content: flex-end; /* Alinha botões à direita */
+          gap: 10px; /* Espaço entre botões */
+      }
+
+      /* Estilo para os campos de formulário */
+      #modalForm .form-group {
+          margin-bottom: 20px; /* Espaçamento padrão entre grupos de campo */
+      }
+
+      #modalForm label {
+          font-weight: 600; /* Labels mais encorpados */
+          color: #555; /* Cor mais suave */
+          margin-bottom: 6px; /* Espaço entre label e input */
+          display: block; /* Garante que a label ocupe sua própria linha */
+          font-size: 0.95em; /* Levemente menor que o input */
+      }
+
+      #modalForm .form-control {
+          border-radius: 8px; /* Cantos arredondados para inputs e selects */
+          border: 1px solid #dcdfe6; /* Borda mais suave */
+          padding: 5px 15px; /* Mais padding para um visual confortável */
+          font-size: 1em; /* Tamanho da fonte padrão */
+          color: #333; /* Cor do texto do input */
+          transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+      }
+
+      #modalForm .form-control:focus {
+          border-color: #007bff; /* Borda azul no foco */
+          box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25); /* Anel de foco sutil */
+          outline: none; /* Remove o outline padrão */
+      }
+
+      #modalForm .form-control::placeholder {
+          color: #a0a7b4; /* Cor mais clara para o placeholder */
+          font-style: italic; /* Placeholder em itálico para diferenciação */
+      }
+
+      /* Ajustes específicos para as linhas do formulário */
+      #modalForm .row {
+          margin-bottom: 20px; /* Espaço entre as linhas de campos */
+      }
+
+      #modalForm .row:last-of-type {
+          margin-bottom: 0; /* Remove margem da última linha */
+      }
+
+      /* Estilo para o preview de cor do status */
+      #preview_cor_status {
+          width: 20px !important; /* Ligeiramente maior */
+          height: 20px !important; /* Ligeiramente maior */
+          border: 1px solid #c0c4cc !important; /* Borda sutil */
+          border-radius: 5px !important; /* Cantos levemente arredondados */
+          box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.08); /* Sombra interna */
+          flex-shrink: 0; /* Impede que ele encolha */
+      }
+
+      /* Ajuste do select de status cliente para alinhar com o preview de cor */
+      #modalForm #status_cliente {
+          margin-top: 0 !important; /* Remove o margin-top padrão se o flexbox já cuida disso */
+      }
+
+      /* Estilo para a mensagem de validação */
+      #mensagem {
+          padding: 10px;
+          border-radius: 6px;
+          font-weight: 500;
+          margin-top: 15px;
+          opacity: 0; /* Inicialmente invisível */
+          transition: opacity 0.3s ease-in-out;
+      }
+
+      #mensagem.visible {
+          opacity: 1; /* Visível quando a mensagem aparece */
+      }
+
+      /* Estilo dos botões do footer */
+      #modalForm .modal-footer .btn {
+          padding: 10px 25px; /* Padding generoso */
+          font-size: 1.05em;
+          border-radius: 8px; /* Botões arredondados */
+          font-weight: 600;
+          transition: all 0.2s ease-in-out;
+      }
+
+      #modalForm .modal-footer .btn-primary {
+          background-color: #007bff;
+          border-color: #007bff;
+          box-shadow: 0 4px 10px rgba(0, 123, 255, 0.2);
+      }
+
+      #modalForm .modal-footer .btn-primary:hover {
+          background-color: #0056b3;
+          border-color: #0056b3;
+          transform: translateY(-2px);
+          box-shadow: 0 6px 15px rgba(0, 123, 255, 0.3);
+      }
+
+      /* Estilo para as imagens de preview de upload */
+      #target-comprovante-endereco,
+      #target-comprovante-rg,
+      #target {
+          width: 80px !important; /* Tamanho um pouco maior */
+          height: 80px; /* Mantém proporção */
+          object-fit: cover; /* Garante que a imagem preencha o espaço sem distorção */
+          border-radius: 8px; /* Cantos arredondados */
+          border: 2px solid #e0e4e8; /* Borda sutil */
+          box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Sombra suave */
+          transition: transform 0.2s ease-in-out;
+      }
+
+      #target-comprovante-endereco:hover,
+      #target-comprovante-rg:hover,
+      #target:hover {
+          transform: scale(1.05); /* Leve zoom no hover */
+      }
+    </style>
+  </head>
+  <body>
+    
 <div class="main-page margin-mobile">
 <a onclick="inserir()" type="button" class="btn btn-primary"><span class="fa fa-plus"></span> Cliente</a>
 
@@ -102,311 +275,270 @@ if($verificar_pagamentos != 'Não'){
 
 <!-- Modal Perfil -->
 <div class="modal fade" id="modalForm" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-	<div class="modal-dialog modal-lg">
-		<div class="modal-content">
-			<div class="modal-header">
-				<h4 class="modal-title" id="exampleModalLabel"><span id="titulo_inserir"></span></h4>
-				<button id="btn-fechar" type="button" class="close" data-dismiss="modal" aria-label="Close" style="margin-top: -25px">
-					<span aria-hidden="true">&times;</span>
-				</button>
-			</div>
-			<form id="form">
-			  <div class="modal-body">
-					<div class="row">
-						<div class="col-md-4">							
-								<label>Nome</label>
-								<input type="text" class="form-control" id="nome" name="nome" placeholder="Nome" required>							
-						</div>
-
-						<div class="col-md-3">							
-								<label>Email</label>
-								<input type="email" class="form-control" id="email" name="email" placeholder="Email" >							
-						</div>
-
-            <div class="col-md-2" style="margin-bottom:10px">
-                <label>RG</label>
-                <input type="text" class="form-control" id="rg" name="rg" placeholder="RG">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="exampleModalLabel">
+                    <span id="titulo_inserir"></span>
+                </h4>
+                <button id="btn-fechar" type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
             </div>
+            <form id="form">
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-4 form-group"> <label>Nome</label>
+                            <input type="text" class="form-control" id="nome" name="nome" placeholder="Nome" required>
+                        </div>
 
-						<div class="col-md-3">	
-						    <div style="display: flex; align-items: center; gap: 10px;">
-						        <label>Status Cliente</label>
-						        <div id="preview_cor_status" style="width: 17px; height: 17px; border: 1px solid #ccc; border-radius: 4px;"></div>
-						    </div>
+                        <div class="col-md-3 form-group"> <label>Email</label>
+                            <input type="email" class="form-control" id="email" name="email" placeholder="Email">
+                        </div>
 
-						    <select class="form-control mt-2" name="status_cliente" id="status_cliente" onchange="atualizarCorStatus()">
-						        <option value="" data-cor="">Selecionar Status</option>				
-						        <?php 
-						        $query = $pdo->query("SELECT * from status_clientes order by id asc");
-						        $res = $query->fetchAll(PDO::FETCH_ASSOC);
-						        $linhas = @count($res);
-						        if($linhas > 0){
-						            for($i=0; $i<$linhas; $i++){
-						        ?>
-						            <option value="<?php echo $res[$i]['nome'] ?>" data-cor="<?php echo $res[$i]['cor'] ?>">
-						                <?php echo $res[$i]['nome'] ?>
-						            </option>
-						        <?php } } ?>
-						    </select>	
-						</div>
+                        <div class="col-md-2 form-group"> <label>RG</label>
+                            <input type="text" class="form-control" id="rg" name="rg" placeholder="RG">
+                        </div>
 
-						
-					</div>
+                        <div class="col-md-3 form-group"> 
+                          <div class="d-flex align-items-center mb-2"> 
+                            <label class="mb-0 mr-2">Status Cliente</label> 
+                            <div style="display: none;" id="preview_cor_status"></div> 
+                          </div>
+                            <select class="form-control" name="status_cliente" id="status_cliente" onchange="atualizarCorStatus()"> <option value="" data-cor="">Selecionar Status</option>
+                                <?php
+                                // PHP code remains the same
+                                $query = $pdo->query("SELECT * from status_clientes order by id asc");
+                                $res = $query->fetchAll(PDO::FETCH_ASSOC);
+                                $linhas = @count($res);
+                                if ($linhas > 0) {
+                                    for ($i = 0; $i < $linhas; $i++) {
+                                ?>
+                                        <option value="<?php echo $res[$i]['nome'] ?>" data-cor="<?php echo $res[$i]['cor'] ?>">
+                                            <?php echo $res[$i]['nome'] ?>
+                                        </option>
+                                <?php }
+                                } ?>
+                            </select>
+                        </div>
+                    </div>
 
+                    <div class="row">
+                        <div class="col-md-3 form-group">
+                            <label>Telefone</label>
+                            <input type="text" class="form-control" id="telefone" name="telefone" placeholder="Telefone" required>
+                        </div>
 
-					<div class="row">
+                        <div class="col-md-3 form-group">
+                            <label>Telefone2</label>
+                            <input type="text" class="form-control" id="telefone2" name="telefone2" placeholder="Outro Telefone">
+                        </div>
 
-						<div class="col-md-3">							
-								<label>Telefone</label>
-								<input type="text" class="form-control" id="telefone" name="telefone" placeholder="Telefone" required>							
-						</div>
+                        <div class="col-md-3 form-group">
+                            <label>Tipo Pessoa</label>
+                            <select class="form-control" name="pessoa" id="pessoa" onchange="mascara_pessoa()">
+                                <option value="Física">Física</option>
+                                <option value="Jurídica">Jurídica</option>
+                            </select>
+                        </div>
 
-						<div class="col-md-3">							
-								<label>Telefone2</label>
-								<input type="text" class="form-control" id="telefone2" name="telefone2" placeholder="Outro Telefone" >							
-						</div>
+                        <div class="col-md-3 form-group">
+                            <label>CPF / CNPJ</label>
+                            <input type="text" class="form-control" id="cpf" name="cpf" placeholder="CPF" required>
+                        </div>
+                    </div>
 
-						<div class="col-md-3">							
-								<label>Tipo Pessoa</label>
-								<select class="form-control" name="pessoa" id="pessoa" onchange="mascara_pessoa()">
-									<option value="Física">Física</option>
-									<option value="Jurídica">Jurídica</option>
-								</select>						
-						</div>
+                    <div class="row">
+                        <div class="col-md-3 form-group">
+                            <label>Contato de Referência</label>
+                            <input type="text" class="form-control" id="referencia_contato" name="referencia_contato" placeholder="Contato de referência">
+                        </div>
 
+                        <div class="col-md-4 form-group">
+                            <label>Nome completo da referência</label>
+                            <input type="text" class="form-control" id="referencia_nome" name="referencia_nome" placeholder="Nome completo da referência">
+                        </div>
 
-						<div class="col-md-3">							
-								<label>CPF / CNPJ</label>
-								<input type="text" class="form-control" id="cpf" name="cpf" placeholder="CPF" required>							
-						</div>
-					</div>
+                        <div class="col-md-3 form-group">
+                            <label>Grau de parentesco</label>
+                            <input type="text" class="form-control" id="referencia_parentesco" name="referencia_parentesco" placeholder="Grau de parentesco">
+                        </div>
 
-          <div class="row">
-            <div class="col-md-3" style="margin-bottom:10px">
-              <label>Contato de Referência</label>
-              <input type="text" class="form-control" id="referencia_contato" name="referencia_contato" placeholder="Contato de referência">
-            </div>
+                        <div class="col-md-2 form-group">
+                            <label>Atuação</label>
+                            <input type="text" class="form-control" id="ramo" name="ramo" placeholder="Ex: Vendas, Construção...">
+                        </div>
+                    </div>
 
-            <div class="col-md-4" style="margin-bottom:10px">
-              <label>Nome completo da referência</label>
-              <input type="text" class="form-control" id="referencia_nome" name="referencia_nome" placeholder="Nome completo da referência">
-            </div>
+                    <div class="row" id="campos_veiculo" style="display: none;">
+                        <div class="col-md-4 form-group">
+                            <label>Modelo veículo</label>
+                            <input type="text" class="form-control" id="modelo_veiculo" name="modelo_veiculo" placeholder="Modelo do veículo">
+                        </div>
 
-            <div class="col-md-3" style="margin-bottom:10px">
-              <label>Grau de parentesco</label>
-              <input type="text" class="form-control" id="referencia_parentesco" name="referencia_parentesco" placeholder="Grau de parentesco">
-            </div>
+                        <div class="col-md-3 form-group">
+                            <label>Placa</label>
+                            <input type="text" class="form-control" id="placa" name="placa" placeholder="Placa do veículo">
+                        </div>
 
-            <div class="col-md-2" style="margin-bottom:10px">
-              <label>Atuação</label>
-              <input type="text" class="form-control" id="ramo" name="ramo" placeholder="Ex: Vendas, Construção, Prestador de Serviço...">
-            </div>
+                        <div class="col-md-3 form-group">
+                            <label>Status do veículo</label>
+                            <select class="form-control" id="status_veiculo" name="status_veiculo">
+                                <option value="">Selecionar</option>
+                                <option value="AC">Próprio</option>
+                                <option value="AL">Alugado</option>
+                            </select>
+                        </div>
 
-					</div>
+                        <div class="col-md-2 form-group">
+                            <label>Valor do aluguel</label>
+                            <input type="text" class="form-control" id="valor_aluguel" name="valor_aluguel" placeholder="Valor do aluguel">
+                        </div>
+                    </div>
 
-           <!-- Campos de veículo agrupados com id para controle -->
-           <div class="row" id="campos_veiculo" style="display: none;">
-            <div class="col-md-4" style="margin-bottom:10px">							
-              <label>Modelo veículo</label>
-              <input type="text" class="form-control" id="modelo_veiculo" name="modelo_veiculo" placeholder="Modelo do veículo">							
-            </div>
+                    <div class="row">
+                        <div class="col-md-3 form-group">
+                            <label>Nascimento</label>
+                            <input type="text" class="form-control" id="data_nasc" name="data_nasc" placeholder="dd/mm/aaaa">
+                        </div>
 
-            <div class="col-md-3" style="margin-bottom:10px">							
-              <label>Placa</label>
-              <input type="text" class="form-control" id="placa" name="placa" placeholder="Placa do veículo">							
-            </div>
+                        <div class="col-md-3 form-group">
+                            <label>CEP</label>
+                            <input type="text" class="form-control" id="cep" name="cep" placeholder="CEP" onblur="pesquisacep(this.value);">
+                        </div>
 
-            <div class="col-md-3" style="margin-bottom:10px">							
-              <label>Status do veículo</label>
-              <select class="form-control" id="status_veiculo" name="status_veiculo">
-                <option value="">Selecionar</option>
-                <option value="AC">Próprio</option>
-                <option value="AL">Alugado</option>                  
-              </select>								
-            </div>
+                        <div class="col-md-6 form-group">
+                            <label>Endereço</label>
+                            <input type="text" class="form-control" id="endereco" name="endereco" placeholder="Rua e Número">
+                        </div>
+                    </div>
 
-            <div class="col-md-2" style="margin-bottom:10px">							
-              <label>Valor do aluguel</label>
-              <input type="text" class="form-control" id="valor_aluguel" name="valor_aluguel" placeholder="Valor do aluguel">							
-            </div>
-          </div>
+                    <div class="row">
+                        <div class="col-md-5 form-group">
+                            <label>Bairro</label>
+                            <input type="text" class="form-control" id="bairro" name="bairro" placeholder="Bairro">
+                        </div>
 
-					<div class="row">
+                        <div class="col-md-4 form-group">
+                            <label>Cidade</label>
+                            <input type="text" class="form-control" id="cidade" name="cidade" placeholder="Cidade">
+                        </div>
 
+                        <div class="col-md-3 form-group">
+                            <label>Estado</label>
+                            <select class="form-control" id="estado" name="estado">
+                                <option value="">Selecionar</option>
+                                <option value="AC">Acre</option>
+                                <option value="AL">Alagoas</option>
+                                <option value="AP">Amapá</option>
+                                <option value="AM">Amazonas</option>
+                                <option value="BA">Bahia</option>
+                                <option value="CE">Ceará</option>
+                                <option value="DF">Distrito Federal</option>
+                                <option value="ES">Espírito Santo</option>
+                                <option value="GO">Goiás</option>
+                                <option value="MA">Maranhão</option>
+                                <option value="MT">Mato Grosso</option>
+                                <option value="MS">Mato Grosso do Sul</option>
+                                <option value="MG">Minas Gerais</option>
+                                <option value="PA">Pará</option>
+                                <option value="PB">Paraíba</option>
+                                <option value="PR">Paraná</option>
+                                <option value="PE">Pernambuco</option>
+                                <option value="PI">Piauí</option>
+                                <option value="RJ">Rio de Janeiro</option>
+                                <option value="RN">Rio Grande do Norte</option>
+                                <option value="RS">Rio Grande do Sul</option>
+                                <option value="RO">Rondônia</option>
+                                <option value="RR">Roraima</option>
+                                <option value="SC">Santa Catarina</option>
+                                <option value="SP">São Paulo</option>
+                                <option value="SE">Sergipe</option>
+                                <option value="TO">Tocantins</option>
+                                <option value="EX">Estrangeiro</option>
+                            </select>
+                        </div>
+                    </div>
 
-						<div class="col-md-3">							
-								<label>Nascimento</label>
-								<input type="text" class="form-control" id="data_nasc" name="data_nasc" placeholder="dd/mm/aaaa">							
-						</div>
+                    <div class="row">
+                        <div class="col-md-4 form-group">
+                            <label>Chave Pix / Conta Bancária</label>
+                            <input type="text" class="form-control" id="pix" name="pix" placeholder="Chave Pix">
+                        </div>
 
-						<div class="col-md-3">							
-								<label>CEP</label>
-								<input type="text" class="form-control" id="cep" name="cep" placeholder="CEP" onblur="pesquisacep(this.value);">							
-						</div>
+                        <div class="col-md-5 form-group">
+                            <label>Indicação</label>
+                            <input type="text" class="form-control" id="indicacao" name="indicacao" placeholder="Indicado Por">
+                        </div>
 
-						<div class="col-md-6">							
-								<label>Endereço</label>
-								<input type="text" class="form-control" id="endereco" name="endereco" placeholder="Rua e Número" >							
-						</div>
-					</div>
+                        <div class="col-md-3 form-group">
+                            <label>Status</label>
+                            <select class="form-control" id="status" name="status">
+                                <option value="Ativo">Ativo</option>
+                                <option value="Inativo">Inativo</option>
+                                <option value="Alerta">Alerta</option>
+                                <option value="Atenção">Atenção</option>
+                            </select>
+                        </div>
+                    </div>
 
+                    <div class="row">
+                        <div class="col-md-8 form-group">
+                            <label>Nome Secundário</label>
+                            <input type="text" class="form-control" id="nome_sec" name="nome_sec" placeholder="Nome Secundário">
+                        </div>
 
-					<div class="row">
-						<div class="col-md-5">							
-								<label>Bairro</label>
-								<input type="text" class="form-control" id="bairro" name="bairro" placeholder="Bairro" >							
-						</div>
+                        <div class="col-md-4 form-group">
+                            <label>Telefone Secundário</label>
+                            <input type="text" class="form-control" id="telefone_sec" name="telefone_sec" placeholder="Telefone Secundário">
+                        </div>
+                    </div>
 
-						<div class="col-md-4">							
-								<label>Cidade</label>
-								<input type="text" class="form-control" id="cidade" name="cidade" placeholder="Cidade" >							
-						</div>
+                    <div class="row">
+                        <div class="col-md-8 form-group">
+                            <label>Endereço Secundário</label>
+                            <input type="text" class="form-control" id="endereco_sec" name="endereco_sec" placeholder="Endereço Secundário">
+                        </div>
 
-						<div class="col-md-3">							
-								<label>Estado</label>
-								<select class="form-control" id="estado" name="estado">
-									<option value="">Selecionar</option>
-                  <option value="AC">Acre</option>
-                  <option value="AL">Alagoas</option>
-                  <option value="AP">Amapá</option>
-                  <option value="AM">Amazonas</option>
-                  <option value="BA">Bahia</option>
-                  <option value="CE">Ceará</option>
-                  <option value="DF">Distrito Federal</option>
-                  <option value="ES">Espírito Santo</option>
-                  <option value="GO">Goiás</option>
-                  <option value="MA">Maranhão</option>
-                  <option value="MT">Mato Grosso</option>
-                  <option value="MS">Mato Grosso do Sul</option>
-                  <option value="MG">Minas Gerais</option>
-                  <option value="PA">Pará</option>
-                  <option value="PB">Paraíba</option>
-                  <option value="PR">Paraná</option>
-                  <option value="PE">Pernambuco</option>
-                  <option value="PI">Piauí</option>
-                  <option value="RJ">Rio de Janeiro</option>
-                  <option value="RN">Rio Grande do Norte</option>
-                  <option value="RS">Rio Grande do Sul</option>
-                  <option value="RO">Rondônia</option>
-                  <option value="RR">Roraima</option>
-                  <option value="SC">Santa Catarina</option>
-                  <option value="SP">São Paulo</option>
-                  <option value="SE">Sergipe</option>
-                  <option value="TO">Tocantins</option>
-                  <option value="EX">Estrangeiro</option>
-              </select>						
-						</div>
+                        <div class="col-md-4 form-group">
+                            <label>Grupo (Empresa, outro)</label>
+                            <input type="text" class="form-control" id="grupo" name="grupo" placeholder="Local de Identificação do Cliente">
+                        </div>
+                    </div>
 
-						
-					</div>
+                    <div class="row align-items-end"> <div class="col-md-4 form-group">
+                            <label>Comprovante Endereço</label>
+                            <input type="file" class="form-control" id="comprovante_endereco" name="comprovante_endereco" onchange="carregarImgComprovanteEndereco()">
+                        </div>
 
-          
+                        <div class="col-md-2 mb-2"> <img src="images/comprovantes/sem-foto.png" id="target-comprovante-endereco"> </div>
 
+                        <div class="col-md-4 form-group">
+                            <label>Comprovante RG / CPF</label>
+                            <input type="file" class="form-control" id="comprovante_rg" name="comprovante_rg" onchange="carregarImgComprovanteRG()">
+                        </div>
 
-					<div class="row">
+                        <div class="col-md-2 mb-2"> <img src="images/comprovantes/sem-foto.png" id="target-comprovante-rg"> </div>
+                    </div>
 
-						<div class="col-md-4">							
-								<label>Chave Pix / Conta Bancária</label>
-								<input type="text" class="form-control" id="pix" name="pix" placeholder="Chave Pix" >							
-						</div>
+                    <div class="row align-items-end"> <div class="col-md-4 form-group">
+                            <label>Foto Cliente</label>
+                            <input type="file" class="form-control" id="foto" name="foto" onchange="carregarImg()">
+                        </div>
 
-						<div class="col-md-5">							
-								<label>Indicação</label>
-								<input type="text" class="form-control" id="indicacao" name="indicacao" placeholder="Indicado Por" >							
-						</div>
+                        <div class="col-md-2 mb-2"> <img src="images/clientes/sem-foto.jpg" id="target"> </div>
+                    </div>
 
-						<div class="col-md-3">							
-								<label>Status</label>
-								<select class="form-control" id="status" name="status">
-									<option value="Ativo">Ativo</option>
-								    <option value="Inativo">Inativo</option>
-								    <option value="Alerta">Alerta</option>
-								    <option value="Atenção">Atenção</option>
-								    </select>						
-						</div>
-					</div>
+                    <input type="hidden" class="form-control" id="id" name="id">
 
-
-
-					<div class="row">
-
-						<div class="col-md-8">							
-								<label>Nome Secundário</label>
-								<input type="text" class="form-control" id="nome_sec" name="nome_sec" placeholder="Nome Secundário" >							
-						</div>
-
-						<div class="col-md-4">							
-								<label>Telefone Secundário</label>
-								<input type="text" class="form-control" id="telefone_sec" name="telefone_sec" placeholder="Telefone Secundário" >							
-						</div>
-					</div>
-
-
-						<div class="row">
-
-						<div class="col-md-8">							
-								<label>Endereço Secundário</label>
-								<input type="text" class="form-control" id="endereco_sec" name="endereco_sec" placeholder="Endereço Secundário" >							
-						</div>
-
-						<div class="col-md-4">							
-								<label>Grupo (Empresa, outro)</label>
-								<input type="text" class="form-control" id="grupo" name="grupo" placeholder="Local de Identificação do Cliente" >							
-						</div>
-					</div>
-
-
-
-					<div class="row">
-						<div class="col-md-4">							
-								<label>Comprovante Endereço</label>
-								<input type="file" class="form-control" id="comprovante_endereco" name="comprovante_endereco"  onchange="carregarImgComprovanteEndereco()">							
-						</div>
-
-						<div class="col-md-2">								
-							<img src="images/comprovantes/sem-foto.png"  width="70px" id="target-comprovante-endereco">								
-						</div>
-
-
-						<div class="col-md-4">							
-								<label>Comprovante RG / CPF</label>
-								<input type="file" class="form-control" id="comprovante_rg" name="comprovante_rg"  onchange="carregarImgComprovanteRG()">							
-						</div>
-
-						<div class="col-md-2">								
-							<img src="images/comprovantes/sem-foto.png"  width="70px" id="target-comprovante-rg">								
-						</div>
-
-
-					</div>
-
-
-					<div class="row">
-						<div class="col-md-4">							
-								<label>Foto Cliente</label>
-								<input type="file" class="form-control" id="foto" name="foto"  onchange="carregarImg()">							
-						</div>
-
-						<div class="col-md-2">								
-							<img src="images/clientes/sem-foto.jpg"  width="70px" id="target">								
-						</div>
-
-					</div>				
-
-
-
-
-					<input type="hidden" class="form-control" id="id" name="id">					
-
-				<br>
-				<small><div id="mensagem" align="center"></div></small>
-			</div>
-			<div class="modal-footer">       
-				<button type="submit" class="btn btn-primary">Salvar</button>
-			</div>
-			</form>
-		</div>
-	</div>
+                    <div id="mensagem" align="center"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">Salvar</button>
+                </div>
+            </form>
+        </div>
+    </div>
 </div>
 
 
@@ -1439,6 +1571,10 @@ if($verificar_pagamentos != 'Não'){
     <input type="hidden" name="enviar" value="Sim">
     <button id="btn_form" type="submit"></button>
 </form>
+
+  </body>
+</html>
+
 
 
 <script type="text/javascript">var pag = "<?=$pag?>"</script>

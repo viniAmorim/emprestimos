@@ -176,7 +176,7 @@ foreach ([$comprovantes_dir, $clientes_dir] as $dir) {
     }
 }
 
-// Função auxiliar para processar uploads de imagens/documentos (SEM MUDANÇAS AQUI)
+// Função auxiliar para processar uploads de imagens/documentos
 function processUpload($file_input_name, &$db_field_variable, $target_dir, $prefix, $allowed_extensions, $quality = 20) {
     global $pdo; // Acesso ao objeto PDO para logging (se necessário)
 
@@ -188,7 +188,8 @@ function processUpload($file_input_name, &$db_field_variable, $target_dir, $pref
 
         if (in_array($ext, $allowed_extensions)) {
             // Exclui o arquivo antigo se existir e não for o default
-            if ($db_field_variable != "sem-foto.png" && file_exists($target_dir . $db_field_variable)) {
+            // ALTERADO: Adicionado 'sem-foto.jpg' para garantir que não tente apagar o padrão de foto principal
+            if ($db_field_variable != "sem-foto.png" && $db_field_variable != "sem-foto.jpg" && file_exists($target_dir . $db_field_variable)) {
                 @unlink($target_dir . $db_field_variable);
             }
             $db_field_variable = $nome_img; // Atualiza a variável para o novo nome do arquivo
@@ -199,7 +200,21 @@ function processUpload($file_input_name, &$db_field_variable, $target_dir, $pref
             if (in_array($ext, $document_extensions)) {
                 move_uploaded_file($imagem_temp, $caminho);
             } else { // É uma imagem, tenta otimizar
+                // ALTERADO: Adicionada verificação se GD Library está disponível
+                if (!function_exists('gd_info')) {
+                    error_log("GD Library não está instalada ou habilitada. Arquivo movido sem otimização: " . $caminho);
+                    move_uploaded_file($imagem_temp, $caminho); // Move o arquivo mesmo sem otimização
+                    return;
+                }
+
                 list($largura, $altura) = getimagesize($imagem_temp);
+                // ALTERADO: Verifica se getimagesize retornou dados válidos
+                if ($largura === false) {
+                     error_log("Não foi possível obter dimensões da imagem: " . $imagem_temp);
+                     move_uploaded_file($imagem_temp, $caminho);
+                     return;
+                }
+
                 if ($largura > 1400) {
                     $nova_largura = 1400;
                     $nova_altura = (int)floor(($altura / $largura) * $nova_largura);
@@ -221,25 +236,53 @@ function processUpload($file_input_name, &$db_field_variable, $target_dir, $pref
                             break;
                         case 'webp':
                             $imagem_original = imagecreatefromwebp($imagem_temp);
+                            // ALTERADO: Adicionado tratamento de transparência para WebP, se aplicável
+                            imagealphablending($image, false);
+                            imagesavealpha($image, true);
                             break;
                         default:
-                            // Não deveria chegar aqui se a extensão foi validada
+                            // Não deveria chegar aqui se a extensão foi validada, mas como fallback
+                            error_log("Extensão de imagem não suportada pela GD na função processUpload: " . $ext);
                             move_uploaded_file($imagem_temp, $caminho);
                             return; // Sai da função se o tipo de imagem não for suportado pela GD
                     }
 
                     if ($imagem_original) {
                         imagecopyresampled($image, $imagem_original, 0, 0, 0, 0, $nova_largura, $nova_altura, $largura, $altura);
-                        imagejpeg($image, $caminho, $quality); // Usa a qualidade definida
+                        
+                        // ALTERADO: Salva a imagem no formato original (PNG, JPEG, GIF, WebP)
+                        switch ($ext) {
+                            case 'png':
+                                imagepng($image, $caminho, 9); // Qualidade PNG (0-9)
+                                break;
+                            case 'jpeg':
+                            case 'jpg':
+                                imagejpeg($image, $caminho, $quality); // Usa a qualidade definida
+                                break;
+                            case 'gif':
+                                imagegif($image, $caminho);
+                                break;
+                            case 'webp':
+                                imagewebp($image, $caminho, $quality); // Qualidade WebP (0-100)
+                                break;
+                            default:
+                                // Fallback para JPEG se o formato de origem não puder ser mantido
+                                imagejpeg($image, $caminho, $quality);
+                        }
+
                         imagedestroy($imagem_original);
                         imagedestroy($image);
+                    } else {
+                        // ALTERADO: Se a imagem original não pôde ser criada (ex: arquivo corrompido), move o temp
+                        error_log("Falha ao criar imagem original a partir do temporário: " . $imagem_temp . " Extensão: " . $ext);
+                        move_uploaded_file($imagem_temp, $caminho); 
                     }
                 } else {
                     move_uploaded_file($imagem_temp, $caminho); // Move sem redimensionar se for pequeno
                 }
             }
         } else {
-            echo json_encode(['success' => false, 'message' => 'Extensão de arquivo para ' . $prefix . ' não permitida!']);
+            echo json_encode(['success' => false, 'message' => 'Extensão de arquivo para ' . $prefix . ' não permitida! (Permitidas: ' . implode(', ', $allowed_extensions) . ')']); // ALTERADO: Adicionado quais extensões são permitidas na mensagem
             exit();
         }
     }
@@ -248,6 +291,7 @@ function processUpload($file_input_name, &$db_field_variable, $target_dir, $pref
 // Extensões de arquivo comuns para comprovantes (podem incluir documentos)
 $extensoes_comprovantes = ['png', 'jpg', 'jpeg', 'gif', 'pdf', 'rar', 'zip', 'doc', 'docx', 'webp', 'xlsx', 'xlsm', 'xls', 'xml'];
 // Extensões para fotos de perfil e prints de app (geralmente só imagens + PDF para prints)
+// ALTERADO: Garantido que 'webp' está nas listas de extensões.
 $extensoes_imagens_pdf = ['png', 'jpg', 'jpeg', 'gif', 'pdf', 'webp'];
 $extensoes_imagens_apenas = ['png', 'jpg', 'jpeg', 'gif', 'webp'];
 
@@ -282,8 +326,9 @@ if (isset($_POST['foto_usuario']) && !empty($_POST['foto_usuario'])) {
         // Garante que a extensão seja 'jpeg' se for 'jpg' (para padronização)
         if ($ext_foto == 'jpg') $ext_foto = 'jpeg';
 
+        // ALTERADO: Garantido que 'webp' é permitido aqui
         if (!in_array($ext_foto, ['png', 'jpeg', 'gif', 'webp'])) { // Apenas imagens para foto de perfil
-            echo json_encode(['success' => false, 'message' => 'Formato de imagem de usuário não permitido para foto da câmera!']);
+            echo json_encode(['success' => false, 'message' => 'Formato de imagem de usuário não permitido para foto da câmera! (Apenas PNG, JPEG, GIF, WebP)']); // ALTERADO: Mensagem de erro mais clara
             exit();
         }
 
@@ -315,7 +360,8 @@ if (isset($_POST['foto_usuario']) && !empty($_POST['foto_usuario'])) {
         // Abre a imagem recém-salva para otimização, se necessário
         list($largura, $altura) = getimagesize($caminho_foto);
 
-        if ($largura > 1400) {
+        // ALTERADO: Verifica se getimagesize retornou dados válidos
+        if ($largura !== false && $largura > 1400) {
             $nova_largura = 1400;
             $nova_altura = intval(($altura / $largura) * $nova_largura);
             $image_resampled = imagecreatetruecolor($nova_largura, $nova_altura);
@@ -334,15 +380,41 @@ if (isset($_POST['foto_usuario']) && !empty($_POST['foto_usuario'])) {
                     $imagem_original_from_file = imagecreatefromgif($caminho_foto);
                     break;
                 case 'webp':
+                    // ALTERADO: Adicionado suporte para WebP aqui
                     $imagem_original_from_file = imagecreatefromwebp($caminho_foto);
+                    imagealphablending($image_resampled, false);
+                    imagesavealpha($image_resampled, true);
                     break;
+                // ALTERADO: Removido o 'default' aqui, pois a validação de extensão já ocorreu antes.
             }
 
             if ($imagem_original_from_file) {
                 imagecopyresampled($image_resampled, $imagem_original_from_file, 0, 0, 0, 0, $nova_largura, $nova_altura, $largura, $altura);
-                imagejpeg($image_resampled, $caminho_foto, 80); // Qualidade 80 para fotos de perfil
+                
+                // ALTERADO: Salva a imagem otimizada no formato original
+                switch ($ext_foto) {
+                    case 'png':
+                        imagepng($image_resampled, $caminho_foto, 9);
+                        break;
+                    case 'jpeg':
+                        imagejpeg($image_resampled, $caminho_foto, 80);
+                        break;
+                    case 'gif':
+                        imagegif($image_resampled, $caminho_foto);
+                        break;
+                    case 'webp':
+                        imagewebp($image_resampled, $caminho_foto, 80);
+                        break;
+                    default:
+                        // Fallback para JPEG, embora não deva ser alcançado se as extensões forem válidas
+                        imagejpeg($image_resampled, $caminho_foto, 80);
+                }
+
                 imagedestroy($imagem_original_from_file);
                 imagedestroy($image_resampled);
+            } else {
+                // ALTERADO: Se a imagem original não pôde ser criada após file_put_contents, loga e não otimiza
+                error_log("Falha ao criar imagem original a partir do arquivo salvo: " . $caminho_foto . " Extensão: " . $ext_foto);
             }
         }
     } else {
@@ -367,7 +439,6 @@ if ($ramo === 'uber') {
     $funcao_assalariado = htmlspecialchars(trim(@$_POST['funcao_assalariado']));
     $empresa_assalariado = htmlspecialchars(trim(@$_POST['empresa_assalariado']));
 }
-
 
 // Prepara a query de INSERT ou UPDATE
 if($id == ""){
