@@ -208,6 +208,7 @@ function processUpload($file_input_name, &$db_field_variable, $target_dir, $pref
       } else {
           error_log("Temporary file not found for exif_imagetype(). Path: " . $file['tmp_name']);
       }
+    }
 
        ///============================ debug ==================
 
