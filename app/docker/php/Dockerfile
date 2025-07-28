@@ -27,6 +27,7 @@ RUN set -eux && \
   linux-headers oniguruma-dev libxslt-dev postgresql-dev vips-dev \
   libssh2-dev gmp-dev libzip-dev libxml2-dev freetds-dev yaml-dev \
   $PHPIZE_DEPS && \
+  docker-php-ext-configure gd --with-jpeg --with-webp && \
   docker-php-ext-install \
   mysqli \
   pdo_mysql \
