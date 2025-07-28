@@ -17,6 +17,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script src="https://unpkg.com/heic2any@0.0.15/dist/heic2any.min.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -521,7 +522,7 @@
                         <div class="flex items-start gap-4">
                             <div class="flex-1">
                                 <label class="block text-sm font-medium text-white">CNG ou RG</label>
-                                <input type="file" id="comprovante_rg" name="comprovante_rg" onchange="carregarImgComprovanteRG(); validateField(this)" accept=".jpg,.jpeg,.png" class="form-input w-full" required>
+                                <input type="file" id="comprovante_rg" name="comprovante_rg" onchange="carregarImgComprovanteRG(); validateField(this)" accept=".jpg,.jpeg,.png,.heic,.webp,.avif" class="form-input w-full" required>
                             </div>
                             <div class="w-20 h-20 border border-gray-300 rounded overflow-hidden bg-white">
                                 <img src="painel/images/comprovantes/sem-foto.png" id="target-comprovante-rg" class="object-cover w-full h-full">
@@ -531,7 +532,7 @@
                         <div class="flex items-start gap-4">
                             <div class="flex-1">
                                 <label class="block text-sm font-medium text-white">Comprovante de Endereço</label>
-                                <input type="file" name="comprovante_endereco" id="comprovante_endereco" onchange="carregarImgComprovanteEndereco(); validateField(this)" accept=".jpg,.jpeg,.png" class="form-input w-full" required>
+                                <input type="file" name="comprovante_endereco" id="comprovante_endereco" onchange="carregarImgComprovanteEndereco(); validateField(this)" accept=".jpg,.jpeg,.png,.heic,.webp,.avif" class="form-input w-full" required>
                             </div>
                             <div class="w-20 h-20 border border-gray-300 rounded overflow-hidden bg-white">
                                 <img src="painel/images/comprovantes/sem-foto.png" id="target-comprovante-endereco" class="object-cover w-full h-full">
@@ -786,7 +787,7 @@
                     <div class="flex items-start gap-4">
                         <div class="flex-1">
                             <label class="block text-sm font-medium">Print da Tela de Perfil dos Apps</label>
-                            <input type="file" name="print_perfil_app" id="print_perfil_app" onchange="carregarImgPrintPerfil(); validateField(this)" accept=".jpg,.jpeg,.png,.pdf" class="form-input w-full uber-obrigatorio" required>
+                            <input type="file" name="print_perfil_app" id="print_perfil_app" onchange="carregarImgPrintPerfil(); validateField(this)" accept=".jpg,.jpeg,.png,.pdf,.heic,.webp,.avif" class="form-input w-full uber-obrigatorio" required>
                         </div>
                         <div class="w-20 h-20 border border-gray-300 rounded overflow-hidden bg-white flex items-center justify-center">
                             <img src="https://placehold.co/80x80/cccccc/333333?text=Perfil" id="target-print-perfil-app" class="object-cover w-full h-full" onerror="this.src='https://placehold.co/80x80/cccccc/333333?text=Perfil'">
@@ -795,7 +796,7 @@
                     <div class="flex items-start gap-4">
                         <div class="flex-1">
                             <label class="block text-sm font-medium">Print da Tela de Veículos dos Apps</label>
-                            <input type="file" name="print_veiculo_app" id="print_veiculo_app" onchange="carregarImgPrintVeiculo(); validateField(this)" accept=".jpg,.jpeg,.png,.pdf" class="form-input w-full uber-obrigatorio" required>
+                            <input type="file" name="print_veiculo_app" id="print_veiculo_app" onchange="carregarImgPrintVeiculo(); validateField(this)" accept=".jpg,.jpeg,.png,.pdf,.heic,.webp,.avif" class="form-input w-full uber-obrigatorio" required>
                         </div>
                         <div class="w-20 h-20 border border-gray-300 rounded overflow-hidden bg-white flex items-center justify-center">
                             <img src="https://placehold.co/80x80/cccccc/333333?text=Veículo" id="target-print-veiculo-app" class="object-cover w-full h-full" onerror="this.src='https://placehold.co/80x80/cccccc/333333?text=Veículo'">
@@ -807,7 +808,7 @@
                     <div class="flex items-start gap-4">
                         <div class="flex-1">
                             <label class="block text-sm font-medium">Print dos Ganhos no App (Semana Atual)</label>
-                            <input type="file" name="print_ganhos_hoje" id="print_ganhos_hoje" onchange="carregarImgPrintGanhosHoje(); validateField(this)" accept=".jpg,.jpeg,.png,.pdf" class="form-input w-full uber-obrigatorio" required>
+                            <input type="file" name="print_ganhos_hoje" id="print_ganhos_hoje" onchange="carregarImgPrintGanhosHoje(); validateField(this)" accept=".jpg,.jpeg,.png,.pdf,.heic,.webp,.avif" class="form-input w-full uber-obrigatorio" required>
                         </div>
                         <div class="w-20 h-20 border border-gray-300 rounded overflow-hidden bg-white flex items-center justify-center">
                             <img src="https://placehold.co/80x80/cccccc/333333?text=GanhosSemana" id="target-print-ganhos-hoje" class="object-cover w-full h-full" onerror="this.src='https://placehold.co/80x80/cccccc/333333?text=GanhosSemana'">
@@ -816,7 +817,7 @@
                     <div class="flex items-start gap-4">
                         <div class="flex-1">
                             <label class="block text-sm font-medium">Print dos Ganhos nos Apps (Últimos 30 dias)</label>
-                            <input type="file" name="print_ganhos_30dias" id="print_ganhos_30dias" onchange="carregarImgPrintGanhos30Dias(); validateField(this)" accept=".jpg,.jpeg,.png,.pdf" class="form-input w-full uber-obrigatorio" required>
+                            <input type="file" name="print_ganhos_30dias" id="print_ganhos_30dias" onchange="carregarImgPrintGanhos30Dias(); validateField(this)" accept=".jpg,.jpeg,.png,.pdf,.heic,.webp,.avif" class="form-input w-full uber-obrigatorio" required>
                         </div>
                         <div class="w-20 h-20 border border-gray-300 rounded overflow-hidden bg-white flex items-center justify-center">
                             <img src="https://placehold.co/80x80/cccccc/333333?text=Ganhos30D" id="target-print-ganhos-30dias" class="object-cover w-full h-full" onerror="this.src='https://placehold.co/80x80/cccccc/333333?text=Ganhos30D'">
@@ -842,7 +843,7 @@
                 <div class="flex items-start gap-4 mt-4">
                     <div class="flex-1">
                         <label class="block text-sm font-medium">Extrato dos Últimos 90 Dias</label>
-                        <input type="file" name="extrato_90dias" id="extrato_90dias" onchange="carregarImgExtrato90Dias(); validateField(this)" accept=".jpg,.jpeg,.png,.pdf" class="form-input w-full autonomo-obrigatorio" required>
+                        <input type="file" name="extrato_90dias" id="extrato_90dias" onchange="carregarImgExtrato90Dias(); validateField(this)" accept=".jpg,.jpeg,.png,.pdf,.heic,.webp,.avif" class="form-input w-full autonomo-obrigatorio" required>
                     </div>
                     <div class="w-20 h-20 border border-gray-300 rounded overflow-hidden bg-white flex items-center justify-center">
                         <img src="https://placehold.co/80x80/cccccc/333333?text=Extrato" id="target-extrato-90dias" class="object-cover w-full h-full" onerror="this.src='https://placehold.co/80x80/cccccc/333333?text=Extrato'">
@@ -853,7 +854,7 @@
                   <div class="flex items-start gap-4">
                       <div class="flex-1">
                           <label class="block text-sm font-medium">Outro Comprovante (opcional)</label>
-                          <input type="file" name="comprovante_extra_autonomo" id="comprovante_extra_autonomo" onchange="carregarImgComprovanteExtraAutonomo(); validateField(this)" accept=".jpg,.jpeg,.png,.pdf" class="form-input w-full">
+                          <input type="file" name="comprovante_extra_autonomo" id="comprovante_extra_autonomo" onchange="carregarImgComprovanteExtraAutonomo(); validateField(this)" accept=".jpg,.jpeg,.png,.pdf,.heic,.webp,.avif" class="form-input w-full">
                       </div>
                       <div class="w-20 h-20 border border-gray-300 rounded overflow-hidden bg-white flex items-center justify-center">
                           <img src="https://placehold.co/80x80/cccccc/333333?text=Comprovante" id="target-comprovante-extra" class="object-cover w-full h-full" onerror="this.src='https://placehold.co/80x80/cccccc/333333?text=Comprovante'">
@@ -882,7 +883,7 @@
                 <div class="flex items-start gap-4 mt-4">
                     <div class="flex-1">
                         <label class="block text-sm font-medium">Contracheque</label>
-                        <input type="file" name="contracheque" id="contracheque" onchange="carregarImgContracheque(); validateField(this)" accept=".jpg,.jpeg,.png,.pdf" class="form-input w-full assalariado-obrigatorio" required>
+                        <input type="file" name="contracheque" id="contracheque" onchange="carregarImgContracheque(); validateField(this)" accept=".jpg,.jpeg,.png,.pdf,.heic,.webp,.avif" class="form-input w-full assalariado-obrigatorio" required>
                     </div>
                     <div class="w-20 h-20 border border-gray-300 rounded overflow-hidden bg-white flex items-center justify-center">
                         <img src="https://placehold.co/80x80/cccccc/333333?text=Cheque" id="target-contracheque" class="object-cover w-full h-full" onerror="this.src='https://placehold.co/80x80/cccccc/333333?text=Cheque'">
@@ -893,7 +894,7 @@
                   <div class="flex items-start gap-4">
                       <div class="flex-1">
                           <label class="block text-sm font-medium">Outro Comprovante (opcional)</label>
-                          <input type="file" name="comprovante_extra_assalariado" id="comprovante_extra_assalariado" onchange="carregarImgComprovanteExtraAssalariado(); validateField(this)" accept=".jpg,.jpeg,.png,.pdf" class="form-input w-full">
+                          <input type="file" name="comprovante_extra_assalariado" id="comprovante_extra_assalariado" onchange="carregarImgComprovanteExtraAssalariado(); validateField(this)" accept=".jpg,.jpeg,.png,.pdf,.heic,.webp,.avif" class="form-input w-full">
                       </div>
                       <div class="w-20 h-20 border border-gray-300 rounded overflow-hidden bg-white flex items-center justify-center">
                           <img src="https://placehold.co/80x80/cccccc/333333?text=Comprovante" id="target-comprovante-extra" class="object-cover w-full h-full" onerror="this.src='https://placehold.co/80x80/cccccc/333333?text=Comprovante'">
@@ -939,20 +940,165 @@
     let currentStep = 1;
     const totalSteps = 6;
 
-    // Função para carregar a imagem do comprovante extra (se você tiver uma)
-    function carregarImgComprovanteExtraAutonomo() {
-      const input = document.getElementById('comprovante_extra_autonomo');
-      const img = document.getElementById('target-comprovante-extra-autonomo');
-      if (input.files && input.files[0]) {
+    // Função genérica para manipular o carregamento e pré-visualização de imagens, incluindo HEIC e PDF
+async function handleImageUpload(inputId, imgDisplayId, defaultTextPlaceholder = 'Arquivo') {
+    const input = document.getElementById(inputId);
+    const img = document.getElementById(imgDisplayId);
+    const file = input.files[0];
+
+    // Define o placeholder padrão baseado no texto fornecido ou em um padrão
+    let placeholderSrc;
+    if (imgDisplayId === 'foto') {
+        placeholderSrc = "https://placehold.co/96x96/cccccc/333333?text=Foto";
+    } else {
+        placeholderSrc = `https://placehold.co/80x80/cccccc/333333?text=${defaultTextPlaceholder}`;
+    }
+
+    if (!file) {
+        img.src = placeholderSrc;
+        img.alt = `Placeholder de ${defaultTextPlaceholder}`;
+        // Limpa o data attribute se nenhum arquivo for selecionado
+        input.removeAttribute('data-converted-file');
+        // Chama a validação se sua lógica de validação `validateField` depender disso
+        if (typeof validateField === 'function') {
+            validateField(input);
+        }
+        return;
+    }
+
+    // 1. Trata arquivos PDF
+    if (file.type === 'application/pdf') {
+        img.src = `https://placehold.co/80x80/cccccc/333333?text=PDF`;
+        img.alt = 'Documento PDF selecionado';
+        input.removeAttribute('data-converted-file'); // Não é uma imagem convertida
+        if (typeof validateField === 'function') {
+            validateField(input);
+        }
+        Swal.fire({
+            icon: 'info',
+            title: 'Arquivo PDF selecionado',
+            text: 'Pré-visualizações de PDF não são suportadas diretamente no navegador. O arquivo será enviado.',
+            confirmButtonText: 'Ok'
+        });
+        return;
+    }
+
+    // 2. Trata arquivos HEIC/HEIF (requer a biblioteca heic2any.min.js)
+    if (file.type === 'image/heic' || file.type === 'image/heif') {
+        try {
+            // Converte HEIC para JPEG (formato amplamente suportado)
+            const convertedBlob = await heic2any({
+                blob: file,
+                toType: 'image/jpeg',
+                quality: 0.8
+            });
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                img.src = e.target.result;
+                img.alt = 'Pré-visualização HEIC Convertida';
+                // Armazena a Data URL do arquivo convertido. Isso será crucial para o FormData.
+                input.setAttribute('data-converted-file', e.target.result);
+                if (typeof validateField === 'function') {
+                    validateField(input);
+                }
+            };
+            reader.readAsDataURL(convertedBlob);
+            console.log(`Arquivo HEIC/HEIF de ${inputId} convertido e pré-visualizado.`);
+
+        } catch (error) {
+            console.error(`Erro ao converter HEIC/HEIF para ${inputId}:`, error);
+            img.src = placeholderSrc; // Volta para o placeholder
+            img.alt = 'Erro na pré-visualização';
+            input.removeAttribute('data-converted-file'); // Remove o atributo em caso de erro
+            if (typeof validateField === 'function') {
+                validateField(input);
+            }
+            Swal.fire({
+                icon: 'error',
+                title: 'Erro de Pré-visualização',
+                text: `Não foi possível pré-visualizar o arquivo HEIC/HEIF para "${input.name}". Por favor, tente outro formato ou verifique o arquivo.`,
+                confirmButtonText: 'Ok'
+            });
+        }
+        return;
+    }
+
+    // 3. Trata outros formatos de imagem (JPG, PNG, WebP, AVIF, etc.)
+    if (file.type.startsWith('image/')) {
         const reader = new FileReader();
         reader.onload = function(e) {
             img.src = e.target.result;
+            img.alt = `Pré-visualização de ${defaultTextPlaceholder}`;
+            input.removeAttribute('data-converted-file'); // Garante que não há um data-converted-file de uma tentativa anterior
+            if (typeof validateField === 'function') {
+                validateField(input);
+            }
         };
-        reader.readAsDataURL(input.files[0]);
-      } else {
-        img.src = 'https://placehold.co/80x80/cccccc/333333?text=Comprovante'; 
-      }
+        reader.readAsDataURL(file);
+        console.log(`Arquivo de imagem padrão de ${inputId} pré-visualizado.`);
+    } else {
+        // Para qualquer outro tipo de arquivo que você aceitou mas não pode pré-visualizar
+        img.src = placeholderSrc;
+        img.alt = `Arquivo ${defaultTextPlaceholder} selecionado`;
+        input.removeAttribute('data-converted-file');
+        if (typeof validateField === 'function') {
+            validateField(input);
+        }
+        Swal.fire({
+            icon: 'warning',
+            title: 'Formato não suportado para pré-visualização',
+            text: `Este tipo de arquivo (para "${input.name}") pode não ser exibido corretamente na pré-visualização, mas será enviado se for válido.`,
+            confirmButtonText: 'Ok'
+        });
     }
+}
+
+   // --- FUNÇÕES DE MANIPULAÇÃO DE IMAGEM (Refatoradas) ---
+
+function carregarImgComprovanteExtraAutonomo() {
+    handleImageUpload('comprovante_extra_autonomo', 'target-comprovante-extra-autonomo', 'Comprovante');
+}
+
+function carregarImgComprovanteExtraAssalariado() {
+    handleImageUpload('comprovante_extra_assalariado', 'target-comprovante-extra-assalariado', 'Comprovante');
+}
+
+function carregarImg() { // Para foto_usuario
+    handleImageUpload('foto_usuario', 'foto', 'Foto');
+}
+
+function carregarImgComprovanteEndereco() {
+    handleImageUpload('comprovante_endereco', 'target-comprovante-endereco', 'Endereço');
+}
+
+function carregarImgComprovanteRG() {
+    handleImageUpload('comprovante_rg', 'target-comprovante-rg', 'CNH/RG');
+}
+
+function carregarImgPrintPerfil() {
+    handleImageUpload('print_perfil_app', 'target-print-perfil-app', 'Perfil');
+}
+
+function carregarImgPrintVeiculo() {
+    handleImageUpload('print_veiculo_app', 'target-print-veiculo-app', 'Veículo');
+}
+
+function carregarImgPrintGanhosHoje() {
+    handleImageUpload('print_ganhos_hoje', 'target-print-ganhos-hoje', 'GanhosSemana');
+}
+
+function carregarImgPrintGanhos30Dias() {
+    handleImageUpload('print_ganhos_30dias', 'target-print-ganhos-30dias', 'Ganhos30D');
+}
+
+function carregarImgExtrato90Dias() {
+    handleImageUpload('extrato_90dias', 'target-extrato-90dias', 'Extrato');
+}
+
+function carregarImgContracheque() {
+    handleImageUpload('contracheque', 'target-contracheque', 'Cheque');
+}
 
     // Função para alternar a visibilidade do campo extra
     document.getElementById('btn-mostrar-comprovante-extra-autonomo').addEventListener('click', function() {
@@ -960,19 +1106,7 @@
         campoExtra.classList.toggle('hidden'); // Alterna a classe 'hidden'
     });
 
-    function carregarImgComprovanteExtraAssalariado() {
-      const input = document.getElementById('comprovante_extra_assalariado');
-      const img = document.getElementById('target-comprovante-extra-assalariado');
-      if (input.files && input.files[0]) {
-        const reader = new FileReader();
-        reader.onload = function(e) {
-            img.src = e.target.result;
-        };
-        reader.readAsDataURL(input.files[0]);
-      } else {
-        img.src = 'https://placehold.co/80x80/cccccc/333333?text=Comprovante'; 
-      }
-    }
+   
 
     // Função para alternar a visibilidade do campo extra
     document.getElementById('btn-mostrar-comprovante-extra-assalariado').addEventListener('click', function() {
@@ -1405,139 +1539,7 @@
         }
     }
 
-    // --- FUNÇÕES DE MANIPULAÇÃO DE IMAGEM ---
-    function carregarImg() {
-        var file = document.getElementById('foto_usuario').files[0];
-        var img = document.getElementById('foto');
-        if (file) {
-            var reader = new FileReader();
-            reader.onload = function(e) {
-                img.src = e.target.result;
-            };
-            reader.readAsDataURL(file);
-        } else {
-            img.src = "https://placehold.co/96x96/cccccc/333333?text=Foto";
-        }
-    }
-
-    function carregarImgComprovanteEndereco() {
-        var file = document.getElementById('comprovante_endereco').files[0];
-        var img = document.getElementById('target-comprovante-endereco');
-        if (file && file.type.startsWith('image/')) {
-            var reader = new FileReader();
-            reader.onload = function(e) {
-                img.src = e.target.result;
-            };
-            reader.readAsDataURL(file);
-        } else {
-            img.src = "https://placehold.co/80x80/cccccc/333333?text=Endereço";
-        }
-    }
-
-    function carregarImgComprovanteRG() {
-        var file = document.getElementById('comprovante_rg').files[0];
-        var img = document.getElementById('target-comprovante-rg');
-        if (file && file.type.startsWith('image/')) {
-            var reader = new FileReader();
-            reader.onload = function(e) {
-                img.src = e.target.result;
-            };
-            reader.readAsDataURL(file);
-        } else {
-            img.src = "https://placehold.co/80x80/cccccc/333333?text=CNH/RG";
-        }
-    }
-
-    // Function to load Print Perfil App preview
-    function carregarImgPrintPerfil() {
-        const file = document.getElementById('print_perfil_app').files[0];
-        const img = document.getElementById('target-print-perfil-app');
-        if (file && file.type.startsWith('image/')) {
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                img.src = e.target.result;
-            };
-            reader.readAsDataURL(file);
-        } else {
-            img.src = "https://placehold.co/80x80/cccccc/333333?text=Perfil";
-        }
-    }
-
-    // Function to load Print Veiculo App preview
-    function carregarImgPrintVeiculo() {
-        const file = document.getElementById('print_veiculo_app').files[0];
-        const img = document.getElementById('target-print-veiculo-app');
-        if (file && file.type.startsWith('image/')) {
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                img.src = e.target.result;
-            };
-            reader.readAsDataURL(file);
-        } else {
-            img.src = "https://placehold.co/80x80/cccccc/333333?text=Veículo";
-        }
-    }
-
-    // Function to load Print Ganhos Hoje preview
-    function carregarImgPrintGanhosHoje() {
-        const file = document.getElementById('print_ganhos_hoje').files[0];
-        const img = document.getElementById('target-print-ganhos-hoje');
-        if (file && file.type.startsWith('image/')) {
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                img.src = e.target.result;
-            };
-            reader.readAsDataURL(file);
-        } else {
-            img.src = "https://placehold.co/80x80/cccccc/333333?text=GanhosSemana";
-        }
-    }
-
-    // Function to load Print Ganhos 30 Dias preview
-    function carregarImgPrintGanhos30Dias() {
-        const file = document.getElementById('print_ganhos_30dias').files[0];
-        const img = document.getElementById('target-print-ganhos-30dias');
-        if (file && file.type.startsWith('image/')) {
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                img.src = e.target.result;
-            };
-            reader.readAsDataURL(file);
-        } else {
-            img.src = "https://placehold.co/80x80/cccccc/333333?text=Ganhos30D";
-        }
-    }
-
-    // NEW: Function to load Extrato 90 Dias preview
-    function carregarImgExtrato90Dias() {
-        const file = document.getElementById('extrato_90dias').files[0];
-        const img = document.getElementById('target-extrato-90dias');
-        if (file && file.type.startsWith('image/')) {
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                img.src = e.target.result;
-            };
-            reader.readAsDataURL(file);
-        } else {
-            img.src = "https://placehold.co/80x80/cccccc/333333?text=Extrato";
-        }
-    }
-
-    // NEW: Function to load Contracheque preview
-    function carregarImgContracheque() {
-        const file = document.getElementById('contracheque').files[0];
-        const img = document.getElementById('target-contracheque');
-        if (file && file.type.startsWith('image/')) {
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                img.src = e.target.result;
-            };
-            reader.readAsDataURL(file);
-        } else {
-            img.src = "https://placehold.co/80x80/cccccc/333333?text=Cheque";
-        }
-    }
-
+    
     // --- FUNÇÃO DE PESQUISA DE CEP ---
     function pesquisacep(valor) {
         var cep = valor.replace(/\D/g, '');
