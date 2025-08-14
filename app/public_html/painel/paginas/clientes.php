@@ -25,171 +25,29 @@ if($verificar_pagamentos != 'Não'){
 <html>
   <head>
     <style>
-      /* Estilo geral do Modal de Formulário */
-      #modalForm .modal-content {
-          border-radius: 12px;
-          box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15); /* Sombra mais destacada */
-          overflow: hidden;
-      }
+      .ocultar {
+    display: none !important;
+}
+.alerta-item {
+    border-bottom: 1px solid #eee;
+    padding: 10px 0;
+}
+.alerta-item:last-child {
+    border-bottom: none;
+}
+.alerta-tipo {
+    font-weight: bold;
+}
+.alerta-valor {
+    color: #555;
+    font-style: italic;
+}
+.alerta-data {
+    font-size: 0.8em;
+    color: #999;
+}
 
-      #modalForm .modal-header {
-          background-color: #f0f2f5; /* Fundo mais claro e suave */
-          border-bottom: 1px solid #e0e4e8;
-          padding: 25px 35px; /* Mais padding para um visual espaçoso */
-          border-top-left-radius: 12px;
-          border-top-right-radius: 12px;
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-      }
 
-      #modalForm .modal-title {
-          color: #2c3e50; /* Cor escura e sofisticada para o título */
-          font-weight: 700;
-          font-size: 2rem; /* Título grande e impactante */
-          letter-spacing: -0.5px; /* Ajuste para melhor leitura */
-      }
-
-      #modalForm .close {
-          font-size: 2.8rem; /* Botão de fechar grande e visível */
-          color: #7f8c8d; /* Cinza sutil */
-          transition: color 0.2s ease-in-out;
-          margin-top: -10px; /* Ajuste para alinhamento fino */
-          opacity: 0.8; /* Levemente transparente */
-      }
-
-      #modalForm .close:hover {
-          color: #e74c3c; /* Vermelho vibrante no hover */
-          opacity: 1;
-      }
-
-      #modalForm .modal-body {
-          padding: 30px 35px; /* Padding consistente */
-          background-color: #ffffff; /* Fundo branco puro */
-      }
-
-      #modalForm .modal-footer {
-          border-top: 1px solid #e0e4e8;
-          padding: 20px 35px;
-          background-color: #f0f2f5; /* Fundo do rodapé similar ao cabeçalho */
-          border-bottom-left-radius: 12px;
-          border-bottom-right-radius: 12px;
-          display: flex;
-          justify-content: flex-end; /* Alinha botões à direita */
-          gap: 10px; /* Espaço entre botões */
-      }
-
-      /* Estilo para os campos de formulário */
-      #modalForm .form-group {
-          margin-bottom: 20px; /* Espaçamento padrão entre grupos de campo */
-      }
-
-      #modalForm label {
-          font-weight: 600; /* Labels mais encorpados */
-          color: #555; /* Cor mais suave */
-          margin-bottom: 6px; /* Espaço entre label e input */
-          display: block; /* Garante que a label ocupe sua própria linha */
-          font-size: 0.95em; /* Levemente menor que o input */
-      }
-
-      #modalForm .form-control {
-          border-radius: 8px; /* Cantos arredondados para inputs e selects */
-          border: 1px solid #dcdfe6; /* Borda mais suave */
-          padding: 5px 15px; /* Mais padding para um visual confortável */
-          font-size: 1em; /* Tamanho da fonte padrão */
-          color: #333; /* Cor do texto do input */
-          transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
-      }
-
-      #modalForm .form-control:focus {
-          border-color: #007bff; /* Borda azul no foco */
-          box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25); /* Anel de foco sutil */
-          outline: none; /* Remove o outline padrão */
-      }
-
-      #modalForm .form-control::placeholder {
-          color: #a0a7b4; /* Cor mais clara para o placeholder */
-          font-style: italic; /* Placeholder em itálico para diferenciação */
-      }
-
-      /* Ajustes específicos para as linhas do formulário */
-      #modalForm .row {
-          margin-bottom: 20px; /* Espaço entre as linhas de campos */
-      }
-
-      #modalForm .row:last-of-type {
-          margin-bottom: 0; /* Remove margem da última linha */
-      }
-
-      /* Estilo para o preview de cor do status */
-      #preview_cor_status {
-          width: 20px !important; /* Ligeiramente maior */
-          height: 20px !important; /* Ligeiramente maior */
-          border: 1px solid #c0c4cc !important; /* Borda sutil */
-          border-radius: 5px !important; /* Cantos levemente arredondados */
-          box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.08); /* Sombra interna */
-          flex-shrink: 0; /* Impede que ele encolha */
-      }
-
-      /* Ajuste do select de status cliente para alinhar com o preview de cor */
-      #modalForm #status_cliente {
-          margin-top: 0 !important; /* Remove o margin-top padrão se o flexbox já cuida disso */
-      }
-
-      /* Estilo para a mensagem de validação */
-      #mensagem {
-          padding: 10px;
-          border-radius: 6px;
-          font-weight: 500;
-          margin-top: 15px;
-          opacity: 0; /* Inicialmente invisível */
-          transition: opacity 0.3s ease-in-out;
-      }
-
-      #mensagem.visible {
-          opacity: 1; /* Visível quando a mensagem aparece */
-      }
-
-      /* Estilo dos botões do footer */
-      #modalForm .modal-footer .btn {
-          padding: 10px 25px; /* Padding generoso */
-          font-size: 1.05em;
-          border-radius: 8px; /* Botões arredondados */
-          font-weight: 600;
-          transition: all 0.2s ease-in-out;
-      }
-
-      #modalForm .modal-footer .btn-primary {
-          background-color: #007bff;
-          border-color: #007bff;
-          box-shadow: 0 4px 10px rgba(0, 123, 255, 0.2);
-      }
-
-      #modalForm .modal-footer .btn-primary:hover {
-          background-color: #0056b3;
-          border-color: #0056b3;
-          transform: translateY(-2px);
-          box-shadow: 0 6px 15px rgba(0, 123, 255, 0.3);
-      }
-
-      /* Estilo para as imagens de preview de upload */
-      #target-comprovante-endereco,
-      #target-comprovante-rg,
-      #target {
-          width: 80px !important; /* Tamanho um pouco maior */
-          height: 80px; /* Mantém proporção */
-          object-fit: cover; /* Garante que a imagem preencha o espaço sem distorção */
-          border-radius: 8px; /* Cantos arredondados */
-          border: 2px solid #e0e4e8; /* Borda sutil */
-          box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Sombra suave */
-          transition: transform 0.2s ease-in-out;
-      }
-
-      #target-comprovante-endereco:hover,
-      #target-comprovante-rg:hover,
-      #target:hover {
-          transform: scale(1.05); /* Leve zoom no hover */
-      }
     </style>
   </head>
   <body>
@@ -705,7 +563,25 @@ if($verificar_pagamentos != 'Não'){
 	</div>
 </div>
 
-
+<div class="modal fade" id="modalAlertas" tabindex="-1" role="dialog" aria-labelledby="modalAlertasLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalAlertasLabel">Alertas de Duplicidade (<span id="nome-cliente-alerta"></span>)</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div id="lista-alertas">
+                    </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 
 

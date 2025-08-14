@@ -204,14 +204,7 @@ if($linhas > 0){
 							</li>
 						<?php } ?>
 
-            <?php if($recursos != "Empréstimos"){ ?>
-							<li class="treeview <?php echo @$painel_alertas ?>">
-								<a href="painel_alertas">
-									<i class="fa fa-cubes"></i> <span>Painel de Alertas</span>
-								</a>
-							</li>
-						<?php } ?>
-
+           
 							<?php if($recursos != "Empréstimos"){ ?>
 							<li class="treeview <?php echo @$cobrancas ?>">
 								<a href="cobrancas">
@@ -513,7 +506,11 @@ $nome_cliente = @$res2[0]['nome'];
 		<!-- main content start-->
 		<div id="page-wrapper" >
 			<?php 
-			require_once('paginas/'.$pagina.'.php');
+        if (@$pagina == "analise_cliente") {
+          require_once('paginas/clientes/analise_cliente.php');
+        } else {
+            require_once('paginas/'.$pagina.'.php');
+        }
 			?>
 		</div>
 

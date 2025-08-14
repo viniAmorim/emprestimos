@@ -132,6 +132,19 @@ if($telefone != ""){
     }
 }
 
+// Validação de Telefone de Referência duplicado (AGORA GERA ALERTA, NÃO IMPEDE)
+if($referencia_contato != ""){
+  $query = $pdo->prepare("SELECT id FROM $tabela WHERE referencia_contato = :referencia_contato");
+  $query->bindValue(":referencia_contato", $referencia_contato);
+  $query->execute();
+  $res = $query->fetchAll(PDO::FETCH_ASSOC);
+  $id_reg_referencia = @$res[0]['id'];
+  if(@count($res) > 0 && $id != $id_reg_referencia){ // Se encontrou e não é o próprio registro sendo editado
+      $alertas_para_inserir[] = ['tipo' => 'Telefone de Referência Duplicado', 'valor' => $referencia_contato];
+      error_log("ALERTA ADMINISTRADOR: Telefone de Referência duplicado detectado: " . $referencia_contato . " para o ID: " . $id);
+  }
+}
+
 
 // --- Inicializa variáveis de imagem e busca existentes para edição ---
 // As variáveis $comprovante_endereco, $comprovante_rg, $foto, etc., já foram inicializadas acima.

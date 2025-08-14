@@ -254,6 +254,76 @@ $emprestimos_finalizados = @count($res);
 
  ?>
 
+ <style>
+  /* Estilo geral para o popup moderno */
+.swal-popup-modern {
+    border-radius: 12px !important;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1) !important;
+    padding: 2.5em !important;
+}
+
+/* Estilo para o título */
+.swal-title-modern {
+    font-size: 1.5rem !important;
+    font-weight: 700 !important;
+    color: #333 !important;
+}
+
+/* Estilo para o container de HTML */
+.swal-html-container-modern {
+    margin-top: 1.5em !important;
+    margin-bottom: 2em !important;
+    text-align: left;
+    padding: 0 1em;
+}
+
+/* Estilo para cada item de informação */
+.swal-info-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5em 0;
+    font-size: 1.1rem;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+/* Estilo para os labels */
+.info-label {
+    font-weight: 600;
+}
+
+/* Estilo para os valores */
+.info-valor {
+    font-weight: 700;
+}
+
+/* Cores de destaque (mantendo a sua lógica) */
+.azul-destaque {
+    color: #007bff;
+}
+
+.vermelho-destaque {
+    color: #dc3545;
+}
+
+/* Estilo para o botão */
+.swal-confirm-button-modern {
+    background-color: #007bff !important;
+    color: #fff !important;
+    font-weight: 600 !important;
+    font-size: 1rem !important;
+    padding: 0.75em 2em !important;
+    border-radius: 8px !important;
+    box-shadow: 0 4px 10px rgba(0, 123, 255, 0.2) !important;
+    transition: all 0.3s ease-in-out !important;
+}
+
+.swal-confirm-button-modern:hover {
+    background-color: #0056b3 !important;
+    box-shadow: 0 6px 15px rgba(0, 123, 255, 0.3) !important;
+}
+ </style>
+
 
 
 <div class="main-page margin-mobile">
@@ -467,110 +537,120 @@ $emprestimos_finalizados = @count($res);
 	
 </div>
 
-
 <input type="hidden" id="mostrar_v">
 
-
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="js/SimpleChart.js"></script>
 
 <script type="text/javascript">
-	$(document).ready(function() {    
+$(document).ready(function() {
+    // Esconder valores ao carregar a página
     $('.ocultar_valor').addClass('ocultar');
     $('.sem_valor').text('R$ ...');
+
+    // Chamar a função de mostrar/esconder valores
+    $('#mostrar_v').on('click', function() {
+        mostrar_valores();
+    });
+
+    // Lógica para mostrar o SweetAlert
+    var clientesParaValidar = <?php echo $total_clientes_debitos; ?>;
+    var alertasParaAnalisar = 2; // Substitua pelo valor real
+
+    // Mostra o SweetAlert a cada vez que a página é carregada (após o login)
+    Swal.fire({
+      title: '👋 Bem-vindo(a) ao seu Painel!',
+      html: `
+          <div class="swal-modern">
+              <p>Seu sistema tem algumas atualizações importantes para você:</p>
+              <div class="swal-info-item">
+                  <span class="info-label azul-destaque">Clientes para validar:</span> 
+                  <span class="info-valor">${clientesParaValidar}</span>
+              </div>
+              <div class="swal-info-item">
+                  <span class="info-label vermelho-destaque">Alertas para analisar:</span> 
+                  <span class="info-valor">${alertasParaAnalisar}</span>
+              </div>
+          </div>
+      `,
+      icon: 'success',
+      confirmButtonText: 'Ver Detalhes',
+      showCloseButton: true,
+      focusConfirm: false,
+      customClass: {
+          popup: 'swal-popup-modern',
+          title: 'swal-title-modern',
+          htmlContainer: 'swal-html-container-modern',
+          confirmButton: 'swal-confirm-button-modern'
+      }
+  });
+
+    // Dados e configuração para o gráfico
+    var meses = "<?=$datas_apuracao_final?>";
+    var dados = meses.split("*"); 
+    var totais = "<?=$total_emprestimos_mes_grafico?>";
+    var dados_totais = totais.split("*"); 
+    var maior_valor_linha = Math.max(...dados_totais);
+    var maior_valor = parseFloat(maior_valor_linha) + 3;
+    var menor_valor = Math.min(...dados_totais);
     
+    var dados_grafico = {
+        linecolor: "#065c1f",
+        title: "Monday",
+        values: [
+            { X: dados[0], Y: dados_totais[0] },
+            { X: dados[1], Y: dados_totais[1] },
+            { X: dados[2], Y: dados_totais[2] },
+            { X: dados[3], Y: dados_totais[3] },
+            { X: dados[4], Y: dados_totais[4] },
+            { X: dados[5], Y: dados_totais[5] }
+        ]
+    };
+
+    var range = {
+        linecolor: "transparent",
+        title: "",
+        values: [
+            { X: dados[0], Y: menor_valor },
+            { X: dados[1], Y: menor_valor },
+            { X: dados[2], Y: menor_valor },
+            { X: dados[3], Y: menor_valor },
+            { X: dados[4], Y: menor_valor },
+            { X: dados[5], Y: maior_valor },
+        ]
+    };
     
-} );
-</script>
+    $("#Linegraph").SimpleChart({
+        ChartType: "Line",
+        toolwidth: "50",
+        toolheight: "25",
+        axiscolor: "#E6E6E6",
+        textcolor: "#6E6E6E",
+        showlegends: false,
+        data: [dados_grafico, range],
+        legendsize: "140",
+        legendposition: 'bottom',
+        xaxislabel: 'Meses',
+        title: '',
+        yaxislabel: 'Totais'
+    });
+});
+function mostrar_valores(){
+    $('.sem_valor').text('');
+    var mostrar = $('#mostrar_v').val();
 
-<!-- for index page weekly sales java script -->
-<script src="js/SimpleChart.js"></script>
-<script>
+    $('.sem_valor').removeClass('ocultar');
+    $('.ocultar_valor').removeClass('mostrar');
 
-	var meses = "<?=$datas_apuracao_final?>";
-	var dados = meses.split("*"); 
-
-	var totais = "<?=$total_emprestimos_mes_grafico?>";
-	var dados_totais = totais.split("*"); 
-
-
-		var maior_valor_linha = Math.max(...dados_totais);
-    	maior_valor = parseFloat(maior_valor_linha) + 3;
-
-    	var menor_valor = Math.min(...dados_totais);
-    	
-
-	var dados_grafico = {
-		linecolor: "#065c1f",
-		title: "Monday",
-		values: [
-		{ X: dados[0], Y: dados_totais[0] },
-		{ X: dados[1], Y: dados_totais[1] },
-		{ X: dados[2], Y: dados_totais[2] },
-		{ X: dados[3], Y: dados_totais[3] },
-		{ X: dados[4], Y: dados_totais[4] },
-		{ X: dados[5], Y: dados_totais[5] }
-		
-		]
-	};
-	
-
-
-	var range = {
-    		linecolor: "transparent",
-    		title: "",
-    		values: [
-    		{ X: dados[0], Y: menor_valor },
-    		{ X: dados[1], Y: menor_valor },
-    		{ X: dados[2], Y: menor_valor },
-    		{ X: dados[3], Y: menor_valor },
-    		{ X: dados[4], Y: menor_valor },
-    		{ X: dados[5], Y: maior_valor },
-    		
-    		]
-    	};
-			
-		
-		$("#Linegraph").SimpleChart({
-			ChartType: "Line",
-			toolwidth: "50",
-			toolheight: "25",
-			axiscolor: "#E6E6E6",
-			textcolor: "#6E6E6E",
-			showlegends: false,
-			data: [dados_grafico, range],
-			legendsize: "140",
-			legendposition: 'bottom',
-			xaxislabel: 'Meses',
-			title: '',
-			yaxislabel: 'Totais'
-		});
-				
-
-</script>
-<!-- //for index page weekly sales java script -->
-
-
-<script type="text/javascript">
-	function mostrar_valores(){
-		$('.sem_valor').text('');
-		var mostrar = $('#mostrar_v').val();
-
-		$('.sem_valor').removeClass('ocultar');
-		$('.ocultar_valor').removeClass('mostrar');
-
-		if(mostrar == ""){			
-
-			$('.sem_valor').addClass('ocultar');
-			$('.ocultar_valor').addClass('mostrar');
-			$('#mostrar_v').val('mostrando');
-		}else{
-			
-			$('.sem_valor').text('R$ ...');
-			$('.sem_valor').addClass('mostrar');
-			$('.ocultar_valor').addClass('ocultar');
-			$('#mostrar_v').val('');
-			
-		}
-		
-		
-	}
+    if(mostrar == ""){
+        $('.sem_valor').addClass('ocultar');
+        $('.ocultar_valor').addClass('mostrar');
+        $('#mostrar_v').val('mostrando');
+    }else{
+        $('.sem_valor').text('R$ ...');
+        $('.sem_valor').addClass('mostrar');
+        $('.ocultar_valor').addClass('ocultar');
+        $('#mostrar_v').val('');
+    }
+}
 </script>
