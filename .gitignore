@@ -15,6 +15,7 @@
 .env.production
 
 /mysql-data
+/app/public_html/painel/images
 /app/public_html/painel/images/clientes
 /app/public_html/painel/images/comprovantes
 # Ignorar chaves SSL privadas e certificados

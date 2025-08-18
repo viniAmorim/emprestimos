@@ -33,7 +33,7 @@ $alertas_duplicidade = $query_alertas->fetchAll(PDO::FETCH_ASSOC);
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <title>Análise do Cliente: <?= htmlspecialchars($cliente['nome']) ?></title>
+    <title>Análise do Cliente: <?= htmlspecialchars($cliente['nome']) ?? '' ?></title>
    
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -72,11 +72,7 @@ $alertas_duplicidade = $query_alertas->fetchAll(PDO::FETCH_ASSOC);
         .img-fluid.rounded.shadow-sm:hover {
             transform: scale(1.02);
         }
-        /* Checkboxes alinhados à esquerda, maiores e com fundo levemente azul */
-        .custom-control.custom-checkbox {
-            padding-left: 3rem;
-            margin-bottom: 0.75rem;
-        }
+       
 
         .custom-control-input:checked ~ .custom-control-label::before {
             background-color: #007bff;
@@ -301,68 +297,6 @@ $alertas_duplicidade = $query_alertas->fetchAll(PDO::FETCH_ASSOC);
             font-weight: 500;
             flex-grow: 1;
         }
-        /* Container para os grupos de checkbox, garantindo um agrupamento visual */
-        .checkbox-group-container {
-            background-color: #f0f8ff;
-            border: 1px solid #cceeff;
-            border-radius: 10px;
-            padding: 20px 25px;
-            margin-top: 25px;
-            box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.08);
-        }
-
-        /* Estilo para cada item individual de checkbox */
-        .custom-control.custom-checkbox {
-            padding-left: 2.5rem;
-            margin-bottom: 1rem;
-            cursor: pointer;
-            position: relative;
-            user-select: none;
-            display: flex;
-            align-items: center;
-            padding: 8px 0;
-            transition: background-color 0.2s ease-in-out, transform 0.1s ease-out;
-            border-radius: 6px;
-        }
-
-        /* Efeito de hover e active para cada item de checkbox */
-        .custom-control.custom-checkbox:hover {
-            background-color: #e6f7ff;
-            transform: translateY(-2px);
-        }
-
-        .custom-control.custom-checkbox:active {
-            transform: translateY(0);
-        }
-
-        /* Estilo do label (texto) do checkbox */
-        .custom-control-label {
-            padding-left: 45px;
-            font-size: 1.05em;
-            color: #495057;
-            line-height: 1.6rem;
-            margin-left: 0.5rem;
-            padding-top: 2px;
-            flex-grow: 1;
-        }
-
-        /* Estilo do quadrado do checkbox (o ::before) */
-        .custom-control-label::before {
-            content: '';
-            display: block;
-            position: absolute;
-            top: 50%;
-            left: 0;
-            transform: translateY(-50%);
-            width: 1.8rem;
-            height: 1.8rem;
-            border-radius: 0.4rem;
-            background-color: #e9f5ff;
-            border: 2px solid #a8d6ff;
-            box-shadow: inset 0 1px 4px rgba(0, 0, 0, 0.08);
-            transition: background-color 0.2s ease-in-out, border-color 0.2s ease-in-out;
-        }
-
         /* Estilo da marca de verificação (o ::after) */
         .custom-control-label::after {
             content: '';
@@ -379,12 +313,7 @@ $alertas_duplicidade = $query_alertas->fetchAll(PDO::FETCH_ASSOC);
             transition: opacity 0.2s ease-in-out;
         }
 
-        /* Estilo do checkbox quando marcado */
-        .custom-control-input:checked ~ .custom-control-label::before {
-            background-color: #007bff;
-            border-color: #007bff;
-            box-shadow: inset 0 1px 4px rgba(0, 0, 0, 0.2), 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
-        }
+       
 
         .custom-control-input:checked ~ .custom-control-label::after {
             opacity: 1;
@@ -427,19 +356,284 @@ $alertas_duplicidade = $query_alertas->fetchAll(PDO::FETCH_ASSOC);
             transform: translateY(-2px);
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
         }
+        /* Estilo para a seção de Status e Estágio */
+.status-card {
+    background-color: #f0f8ff; /* Fundo azul claro */
+    border: 1px solid #cceeff; /* Borda azul clara */
+    border-radius: 12px; /* Cantos arredondados */
+    padding: 20px; /* Espaçamento interno */
+    margin-bottom: 25px; /* Margem inferior */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08); /* Sombra suave */
+    display: flex;
+    justify-content: space-between; /* Espaço entre os itens */
+    align-items: center;
+}
+
+.status-card h6 {
+    font-size: 1.1em;
+    font-weight: 600;
+    color: #555;
+    margin-bottom: 0;
+}
+
+.status-card p {
+    font-size: 1.3em;
+    font-weight: 700;
+    color: #007bff; /* Cor azul para os valores */
+    margin-bottom: 0;
+}
+/* Estilo para a seção de Valores de Empréstimos */
+.loan-values-card {
+    background-color: #f8f9fa; /* Fundo cinza claro */
+    border: 1px solid #e9ecef; /* Borda cinza suave */
+    border-radius: 8px; /* Cantos arredondados */
+    padding: 20px; /* Espaçamento interno */
+    margin-bottom: 20px; /* Margem inferior */
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05); /* Sombra leve */
+}
+
+.loan-values-card p {
+    margin: 0 0 10px 0; /* Espaçamento entre os parágrafos */
+    font-size: 1em;
+    color: #495057;
+}
+
+.loan-values-card strong {
+    color: #212529; /* Cor mais escura para os rótulos */
+    font-weight: 600;
+}
+
+.loan-value {
+    color: #007bff; /* Cor azul para os valores */
+    font-weight: bold;
+    font-size: 1.1em;
+    display: inline-block;
+    margin-left: 5px;
+}
+
+/* Estilo para a seção de dados pessoais e endereço */
+.card p {
+    font-size: 0.9em;
+    color: #495057;
+    margin-bottom: 5px;
+}
+.card p strong {
+    color: #212529;
+}
+.card h6 {
+    font-size: 1.05em;
+    font-weight: 600;
+}
+
+/* Estilo para as caixas de validação */
+.validation-card {
+    background-color: #f8f9fa; /* Fundo cinza claro, neutro e suave */
+    border: 1px solid #e9ecef; /* Borda cinza clara */
+    border-radius: 8px; /* Cantos arredondados */
+    padding: 20px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05); /* Sombra suave */
+}
+
+.validation-card .form-group {
+    display: block;
+    margin-bottom: 0.25rem; /* Reduzindo a margem inferior para diminuir o espaçamento */
+}
+
+
+
+/* Estilo para os títulos das seções */
+.validation-card h6 {
+    font-size: 1.05em;
+    font-weight: 600;
+    color: #333; /* Cor escura para o texto */
+    margin-top: 0;
+}
+
+/* Estilo para os dados pessoais e endereço */
+.text-start {
+    text-align: left !important;
+}
+
+.text-start p {
+    font-size: 0.95em;
+    line-height: 1.4;
+    margin-top: 0;
+    margin-bottom: 5px;
+}
+
+.text-start strong {
+    color: #555;
+    font-weight: 600;
+}
+/* Container para os grupos de checkbox, garantindo um agrupamento visual */
+.checkbox-group-container {
+    background-color: #f0f8ff;
+    border: 1px solid #cceeff;
+    border-radius: 10px;
+    padding: 20px 25px;
+    margin-top: 25px;
+    box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.08);
+}
+
+/* Estilo para cada item individual de checkbox */
+.custom-control.custom-checkbox {
+    padding-left: 2.5rem;
+    margin-bottom: 1rem;
+    cursor: pointer;
+    position: relative;
+    user-select: none;
+    display: flex;
+    align-items: center;
+    padding: 8px 0;
+    transition: background-color 0.2s ease-in-out, transform 0.1s ease-out;
+    border-radius: 6px;
+}
+
+/* Efeito de hover e active para cada item de checkbox */
+.custom-control.custom-checkbox:hover {
+    background-color: #e6f7ff;
+    transform: translateY(-2px);
+}
+
+.custom-control.custom-checkbox:active {
+    transform: translateY(0);
+}
+
+/* Estilo do label (texto) do checkbox */
+.custom-control-label {
+    padding-left: 45px;
+    font-size: 1.05em;
+    color: #495057;
+    line-height: 1.6rem;
+    margin-left: 0.5rem;
+    padding-top: 2px;
+    flex-grow: 1;
+}
+
+/* Estilo do quadrado do checkbox (o ::before) */
+.custom-control-label::before {
+    content: '';
+    display: block;
+    position: absolute;
+    top: 50%;
+    left: 0;
+    transform: translateY(-50%);
+    width: 1.8rem;
+    height: 1.8rem;
+    border-radius: 0.4rem;
+    background-color: #e9f5ff;
+    border: 2px solid #a8d6ff;
+    box-shadow: inset 0 1px 4px rgba(0, 0, 0, 0.08);
+    transition: background-color 0.2s ease-in-out, border-color 0.2s ease-in-out;
+}
+
+/* Estilo da marca de verificação (o ::after) */
+.custom-control-label::after {
+    content: '';
+    display: block;
+    position: absolute;
+    top: 50%;
+    left: 0.2rem;
+    transform: translateY(-50%) rotate(45deg);
+    width: 0.6rem;
+    height: 1.2rem;
+    border: solid white;
+    border-width: 0 4px 4px 0;
+    opacity: 0;
+    transition: opacity 0.2s ease-in-out;
+}
+
+/* Estilo do checkbox quando marcado */
+.custom-control-input:checked ~ .custom-control-label::before {
+    background-color: #007bff;
+    border-color: #007bff;
+    box-shadow: inset 0 1px 4px rgba(0, 0, 0, 0.2), 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+.custom-control-input:checked ~ .custom-control-label::after {
+    opacity: 1;
+}
+
+/* Estilo para o foco (acessibilidade com teclado) */
+.custom-control-input:focus ~ .custom-control-label::before {
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+/* Estilo para a seção de dados pessoais e endereço */
+.data-card {
+    background-color: #fff;
+    border: 1px solid #e9ecef;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+}
+
+.data-card p {
+    font-size: 1.0em;
+    color: #495057;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: baseline;
+}
+
+.data-card p strong {
+    color: #2c3e50;
+    font-weight: 600;
+    min-width: 120px; /* Alinha os rótulos */
+    flex-shrink: 0;
+}
+/* Estilo para o container do formulário */
+.form-card {
+    background-color: #fff;
+    border: 1px solid #e9ecef;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+}
+
+/* Estilo para os campos de formulário */
+.form-card .form-control,
+.form-card .form-select {
+    border-radius: 6px;
+    border: 1px solid #ced4da;
+    transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+.form-card .form-control:focus,
+.form-card .form-select:focus {
+    border-color: #86b7fe;
+    outline: 0;
+    box-shadow: 0 0 0 0.25rem rgba(13,110,253,.25);
+}
+
+/* Estilo para o botão de ação */
+.form-card .btn-primary {
+    background-color: #007bff;
+    border-color: #007bff;
+    font-weight: 600;
+    border-radius: 6px;
+    transition: background-color 0.2s ease-in-out, border-color 0.2s ease-in-out;
+}
+
+.form-card .btn-primary:hover {
+    background-color: #0056b3;
+    border-color: #004a99;
+}
+
     </style>
 </head>
 <body>
     <div class="container">
-        <h2 class="main-page-title text-center mb-4"><?= htmlspecialchars($cliente['nome']) ?></h2>
+        <h2 class="main-page-title text-center mb-4"><?= htmlspecialchars($cliente['nome']) ?? '' ?></h2>
 
-        <div class="row info-block mb-4">
-            <div class="col-md-6">
-                <h6>Status: <strong>Novo</strong></h6>
-            </div>
-            <div class="col-md-6">
-                <h6>Estágio: <strong><?= htmlspecialchars($cliente['estagio_cliente']) ?></strong></h6>
-            </div>
+        <div class="status-card">
+          <div class="status-item">
+              <h6>Status:</h6>
+              <p>Novo</p>
+          </div>
+          <div class="status-item">
+              <h6>Estágio:</h6>
+              <p><?= htmlspecialchars($cliente['estagio_cliente']) ?? '' ?></p>
+          </div>
         </div>
 
         <hr>
@@ -487,13 +681,13 @@ $alertas_duplicidade = $query_alertas->fetchAll(PDO::FETCH_ASSOC);
                         }
                     }
                 ?>
-                    <div id="alerta-<?= htmlspecialchars($alerta['id']) ?>">
+                    <div id="alerta-<?= htmlspecialchars($alerta['id']) ?? '' ?>">
                         <h5 class="section-title-alt">Alerta: <?= htmlspecialchars($alerta['tipo_alerta']) ?></h5>
-                        <p class="mb-2"><strong>Valor Duplicado:</strong> <span class="form-control-plaintext py-1"><?= htmlspecialchars($alerta['valor_duplicado']) ?></span></p>
-                        <p class="mb-2"><strong>Cliente Duplicado:</strong> <span class="form-control-plaintext py-1"><?= htmlspecialchars($nome_cliente_duplicado) ?></span></p>
+                        <p class="mb-2"><strong>Valor Duplicado:</strong> <span class="form-control-plaintext py-1"><?= htmlspecialchars($alerta['valor_duplicado']) ?? '' ?></span></p>
+                        <p class="mb-2"><strong>Cliente Duplicado:</strong> <span class="form-control-plaintext py-1"><?= htmlspecialchars($nome_cliente_duplicado) ?? '' ?></span></p>
                         <p class="mb-2"><strong>Data do Alerta:</strong> <span class="form-control-plaintext py-1"><?= $data_alerta_formatada ?></span></p>
                         
-                        <button class="btn btn-sm btn-success btn-resolvido" data-id="<?= htmlspecialchars($alerta['id']) ?>">
+                        <button class="btn btn-sm btn-success btn-resolvido" data-id="<?= htmlspecialchars($alerta['id']) ?? '' ?>">
                             <i class="fas fa-check"></i> Ignorar
                         </button>
                         
@@ -507,132 +701,171 @@ $alertas_duplicidade = $query_alertas->fetchAll(PDO::FETCH_ASSOC);
         </div>
 
         <h4 class="section-title">Comprovantes</h4>
-        <div class="row mb-4">
-            <div class="col-md-6 text-center">
-                <h5 class="section-title">Comprovante de RG:</h5>
-                <?php if (!empty($cliente['comprovante_rg'])): ?>
-                    <img src="/painel/images/comprovantes/<?= htmlspecialchars($cliente['comprovante_rg']) ?>" alt="Comprovante de RG" class="img-fluid rounded shadow-sm" style="max-width: 350px; border: 2px solid #ddd; display: block; margin: 0 auto;">
-                <?php else: ?>
-                    <p>Não enviado.</p>
-                <?php endif; ?>
+<div class="row mb-4">
+    <div class="col-md-6 text-center">
+        <h5 class="section-title">Comprovante de RG:</h5>
+        <?php if (!empty($cliente['comprovante_rg']) && $cliente['comprovante_rg'] !== 'sem-foto.png'): ?>
+            <img src="/painel/images/comprovantes/<?= htmlspecialchars($cliente['comprovante_rg']) ?? '' ?>" alt="Comprovante de RG" class="img-fluid rounded shadow-sm" style="max-width: 500px; border: 2px solid #ddd; display: block; margin: 0 auto;">
+        <?php else: ?>
+            <p>Não enviado.</p>
+        <?php endif; ?>
+    </div>
+    <div class="col-md-6">
+    <div class="validation-card">
+    <h6 class="section-title text-start mb-3">Validações:</h6>
+    <div class="form-group custom-control custom-checkbox small-checkbox my-1">
+        <input type="checkbox" class="custom-control-input" id="check_validade_cnh">
+        <label class="custom-control-label" for="check_validade_cnh">Validade da CNH</label>
+    </div>
+    <div class="form-group custom-control custom-checkbox small-checkbox my-1">
+        <input type="checkbox" class="custom-control-input" id="check_nome_documento">
+        <label class="custom-control-label" for="check_nome_documento">Confere com Documento</label>
+    </div>
+    <div class="form-group custom-control custom-checkbox small-checkbox my-1">
+        <input type="checkbox" class="custom-control-input" id="check_nome_whatsapp">
+        <label class="custom-control-label" for="check_nome_whatsapp">Busca em Whatsapp</label>
+    </div>
+    <div class="form-group custom-control custom-checkbox small-checkbox my-1">
+        <input type="checkbox" class="custom-control-input" id="check_nome_consulta">
+        <label class="custom-control-label" for="check_nome_consulta">Consulta</label>
+    </div>
+    <div class="form-group custom-control custom-checkbox small-checkbox my-1">
+        <input type="checkbox" class="custom-control-input" id="check_cpf_confere_documento">
+        <label class="custom-control-label" for="check_cpf_confere_documento">Confere CPF com Documento</label>
+    </div>
+    <div class="form-group custom-control custom-checkbox small-checkbox my-1">
+        <input type="checkbox" class="custom-control-input" id="check_rg_confere_documento">
+        <label class="custom-control-label" for="check_rg_confere_documento">Confere RG com Documento</label>
+    </div>
+    <div class="form-group custom-control custom-checkbox small-checkbox my-1">
+        <input type="checkbox" class="custom-control-input" id="check_foto_usuario_confere">
+        <label class="custom-control-label" for="check_foto_usuario_confere">Foto do usuário confere com Documento</label>
+    </div>
+    <div class="form-group custom-control custom-checkbox small-checkbox my-1">
+        <input type="checkbox" class="custom-control-input" id="check_celular_confere">
+        <label class="custom-control-label" for="check_celular_confere">Celular confere</label>
+    </div>
+</div>
+
+<div class="data-card mt-4">
+    <h6 class="section-title text-start">Dados Pessoais:</h6>
+    <p>
+        <strong>Nome Completo:</strong> <span><?= htmlspecialchars($cliente['nome'])  ?? ''?></span>
+    </p>
+    <p>
+        <strong>CPF:</strong> <span><?= htmlspecialchars($cliente['cpf']) ?? '' ?></span>
+    </p>
+    <p>
+        <strong>RG:</strong> <span><?= htmlspecialchars($cliente['rg']) ?? '' ?></span>
+    </p>
+    <p>
+        <strong>Celular:</strong> <span><?= htmlspecialchars($cliente['telefone']) ?? '' ?></span>
+    </p>
+</div>
+
+    </div>
+</div>
+
+<hr>
+
+<div class="row info-block">
+    <div class="col-md-6">
+        <h5 class="section-title">Comprovante de Endereço:</h5>
+        <?php if (!empty($cliente['comprovante_endereco']) && $cliente['comprovante_endereco'] !== 'sem-foto.png'): ?>
+            <img src="/painel/images/comprovantes/<?= htmlspecialchars($cliente['comprovante_endereco']) ?? ''?>" alt="Comprovante de Endereço" class="img-fluid rounded shadow-sm" style="max-width: 500px; border: 2px solid #ddd; display: block; margin: 0 auto;">
+        <?php else: ?>
+            <p>Não enviado.</p>
+        <?php endif; ?>
+    </div>
+    <div class="col-md-6">
+        <div class="validation-card">
+            <h6 class="section-title text-start mb-3">Validação do Endereço:</h6>
+            <div class="form-group custom-control custom-checkbox small-checkbox my-1">
+                <input type="checkbox" class="custom-control-input" id="check_titular_aceito">
+                <label class="custom-control-label" for="check_titular_aceito">Titular Aceito</label>
             </div>
-            <div class="col-md-6 text-center">
-                <h5 class="section-title">Comprovante de Endereço:</h5>
-                <?php if (!empty($cliente['comprovante_endereco'])): ?>
-                    <img src="/painel/images/comprovantes/<?= htmlspecialchars($cliente['comprovante_endereco']) ?>" alt="Comprovante de Endereço" class="img-fluid rounded shadow-sm" style="max-width: 350px; border: 2px solid #ddd; display: block; margin: 0 auto;">
-                <?php else: ?>
-                    <p>Não enviado.</p>
-                <?php endif; ?>
+            <div class="form-group custom-control custom-checkbox small-checkbox my-1">
+                <input type="checkbox" class="custom-control-input" id="check_cidade_atendemos">
+                <label class="custom-control-label" for="check_cidade_atendemos">Cidade que atendemos</label>
             </div>
-        </div>
-      
-        <h4 class="section-title">Dados Pessoais e Validações</h4>
-        <div class="row info-block">
-            <div class="col-md-6">
-                <div class="form-group custom-control custom-checkbox my-3">
-                    <input type="checkbox" class="custom-control-input" id="check_validade_cnh">
-                    <label class="custom-control-label" for="check_validade_cnh">Validade da CNH</label>
-                </div>
-
-                <h6>Nome Completo:</h6>
-                <p><?= htmlspecialchars($cliente['nome']) ?></p>
-                <div class="form-group custom-control custom-checkbox my-1">
-                    <input type="checkbox" class="custom-control-input" id="check_nome_documento">
-                    <label class="custom-control-label" for="check_nome_documento">Confere com Documento</label>
-                </div>
-                <div class="form-group custom-control custom-checkbox my-1">
-                    <input type="checkbox" class="custom-control-input" id="check_nome_whatsapp">
-                    <label class="custom-control-label" for="check_nome_whatsapp">Busca em Whatsapp</label>
-                </div>
-                <div class="form-group custom-control custom-checkbox my-1">
-                    <input type="checkbox" class="custom-control-input" id="check_nome_consulta">
-                    <label class="custom-control-label" for="check_nome_consulta">Consulta</label>
-                </div>
-
-                <h6 class="mt-4">CPF:</h6>
-                <p><?= htmlspecialchars($cliente['cpf']) ?></p>
-                <div class="form-group custom-control custom-checkbox my-1">
-                    <input type="checkbox" class="custom-control-input" id="check_cpf_confere_documento">
-                    <label class="custom-control-label" for="check_cpf_confere_documento">Confere com documento</label>
-                </div>
-
-                <h6 class="mt-4">RG:</h6>
-                <p><?= htmlspecialchars($cliente['rg']) ?></p>
-                <div class="form-group custom-control custom-checkbox my-1">
-                    <input type="checkbox" class="custom-control-input" id="check_rg_confere_documento">
-                    <label class="custom-control-label" for="check_rg_confere_documento">Confere com documento</label>
-                </div>
-                
-                <div class="form-group custom-control custom-checkbox my-4">
-                    <input type="checkbox" class="custom-control-input" id="check_foto_usuario_confere">
-                    <label class="custom-control-label" for="check_foto_usuario_confere">Foto do usuário confere com documento</label>
-                </div>
-
-                <h6 class="mt-4">Celular:</h6>
-                <p><?= htmlspecialchars($cliente['telefone']) ?></p>
-                <div class="form-group custom-control custom-checkbox my-1">
-                    <input type="checkbox" class="custom-control-input" id="check_celular_confere">
-                    <label class="custom-control-label" for="check_celular_confere">Confere</label>
-                </div>
+            <div class="form-group custom-control custom-checkbox small-checkbox my-1">
+                <input type="checkbox" class="custom-control-input" id="check_emissao_prazo">
+                <label class="custom-control-label" for="check_emissao_prazo">Emissão dentro do prazo</label>
             </div>
-
-            <div class="col-md-6">
-                <h6 class="mt-3">Validação do Endereço:</h6>
-                <div class="form-group custom-control custom-checkbox my-3">
-                    <input type="checkbox" class="custom-control-input" id="check_titular_aceito">
-                    <label class="custom-control-label" for="check_titular_aceito">Titular Aceito</label>
-                </div>
-                <div class="form-group custom-control custom-checkbox my-1">
-                    <input type="checkbox" class="custom-control-input" id="check_cidade_atendemos">
-                    <label class="custom-control-label" for="check_cidade_atendemos">Cidade que atendemos</label>
-                </div>
-                <div class="form-group custom-control custom-checkbox my-1">
-                    <input type="checkbox" class="custom-control-input" id="check_emissao_prazo">
-                    <label class="custom-control-label" for="check_emissao_prazo">Emissão dentro do prazo</label>
-                </div>
-                
-                <h6 class="mt-4">Endereço Registrado:</h6>
-                <p>
-                    <?= htmlspecialchars($cliente['endereco']) ?>, 
-                    Nº <?= htmlspecialchars($cliente['numero']) ?>, 
-                    Quadra <?= htmlspecialchars($cliente['quadra']) ?>, 
-                    Lote <?= htmlspecialchars($cliente['lote']) ?>, 
-                    Bairro <?= htmlspecialchars($cliente['bairro']) ?>, 
-                    <?= htmlspecialchars($cliente['cidade']) ?> - <?= htmlspecialchars($cliente['estado']) ?>, 
-                    CEP <?= htmlspecialchars($cliente['cep']) ?>.
-                    <?= !empty($cliente['complemento']) ? 'Complemento: ' . htmlspecialchars($cliente['complemento']) : '' ?>
-                </p>
-                <div class="form-group custom-control custom-checkbox my-1">
-                    <input type="checkbox" class="custom-control-input" id="check_endereco_confere_comprovante">
-                    <label class="custom-control-label" for="check_endereco_confere_comprovante">Endereço confere com comprovante</label>
-                </div>
+            <div class="form-group custom-control custom-checkbox small-checkbox my-1">
+                <input type="checkbox" class="custom-control-input" id="check_endereco_confere_comprovante">
+                <label class="custom-control-label" for="check_endereco_confere_comprovante">Endereço confere com comprovante</label>
             </div>
-        </div>
+        </div>        
 
+        <div class="data-card mt-4">
+          <h6 class="section-title text-start">Endereço Registrado:</h6>
+          <p>
+              <strong>Endereço:</strong> <span><?= htmlspecialchars($cliente['endereco']) ?? '' ?>, Nº <?= htmlspecialchars($cliente['numero']) ?? '' ?></span>
+          </p>
+          <p>
+              <strong>Quadra:</strong> <span><?= htmlspecialchars($cliente['quadra']) ?? '' ?></span>
+          </p>
+          <p>
+              <strong>Lote:</strong> <span><?= htmlspecialchars($cliente['lote']) ?? ''?></span>
+          </p>
+          <p>
+              <strong>Bairro:</strong> <span><?= htmlspecialchars($cliente['bairro']) ?? ''?></span>
+          </p>
+          <p>
+              <strong>Cidade/Estado:</strong> <span><?= htmlspecialchars($cliente['cidade']) ?? ''?> - <?= htmlspecialchars($cliente['estado']) ?? ''?></span>
+          </p>
+          <p>
+              <strong>CEP:</strong> <span><?= htmlspecialchars($cliente['cep']) ?? ''?></span>
+          </p>
+          <?php if (!empty($cliente['complemento'])): ?>
+              <p>
+                  <strong>Complemento:</strong> <span><?= htmlspecialchars($cliente['complemento']) ?? ''?></span>
+              </p>
+          <?php endif; ?>
+      </div>
+    </div>
+</div>
         <hr>
 
         <h4 class="section-title">Referências</h4>
         <div class="row info-block">
             <div class="col-md-6">
-                <h6>Nome da Referência:</h6>
-                <p><?= htmlspecialchars($cliente['referencia_nome']) ?></p>
+                <div class="data-card">
+                    <h6 class="section-title text-start">Dados da Referência:</h6>
+                    <p>
+                        <strong>Nome Completo:</strong> <span><?= htmlspecialchars($cliente['referencia_nome']) ?? '' ?></span>
+                    </p>
+                    <p>
+                        <strong>Celular (WhatsApp):</strong> <span><?= htmlspecialchars($cliente['referencia_contato']) ?? ''?></span>
+                    </p>
+                </div>
             </div>
             <div class="col-md-6">
-                <h6>Contato da Referência:</h6>
-                <p><?= htmlspecialchars($cliente['referencia_contato']) ?></p>
-            </div>
-            <div class="col-md-6">
-                <h6>Parentesco:</h6>
-                <p><?= htmlspecialchars($cliente['referencia_parentesco']) ?></p>
+                <div class="validation-card">
+                    <h6 class="section-title text-start mb-3">Validações:</h6>
+                    <div class="form-group custom-control custom-checkbox small-checkbox my-1">
+                        <input type="checkbox" class="custom-control-input" id="check_sobrenome_confere">
+                        <label class="custom-control-label" for="check_sobrenome_confere">Sobrenome confere</label>
+                    </div>
+                    <div class="form-group custom-control custom-checkbox small-checkbox my-1">
+                        <input type="checkbox" class="custom-control-input" id="check_num_com_whatsapp">
+                        <label class="custom-control-label" for="check_num_com_whatsapp">Número com WhatsApp</label>
+                    </div>
+                    <div class="form-group custom-control custom-checkbox small-checkbox my-1">
+                        <input type="checkbox" class="custom-control-input" id="check_cliente_bom">
+                        <label class="custom-control-label" for="check_cliente_bom">Cliente bom?</label>
+                    </div>
+                </div>
             </div>
         </div>
 
-        <h4 class="section-title">Comprovantes Adicionais</h4>
+        <!-- <h4 class="section-title">Comprovantes Adicionais</h4>
 <div class="row mb-4">
     <div class="col-md-4 text-center">
         <h5 class="section-title">Print Perfil App:</h5>
         <?php if (!empty($cliente['print_perfil_app']) && $cliente['print_perfil_app'] !== 'sem-foto.png'): ?>
-            <img src="/painel/images/comprovantes/<?= htmlspecialchars($cliente['print_perfil_app']) ?>" alt="Print Perfil App" class="img-fluid rounded shadow-sm" style="max-width: 350px; border: 2px solid #ddd; display: block; margin: 0 auto;">
+            <img src="/painel/images/comprovantes/<?= htmlspecialchars($cliente['print_perfil_app']) ?? ''?>" alt="Print Perfil App" class="img-fluid rounded shadow-sm" style="max-width: 450px; border: 2px solid #ddd; display: block; margin: 0 auto;">
         <?php else: ?>
             <p>Não enviado.</p>
         <?php endif; ?>
@@ -640,7 +873,7 @@ $alertas_duplicidade = $query_alertas->fetchAll(PDO::FETCH_ASSOC);
     <div class="col-md-4 text-center">
         <h5 class="section-title">Print Veículo App:</h5>
         <?php if (!empty($cliente['print_veiculo_app']) && $cliente['print_veiculo_app'] !== 'sem-foto.png'): ?>
-            <img src="/painel/images/comprovantes/<?= htmlspecialchars($cliente['print_veiculo_app']) ?>" alt="Print Veículo App" class="img-fluid rounded shadow-sm" style="max-width: 350px; border: 2px solid #ddd; display: block; margin: 0 auto;">
+            <img src="/painel/images/comprovantes/<?= htmlspecialchars($cliente['print_veiculo_app']) ?? ''?>" alt="Print Veículo App" class="img-fluid rounded shadow-sm" style="max-width: 350px; border: 2px solid #ddd; display: block; margin: 0 auto;">
         <?php else: ?>
             <p>Não enviado.</p>
         <?php endif; ?>
@@ -648,7 +881,7 @@ $alertas_duplicidade = $query_alertas->fetchAll(PDO::FETCH_ASSOC);
     <div class="col-md-4 text-center">
         <h5 class="section-title">Print Ganhos Hoje:</h5>
         <?php if (!empty($cliente['print_ganhos_hoje']) && $cliente['print_ganhos_hoje'] !== 'sem-foto.png'): ?>
-            <img src="/painel/images/comprovantes/<?= htmlspecialchars($cliente['print_ganhos_hoje']) ?>" alt="Print Ganhos Hoje" class="img-fluid rounded shadow-sm" style="max-width: 350px; border: 2px solid #ddd; display: block; margin: 0 auto;">
+            <img src="/painel/images/comprovantes/<?= htmlspecialchars($cliente['print_ganhos_hoje']) ?? ''?>" alt="Print Ganhos Hoje" class="img-fluid rounded shadow-sm" style="max-width: 350px; border: 2px solid #ddd; display: block; margin: 0 auto;">
         <?php else: ?>
             <p>Não enviado.</p>
         <?php endif; ?>
@@ -659,7 +892,7 @@ $alertas_duplicidade = $query_alertas->fetchAll(PDO::FETCH_ASSOC);
     <div class="col-md-4 text-center">
         <h5 class="section-title">Print Ganhos 30 Dias:</h5>
         <?php if (!empty($cliente['print_ganhos_30dias']) && $cliente['print_ganhos_30dias'] !== 'sem-foto.png'): ?>
-            <img src="/painel/images/comprovantes/<?= htmlspecialchars($cliente['print_ganhos_30dias']) ?>" alt="Print Ganhos 30 Dias" class="img-fluid rounded shadow-sm" style="max-width: 350px; border: 2px solid #ddd; display: block; margin: 0 auto;">
+            <img src="/painel/images/comprovantes/<?= htmlspecialchars($cliente['print_ganhos_30dias']) ?? '' ?>" alt="Print Ganhos 30 Dias" class="img-fluid rounded shadow-sm" style="max-width: 350px; border: 2px solid #ddd; display: block; margin: 0 auto;">
         <?php else: ?>
             <p>Não enviado.</p>
         <?php endif; ?>
@@ -667,7 +900,7 @@ $alertas_duplicidade = $query_alertas->fetchAll(PDO::FETCH_ASSOC);
     <div class="col-md-4 text-center">
         <h5 class="section-title">Extrato 90 Dias:</h5>
         <?php if (!empty($cliente['extrato_90dias']) && $cliente['extrato_90dias'] !== 'sem-foto.png'): ?>
-            <img src="/painel/images/comprovantes/<?= htmlspecialchars($cliente['extrato_90dias']) ?>" alt="Extrato 90 Dias" class="img-fluid rounded shadow-sm" style="max-width: 350px; border: 2px solid #ddd; display: block; margin: 0 auto;">
+            <img src="/painel/images/comprovantes/<?= htmlspecialchars($cliente['extrato_90dias']) ?? '' ?>" alt="Extrato 90 Dias" class="img-fluid rounded shadow-sm" style="max-width: 350px; border: 2px solid #ddd; display: block; margin: 0 auto;">
         <?php else: ?>
             <p>Não enviado.</p>
         <?php endif; ?>
@@ -675,32 +908,41 @@ $alertas_duplicidade = $query_alertas->fetchAll(PDO::FETCH_ASSOC);
     <div class="col-md-4 text-center">
         <h5 class="section-title">Contracheque:</h5>
         <?php if (!empty($cliente['contracheque']) && $cliente['contracheque'] !== 'sem-foto.png'): ?>
-            <img src="/painel/images/comprovantes/<?= htmlspecialchars($cliente['contracheque']) ?>" alt="Contracheque" class="img-fluid rounded shadow-sm" style="max-width: 350px; border: 2px solid #ddd; display: block; margin: 0 auto;">
+            <img src="/painel/images/comprovantes/<?= htmlspecialchars($cliente['contracheque']) ?? ''?>" alt="Contracheque" class="img-fluid rounded shadow-sm" style="max-width: 350px; border: 2px solid #ddd; display: block; margin: 0 auto;">
         <?php else: ?>
             <p>Não enviado.</p>
         <?php endif; ?>
     </div>
 </div>
-<hr>
+<hr> -->
         <hr>
 
         <hr>
 
         <h4 class="section-title">Valores de Empréstimos</h4>
-        <?php if (!empty($cliente)): ?>
-          <p>
-              **Valor Desejado:** R$ <?= number_format($cliente['valor_desejado'], 2, ',', '.') ?> <br>
-              **Valor da Parcela Desejada:** R$ <?= number_format($cliente['valor_parcela_desejada'], 2, ',', '.') ?>
-          </p>
-      <?php endif; ?>
+        <?php if (!empty($cliente) && (!empty($cliente['valor_desejado']) || !empty($cliente['valor_parcela_desejada']))): ?>
+            <div class="card loan-values-card">
+                <p>
+                    <strong>Valor Desejado:</strong> 
+                    <span class="loan-value">R$ <?= number_format($cliente['valor_desejado'], 2, ',', '.') ?></span>
+                </p>
+                <p>
+                    <strong>Valor da Parcela Desejada:</strong> 
+                    <span class="loan-value">R$ <?= number_format($cliente['valor_parcela_desejada'], 2, ',', '.') ?></span>
+                </p>
+            </div>
+        <?php else: ?>
+            <p>Nenhum valor de empréstimo desejado registrado.</p>
+        <?php endif; ?>
 
       <hr>
 
       <h4 class="section-title">Finalizar Análise</h4>
       <div class="row justify-content-center">
-          <div class="col-md-6">
+          <div class="col-md-12">
+            <div class="form-card mt-4">
               <form action="finalizar_analise.php" method="POST">
-                  <input type="hidden" name="id_cliente" value="<?= htmlspecialchars($id_cliente) ?>">
+                  <input type="hidden" name="id_cliente" value="<?= htmlspecialchars($id_cliente) ?? ''?>">
 
                   <div class="form-group mb-3">
                       <label for="status_final" class="form-label">Selecione o status final:</label>
@@ -712,10 +954,16 @@ $alertas_duplicidade = $query_alertas->fetchAll(PDO::FETCH_ASSOC);
                       </select>
                   </div>
 
+                  <div class="form-group mb-3">
+                      <label for="observacoes" class="form-label">Descrição e Observações:</label>
+                      <textarea class="form-control" id="observacoes" name="observacoes" rows="4" placeholder="Insira aqui as observações, motivos ou pendências..."></textarea>
+                  </div>
+
                   <div class="d-grid gap-2">
                       <button type="submit" class="btn btn-primary btn-lg mt-3">Finalizar Análise</button>
                   </div>
               </form>
+          </div>
           </div>
       </div>
 
