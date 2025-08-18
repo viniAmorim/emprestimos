@@ -710,58 +710,59 @@ $alertas_duplicidade = $query_alertas->fetchAll(PDO::FETCH_ASSOC);
             <p>Não enviado.</p>
         <?php endif; ?>
     </div>
-    <div class="col-md-6">
-    <div class="validation-card">
-    <h6 class="section-title text-start mb-3">Validações:</h6>
-    <div class="form-group custom-control custom-checkbox small-checkbox my-1">
-        <input type="checkbox" class="custom-control-input" id="check_validade_cnh">
-        <label class="custom-control-label" for="check_validade_cnh">Validade da CNH</label>
-    </div>
-    <div class="form-group custom-control custom-checkbox small-checkbox my-1">
-        <input type="checkbox" class="custom-control-input" id="check_nome_documento">
-        <label class="custom-control-label" for="check_nome_documento">Confere com Documento</label>
-    </div>
-    <div class="form-group custom-control custom-checkbox small-checkbox my-1">
-        <input type="checkbox" class="custom-control-input" id="check_nome_whatsapp">
-        <label class="custom-control-label" for="check_nome_whatsapp">Busca em Whatsapp</label>
-    </div>
-    <div class="form-group custom-control custom-checkbox small-checkbox my-1">
-        <input type="checkbox" class="custom-control-input" id="check_nome_consulta">
-        <label class="custom-control-label" for="check_nome_consulta">Consulta</label>
-    </div>
-    <div class="form-group custom-control custom-checkbox small-checkbox my-1">
-        <input type="checkbox" class="custom-control-input" id="check_cpf_confere_documento">
-        <label class="custom-control-label" for="check_cpf_confere_documento">Confere CPF com Documento</label>
-    </div>
-    <div class="form-group custom-control custom-checkbox small-checkbox my-1">
-        <input type="checkbox" class="custom-control-input" id="check_rg_confere_documento">
-        <label class="custom-control-label" for="check_rg_confere_documento">Confere RG com Documento</label>
-    </div>
-    <div class="form-group custom-control custom-checkbox small-checkbox my-1">
-        <input type="checkbox" class="custom-control-input" id="check_foto_usuario_confere">
-        <label class="custom-control-label" for="check_foto_usuario_confere">Foto do usuário confere com Documento</label>
-    </div>
-    <div class="form-group custom-control custom-checkbox small-checkbox my-1">
-        <input type="checkbox" class="custom-control-input" id="check_celular_confere">
-        <label class="custom-control-label" for="check_celular_confere">Celular confere</label>
-    </div>
-</div>
 
-<div class="data-card mt-4">
-    <h6 class="section-title text-start">Dados Pessoais:</h6>
-    <p>
-        <strong>Nome Completo:</strong> <span><?= htmlspecialchars($cliente['nome']  ?? '') ?></span>
-    </p>
-    <p>
-        <strong>CPF:</strong> <span><?= htmlspecialchars($cliente['cpf']  ?? '') ?></span>
-    </p>
-    <p>
-        <strong>RG:</strong> <span><?= htmlspecialchars($cliente['rg']  ?? '') ?></span>
-    </p>
-    <p>
-        <strong>Celular:</strong> <span><?= htmlspecialchars($cliente['telefone']  ?? '')  ?></span>
-    </p>
-</div>
+    <div class="col-md-6">
+      <div class="data-card mt-4">
+          <h6 class="section-title text-start">Dados Pessoais:</h6>
+          <p>
+              <strong>Nome Completo:</strong> <span><?= htmlspecialchars($cliente['nome']  ?? '') ?></span>
+          </p>
+          <p>
+              <strong>CPF:</strong> <span><?= htmlspecialchars($cliente['cpf']  ?? '') ?></span>
+          </p>
+          <p>
+              <strong>RG:</strong> <span><?= htmlspecialchars($cliente['rg']  ?? '') ?></span>
+          </p>
+          <p>
+              <strong>Celular:</strong> <span><?= htmlspecialchars($cliente['telefone']  ?? '')  ?></span>
+          </p>
+      </div>
+      <div class="validation-card">
+        <h6 class="section-title text-start mb-3">Validações:</h6>
+        <div class="form-group custom-control custom-checkbox small-checkbox my-1">
+            <input type="checkbox" class="custom-control-input" id="check_validade_cnh">
+            <label class="custom-control-label" for="check_validade_cnh">Validade da CNH</label>
+        </div>
+        <div class="form-group custom-control custom-checkbox small-checkbox my-1">
+            <input type="checkbox" class="custom-control-input" id="check_nome_documento">
+            <label class="custom-control-label" for="check_nome_documento">Confere com Documento</label>
+        </div>
+        <div class="form-group custom-control custom-checkbox small-checkbox my-1">
+            <input type="checkbox" class="custom-control-input" id="check_nome_whatsapp">
+            <label class="custom-control-label" for="check_nome_whatsapp">Busca em Whatsapp</label>
+        </div>
+        <div class="form-group custom-control custom-checkbox small-checkbox my-1">
+            <input type="checkbox" class="custom-control-input" id="check_nome_consulta">
+            <label class="custom-control-label" for="check_nome_consulta">Consulta</label>
+        </div>
+        <div class="form-group custom-control custom-checkbox small-checkbox my-1">
+            <input type="checkbox" class="custom-control-input" id="check_cpf_confere_documento">
+            <label class="custom-control-label" for="check_cpf_confere_documento">Confere CPF com Documento</label>
+        </div>
+        <div class="form-group custom-control custom-checkbox small-checkbox my-1">
+            <input type="checkbox" class="custom-control-input" id="check_rg_confere_documento">
+            <label class="custom-control-label" for="check_rg_confere_documento">Confere RG com Documento</label>
+        </div>
+        <div class="form-group custom-control custom-checkbox small-checkbox my-1">
+            <input type="checkbox" class="custom-control-input" id="check_foto_usuario_confere">
+            <label class="custom-control-label" for="check_foto_usuario_confere">Foto do usuário confere com Documento</label>
+        </div>
+        <div class="form-group custom-control custom-checkbox small-checkbox my-1">
+            <input type="checkbox" class="custom-control-input" id="check_celular_confere">
+            <label class="custom-control-label" for="check_celular_confere">Celular confere</label>
+        </div>
+  </div>
+
 
     </div>
 </div>
