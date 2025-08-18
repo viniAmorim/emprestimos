@@ -33,7 +33,7 @@ $alertas_duplicidade = $query_alertas->fetchAll(PDO::FETCH_ASSOC);
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <title>Análise do Cliente: <?= htmlspecialchars($cliente['nome']) ?? '' ?></title>
+    <title>Análise do Cliente: <?= htmlspecialchars($cliente['nome'] ?? '') ?></title>
    
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -623,7 +623,7 @@ $alertas_duplicidade = $query_alertas->fetchAll(PDO::FETCH_ASSOC);
 </head>
 <body>
     <div class="container">
-        <h2 class="main-page-title text-center mb-4"><?= htmlspecialchars($cliente['nome']) ?? '' ?></h2>
+        <h2 class="main-page-title text-center mb-4"><?= htmlspecialchars($cliente['nome'] ?? '')  ?></h2>
 
         <div class="status-card">
           <div class="status-item">
@@ -632,7 +632,7 @@ $alertas_duplicidade = $query_alertas->fetchAll(PDO::FETCH_ASSOC);
           </div>
           <div class="status-item">
               <h6>Estágio:</h6>
-              <p><?= htmlspecialchars($cliente['estagio_cliente']) ?? '' ?></p>
+              <p><?= htmlspecialchars($cliente['estagio_cliente'] ?? '') ?></p>
           </div>
         </div>
 
@@ -681,13 +681,13 @@ $alertas_duplicidade = $query_alertas->fetchAll(PDO::FETCH_ASSOC);
                         }
                     }
                 ?>
-                    <div id="alerta-<?= htmlspecialchars($alerta['id']) ?? '' ?>">
+                    <div id="alerta-<?= htmlspecialchars($alerta['id'] ?? '') ?>">
                         <h5 class="section-title-alt">Alerta: <?= htmlspecialchars($alerta['tipo_alerta']) ?></h5>
-                        <p class="mb-2"><strong>Valor Duplicado:</strong> <span class="form-control-plaintext py-1"><?= htmlspecialchars($alerta['valor_duplicado']) ?? '' ?></span></p>
-                        <p class="mb-2"><strong>Cliente Duplicado:</strong> <span class="form-control-plaintext py-1"><?= htmlspecialchars($nome_cliente_duplicado) ?? '' ?></span></p>
+                        <p class="mb-2"><strong>Valor Duplicado:</strong> <span class="form-control-plaintext py-1"><?= htmlspecialchars($alerta['valor_duplicado'] ?? '') ?></span></p>
+                        <p class="mb-2"><strong>Cliente Duplicado:</strong> <span class="form-control-plaintext py-1"><?= htmlspecialchars($nome_cliente_duplicado  ?? '') ?></span></p>
                         <p class="mb-2"><strong>Data do Alerta:</strong> <span class="form-control-plaintext py-1"><?= $data_alerta_formatada ?></span></p>
                         
-                        <button class="btn btn-sm btn-success btn-resolvido" data-id="<?= htmlspecialchars($alerta['id']) ?? '' ?>">
+                        <button class="btn btn-sm btn-success btn-resolvido" data-id="<?= htmlspecialchars($alerta['id']  ?? '') ?>">
                             <i class="fas fa-check"></i> Ignorar
                         </button>
                         
@@ -705,7 +705,7 @@ $alertas_duplicidade = $query_alertas->fetchAll(PDO::FETCH_ASSOC);
     <div class="col-md-6 text-center">
         <h5 class="section-title">Comprovante de RG:</h5>
         <?php if (!empty($cliente['comprovante_rg']) && $cliente['comprovante_rg'] !== 'sem-foto.png'): ?>
-            <img src="/painel/images/comprovantes/<?= htmlspecialchars($cliente['comprovante_rg']) ?? '' ?>" alt="Comprovante de RG" class="img-fluid rounded shadow-sm" style="max-width: 500px; border: 2px solid #ddd; display: block; margin: 0 auto;">
+            <img src="/painel/images/comprovantes/<?= htmlspecialchars($cliente['comprovante_rg'] ?? '') ?>" alt="Comprovante de RG" class="img-fluid rounded shadow-sm" style="max-width: 500px; border: 2px solid #ddd; display: block; margin: 0 auto;">
         <?php else: ?>
             <p>Não enviado.</p>
         <?php endif; ?>
@@ -750,16 +750,16 @@ $alertas_duplicidade = $query_alertas->fetchAll(PDO::FETCH_ASSOC);
 <div class="data-card mt-4">
     <h6 class="section-title text-start">Dados Pessoais:</h6>
     <p>
-        <strong>Nome Completo:</strong> <span><?= htmlspecialchars($cliente['nome'])  ?? ''?></span>
+        <strong>Nome Completo:</strong> <span><?= htmlspecialchars($cliente['nome']  ?? '') ?></span>
     </p>
     <p>
-        <strong>CPF:</strong> <span><?= htmlspecialchars($cliente['cpf']) ?? '' ?></span>
+        <strong>CPF:</strong> <span><?= htmlspecialchars($cliente['cpf']  ?? '') ?></span>
     </p>
     <p>
-        <strong>RG:</strong> <span><?= htmlspecialchars($cliente['rg']) ?? '' ?></span>
+        <strong>RG:</strong> <span><?= htmlspecialchars($cliente['rg']  ?? '') ?></span>
     </p>
     <p>
-        <strong>Celular:</strong> <span><?= htmlspecialchars($cliente['telefone']) ?? '' ?></span>
+        <strong>Celular:</strong> <span><?= htmlspecialchars($cliente['telefone']  ?? '')  ?></span>
     </p>
 </div>
 
@@ -772,7 +772,7 @@ $alertas_duplicidade = $query_alertas->fetchAll(PDO::FETCH_ASSOC);
     <div class="col-md-6">
         <h5 class="section-title">Comprovante de Endereço:</h5>
         <?php if (!empty($cliente['comprovante_endereco']) && $cliente['comprovante_endereco'] !== 'sem-foto.png'): ?>
-            <img src="/painel/images/comprovantes/<?= htmlspecialchars($cliente['comprovante_endereco']) ?? ''?>" alt="Comprovante de Endereço" class="img-fluid rounded shadow-sm" style="max-width: 500px; border: 2px solid #ddd; display: block; margin: 0 auto;">
+            <img src="/painel/images/comprovantes/<?= htmlspecialchars($cliente['comprovante_endereco'] ?? '') ?>" alt="Comprovante de Endereço" class="img-fluid rounded shadow-sm" style="max-width: 500px; border: 2px solid #ddd; display: block; margin: 0 auto;">
         <?php else: ?>
             <p>Não enviado.</p>
         <?php endif; ?>
@@ -801,26 +801,26 @@ $alertas_duplicidade = $query_alertas->fetchAll(PDO::FETCH_ASSOC);
         <div class="data-card mt-4">
           <h6 class="section-title text-start">Endereço Registrado:</h6>
           <p>
-              <strong>Endereço:</strong> <span><?= htmlspecialchars($cliente['endereco']) ?? '' ?>, Nº <?= htmlspecialchars($cliente['numero']) ?? '' ?></span>
+              <strong>Endereço:</strong> <span><?= htmlspecialchars($cliente['endereco'] ?? '') ?>, Nº <?= htmlspecialchars($cliente['numero']?? '') ?></span>
           </p>
           <p>
-              <strong>Quadra:</strong> <span><?= htmlspecialchars($cliente['quadra']) ?? '' ?></span>
+              <strong>Quadra:</strong> <span><?= htmlspecialchars($cliente['quadra']?? '') ?></span>
           </p>
           <p>
-              <strong>Lote:</strong> <span><?= htmlspecialchars($cliente['lote']) ?? ''?></span>
+              <strong>Lote:</strong> <span><?= htmlspecialchars($cliente['lote']?? '') ?></span>
           </p>
           <p>
-              <strong>Bairro:</strong> <span><?= htmlspecialchars($cliente['bairro']) ?? ''?></span>
+              <strong>Bairro:</strong> <span><?= htmlspecialchars($cliente['bairro']?? '') ?></span>
           </p>
           <p>
-              <strong>Cidade/Estado:</strong> <span><?= htmlspecialchars($cliente['cidade']) ?? ''?> - <?= htmlspecialchars($cliente['estado']) ?? ''?></span>
+              <strong>Cidade/Estado:</strong> <span><?= htmlspecialchars($cliente['cidade']?? '') ?> - <?= htmlspecialchars($cliente['estado']?? '') ?></span>
           </p>
           <p>
-              <strong>CEP:</strong> <span><?= htmlspecialchars($cliente['cep']) ?? ''?></span>
+              <strong>CEP:</strong> <span><?= htmlspecialchars($cliente['cep']?? '') ?></span>
           </p>
           <?php if (!empty($cliente['complemento'])): ?>
               <p>
-                  <strong>Complemento:</strong> <span><?= htmlspecialchars($cliente['complemento']) ?? ''?></span>
+                  <strong>Complemento:</strong> <span><?= htmlspecialchars($cliente['complemento'] ?? '') ?></span>
               </p>
           <?php endif; ?>
       </div>
@@ -834,10 +834,10 @@ $alertas_duplicidade = $query_alertas->fetchAll(PDO::FETCH_ASSOC);
                 <div class="data-card">
                     <h6 class="section-title text-start">Dados da Referência:</h6>
                     <p>
-                        <strong>Nome Completo:</strong> <span><?= htmlspecialchars($cliente['referencia_nome']) ?? '' ?></span>
+                        <strong>Nome Completo:</strong> <span><?= htmlspecialchars($cliente['referencia_nome']?? '') ?></span>
                     </p>
                     <p>
-                        <strong>Celular (WhatsApp):</strong> <span><?= htmlspecialchars($cliente['referencia_contato']) ?? ''?></span>
+                        <strong>Celular (WhatsApp):</strong> <span><?= htmlspecialchars($cliente['referencia_contato'] ?? '') ?></span>
                     </p>
                 </div>
             </div>
@@ -865,7 +865,7 @@ $alertas_duplicidade = $query_alertas->fetchAll(PDO::FETCH_ASSOC);
     <div class="col-md-4 text-center">
         <h5 class="section-title">Print Perfil App:</h5>
         <?php if (!empty($cliente['print_perfil_app']) && $cliente['print_perfil_app'] !== 'sem-foto.png'): ?>
-            <img src="/painel/images/comprovantes/<?= htmlspecialchars($cliente['print_perfil_app']) ?? ''?>" alt="Print Perfil App" class="img-fluid rounded shadow-sm" style="max-width: 450px; border: 2px solid #ddd; display: block; margin: 0 auto;">
+            <img src="/painel/images/comprovantes/<?= htmlspecialchars($cliente['print_perfil_app'] ?? '') ?>" alt="Print Perfil App" class="img-fluid rounded shadow-sm" style="max-width: 450px; border: 2px solid #ddd; display: block; margin: 0 auto;">
         <?php else: ?>
             <p>Não enviado.</p>
         <?php endif; ?>
@@ -873,7 +873,7 @@ $alertas_duplicidade = $query_alertas->fetchAll(PDO::FETCH_ASSOC);
     <div class="col-md-4 text-center">
         <h5 class="section-title">Print Veículo App:</h5>
         <?php if (!empty($cliente['print_veiculo_app']) && $cliente['print_veiculo_app'] !== 'sem-foto.png'): ?>
-            <img src="/painel/images/comprovantes/<?= htmlspecialchars($cliente['print_veiculo_app']) ?? ''?>" alt="Print Veículo App" class="img-fluid rounded shadow-sm" style="max-width: 350px; border: 2px solid #ddd; display: block; margin: 0 auto;">
+            <img src="/painel/images/comprovantes/<?= htmlspecialchars($cliente['print_veiculo_app'] ?? '') ?>" alt="Print Veículo App" class="img-fluid rounded shadow-sm" style="max-width: 350px; border: 2px solid #ddd; display: block; margin: 0 auto;">
         <?php else: ?>
             <p>Não enviado.</p>
         <?php endif; ?>
@@ -881,7 +881,7 @@ $alertas_duplicidade = $query_alertas->fetchAll(PDO::FETCH_ASSOC);
     <div class="col-md-4 text-center">
         <h5 class="section-title">Print Ganhos Hoje:</h5>
         <?php if (!empty($cliente['print_ganhos_hoje']) && $cliente['print_ganhos_hoje'] !== 'sem-foto.png'): ?>
-            <img src="/painel/images/comprovantes/<?= htmlspecialchars($cliente['print_ganhos_hoje']) ?? ''?>" alt="Print Ganhos Hoje" class="img-fluid rounded shadow-sm" style="max-width: 350px; border: 2px solid #ddd; display: block; margin: 0 auto;">
+            <img src="/painel/images/comprovantes/<?= htmlspecialchars($cliente['print_ganhos_hoje'] ?? '') ?>" alt="Print Ganhos Hoje" class="img-fluid rounded shadow-sm" style="max-width: 350px; border: 2px solid #ddd; display: block; margin: 0 auto;">
         <?php else: ?>
             <p>Não enviado.</p>
         <?php endif; ?>
@@ -892,7 +892,7 @@ $alertas_duplicidade = $query_alertas->fetchAll(PDO::FETCH_ASSOC);
     <div class="col-md-4 text-center">
         <h5 class="section-title">Print Ganhos 30 Dias:</h5>
         <?php if (!empty($cliente['print_ganhos_30dias']) && $cliente['print_ganhos_30dias'] !== 'sem-foto.png'): ?>
-            <img src="/painel/images/comprovantes/<?= htmlspecialchars($cliente['print_ganhos_30dias']) ?? '' ?>" alt="Print Ganhos 30 Dias" class="img-fluid rounded shadow-sm" style="max-width: 350px; border: 2px solid #ddd; display: block; margin: 0 auto;">
+            <img src="/painel/images/comprovantes/<?= htmlspecialchars($cliente['print_ganhos_30dias'] ?? '')  ?>" alt="Print Ganhos 30 Dias" class="img-fluid rounded shadow-sm" style="max-width: 350px; border: 2px solid #ddd; display: block; margin: 0 auto;">
         <?php else: ?>
             <p>Não enviado.</p>
         <?php endif; ?>
@@ -900,7 +900,7 @@ $alertas_duplicidade = $query_alertas->fetchAll(PDO::FETCH_ASSOC);
     <div class="col-md-4 text-center">
         <h5 class="section-title">Extrato 90 Dias:</h5>
         <?php if (!empty($cliente['extrato_90dias']) && $cliente['extrato_90dias'] !== 'sem-foto.png'): ?>
-            <img src="/painel/images/comprovantes/<?= htmlspecialchars($cliente['extrato_90dias']) ?? '' ?>" alt="Extrato 90 Dias" class="img-fluid rounded shadow-sm" style="max-width: 350px; border: 2px solid #ddd; display: block; margin: 0 auto;">
+            <img src="/painel/images/comprovantes/<?= htmlspecialchars($cliente['extrato_90dias'] ?? '') ?>" alt="Extrato 90 Dias" class="img-fluid rounded shadow-sm" style="max-width: 350px; border: 2px solid #ddd; display: block; margin: 0 auto;">
         <?php else: ?>
             <p>Não enviado.</p>
         <?php endif; ?>
@@ -908,7 +908,7 @@ $alertas_duplicidade = $query_alertas->fetchAll(PDO::FETCH_ASSOC);
     <div class="col-md-4 text-center">
         <h5 class="section-title">Contracheque:</h5>
         <?php if (!empty($cliente['contracheque']) && $cliente['contracheque'] !== 'sem-foto.png'): ?>
-            <img src="/painel/images/comprovantes/<?= htmlspecialchars($cliente['contracheque']) ?? ''?>" alt="Contracheque" class="img-fluid rounded shadow-sm" style="max-width: 350px; border: 2px solid #ddd; display: block; margin: 0 auto;">
+            <img src="/painel/images/comprovantes/<?= htmlspecialchars($cliente['contracheque'] ?? '') ?>" alt="Contracheque" class="img-fluid rounded shadow-sm" style="max-width: 350px; border: 2px solid #ddd; display: block; margin: 0 auto;">
         <?php else: ?>
             <p>Não enviado.</p>
         <?php endif; ?>
@@ -942,7 +942,7 @@ $alertas_duplicidade = $query_alertas->fetchAll(PDO::FETCH_ASSOC);
           <div class="col-md-12">
             <div class="form-card mt-4">
               <form action="finalizar_analise.php" method="POST">
-                  <input type="hidden" name="id_cliente" value="<?= htmlspecialchars($id_cliente) ?? ''?>">
+                  <input type="hidden" name="id_cliente" value="<?= htmlspecialchars($id_cliente ?? '') ?>">
 
                   <div class="form-group mb-3">
                       <label for="status_final" class="form-label">Selecione o status final:</label>
