@@ -860,64 +860,127 @@ $alertas_duplicidade = $query_alertas->fetchAll(PDO::FETCH_ASSOC);
                 </div>
             </div>
         </div>
+        <h4 class="section-title">Ramo de Atuação</h4>
 
-        <!-- <h4 class="section-title">Comprovantes Adicionais</h4>
-<div class="row mb-4">
-    <div class="col-md-4 text-center">
-        <h5 class="section-title">Print Perfil App:</h5>
-        <?php if (!empty($cliente['print_perfil_app']) && $cliente['print_perfil_app'] !== 'sem-foto.png'): ?>
-            <img src="/painel/images/comprovantes/<?= htmlspecialchars($cliente['print_perfil_app'] ?? '') ?>" alt="Print Perfil App" class="img-fluid rounded shadow-sm" style="max-width: 450px; border: 2px solid #ddd; display: block; margin: 0 auto;">
-        <?php else: ?>
-            <p>Não enviado.</p>
-        <?php endif; ?>
+<?php
+$motorista = !empty($cliente['print_perfil_app']) && $cliente['print_perfil_app'] !== 'sem-foto.png' ||
+             !empty($cliente['print_veiculo_app']) && $cliente['print_veiculo_app'] !== 'sem-foto.png' ||
+             !empty($cliente['print_ganhos_hoje']) && $cliente['print_ganhos_hoje'] !== 'sem-foto.png' ||
+             !empty($cliente['print_ganhos_30dias']) && $cliente['print_ganhos_30dias'] !== 'sem-foto.png';
+
+$autonomo = !empty($cliente['extrato_90dias']) && $cliente['extrato_90dias'] !== 'sem-foto.png';
+$assalariado = !empty($cliente['contracheque']) && $cliente['contracheque'] !== 'sem-foto.png';
+?>
+<div class="row">
+    <div class="col-md-6">
+        <div class="validation-card">
+            <h6>Comprovantes Genéricos</h6>
+            <hr>
+            <div class="form-group custom-control custom-checkbox small-checkbox my-1">
+                <input type="checkbox" class="custom-control-input" id="checkNome" value="1">
+                <label class="custom-control-label" for="checkNome">Nome</label>
+            </div>
+            <div class="form-group custom-control custom-checkbox small-checkbox my-1">
+                <input type="checkbox" class="custom-control-input" id="checkData" value="1">
+                <label class="custom-control-label" for="checkData">Data</label>
+            </div>
+            <div class="form-group custom-control custom-checkbox small-checkbox my-1">
+                <input type="checkbox" class="custom-control-input" id="checkGanhos" value="1">
+                <label class="custom-control-label" for="checkGanhos">Ganhos</label>
+            </div>
+        </div>
     </div>
-    <div class="col-md-4 text-center">
-        <h5 class="section-title">Print Veículo App:</h5>
-        <?php if (!empty($cliente['print_veiculo_app']) && $cliente['print_veiculo_app'] !== 'sem-foto.png'): ?>
-            <img src="/painel/images/comprovantes/<?= htmlspecialchars($cliente['print_veiculo_app'] ?? '') ?>" alt="Print Veículo App" class="img-fluid rounded shadow-sm" style="max-width: 350px; border: 2px solid #ddd; display: block; margin: 0 auto;">
-        <?php else: ?>
-            <p>Não enviado.</p>
-        <?php endif; ?>
-    </div>
-    <div class="col-md-4 text-center">
-        <h5 class="section-title">Print Ganhos Hoje:</h5>
-        <?php if (!empty($cliente['print_ganhos_hoje']) && $cliente['print_ganhos_hoje'] !== 'sem-foto.png'): ?>
-            <img src="/painel/images/comprovantes/<?= htmlspecialchars($cliente['print_ganhos_hoje'] ?? '') ?>" alt="Print Ganhos Hoje" class="img-fluid rounded shadow-sm" style="max-width: 350px; border: 2px solid #ddd; display: block; margin: 0 auto;">
-        <?php else: ?>
-            <p>Não enviado.</p>
-        <?php endif; ?>
-    </div>
+
+    <?php if ($motorista): ?>
+        <div class="col-md-6">
+            <div class="validation-card">
+                <h6>Validação de Motorista</h6>
+                <hr>
+                <div class="form-group custom-control custom-checkbox small-checkbox my-1">
+                    <input type="checkbox" class="custom-control-input" id="checkTaxaAceitacao" value="1">
+                    <label class="custom-control-label" for="checkTaxaAceitacao">Taxa de Aceitação</label>
+                </div>
+                <div class="form-group custom-control custom-checkbox small-checkbox my-1">
+                    <input type="checkbox" class="custom-control-input" id="checkConfere" value="1">
+                    <label class="custom-control-label" for="checkConfere">Confere</label>
+                </div>
+                <div class="form-group custom-control custom-checkbox small-checkbox my-1">
+                    <input type="checkbox" class="custom-control-input" id="checkAtivo" value="1">
+                    <label class="custom-control-label" for="checkAtivo">Está ativo</label>
+                </div>
+                <div class="form-group custom-control custom-checkbox small-checkbox my-1">
+                    <input type="checkbox" class="custom-control-input" id="checkCabecalhos" value="1">
+                    <label class="custom-control-label" for="checkCabecalhos">Cabeçalhos/Horários prints</label>
+                </div>
+            </div>
+        </div>
+    <?php endif; ?>
 </div>
 
-<div class="row mb-4">
-    <div class="col-md-4 text-center">
-        <h5 class="section-title">Print Ganhos 30 Dias:</h5>
-        <?php if (!empty($cliente['print_ganhos_30dias']) && $cliente['print_ganhos_30dias'] !== 'sem-foto.png'): ?>
-            <img src="/painel/images/comprovantes/<?= htmlspecialchars($cliente['print_ganhos_30dias'] ?? '')  ?>" alt="Print Ganhos 30 Dias" class="img-fluid rounded shadow-sm" style="max-width: 350px; border: 2px solid #ddd; display: block; margin: 0 auto;">
-        <?php else: ?>
-            <p>Não enviado.</p>
-        <?php endif; ?>
+<?php if ($motorista): ?>
+    <div class="row mb-4">
+        <div class="col-md-4 text-center">
+            <h5 class="section-title">Print Perfil App:</h5>
+            <?php if (!empty($cliente['print_perfil_app']) && $cliente['print_perfil_app'] !== 'sem-foto.png'): ?>
+                <img src="/painel/images/comprovantes/<?= htmlspecialchars($cliente['print_perfil_app'] ?? '') ?>" alt="Print Perfil App" class="img-fluid rounded shadow-sm" style="max-width: 350px; border: 2px solid #ddd; display: block; margin: 0 auto;">
+            <?php else: ?>
+                <p>Não enviado.</p>
+            <?php endif; ?>
+        </div>
+        <div class="col-md-4 text-center">
+            <h5 class="section-title">Print Veículo App:</h5>
+            <?php if (!empty($cliente['print_veiculo_app']) && $cliente['print_veiculo_app'] !== 'sem-foto.png'): ?>
+                <img src="/painel/images/comprovantes/<?= htmlspecialchars($cliente['print_veiculo_app'] ?? '') ?>" alt="Print Veículo App" class="img-fluid rounded shadow-sm" style="max-width: 350px; border: 2px solid #ddd; display: block; margin: 0 auto;">
+            <?php else: ?>
+                <p>Não enviado.</p>
+            <?php endif; ?>
+        </div>
+        <div class="col-md-4 text-center">
+            <h5 class="section-title">Print Ganhos Hoje:</h5>
+            <?php if (!empty($cliente['print_ganhos_hoje']) && $cliente['print_ganhos_hoje'] !== 'sem-foto.png'): ?>
+                <img src="/painel/images/comprovantes/<?= htmlspecialchars($cliente['print_ganhos_hoje'] ?? '') ?>" alt="Print Ganhos Hoje" class="img-fluid rounded shadow-sm" style="max-width: 350px; border: 2px solid #ddd; display: block; margin: 0 auto;">
+            <?php else: ?>
+                <p>Não enviado.</p>
+            <?php endif; ?>
+        </div>
     </div>
-    <div class="col-md-4 text-center">
-        <h5 class="section-title">Extrato 90 Dias:</h5>
-        <?php if (!empty($cliente['extrato_90dias']) && $cliente['extrato_90dias'] !== 'sem-foto.png'): ?>
-            <img src="/painel/images/comprovantes/<?= htmlspecialchars($cliente['extrato_90dias'] ?? '') ?>" alt="Extrato 90 Dias" class="img-fluid rounded shadow-sm" style="max-width: 350px; border: 2px solid #ddd; display: block; margin: 0 auto;">
-        <?php else: ?>
-            <p>Não enviado.</p>
-        <?php endif; ?>
+    <div class="row mb-4">
+        <div class="col-md-4 text-center">
+            <h5 class="section-title">Print Ganhos 30 Dias:</h5>
+            <?php if (!empty($cliente['print_ganhos_30dias']) && $cliente['print_ganhos_30dias'] !== 'sem-foto.png'): ?>
+                <img src="/painel/images/comprovantes/<?= htmlspecialchars($cliente['print_ganhos_30dias'] ?? '') ?>" alt="Print Ganhos 30 Dias" class="img-fluid rounded shadow-sm" style="max-width: 350px; border: 2px solid #ddd; display: block; margin: 0 auto;">
+            <?php else: ?>
+                <p>Não enviado.</p>
+            <?php endif; ?>
+        </div>
     </div>
-    <div class="col-md-4 text-center">
-        <h5 class="section-title">Contracheque:</h5>
-        <?php if (!empty($cliente['contracheque']) && $cliente['contracheque'] !== 'sem-foto.png'): ?>
-            <img src="/painel/images/comprovantes/<?= htmlspecialchars($cliente['contracheque'] ?? '') ?>" alt="Contracheque" class="img-fluid rounded shadow-sm" style="max-width: 350px; border: 2px solid #ddd; display: block; margin: 0 auto;">
-        <?php else: ?>
-            <p>Não enviado.</p>
-        <?php endif; ?>
-    </div>
-</div>
-<hr> -->
-        <hr>
+<?php endif; ?>
 
+<?php if ($autonomo): ?>
+    <div class="row mb-4">
+        <div class="col-md-4 text-center">
+            <h5 class="section-title">Extrato 90 Dias:</h5>
+            <?php if (!empty($cliente['extrato_90dias']) && $cliente['extrato_90dias'] !== 'sem-foto.png'): ?>
+                <img src="/painel/images/comprovantes/<?= htmlspecialchars($cliente['extrato_90dias'] ?? '') ?>" alt="Extrato 90 Dias" class="img-fluid rounded shadow-sm" style="max-width: 350px; border: 2px solid #ddd; display: block; margin: 0 auto;">
+            <?php else: ?>
+                <p>Não enviado.</p>
+            <?php endif; ?>
+        </div>
+    </div>
+<?php endif; ?>
+
+<?php if ($assalariado): ?>
+    <div class="row mb-4">
+        <div class="col-md-4 text-center">
+            <h5 class="section-title">Contracheque:</h5>
+            <?php if (!empty($cliente['contracheque']) && $cliente['contracheque'] !== 'sem-foto.png'): ?>
+                <img src="/painel/images/comprovantes/<?= htmlspecialchars($cliente['contracheque'] ?? '') ?>" alt="Contracheque" class="img-fluid rounded shadow-sm" style="max-width: 350px; border: 2px solid #ddd; display: block; margin: 0 auto;">
+            <?php else: ?>
+                <p>Não enviado.</p>
+            <?php endif; ?>
+        </div>
+    </div>
+<?php endif; ?>
         <hr>
 
         <h4 class="section-title">Valores de Empréstimos</h4>
