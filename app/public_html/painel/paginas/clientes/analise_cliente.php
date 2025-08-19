@@ -918,8 +918,8 @@ $assalariado = !empty($cliente['contracheque']) && $cliente['contracheque'] !== 
 </div>
 
 <?php if ($motorista): ?>
-    <div class="row mb-4">
-        <div class="col-md-4 text-center">
+    <div class="row mb-6">
+        <div class="col-md-6 text-center">
             <h5 class="section-title">Print Perfil App:</h5>
             <?php if (!empty($cliente['print_perfil_app']) && $cliente['print_perfil_app'] !== 'sem-foto.png'): ?>
                 <img src="/painel/images/comprovantes/<?= htmlspecialchars($cliente['print_perfil_app'] ?? '') ?>" alt="Print Perfil App" class="img-fluid rounded shadow-sm" style="max-width: 350px; border: 2px solid #ddd; display: block; margin: 0 auto;">
@@ -927,7 +927,7 @@ $assalariado = !empty($cliente['contracheque']) && $cliente['contracheque'] !== 
                 <p>Não enviado.</p>
             <?php endif; ?>
         </div>
-        <div class="col-md-4 text-center">
+        <div class="col-md-6 text-center">
             <h5 class="section-title">Print Veículo App:</h5>
             <?php if (!empty($cliente['print_veiculo_app']) && $cliente['print_veiculo_app'] !== 'sem-foto.png'): ?>
                 <img src="/painel/images/comprovantes/<?= htmlspecialchars($cliente['print_veiculo_app'] ?? '') ?>" alt="Print Veículo App" class="img-fluid rounded shadow-sm" style="max-width: 350px; border: 2px solid #ddd; display: block; margin: 0 auto;">
@@ -935,20 +935,21 @@ $assalariado = !empty($cliente['contracheque']) && $cliente['contracheque'] !== 
                 <p>Não enviado.</p>
             <?php endif; ?>
         </div>
-        <div class="col-md-4 text-center">
-            <h5 class="section-title">Print Ganhos Hoje:</h5>
-            <?php if (!empty($cliente['print_ganhos_hoje']) && $cliente['print_ganhos_hoje'] !== 'sem-foto.png'): ?>
-                <img src="/painel/images/comprovantes/<?= htmlspecialchars($cliente['print_ganhos_hoje'] ?? '') ?>" alt="Print Ganhos Hoje" class="img-fluid rounded shadow-sm" style="max-width: 350px; border: 2px solid #ddd; display: block; margin: 0 auto;">
+        
+    </div>
+    <div class="row mb-6">
+        <div class="col-md-6 text-center">
+            <h5 class="section-title">Print Ganhos 30 Dias:</h5>
+            <?php if (!empty($cliente['print_ganhos_30dias']) && $cliente['print_ganhos_30dias'] !== 'sem-foto.png'): ?>
+                <img src="/painel/images/comprovantes/<?= htmlspecialchars($cliente['print_ganhos_30dias'] ?? '') ?>" alt="Print Ganhos 30 Dias" class="img-fluid rounded shadow-sm" style="max-width: 350px; border: 2px solid #ddd; display: block; margin: 0 auto;">
             <?php else: ?>
                 <p>Não enviado.</p>
             <?php endif; ?>
         </div>
-    </div>
-    <div class="row mb-4">
-        <div class="col-md-4 text-center">
-            <h5 class="section-title">Print Ganhos 30 Dias:</h5>
-            <?php if (!empty($cliente['print_ganhos_30dias']) && $cliente['print_ganhos_30dias'] !== 'sem-foto.png'): ?>
-                <img src="/painel/images/comprovantes/<?= htmlspecialchars($cliente['print_ganhos_30dias'] ?? '') ?>" alt="Print Ganhos 30 Dias" class="img-fluid rounded shadow-sm" style="max-width: 350px; border: 2px solid #ddd; display: block; margin: 0 auto;">
+        <div class="col-md-6 text-center">
+            <h5 class="section-title">Print Ganhos Hoje:</h5>
+            <?php if (!empty($cliente['print_ganhos_hoje']) && $cliente['print_ganhos_hoje'] !== 'sem-foto.png'): ?>
+                <img src="/painel/images/comprovantes/<?= htmlspecialchars($cliente['print_ganhos_hoje'] ?? '') ?>" alt="Print Ganhos Hoje" class="img-fluid rounded shadow-sm" style="max-width: 350px; border: 2px solid #ddd; display: block; margin: 0 auto;">
             <?php else: ?>
                 <p>Não enviado.</p>
             <?php endif; ?>
@@ -961,7 +962,7 @@ $assalariado = !empty($cliente['contracheque']) && $cliente['contracheque'] !== 
         <div class="col-md-4 text-center">
             <h5 class="section-title">Extrato 90 Dias:</h5>
             <?php if (!empty($cliente['extrato_90dias']) && $cliente['extrato_90dias'] !== 'sem-foto.png'): ?>
-                <img src="/painel/images/comprovantes/<?= htmlspecialchars($cliente['extrato_90dias'] ?? '') ?>" alt="Extrato 90 Dias" class="img-fluid rounded shadow-sm" style="max-width: 350px; border: 2px solid #ddd; display: block; margin: 0 auto;">
+                <img src="/painel/images/comprovantes/<?= htmlspecialchars($cliente['extrato_90dias'] ?? '') ?>" alt="Extrato 90 Dias" class="img-fluid rounded shadow-sm" style="max-width: 450px; border: 2px solid #ddd; display: block; margin: 0 auto;">
             <?php else: ?>
                 <p>Não enviado.</p>
             <?php endif; ?>
@@ -974,7 +975,7 @@ $assalariado = !empty($cliente['contracheque']) && $cliente['contracheque'] !== 
         <div class="col-md-4 text-center">
             <h5 class="section-title">Contracheque:</h5>
             <?php if (!empty($cliente['contracheque']) && $cliente['contracheque'] !== 'sem-foto.png'): ?>
-                <img src="/painel/images/comprovantes/<?= htmlspecialchars($cliente['contracheque'] ?? '') ?>" alt="Contracheque" class="img-fluid rounded shadow-sm" style="max-width: 350px; border: 2px solid #ddd; display: block; margin: 0 auto;">
+                <img src="/painel/images/comprovantes/<?= htmlspecialchars($cliente['contracheque'] ?? '') ?>" alt="Contracheque" class="img-fluid rounded shadow-sm" style="max-width: 450px; border: 2px solid #ddd; display: block; margin: 0 auto;">
             <?php else: ?>
                 <p>Não enviado.</p>
             <?php endif; ?>
@@ -1012,16 +1013,35 @@ $assalariado = !empty($cliente['contracheque']) && $cliente['contracheque'] !== 
                       <label for="status_final" class="form-label">Selecione o status final:</label>
                       <select class="form-select form-control" id="status_final" name="status_final" required>
                           <option value="" selected disabled>Escolha uma opção</option>
-                          <option value="Aprovado">Aprovar</option>
+                          <option value="Aprovado">Aprovado</option>
                           <option value="Reprovado">Reprovar</option>
-                          <option value="Pendente">Pendência</option>
+                          <option value="Pendente">Pendente</option>
+                          <option value="NaoValidado">Não Validado</option>
+                          <option value="Ativo">Ativo</option>
+                          <option value="Inativo">Inativo</option>
+                          <option value="EmAtraso">Em Atraso</option>
+                          <option value="Negativado">Negativado</option>
+                          <option value="EmAnalise">Em Análise</option>
+                          <option value="NaoTemInteresse">Não tem Interesse</option>
                       </select>
                   </div>
 
-                  <div class="form-group mb-3">
-                      <label for="observacoes" class="form-label">Descrição e Observações:</label>
-                      <textarea class="form-control" id="observacoes" name="observacoes" rows="4" placeholder="Insira aqui as observações, motivos ou pendências..."></textarea>
-                  </div>
+                  <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="observacoes">Observações</label>
+                        <select name="observacoes" id="observacoes" class="form-select">
+                            <option value="">Selecione uma opção</option>
+                            <option value="Outra cidade">Outra cidade</option>
+                            <option value="Fraude">Fraude</option>
+                            <option value="Inadimplente">Inadimplente</option>
+                            <option value="Negado consulta">Negado consulta</option>
+                            <option value="Rendimentos baixos">Rendimentos baixos</option>
+                            <option value="Solicitou cancelamento">Solicitou cancelamento</option>
+                            <option value="CNH vencida">CNH vencida</option>
+                            <option value="Não tem endereço no nome">Não tem endereço no nome</option>
+                        </select>
+                    </div>
+                </div>
 
                   <div class="d-grid gap-2">
                       <button type="submit" class="btn btn-primary btn-lg mt-3">Finalizar Análise</button>
@@ -1030,8 +1050,6 @@ $assalariado = !empty($cliente['contracheque']) && $cliente['contracheque'] !== 
           </div>
           </div>
       </div>
-
-      
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
@@ -1054,7 +1072,7 @@ $assalariado = !empty($cliente['contracheque']) && $cliente['contracheque'] !== 
             }).then((result) => {
                 if (result.isConfirmed) {
                     $.ajax({
-                        url: 'marcar_alerta_resolvido.php',
+                        url: 'marca_alerta_resolvido.php',
                         type: 'POST',
                         data: {
                             id: alertaId

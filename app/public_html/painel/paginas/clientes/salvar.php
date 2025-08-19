@@ -706,7 +706,8 @@ try {
             $stmt_alerta->bindValue(":id_cliente", $cliente_id_afetado, PDO::PARAM_INT); // Garante que é um INT
             $stmt_alerta->execute();
         }
-        $mensagem_sucesso .= ' Alertas de duplicidade registrados.';
+       // $mensagem_sucesso .= ' Alertas de duplicidade registrados.';
+       $mensagem_sucesso = 'Salvo com Sucesso!';
     }
 
     echo json_encode(['success' => true, 'message' => $mensagem_sucesso]); // Mensagem de sucesso em JSON
