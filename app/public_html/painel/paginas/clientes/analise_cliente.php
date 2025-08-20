@@ -1072,7 +1072,7 @@ $assalariado = !empty($cliente['contracheque']) && $cliente['contracheque'] !== 
             }).then((result) => {
                 if (result.isConfirmed) {
                     $.ajax({
-                        url: 'marca_alerta_resolvido.php',
+                        url: '/painel/paginas/clientes/marca_alerta_resolvido.php',
                         type: 'POST',
                         data: {
                             id: alertaId
