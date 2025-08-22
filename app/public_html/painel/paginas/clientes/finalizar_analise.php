@@ -1,6 +1,6 @@
 <?php
 // Inclui a conexão com o banco de dados.
-require_once("../conexao.php");
+require_once("../../../conexao.php");
 
 // Verifica se a requisição foi feita via POST.
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -80,7 +80,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     // 4. Redireciona o usuário.
     // Envia uma mensagem de sucesso via URL para exibir na próxima página.
-    header("Location: clientes.php?status=sucesso&mensagem=Análise finalizada com sucesso!");
+    header("Location: ../../index.php?pagina=clientes&status=sucesso&mensagem=Análise finalizada com sucesso!");
     exit();
 
 } else {

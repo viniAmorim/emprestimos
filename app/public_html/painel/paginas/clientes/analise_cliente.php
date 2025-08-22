@@ -1017,7 +1017,7 @@ $assalariado = !empty($cliente['contracheque']) && $cliente['contracheque'] !== 
       <div class="row justify-content-center">
           <div class="col-md-12">
               <div class="form-card mt-4">
-                  <form id="form-analise" action="finalizar_analise.php" method="POST">
+                  <form id="form-analise" action="/painel/paginas/clientes/finalizar_analise.php" method="POST">
                       <input type="hidden" name="id_cliente" value="<?= htmlspecialchars($id_cliente ?? '') ?>">
 
                       <div class="form-group mb-3">
