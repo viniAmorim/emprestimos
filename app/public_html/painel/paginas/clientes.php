@@ -366,17 +366,17 @@ if($verificar_pagamentos != 'Não'){
 
                     <div class="row align-items-end"> <div class="col-md-4 form-group">
                             <label>Comprovante Endereço</label>
-                            <input type="file" class="form-control" id="comprovante_endereco" name="comprovante_endereco" onchange="carregarImgComprovanteEndereco()">
+                            <input type="file" style="width: 100px;" class="form-control" id="comprovante_endereco" name="comprovante_endereco" onchange="carregarImgComprovanteEndereco()">
                         </div>
 
-                        <div class="col-md-2 mb-2"> <img src="images/comprovantes/sem-foto.png" id="target-comprovante-endereco"> </div>
+                        <div class="col-md-2 mb-2"> <img style="width: 100px;" src="images/comprovantes/sem-foto.png" id="target-comprovante-endereco"> </div>
 
                         <div class="col-md-4 form-group">
                             <label>Comprovante RG / CPF</label>
                             <input type="file" class="form-control" id="comprovante_rg" name="comprovante_rg" onchange="carregarImgComprovanteRG()">
                         </div>
 
-                        <div class="col-md-2 mb-2"> <img src="images/comprovantes/sem-foto.png" id="target-comprovante-rg"> </div>
+                        <div class="col-md-2 mb-2"> <img style="width: 100px;" src="images/comprovantes/sem-foto.png" id="target-comprovante-rg"> </div>
                     </div>
 
                     <div class="row align-items-end"> <div class="col-md-4 form-group">
