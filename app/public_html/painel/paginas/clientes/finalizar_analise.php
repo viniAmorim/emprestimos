@@ -93,24 +93,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $query_update_estagio->bindValue(":id_cliente", $id_cliente);
     $query_update_estagio->execute();
 
-    // Exibe o array de parâmetros que será usado na query das checkboxes
-    echo "<pre>Parâmetros da Query de Checkboxes:\n";
-    var_dump($params);
-    echo "</pre>";
+    // // Exibe o array de parâmetros que será usado na query das checkboxes
+    // echo "<pre>Parâmetros da Query de Checkboxes:\n";
+    // var_dump($params);
+    // echo "</pre>";
 
-    // Exibe a query SQL que está sendo construída
-    echo "<pre>Query SQL das Checkboxes:\n";
-    var_dump($sql_checkboxes);
-    echo "</pre>";
+    // // Exibe a query SQL que está sendo construída
+    // echo "<pre>Query SQL das Checkboxes:\n";
+    // var_dump($sql_checkboxes);
+    // echo "</pre>";
 
-    // Exibe o resultado da execução da query
-    echo "<pre>Resultado da Execução:\n";
-    var_dump($query_checkboxes->rowCount()); // Isso mostra o número de linhas afetadas
-    echo "</pre>";
+    // // Exibe o resultado da execução da query
+    // echo "<pre>Resultado da Execução:\n";
+    // var_dump($query_checkboxes->rowCount()); // Isso mostra o número de linhas afetadas
+    // echo "</pre>";
 
     // 5. Redireciona o usuário.
-    // header("Location: ../../index.php?pagina=clientes&status=sucesso&mensagem=Análise finalizada com sucesso!");
-    // exit();
+    header("Location: ../../index.php?pagina=clientes&status=sucesso&mensagem=Análise finalizada com sucesso!");
+    exit();
 
 } else {
     // Se a requisição não for POST, redireciona de volta com uma mensagem de erro.
