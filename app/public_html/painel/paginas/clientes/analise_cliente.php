@@ -701,6 +701,7 @@ $alertas_duplicidade = $query_alertas->fetchAll(PDO::FETCH_ASSOC);
         </div>
 
         <h4 class="section-title">Comprovantes</h4>
+        <form id="form-analise" action="/painel/paginas/clientes/finalizar_analise.php" method="POST">
 <div class="row mb-4">
     <div class="col-md-6 text-center">
         <h5 class="section-title">Comprovante de RG:</h5>
@@ -1017,7 +1018,7 @@ $assalariado = !empty($cliente['contracheque']) && $cliente['contracheque'] !== 
       <div class="row justify-content-center">
           <div class="col-md-12">
               <div class="form-card mt-4">
-                  <form id="form-analise" action="/painel/paginas/clientes/finalizar_analise.php" method="POST">
+                  
                       <input type="hidden" name="id_cliente" value="<?= htmlspecialchars($id_cliente ?? '') ?>">
 
                       <div class="form-group mb-3">
@@ -1079,135 +1080,136 @@ $assalariado = !empty($cliente['contracheque']) && $cliente['contracheque'] !== 
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
-    $(document).ready(function() {
-        // --- LÓGICA DO FORMULÁRIO DE FINALIZAÇÃO DE ANÁLISE ---
+$(document).ready(function() {
+    // --- LÓGICA DO FORMULÁRIO DE FINALIZAÇÃO DE ANÁLISE ---
 
-        // Lógica para mostrar/esconder campos de observação
-        $('#status_final').on('change', function() {
-            var status = $(this).val();
+    // Lógica para mostrar/esconder campos de observação
+    $('#status_final').on('change', function() {
+        var status = $(this).val();
 
-            // Esconde e limpa todos os campos de observação
-            $('#observacoes-reprovado').hide().find('select').val('');
-            $('#observacoes-pendente').hide().find('textarea').val('');
-            $('#observacoes-genericas').hide().find('textarea').val('');
+        // Esconde e limpa todos os campos de observação
+        $('#observacoes-reprovado').hide().find('select').val('');
+        $('#observacoes-pendente').hide().find('textarea').val('');
+        $('#observacoes-genericas').hide().find('textarea').val('');
+
+        // Remove o atributo 'required' de todos os campos de observação
+        $('#observacoes_reprovado').removeAttr('required');
+        $('#observacoes_pendente').removeAttr('required');
+
+        // Exibe o campo de observação apropriado e o torna obrigatório se necessário
+        if (status === 'Reprovado') {
+            $('#observacoes-reprovado').show();
+            $('#observacoes_reprovado').attr('required', 'required');
+        } else if (status === 'Pendente') {
+            $('#observacoes-pendente').show();
+            $('#observacoes_pendente').attr('required', 'required');
+        } else {
+            // Para todos os outros status, mostra o campo de observação genérico
+            $('#observacoes-genericas').show();
+        }
+    });
+
+    // Lógica de validação na submissão do formulário
+    $('#form-analise').on('submit', function(e) {
+        var statusFinal = $('#status_final').val();
+        
+        // **NOVA LÓGICA DE VALIDAÇÃO PARA O STATUS "APROVADO"**
+        if (statusFinal === 'Aprovado') {
+            // Seleciona todas as checkboxes de validação
+            // O seletor '.validation-card input[type="checkbox"]' é mais seguro
+            // pois só pega as checkboxes dentro dos blocos de validação.
+            var totalCheckboxes = $('.validation-card input[type="checkbox"]').length;
+            var checkedCheckboxes = $('.validation-card input[type="checkbox"]:checked').length;
             
-            // Remove o atributo 'required' de todos os campos de observação
-            $('#observacoes_reprovado').removeAttr('required');
-            $('#observacoes_pendente').removeAttr('required');
-
-            // Exibe o campo de observação apropriado e o torna obrigatório se necessário
-            if (status === 'Reprovado') {
-                $('#observacoes-reprovado').show();
-                $('#observacoes_reprovado').attr('required', 'required');
-            } else if (status === 'Pendente') {
-                $('#observacoes-pendente').show();
-                $('#observacoes_pendente').attr('required', 'required');
-            } else {
-                // Para todos os outros status, mostra o campo de observação genérico
-                $('#observacoes-genericas').show();
-            }
-        });
-
-        // Lógica de validação na submissão do formulário
-        $('#form-analise').on('submit', function(e) {
-            var statusFinal = $('#status_final').val();
-            
-            // Validação para o status "Aprovado"
-            if (statusFinal === 'Aprovado') {
-                // Seleciona todas as checkboxes dentro da section de validações
-                // É mais seguro do que pegar todas as checkboxes da página
-                var totalCheckboxes = $('.section-validacao input[type="checkbox"]').length;
-                var checkedCheckboxes = $('.section-validacao input[type="checkbox"]:checked').length;
-                
-                if (checkedCheckboxes < totalCheckboxes) {
-                    Swal.fire({
-                        title: 'Atenção!',
-                        text: 'Para aprovar o cliente, todas as validações devem ser marcadas.',
-                        icon: 'warning'
-                    });
-                    e.preventDefault(); // Impede o envio do formulário
-                }
-            }
-
-            // Validação para status com observações obrigatórias
-            if (statusFinal === 'Pendente' && $('#observacoes_pendente').val().trim() === '') {
+            if (checkedCheckboxes < totalCheckboxes) {
                 Swal.fire({
                     title: 'Atenção!',
-                    text: 'A descrição para o status "Pendente" é obrigatória.',
+                    text: 'Para aprovar o cliente, todas as validações devem ser marcadas.',
                     icon: 'warning'
                 });
-                e.preventDefault();
+                e.preventDefault(); // Impede o envio do formulário
             }
+        }
 
-            if (statusFinal === 'Reprovado' && $('#observacoes_reprovado').val().trim() === '') {
-                Swal.fire({
-                    title: 'Atenção!',
-                    text: 'A observação para o status "Reprovado" é obrigatória.',
-                    icon: 'warning'
-                });
-                e.preventDefault();
-            }
-        });
-
-        // --- LÓGICA DOS ALERTAS DE DUPLICIDADE ---
-
-        // Escuta o clique em qualquer botão com a classe 'btn-resolvido'
-        $(document).on('click', '.btn-resolvido', function() {
-            var alertaId = $(this).data('id');
-            var alertaElemento = $('#alerta-' + alertaId);
-            
-            // Confirmação via SweetAlert
+        // Validação para status com observações obrigatórias
+        if (statusFinal === 'Pendente' && $('#observacoes_pendente').val().trim() === '') {
             Swal.fire({
-                title: 'Tem certeza?',
-                text: "Você irá marcar este alerta como resolvido e ele não será mais exibido.",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'Sim, resolver!',
-                cancelButtonText: 'Cancelar'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    $.ajax({
-                        url: '/painel/paginas/clientes/marca_alerta_resolvido.php',
-                        type: 'POST',
-                        data: {
-                            id: alertaId
-                        },
-                        success: function(response) {
-                            if (response.trim() === 'sucesso') {
-                                alertaElemento.fadeOut('slow', function() {
-                                    $(this).remove();
-                                    // Verifica se ainda existem alertas visíveis
-                                    if ($('.alert-duplicidade-card').children('div').length === 0) {
-                                        $('.alert-duplicidade-card').html('<p>Nenhum alerta de duplicidade pendente para este cliente.</p>');
-                                    }
-                                    Swal.fire(
-                                        'Resolvido!',
-                                        'O alerta foi marcado como resolvido.',
-                                        'success'
-                                    );
-                                });
-                            } else {
+                title: 'Atenção!',
+                text: 'A descrição para o status "Pendente" é obrigatória.',
+                icon: 'warning'
+            });
+            e.preventDefault();
+        }
+
+        if (statusFinal === 'Reprovado' && $('#observacoes_reprovado').val().trim() === '') {
+            Swal.fire({
+                title: 'Atenção!',
+                text: 'A observação para o status "Reprovado" é obrigatória.',
+                icon: 'warning'
+            });
+            e.preventDefault();
+        }
+    });
+
+    // --- LÓGICA DOS ALERTAS DE DUPLICIDADE (mantida) ---
+
+    // Escuta o clique em qualquer botão com a classe 'btn-resolvido'
+    $(document).on('click', '.btn-resolvido', function() {
+        var alertaId = $(this).data('id');
+        var alertaElemento = $('#alerta-' + alertaId);
+        
+        // Confirmação via SweetAlert
+        Swal.fire({
+            title: 'Tem certeza?',
+            text: "Você irá marcar este alerta como resolvido e ele não será mais exibido.",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Sim, resolver!',
+            cancelButtonText: 'Cancelar'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    url: '/painel/paginas/clientes/marca_alerta_resolvido.php',
+                    type: 'POST',
+                    data: {
+                        id: alertaId
+                    },
+                    success: function(response) {
+                        if (response.trim() === 'sucesso') {
+                            alertaElemento.fadeOut('slow', function() {
+                                $(this).remove();
+                                // Verifica se ainda existem alertas visíveis
+                                if ($('.alert-duplicidade-card').children('div').length === 0) {
+                                    $('.alert-duplicidade-card').html('<p>Nenhum alerta de duplicidade pendente para este cliente.</p>');
+                                }
                                 Swal.fire(
-                                    'Erro!',
-                                    'Não foi possível resolver o alerta. Tente novamente.',
-                                    'error'
+                                    'Resolvido!',
+                                    'O alerta foi marcado como resolvido.',
+                                    'success'
                                 );
-                            }
-                        },
-                        error: function() {
+                            });
+                        } else {
                             Swal.fire(
                                 'Erro!',
-                                'Ocorreu um erro na requisição. Verifique sua conexão.',
+                                'Não foi possível resolver o alerta. Tente novamente.',
                                 'error'
                             );
                         }
-                    });
-                }
-            });
+                    },
+                    error: function() {
+                        Swal.fire(
+                            'Erro!',
+                            'Ocorreu um erro na requisição. Verifique sua conexão.',
+                            'error'
+                        );
+                    }
+                });
+            }
         });
     });
+});
 </script>
 </body>
 </html>

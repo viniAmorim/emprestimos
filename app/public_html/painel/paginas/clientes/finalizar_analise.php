@@ -8,11 +8,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // 1. Coleta e valida os dados do formulário.
     $id_cliente = $_POST['id_cliente'] ?? null;
     $status_final = $_POST['status_final'] ?? null;
-    $observacoes = $_POST['observacoes'] ?? null;
 
     // Garante que o ID do cliente e o status foram fornecidos.
     if (!$id_cliente || !$status_final) {
         die("Erro: ID do cliente ou status final não fornecido.");
+    }
+
+    // Lógica para coletar a observação correta com base no status.
+    $observacoes = null;
+    if ($status_final === 'Reprovado') {
+        $observacoes = $_POST['observacoes'] ?? null;
+    } elseif ($status_final === 'Pendente') {
+        $observacoes = $_POST['observacoes_pendente_desc'] ?? null;
+    } else {
+        $observacoes = $_POST['observacoes_genericas_desc'] ?? null;
     }
 
     // 2. Prepara e executa a atualização dos dados do cliente.
@@ -60,8 +69,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     // Itera sobre a lista segura de campos de validação.
     foreach ($campos_validacao as $campo) {
-        // Verifica se a checkbox foi marcada no formulário.
-        // Se ela existir, o valor é 1 (marcado). Se não, o valor é 0.
+        // Se a checkbox foi marcada no formulário, o valor é 1.
+        // Se não, o valor é 0.
         $valor = isset($_POST[$campo]) ? 1 : 0;
         
         $updates[] = "`{$campo}` = :{$campo}";
@@ -77,11 +86,31 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $query_checkboxes = $pdo->prepare($sql_checkboxes);
     $query_checkboxes->execute($params);
 
+    // 4. Atualiza o estágio do cliente para refletir o status da análise
+    $sql_update_estagio = "UPDATE clientes SET estagio_cliente = :estagio WHERE id = :id_cliente";
+    $query_update_estagio = $pdo->prepare($sql_update_estagio);
+    $query_update_estagio->bindValue(":estagio", $status_final);
+    $query_update_estagio->bindValue(":id_cliente", $id_cliente);
+    $query_update_estagio->execute();
 
-    // 4. Redireciona o usuário.
-    // Envia uma mensagem de sucesso via URL para exibir na próxima página.
-    header("Location: ../../index.php?pagina=clientes&status=sucesso&mensagem=Análise finalizada com sucesso!");
-    exit();
+    // Exibe o array de parâmetros que será usado na query das checkboxes
+    echo "<pre>Parâmetros da Query de Checkboxes:\n";
+    var_dump($params);
+    echo "</pre>";
+
+    // Exibe a query SQL que está sendo construída
+    echo "<pre>Query SQL das Checkboxes:\n";
+    var_dump($sql_checkboxes);
+    echo "</pre>";
+
+    // Exibe o resultado da execução da query
+    echo "<pre>Resultado da Execução:\n";
+    var_dump($query_checkboxes->rowCount()); // Isso mostra o número de linhas afetadas
+    echo "</pre>";
+
+    // 5. Redireciona o usuário.
+    // header("Location: ../../index.php?pagina=clientes&status=sucesso&mensagem=Análise finalizada com sucesso!");
+    // exit();
 
 } else {
     // Se a requisição não for POST, redireciona de volta com uma mensagem de erro.
