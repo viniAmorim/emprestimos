@@ -27,7 +27,7 @@ if($linhas > 0){
 	echo '<script>window.location="painel_cliente"</script>';
 }else{
 	echo '<script>window.alert("Dados Incorretos!!")</script>'; 
-	echo '<script>window.location="acesso"</script>';  
+	echo '<script>window.location="index.php"</script>';  
 }
 
 

@@ -469,8 +469,68 @@
           border: none; 
         }
         .btn-camera:hover {
-            background-color: #5291dd; 
+          background-color: #5291dd; 
         }
+        .info-icon {
+          position: relative;
+          display: inline-block;
+        }
+
+        .info-tooltip {
+          visibility: hidden;
+          width: 200px;
+          background-color: #333;
+          color: #fff;
+          text-align: center;
+          border-radius: 6px;
+          padding: 5px;
+          position: absolute;
+          z-index: 1;
+          bottom: 125%;
+          left: 50%;
+          margin-left: -100px;
+          opacity: 0;
+          transition: opacity 0.3s;
+        }
+
+        .info-icon:hover .info-tooltip {
+          visibility: visible;
+          opacity: 1;
+        }
+        /* CSS para o overlay de loading */
+        .loading-overlay {
+            display: none; /* Esconde o overlay por padrão */
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7); /* Fundo semi-transparente */
+            z-index: 1000; /* Garante que fique acima de outros elementos */
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+
+        .spinner {
+            border: 4px solid #f3f3f3; /* Cor do spinner (cinza claro) */
+            border-top: 4px solid #3498db; /* Cor da parte que gira (azul) */
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+        }
+
+        .loading-text {
+            margin-top: 15px;
+            color: #fff;
+            font-size: 1.2em;
+        }
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
     </style>
 </head>
 <body class="font-poppins bg-gradient-to-br from-primary-dark to-primary text-white min-h-screen overflow-x-hidden">
@@ -521,8 +581,8 @@
                         
                         <div class="flex items-start gap-4">
                             <div class="flex-1">
-                                <label class="block text-sm font-medium text-white">CNG ou RG</label>
-                                <input type="file" id="comprovante_rg" name="comprovante_rg" onchange="carregarImgComprovanteRG(); validateField(this)" accept=".jpg,.jpeg,.png,.heic,.webp,.avif" class="form-input w-full" required>
+                                <label class="block text-sm font-medium text-white">CNH ou RG</label>
+                                <input type="file" id="comprovante_rg" name="comprovante_rg" onchange="carregarImgComprovanteRG(); validateField(this)" accept=".jpg,.jpeg,.png,.heic,.webp,.avif" capture="camera"  class="form-input w-full" required>
                             </div>
                             <div class="w-20 h-20 border border-gray-300 rounded overflow-hidden bg-white">
                                 <img src="painel/images/comprovantes/sem-foto.png" id="target-comprovante-rg" class="object-cover w-full h-full">
@@ -532,7 +592,7 @@
                         <div class="flex items-start gap-4">
                             <div class="flex-1">
                                 <label class="block text-sm font-medium text-white">Comprovante de Endereço</label>
-                                <input type="file" name="comprovante_endereco" id="comprovante_endereco" onchange="carregarImgComprovanteEndereco(); validateField(this)" accept=".jpg,.jpeg,.png,.heic,.webp,.avif" class="form-input w-full" required>
+                                <input type="file" name="comprovante_endereco" id="comprovante_endereco" onchange="carregarImgComprovanteEndereco(); validateField(this)" accept=".jpg,.jpeg,.png,.heic,.webp,.avif" capture="camera"  class="form-input w-full" required>
                             </div>
                             <div class="w-20 h-20 border border-gray-300 rounded overflow-hidden bg-white">
                                 <img src="painel/images/comprovantes/sem-foto.png" id="target-comprovante-endereco" class="object-cover w-full h-full">
@@ -657,23 +717,41 @@
                     </div>
 
                     <div class="grid grid-cols-1 md:grid-cols-6 gap-4">
-                        <div class="md:col-span-1">
-                            <label class="block text-sm font-medium text-white">Quadra</label>
-                            <input type="text" name="quadra" id="quadra" class="form-input w-full" required onblur="validateField(this)">
+                    <div class="md:col-span-1">
+                        <div style="display: flex; align-items: center; gap: 8px;">
+                          <label class="block text-sm font-medium text-white">Quadra</label>
+                          <div class="info-icon">
+                              <i class="fas fa-info-circle" style="color: #fff; cursor: pointer;"></i>
+                              <span class="info-tooltip">Exemplo: Q-10.</span>
+                          </div>
                         </div>
+                        <input type="text" name="quadra" id="quadra" class="form-input w-full" required onblur="validateField(this)">
+                    </div>
 
-                        <div class="md:col-span-1">
-                            <label class="block text-sm font-medium text-white">Lote</label>
-                            <input type="number" name="lote" id="lote" class="form-input w-full" min="0" required onblur="validateField(this)">
+                    <div class="md:col-span-1">
+                        <div style="display: flex; align-items: center; gap: 8px;">
+                          <label class="block text-sm font-medium text-white">Lote</label>
+                          <div class="info-icon">
+                              <i class="fas fa-info-circle" style="color: #fff; cursor: pointer;"></i>
+                              <span class="info-tooltip">Se não houver lote, preencha com 0.</span>
+                          </div>
                         </div>
+                        <input type="number" name="lote" id="lote" class="form-input w-full" min="0" required onblur="validateField(this)">
+                    </div>
 
-                        <div class="md:col-span-1">
-                            <label class="block text-sm font-medium text-white">Número</label>
-                            <input type="number" name="numero" id="numero" class="form-input w-full" min="0" required onblur="validateField(this)">
+                    <div class="md:col-span-1">
+                        <div style="display: flex; align-items: center; gap: 8px;">
+                          <label class="block text-sm font-medium text-white">Número</label>
+                          <div class="info-icon">
+                              <i class="fas fa-info-circle" style="color: #fff; cursor: pointer;"></i>
+                              <span class="info-tooltip">Se não houver número, preencha com 0.</span>
+                          </div>
                         </div>
+                        <input type="number" name="numero" id="numero" class="form-input w-full" min="0" required onblur="validateField(this)">
+                    </div>
                         <div class="md:col-span-3">
-                            <label class="block text-sm font-medium text-white">Complemento</label>
-                            <input type="text" name="complemento" id="complemento" class="form-input w-full" onblur="validateField(this)">
+                          <label class="block text-sm font-medium text-white">Complemento</label>
+                          <input type="text" name="complemento" id="complemento" class="form-input w-full" onblur="validateField(this)">
                         </div>
                     </div>
                     <div class="pt-4 flex justify-between">
@@ -1045,12 +1123,12 @@ async function handleImageUpload(inputId, imgDisplayId, defaultTextPlaceholder =
         if (typeof validateField === 'function') {
             validateField(input);
         }
-        Swal.fire({
-            icon: 'warning',
-            title: 'Formato não suportado para pré-visualização',
-            text: `Este tipo de arquivo (para "${input.name}") pode não ser exibido corretamente na pré-visualização, mas será enviado se for válido.`,
-            confirmButtonText: 'Ok'
-        });
+        // Swal.fire({
+        //     icon: 'warning',
+        //     title: 'Formato não suportado para pré-visualização',
+        //     text: `Este tipo de arquivo (para "${input.name}") pode não ser exibido corretamente na pré-visualização, mas será enviado se for válido.`,
+        //     confirmButtonText: 'Ok'
+        // });
     }
 }
 
@@ -1698,6 +1776,17 @@ $('#form').submit(function(event) {
         contentType: false,
         processData: false,
         dataType: 'json', // <--- ESSA LINHA É FUNDAMENTAL! Diz ao jQuery para esperar JSON.
+
+        // --- ADICIONE ESTES DOIS BLOCOS ---
+        beforeSend: function() {
+            // Exibe o overlay de loading antes da requisição começar
+            $('#loading-overlay').css('display', 'flex');
+        },
+        complete: function() {
+            // Esconde o overlay de loading quando a requisição termina (sucesso ou erro)
+            $('#loading-overlay').css('display', 'none');
+        },
+        
         success: function(response) {
             // REMOVA O BLOCO TRY/CATCH E O JSON.parse(response) AQUI!
             // Com 'dataType: "json"', a variável 'response' JÁ É UM OBJETO JAVASCRIPT.
@@ -1733,5 +1822,11 @@ $('#form').submit(function(event) {
     });
 });
 </script>
+
+<div id="loading-overlay" class="loading-overlay">
+    <div class="spinner"></div>
+    <div class="loading-text">Finalizando cadastro...</div>
+</div>
+
 </body>
 </html>
