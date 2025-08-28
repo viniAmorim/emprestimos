@@ -732,6 +732,25 @@ $data_atual = date('Y-m-d');
   btns[0].classList.add('border-accent');
 });
 
+    // Função para detectar se é um dispositivo mobile
+    function isMobile() {
+      const userAgent = navigator.userAgent || navigator.vendor || window.opera;
+
+      // Expressões regulares para checar sistemas operacionais mobile comuns
+      return /android|ipad|iphone|ipod|blackberry|windows phone/i.test(userAgent);
+    }
+
+    // Função para verificar a URL atual e redirecionar
+    function redirectToApp() {
+      // Redireciona apenas se for um dispositivo mobile e a URL não for a rota /app
+      if (isMobile() && window.location.pathname !== '/app') {
+          window.location.href = '/app';
+      }
+    }
+
+    // Chama a função ao carregar a página
+    window.onload = redirectToApp;
+
 
 </script>
 
