@@ -19,13 +19,22 @@ if($total_reg > 0){
         $reset_link = $url_sistema.'app/resetar-senha.php'.'?email='.$email.'&token='.$token_usuario;
 
 
-    //envio do email
+    // //envio do email
+    // $destinatario = $email;
+    // $assunto = mb_convert_encoding($nome_sistema . ' - Recuperação de Senha', 'ISO-8859-1', 'UTF-8');
+    // $mensagem = mb_convert_encoding('Clique no Link ao lado para atualizar sua senha:' .$reset_link, 'ISO-8859-1', 'UTF-8');
+    // $cabecalhos = "From: ".$email_sistema;
+   
+    // @mail($destinatario, $assunto, $mensagem, $cabecalhos);
+
+    // Envio do email
     $destinatario = $email;
     $assunto = mb_convert_encoding($nome_sistema . ' - Recuperação de Senha', 'ISO-8859-1', 'UTF-8');
-    $mensagem = mb_convert_encoding('Clique no Link ao lado para atualizar sua senha:' .$reset_link, 'ISO-8859-1', 'UTF-8');
-    $cabecalhos = "From: ".$email_sistema;
-   
-    @mail($destinatario, $assunto, $mensagem, $cabecalhos);
+    $mensagem = mb_convert_encoding('Clique no Link ao lado para atualizar sua senha:' . $reset_link, 'ISO-8859-1', 'UTF-8');
+    $cabecalhos = "From: " . $email_sistema;
+
+    // Tenta enviar o email e armazena o resultado em $envio_sucesso
+    $envio_sucesso = mail($destinatario, $assunto, $mensagem, $cabecalhos);
 
     //echo $reset_link;
     //exit();
