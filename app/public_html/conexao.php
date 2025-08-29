@@ -39,7 +39,8 @@ $hora_random = $hora_rand.':'.$minutos_rand.':00';
 //variaveis globais
 $nome_sistema = 'Nome Sistema';
 $email_sistema = 'contato@hugocursos.com.br';
-$telefone_sistema = '(31)97527-5084';
+//$telefone_sistema = '(31)97527-5084';
+$telefone_sistema = '(62)99534-6049';
 
 $query = $pdo->query("SELECT * from config");
 $res = $query->fetchAll(PDO::FETCH_ASSOC);
