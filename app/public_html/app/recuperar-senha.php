@@ -21,8 +21,8 @@ if($total_reg > 0){
 
     //envio do email
     $destinatario = $email;
-    $assunto = utf8_decode($nome_sistema . ' - Recuperação de Senha');
-    $mensagem = utf8_decode('Clique no Link ao lado para atualizar sua senha:' .$reset_link);
+    $assunto = mb_convert_encoding($nome_sistema . ' - Recuperação de Senha', 'ISO-8859-1', 'UTF-8');
+    $mensagem = mb_convert_encoding('Clique no Link ao lado para atualizar sua senha:' .$reset_link, 'ISO-8859-1', 'UTF-8');
     $cabecalhos = "From: ".$email_sistema;
    
     @mail($destinatario, $assunto, $mensagem, $cabecalhos);
