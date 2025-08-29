@@ -170,7 +170,7 @@ if ($linhas == 0) {
 			</form>
 			<div class="row">
 				<div class="col-12 text-start">
-						<p class="font-11 color-theme opacity-60 pt-3" align="center">Verifique seu email, ou seu whatsapp para redefinir a senha!</p>
+						<p class="font-11 color-theme opacity-60 pt-3" align="center">Verifique seu whatsapp para redefinir a senha!</p>
 				</div>
 			</div>
 		</div>
