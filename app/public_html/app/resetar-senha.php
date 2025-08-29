@@ -59,7 +59,7 @@ $_SESSION['temp_reset_token'] = @$_REQUEST['token'];
 				<div class="card-center">
 					<div class="card card-style">
 						<div class="content">
-							<h2 class="text-center font-800 font-30 mb-2"><br><img src="../img/logo.png" width="70%"></h2><br>
+							<h2 class="text-center font-800 font-30 mb-2"><br><img src="../img/logo_ucred.png" width="70%"></h2><br>
 
 
 							<form method="post" id="form-recuperar">
