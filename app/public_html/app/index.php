@@ -45,8 +45,6 @@ if ($linhas == 0) {
 
 </head>
 
-
-
 <body class="theme-light">
 
 	<div id="preloader">
@@ -86,11 +84,7 @@ if ($linhas == 0) {
   </div>
 </div>
 
-
 	<div id="page">
-
-
-
 		<!-- MODAL RESETAR SENHA-->
 		<div class="page-content pb-0 mb-0">
 			<div class="card card-style m-0 bg-transparent shadow-0 bg-10 rounded-0" data-card-height="cover">
@@ -111,8 +105,15 @@ if ($linhas == 0) {
 										placeholder="Sua Senha" required />
 									<label class="color-theme">Senha</label>
 								</div>
-								<button class="btn btn-full gradient-green rounded-xs text-uppercase font-700 w-100 btn-s mt-4 mb-3"
-									type="submit">Logar</button><br>
+								<button class="btn btn-full gradient-green rounded-xs text-uppercase font-700 w-100 btn-s mt-4 mb-2"
+									type="submit">Logar
+                </button>
+                
+                <div class="d-flex justify-content-end w-100 mb-3">
+                  <a class="color-theme font-12 me-1" href="painel/paginas/cadastro.php">
+                      <span class="opacity-70">Ainda não possui cadastro? <span style="color: #97cc5e">Cadastre-se</span></span>
+                  </a>
+                </div>
 								<a href="#" class="d-flex pb-2" data-trigger-switch="salvar_acesso">
 									<div class="align-self-center">
 										<h6 class="mb-0 font-12">Salvar Acesso</h6>
