@@ -385,88 +385,66 @@
                 <!-- Campos para Motorista/Entregador App (Uber) -->
                 <div id="veiculo-campos" class="hidden mt-4 border border-yellow-400 p-4 rounded bg-yellow-100 text-black">
                     <p class="text-sm font-semibold mb-4">Preencha os campos abaixo se você for motorista ou entregador:</p>
+                      <div class="form-group mb-4">
+                          <label class="block text-gray-700">Modelo do Veículo</label>
+                          <input type="text" name="modelo_veiculo" id="modelo_veiculo" class="form-input w-full uber-obrigatorio" required onblur="validateField(this)">
+                      </div>
+                      <div class="form-group mb-4">
+                          <label class="block text-sm font-medium">Placa</label>
+                          <input type="text" name="placa_veiculo" id="placa_veiculo" class="form-input w-full uber-obrigatorio" maxlength="7" placeholder="ABC1234" required onblur="validatePlaca(this)">
+                      </div>
+                  
+                      <div class="form-group mb-4">
+                          <label class="block text-sm font-medium">Status do Veículo</label>
+                          <select name="status_veiculo" id="status_veiculo" class="form-input w-full uber-obrigatorio" required onchange="handleStatusVeiculoChange(); validateField(this)">
+                              <option value="" disabled selected>Selecione</option>
+                              <option value="proprio">Próprio</option>
+                              <option value="alugado">Alugado</option>
+                          </select>
+                      </div>
+                      <div class="form-group mb-4">
+                          <label class="block text-sm font-medium">Valor do Aluguel</label>
+                          <input type="text" name="valor_aluguel" id="valor_aluguel" class="form-input w-full uber-obrigatorio" placeholder="R$" min="0" step="0.01" onblur="validateField(this)">
+                      </div>
+   
+                      <div class="form-group mb-4">
+                          <label class="block text-sm font-medium">Print da Tela de Perfil dos Apps</label>
+                          <input type="file" name="print_perfil_app" id="print_perfil_app" onchange="handleFile('print_perfil_app');validateField(this)" accept=".jpg,.jpeg,.png,.pdf,.heic,.webp,.avif" class="form-input w-full uber-obrigatorio" required>
+                      </div>
 
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div>
-                            <label class="block text-sm font-medium">Modelo do Veículo</label>
-                            <input type="text" name="modelo_veiculo" id="modelo_veiculo" class="form-input w-full uber-obrigatorio" required onblur="validateField(this)">
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium">Placa</label>
-                            <input type="text" name="placa_veiculo" id="placa_veiculo" class="form-input w-full uber-obrigatorio" maxlength="7" placeholder="ABC1234" required onblur="validatePlaca(this)">
-                        </div>
-                    </div>
+                      <div class="form-group mb-4">
+                          <label class="block text-sm font-medium">Print da Tela de Veículos dos Apps</label>
+                          <input type="file" name="print_veiculo_app" id="print_veiculo_app" onchange="handleFile('print_veiculo_app');validateField(this)" accept=".jpg,.jpeg,.png,.pdf,.heic,.webp,.avif" class="form-input w-full uber-obrigatorio" required>
+                      </div>
 
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
-                        <div>
-                            <label class="block text-sm font-medium">Status do Veículo</label>
-                            <select name="status_veiculo" id="status_veiculo" class="form-input w-full uber-obrigatorio" required onchange="handleStatusVeiculoChange(); validateField(this)">
-                                <option value="" disabled selected>Selecione</option>
-                                <option value="proprio">Próprio</option>
-                                <option value="alugado">Alugado</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium">Valor do Aluguel</label>
-                            <input type="text" name="valor_aluguel" id="valor_aluguel" class="form-input w-full uber-obrigatorio" placeholder="R$" min="0" step="0.01" onblur="validateField(this)">
-                        </div>
-                    </div>
+                      <div class="form-group mb-4">
+                          <label class="block text-sm font-medium">Print dos Ganhos no App (Semana Atual)</label>
+                          <input type="file" name="print_ganhos_hoje" id="print_ganhos_hoje" onchange="handleFile('print_ganhos_hoje');validateField(this)" accept=".jpg,.jpeg,.png,.pdf,.heic,.webp,.avif" class="form-input w-full uber-obrigatorio" required>
+                      </div>
 
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
-                        <div class="flex items-start gap-4">
-                            <div class="flex-1">
-                                <label class="block text-sm font-medium">Print da Tela de Perfil dos Apps</label>
-                                <input type="file" name="print_perfil_app" id="print_perfil_app" onchange="handleFile('print_perfil_app');validateField(this)" accept=".jpg,.jpeg,.png,.pdf,.heic,.webp,.avif" class="form-input w-full uber-obrigatorio" required>
-                            </div>
-                            
-                        </div>
-                        <div class="flex items-start gap-4">
-                            <div class="flex-1">
-                                <label class="block text-sm font-medium">Print da Tela de Veículos dos Apps</label>
-                                <input type="file" name="print_veiculo_app" id="print_veiculo_app" onchange="handleFile('print_veiculo_app');validateField(this)" accept=".jpg,.jpeg,.png,.pdf,.heic,.webp,.avif" class="form-input w-full uber-obrigatorio" required>
-                            </div>
-                            
-                        </div>
-                    </div>
-
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
-                        <div class="flex items-start gap-4">
-                            <div class="flex-1">
-                                <label class="block text-sm font-medium">Print dos Ganhos no App (Semana Atual)</label>
-                                <input type="file" name="print_ganhos_hoje" id="print_ganhos_hoje" onchange="handleFile('print_ganhos_hoje');validateField(this)" accept=".jpg,.jpeg,.png,.pdf,.heic,.webp,.avif" class="form-input w-full uber-obrigatorio" required>
-                            </div>
-                            
-                        </div>
-                        <div class="flex items-start gap-4">
-                            <div class="flex-1">
-                                <label class="block text-sm font-medium">Print dos Ganhos nos Apps (Últimos 30 dias)</label>
-                                <input type="file" name="print_ganhos_30dias" id="print_ganhos_30dias" onchange="handleFile('print_ganhos_30dias');validateField(this)" accept=".jpg,.jpeg,.png,.pdf,.heic,.webp,.avif" class="form-input w-full uber-obrigatorio" required>
-                            </div>
-                            
-                        </div>
-                    </div>
-                    
+                      <div class="form-group mb-4">
+                          <label class="block text-sm font-medium">Print dos Ganhos nos Apps (Últimos 30 dias)</label>
+                          <input type="file" name="print_ganhos_30dias" id="print_ganhos_30dias" onchange="handleFile('print_ganhos_30dias');validateField(this)" accept=".jpg,.jpeg,.png,.pdf,.heic,.webp,.avif" class="form-input w-full uber-obrigatorio" required>
+                      </div>
                 </div>
 
                 <!-- Novos Campos para Autônomo -->
                 <div id="autonomo-campos" class="hidden mt-4 border border-blue-400 p-4 rounded bg-blue-100 text-black">
-                    <p class="text-sm font-semibold mb-4">Preencha os campos abaixo se você for autônomo:</p>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div>
-                            <label class="block text-sm font-medium">Função Exercida</label>
-                            <input type="text" name="funcao_autonomo" id="funcao_autonomo" class="form-input w-full autonomo-obrigatorio" required onblur="validateField(this)">
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium">Nome da Empresa (se houver)</label>
-                            <input type="text" name="empresa_autonomo" id="empresa_autonomo" class="form-input w-full autonomo-obrigatorio" onblur="validateField(this)">
-                        </div>
+                  <p class="text-sm font-semibold mb-4">Preencha os campos abaixo se você for autônomo:</p>
+                    <div class="form-group mb-4">
+                      <label class="block text-sm font-medium">Função Exercida</label>
+                      <input type="text" name="funcao_autonomo" id="funcao_autonomo" class="form-input w-full autonomo-obrigatorio" required onblur="validateField(this)">
                     </div>
-                    <div class="flex items-start gap-4 mt-4">
-                      <div class="flex-1">
-                        <label class="block text-sm font-medium">Extrato dos Últimos 90 Dias</label>
-                        <input type="file" name="extrato_90dias" id="extrato_90dias" onchange="handleFile('extrato_90dias');validateField(this)" accept=".jpg,.jpeg,.png,.pdf,.heic,.webp,.avif" class="form-input w-full autonomo-obrigatorio" required>
-                      </div>
+                    <div class="form-group mb-4">
+                        <label class="block text-sm font-medium">Nome da Empresa (se houver)</label>
+                        <input type="text" name="empresa_autonomo" id="empresa_autonomo" class="form-input w-full autonomo-obrigatorio" onblur="validateField(this)">
                     </div>
+
+                    <div class="form-group mb-4">
+                      <label class="block text-sm font-medium">Extrato dos Últimos 90 Dias</label>
+                      <input type="file" name="extrato_90dias" id="extrato_90dias" onchange="handleFile('extrato_90dias');validateField(this)" accept=".jpg,.jpeg,.png,.pdf,.heic,.webp,.avif" class="form-input w-full autonomo-obrigatorio" required>
+                    </div>
+                    
 
                     <div id="campo-comprovante-extra-autonomo" class="hidden mt-4">
                       <div class="flex items-start gap-4">
@@ -484,33 +462,29 @@
 
                 <!-- Novos Campos para Assalariado -->
                 <div id="assalariado-campos" class="hidden mt-4 border border-green-400 p-4 rounded bg-green-100 text-black">
-                    <p class="text-sm font-semibold mb-4">Preencha os campos abaixo se você for assalariado:</p>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div>
-                            <label class="block text-sm font-medium">Função Exercida</label>
-                            <input type="text" name="funcao_assalariado" id="funcao_assalariado" class="form-input w-full assalariado-obrigatorio" required onblur="validateField(this)">
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium">Nome da Empresa</label>
-                            <input type="text" name="empresa_assalariado" id="empresa_assalariado" class="form-input w-full assalariado-obrigatorio" required onblur="validateField(this)">
-                        </div>
+                  <p class="text-sm font-semibold mb-4">Preencha os campos abaixo se você for assalariado:</p>
+                  
+                    <div class="form-group mb-4">
+                        <label class="block text-sm font-medium">Função Exercida</label>
+                        <input type="text" name="funcao_assalariado" id="funcao_assalariado" class="form-input w-full assalariado-obrigatorio" required onblur="validateField(this)">
                     </div>
-                    <div class="flex items-start gap-4 mt-4">
-                        <div class="flex-1">
-                            <label class="block text-sm font-medium">Contracheque</label>
-                            <input type="file" name="contracheque" id="contracheque" onchange="handleFile('contracheque');validateField(this)" accept=".jpg,.jpeg,.png,.pdf,.heic,.webp,.avif" class="form-input w-full assalariado-obrigatorio" required>
-                        </div>
-                       
+                    <div class="form-group mb-4">
+                        <label class="block text-sm font-medium">Nome da Empresa</label>
+                        <input type="text" name="empresa_assalariado" id="empresa_assalariado" class="form-input w-full assalariado-obrigatorio" required onblur="validateField(this)">
+                    </div>
+
+                    <div class="form-group mb-4">
+                        <label class="block text-sm font-medium">Contracheque</label>
+                        <input type="file" name="contracheque" id="contracheque" onchange="handleFile('contracheque');validateField(this)" accept=".jpg,.jpeg,.png,.pdf,.heic,.webp,.avif" class="form-input w-full assalariado-obrigatorio" required>
                     </div>
 
                     <div id="campo-comprovante-extra-assalariado" class="hidden mt-4">
-                      <div class="flex items-start gap-4">
-                          <div class="flex-1">
-                              <label class="block text-sm font-medium">Outro Comprovante (opcional)</label>
-                              <input type="file" name="comprovante_extra_assalariado" id="comprovante_extra_assalariado" onchange="handleFile('comprovante_extra_assalariado');validateField(this)" accept=".jpg,.jpeg,.png,.pdf,.heic,.webp,.avif" class="form-input w-full">
-                          </div>
-  
+                      
+                      <div class="form-group mb-4">
+                        <label class="block text-sm font-medium">Outro Comprovante (opcional)</label>
+                        <input type="file" name="comprovante_extra_assalariado" id="comprovante_extra_assalariado" onchange="handleFile('comprovante_extra_assalariado');validateField(this)" accept=".jpg,.jpeg,.png,.pdf,.heic,.webp,.avif" class="form-input w-full">
                       </div>
+      
                     </div>
 
                     <button type="button" id="btn-mostrar-comprovante-extra-assalariado" class="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50">
