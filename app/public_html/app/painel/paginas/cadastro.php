@@ -173,15 +173,15 @@
                 
                 <div class="form-group mb-4">
                     <div class="flex-1">
-                        <label class="block text-gray-700">CNH ou RG</label>
-                        <input type="file" id="comprovante_rg" name="comprovante_rg" onchange="handleFile('comprovante_rg'); validateField(this)" accept=".jpg,.jpeg,.png,.heic,.webp,.avif" capture="camera" class="form-input w-full" required>
+                      <label class="block text-gray-700">CNH ou RG</label>
+                      <input type="file" id="comprovante_rg" name="comprovante_rg" onchange="handleFile('comprovante_rg'); validateField(this)" accept=".jpg,.jpeg,.png,.heic,.webp,.avif" class="form-input w-full" required>
                     </div>
                 </div>
 
                 <div class="form-group mb-4">
                     <div class="flex-1">
                         <label class="block text-gray-700">Comprovante de Endereço</label>
-                        <input type="file" name="comprovante_endereco" id="comprovante_endereco" onchange="handleFile('comprovante_endereco');validateField(this)" accept=".jpg,.jpeg,.png,.heic,.webp,.avif" capture="camera" class="form-input w-full" required>
+                        <input type="file" name="comprovante_endereco" id="comprovante_endereco" onchange="handleFile('comprovante_endereco');validateField(this)" accept=".jpg,.jpeg,.png,.heic,.webp,.avif" class="form-input w-full" required>
                     </div>
                 </div>
                 
@@ -290,17 +290,17 @@
                 </div>
 
                 <div class="form-group mb-4">
-                    <label for="quadra" class="block text-gray-700">Quadra</label>
+                    <label for="quadra" class="block text-gray-700">Quadra <span class="text-xs text-red-500">*Caso não tenha, preencher com 0</span></label>
                     <input type="text" id="quadra" name="quadra" required>
                 </div>
 
                 <div class="form-group mb-4">
-                    <label for="lote" class="block text-gray-700">Lote</label>
+                    <label for="lote" class="block text-gray-700">Lote <span class="text-xs text-red-500">*Caso não tenha, preencher com 0</span></label>
                     <input type="text" id="lote" name="lote" required>
                 </div>
 
                 <div class="form-group mb-4">
-                    <label for="numero" class="block text-gray-700">Número</label>
+                    <label for="numero" class="block text-gray-700">Número <span class="text-xs text-red-500">*Caso não tenha, preencher com 0</span></label>
                     <input type="text" id="numero" name="numero" required>
                 </div>
 
@@ -351,7 +351,7 @@
                     </select>
                 </div>
 
-                <label class="block text-md font-medium text-white mt-6 mb-6">Quem te indicou?</label>
+                <label class="block text-md font-medium text-blue-700 mt-6 mb-6">Quem te indicou?</label>
                 
                 <div class="form-group mb-4">
                     <label for="indicacao" class="block text-gray-700">Nome completo</label>
@@ -677,17 +677,11 @@
       $('#data_nasc').mask('00/00/0000');
       $('#referencia_contato').mask('(00) 00000-0000');
       $('#indicacao_contato').mask('(00) 00000-0000');
-      // Usando um ARRAY de máscaras para a placa (Mercosul e Antiga)
-      $('#placa_veiculo').mask('AAA0A00', {
-        translation: {
-          'A': { pattern: /[A-Za-z]/ },
-          '0': { pattern: /[0-9]/ }
-        },
-        onKeyPress: function(val, e, field, options) {
-          // Lógica para alternar para a máscara antiga (XXX-0000) se necessário
-          field.mask(val.length === 7 ? 'AAA0A00' : 'AAA-0000', options);
-        }
-      });
+
+      // Múltiplas máscaras para a placa (Mercosul e Antiga)
+      var plateMasks = ['AAA-0000', 'AAA0A00'];
+      $('#placa_veiculo').mask(plateMasks);
+      
       $('#valor_desejado').mask('000.000.000.000.000,00', {reverse: true});
       $('#parcela_desejada').mask('000.000.000.000.000,00', {reverse: true});
       $('#valor_aluguel').mask('000.000.000.000.000,00', {reverse: true});
