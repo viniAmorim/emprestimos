@@ -717,7 +717,7 @@ try {
     error_log("Erro de PDO ao salvar cliente: " . $e->getMessage());
 
     // Mensagem genérica para o frontend, para não expor detalhes internos
-    echo json_encode(['success' => false, 'message' => 'Erro ao salvar os dados. Por favor, tente novamente mais tarde.']);
+    echo json_encode(['success' => false, 'message' => 'Erro ao salvar os dados. Por favor, tente novamente mais tarde.' . $e->getMessage()]);
 }
 
 // --- Envio de mensagem para o administrador (se cliente_cadastro for 'Sim' e variáveis de API existirem) ---

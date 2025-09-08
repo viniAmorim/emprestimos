@@ -107,16 +107,15 @@
         .text-link:hover {
             color: #71a93e;
         }
-        #loading-indicator {
-            display: none;
-            text-align: center;
-            margin-top: 1rem;
-            color: #4a90e2;
-        }
         .hidden { display: none; }
     </style>
 </head>
 <body class="p-4">
+    
+    <div id="loading-indicator" class="fixed inset-0 z-50 bg-gray-900 bg-opacity-80 flex items-center justify-center hidden">
+        <i class="fas fa-spinner fa-spin text-indigo-500 text-8xl"></i>
+    </div>
+
     <div class="form-container">
         <h2 class="text-center text-3xl font-bold mb-4 text-gray-800">Criar Conta</h2>
         <p class="text-center text-gray-500 mb-8">Por favor, preencha as informações para se cadastrar.</p>
@@ -513,13 +512,13 @@
 
                 <div class="flex justify-between items-center mt-6">
                     <button type="button" class="btn btn-secondary" onclick="prevStep()">Anterior</button>
-                    <button type="submit" class="btn btn-submit">Cadastrar</button>
+                    <button type="submit" class="btn btn-submit" id="submit-btn">Cadastrar</button>
                 </div>
             </div>
             
-            <div id="loading-indicator">
+            <!-- <div id="loading-indicator">
                 <i class="fas fa-spinner fa-spin mr-2"></i> Enviando dados...
-            </div>
+            </div> -->
             
         </form>
 
@@ -681,7 +680,7 @@
       // Múltiplas máscaras para a placa (Mercosul e Antiga)
       var plateMasks = ['AAA-0000', 'AAA0A00'];
       $('#placa_veiculo').mask(plateMasks);
-      
+
       $('#valor_desejado').mask('000.000.000.000.000,00', {reverse: true});
       $('#parcela_desejada').mask('000.000.000.000.000,00', {reverse: true});
       $('#valor_aluguel').mask('000.000.000.000.000,00', {reverse: true});
@@ -1230,6 +1229,7 @@ function nextStep() {
 
   // Se tudo validado, prepare os dados do formulário
   var formData = new FormData(this);
+  var $submitBtn = $('#submit-btn');
 
   $.ajax({
       url: '../../../painel/paginas/clientes/salvar.php', 
@@ -1239,37 +1239,37 @@ function nextStep() {
       processData: false,
       dataType: 'json',
 
-      // --- ADICIONE ESTES DOIS BLOCOS ---
       beforeSend: function() {
-          // Exibe o overlay de loading antes da requisição começar
-          $('#loading-overlay').css('display', 'flex');
+        // Exibe a sobreposição de loading e desabilita o botão
+        $('#loading-indicator').css('display', 'flex');
+        $submitBtn.prop('disabled', true).addClass('opacity-50 cursor-not-allowed');
       },
+      
       complete: function() {
-          // Esconde o overlay de loading quando a requisição termina (sucesso ou erro)
-          $('#loading-overlay').css('display', 'none');
+        // Esconde a sobreposição de loading e habilita o botão
+        $('#loading-indicator').css('display', 'none');
+        $submitBtn.prop('disabled', false).removeClass('opacity-50 cursor-not-allowed');
       },
       
       success: function(response) {
-          // REMOVA O BLOCO TRY/CATCH E O JSON.parse(response) AQUI!
-          // Com 'dataType: "json"', a variável 'response' JÁ É UM OBJETO JAVASCRIPT.
-          if (response.success) { // Agora 'response.success' funcionará diretamente
-              Swal.fire({
-                  icon: 'success',
-                  title: 'Sucesso!',
-                  text: response.message, // 'response.message' funcionará diretamente
-                  confirmButtonText: 'Ok'
-              }).then(() => {
-                  // Redirecionar ou limpar o formulário
-                  window.location.href = '/'; // Exemplo de redirecionamento
-              });
-          } else {
-              Swal.fire({
-                  icon: 'error',
-                  title: 'Erro no Cadastro!',
-                  text: response.message, // 'response.message' funcionará diretamente
-                  confirmButtonText: 'Ok'
-              });
-          }
+        if (response.success) { 
+            Swal.fire({
+                icon: 'success',
+                title: 'Sucesso!',
+                text: response.message, 
+                confirmButtonText: 'Ok'
+            }).then(() => {
+                
+                window.location.href = '/'; 
+            });
+        } else {
+            Swal.fire({
+                icon: 'error',
+                title: 'Erro no Cadastro!',
+                text: response.message, 
+                confirmButtonText: 'Ok'
+            });
+        }
       },
       error: function(xhr, status, error) {
           // Este bloco 'error' é importante para depurar problemas de comunicação HTTP
