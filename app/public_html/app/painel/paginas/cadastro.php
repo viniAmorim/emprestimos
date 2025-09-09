@@ -171,10 +171,10 @@
                 </div>
                 
                 <div class="form-group mb-4">
-                    <div class="flex-1">
-                      <label class="block text-gray-700">CNH ou RG</label>
-                      <input type="file" id="comprovante_rg" name="comprovante_rg" onchange="handleFile('comprovante_rg'); validateField(this)" accept=".jpg,.jpeg,.png,.heic,.webp,.avif" class="form-input w-full" required>
-                    </div>
+                  <div class="flex-1">
+                    <label class="block text-gray-700">CNH ou RG</label>
+                    <input type="file" id="comprovante_rg" name="comprovante_rg" onchange="handleFile('comprovante_rg'); validateField(this)" accept=".jpg,.jpeg,.png,.heic,.webp,.avif" class="form-input w-full" required>
+                  </div>
                 </div>
 
                 <div class="form-group mb-4">
@@ -289,18 +289,18 @@
                 </div>
 
                 <div class="form-group mb-4">
-                    <label for="quadra" class="block text-gray-700">Quadra <span class="text-xs text-red-500">*Caso não tenha, preencher com 0</span></label>
-                    <input type="text" id="quadra" name="quadra" required>
+                    <label for="quadra" class="block text-gray-700">Quadra</label>
+                    <input type="text" id="quadra" name="quadra">
                 </div>
 
                 <div class="form-group mb-4">
-                    <label for="lote" class="block text-gray-700">Lote <span class="text-xs text-red-500">*Caso não tenha, preencher com 0</span></label>
-                    <input type="text" id="lote" name="lote" required>
+                    <label for="lote" class="block text-gray-700">Lote</label>
+                    <input type="text" id="lote" name="lote">
                 </div>
 
                 <div class="form-group mb-4">
-                    <label for="numero" class="block text-gray-700">Número <span class="text-xs text-red-500">*Caso não tenha, preencher com 0</span></label>
-                    <input type="text" id="numero" name="numero" required>
+                    <label for="numero" class="block text-gray-700">Número</label>
+                    <input type="text" id="numero" name="numero">
                 </div>
 
                 <div class="form-group mb-4">
@@ -404,6 +404,17 @@
                       <div class="form-group mb-4">
                           <label class="block text-sm font-medium">Valor do Aluguel</label>
                           <input type="text" name="valor_aluguel" id="valor_aluguel" class="form-input w-full uber-obrigatorio" placeholder="R$" min="0" step="0.01" onblur="validateField(this)">
+                      </div>
+
+                      <div id="frequencia_aluguel_div" class="form-group mb-4" style="display: none;">
+                        <label class="block text-sm font-medium">Frequência do Aluguel</label>
+                        <select name="frequencia_aluguel" id="frequencia_aluguel" class="form-input w-full uber-obrigatorio">
+                            <option value="" disabled selected>Selecione a frequência</option>
+                            <option value="diario">Diário</option>
+                            <option value="semanal">Semanal</option>
+                            <option value="quinzenal">Quinzenal</option>
+                            <option value="mensal">Mensal</option>
+                        </select>
                       </div>
    
                       <div class="form-group mb-4">
@@ -514,12 +525,7 @@
                     <button type="button" class="btn btn-secondary" onclick="prevStep()">Anterior</button>
                     <button type="submit" class="btn btn-submit" id="submit-btn">Cadastrar</button>
                 </div>
-            </div>
-            
-            <!-- <div id="loading-indicator">
-                <i class="fas fa-spinner fa-spin mr-2"></i> Enviando dados...
-            </div> -->
-            
+            </div>            
         </form>
 
         <div class="mt-8 text-center text-gray-500">
@@ -847,166 +853,166 @@
 
   // Validação genérica de campo
   function validateField(input) {
-      console.log(`Validando campo: ${input.id || input.name}, Valor: "${input.value}"`);
-      console.log("Campo validado:", input.id, input.value ? "Com valor" : "Sem valor");
-      const type = input.type;
-      const id = input.id;
-      let isValid = true;
-      let errorMessage = '';
+    const type = input.type;
+    const id = input.id;
+    let isValid = true;
+    let errorMessage = '';
 
-      // Verifica campos obrigatórios primeiro
-      if (input.hasAttribute('required') && input.value.trim() === '') {
-          isValid = false;
-          errorMessage = 'Este campo é obrigatório.';
-      } else {
-          // Validações específicas
-          if (id === 'email') {
-              if (!validateEmail(input.value)) {
-                  isValid = false;
-                  errorMessage = 'Email inválido.';
-              }
-          } else if (id === 'cpf') {
-              isValid = validateCPF(input);
-              if (!isValid) errorMessage = input.getAttribute('data-invalid');
-          } else if (id === 'data_nasc') { // NOVO: VALIDAÇÃO DA DATA DE NASCIMENTO
-              isValid = validateDataNascimento(input);
-              // A função validateDataNascimento já marca como inválido e define a mensagem
-              if (!isValid) {
-                  // Tenta obter a mensagem da própria função de validação de data
-                  let errorMessageElement = input.nextElementSibling;
-                  if (errorMessageElement && errorMessageElement.classList.contains('error-message')) {
-                      errorMessage = errorMessageElement.textContent;
-                  } else {
-                      errorMessage = 'Data de Nascimento inválida.';
-                  }
-              }
-          } else if (id === 'telefone' || id === 'referencia_contato') {
-              if (input.value.replace(/\D/g, '').length < 11) {
-                  isValid = false;
-                  errorMessage = 'Telefone inválido (mínimo 11 dígitos incluindo DDD).';
-              }
-          } else if (id === 'senha' || id === 'conf_senha') {
-              isValid = validatePassword(input);
-              if (!isValid) errorMessage = input.getAttribute('data-invalid');
-          } else if (id === 'placa_veiculo') {
-              isValid = validatePlaca(input);
-              if (!isValid) errorMessage = input.getAttribute('data-invalid');
-          } else if (type === 'file') {
-              if (input.hasAttribute('required') && input.files.length === 0) {
-                  isValid = false;
-                  errorMessage = 'Por favor, anexe o arquivo.';
-              }
-          } else if (type === 'number') {
-              if (input.hasAttribute('required') && input.value.trim() === '') {
-                  isValid = false;
-                  errorMessage = 'Este campo é obrigatório.';
-              } else if (input.min && parseFloat(input.value) < parseFloat(input.min)) {
-                  isValid = false;
-                  errorMessage = `O valor mínimo é ${input.min}.`;
-              }
-          } else if (input.tagName === 'SELECT' && input.value === '') {
-              isValid = false;
-              errorMessage = 'Por favor, selecione uma opção.';
-          }
-      }
+    const statusVeiculoSelect = document.getElementById('status_veiculo');
+    
+    // VERIFICAÇÃO ADICIONADA: Campos de aluguel só são validados se o status for "alugado"
+    if (statusVeiculoSelect && statusVeiculoSelect.value !== 'alugado' && (id === 'valor_aluguel' || id === 'frequencia_aluguel')) {
+        markValid(input);
+        return true;
+    }
 
-      if (isValid) {
-          markValid(input);
-      } else {
-          markInvalid(input, errorMessage);
-      }
-      console.log(`Campo ${input.id || input.name} é válido: ${isValid}`);
-      return isValid;
-  }
+    // Verifica campos obrigatórios primeiro
+    if (input.hasAttribute('required') && input.value.trim() === '') {
+        isValid = false;
+        errorMessage = 'Este campo é obrigatório.';
+    } else {
+        // Validações específicas
+        if (id === 'email') {
+            if (!validateEmail(input.value)) {
+                isValid = false;
+                errorMessage = 'Email inválido.';
+            }
+        } else if (id === 'cpf') {
+            isValid = validateCPF(input);
+            if (!isValid) errorMessage = input.getAttribute('data-invalid');
+        } else if (id === 'data_nasc') {
+            isValid = validateDataNascimento(input);
+            if (!isValid) {
+                let errorMessageElement = input.nextElementSibling;
+                if (errorMessageElement && errorMessageElement.classList.contains('error-message')) {
+                    errorMessage = errorMessageElement.textContent;
+                } else {
+                    errorMessage = 'Data de Nascimento inválida.';
+                }
+            }
+        } else if (id === 'telefone' || id === 'referencia_contato') {
+            if (input.value.replace(/\D/g, '').length < 11) {
+                isValid = false;
+                errorMessage = 'Telefone inválido (mínimo 11 dígitos incluindo DDD).';
+            }
+        } else if (id === 'senha' || id === 'conf_senha') {
+            isValid = validatePassword(input);
+            if (!isValid) errorMessage = input.getAttribute('data-invalid');
+        } else if (id === 'placa_veiculo') {
+            isValid = validatePlaca(input);
+            if (!isValid) errorMessage = input.getAttribute('data-invalid');
+        } else if (type === 'file') {
+            if (input.hasAttribute('required') && input.files.length === 0) {
+                isValid = false;
+                errorMessage = 'Por favor, anexe o arquivo.';
+            }
+        } else if (type === 'number') {
+            if (input.hasAttribute('required') && input.value.trim() === '') {
+                isValid = false;
+                errorMessage = 'Este campo é obrigatório.';
+            } else if (input.min && parseFloat(input.value) < parseFloat(input.min)) {
+                isValid = false;
+                errorMessage = `O valor mínimo é ${input.min}.`;
+            }
+        } else if (input.tagName === 'SELECT' && input.value === '') {
+            isValid = false;
+            errorMessage = 'Por favor, selecione uma opção.';
+        }
+    }
+
+    if (isValid) {
+        markValid(input);
+    } else {
+        markInvalid(input, errorMessage);
+    }
+    return isValid;
+}
 
   // Validação da etapa atual antes de prosseguir
   function validateCurrentStep() {
-      console.log(`--- Validando Etapa ${currentStep} ---`);
-      const currentStepElement = document.getElementById(`step-${currentStep}`);
-      // Seleciona todos os campos que podem ser obrigatórios nesta etapa
-      const inputs = currentStepElement.querySelectorAll('[required], .uber-obrigatorio, .autonomo-obrigatorio, .assalariado-obrigatorio');
-      let allValid = true;
-      let firstInvalidField = null;
-      let invalidMessages = [];
+    console.log(`--- Validando Etapa ${currentStep} ---`);
+    const currentStepElement = document.getElementById(`step-${currentStep}`);
+    const inputs = currentStepElement.querySelectorAll('[required], .uber-obrigatorio, .autonomo-obrigatorio, .assalariado-obrigatorio');
+    let allValid = true;
+    let firstInvalidField = null;
+    let invalidMessages = [];
 
-      const ramoSelect = document.getElementById('ramo');
-      const selectedRamo = ramoSelect ? ramoSelect.value : '';
+    const ramoSelect = document.getElementById('ramo');
+    const selectedRamo = ramoSelect ? ramoSelect.value : '';
+    const statusVeiculoSelect = document.getElementById('status_veiculo');
+    const selectedStatusVeiculo = statusVeiculoSelect ? statusVeiculoSelect.value : '';
 
-      inputs.forEach(input => {
-          // Lógica condicional para campos obrigatórios baseada no ramo
-          const isUberField = input.classList.contains('uber-obrigatorio');
-          const isAutonomoField = input.classList.contains('autonomo-obrigatorio');
-          const isAssalariadoField = input.classList.contains('assalariado-obrigatorio');
+    inputs.forEach(input => {
+        let shouldValidate = true;
 
-          let shouldValidate = true;
+        const isUberField = input.classList.contains('uber-obrigatorio');
+        const isAutonomoField = input.classList.contains('autonomo-obrigatorio');
+        const isAssalariadoField = input.classList.contains('assalariado-obrigatorio');
+        // VERIFICAÇÃO ADICIONADA: Lógica condicional para campos de aluguel
+        const isAluguelField = (input.id === 'valor_aluguel' || input.id === 'frequencia_aluguel');
 
-          if (isUberField && selectedRamo !== 'uber') {
-              shouldValidate = false;
-          } else if (isAutonomoField && selectedRamo !== 'autonomo') {
-              shouldValidate = false;
-          } else if (isAssalariadoField && selectedRamo !== 'assalariado') {
-              shouldValidate = false;
-          }
+        if (isUberField && selectedRamo !== 'uber') {
+            shouldValidate = false;
+        } else if (isAutonomoField && selectedRamo !== 'autonomo') {
+            shouldValidate = false;
+        } else if (isAssalariadoField && selectedRamo !== 'assalariado') {
+            shouldValidate = false;
+        } else if (isAluguelField && selectedStatusVeiculo !== 'alugado') {
+            shouldValidate = false;
+        }
 
-          if (!shouldValidate) {
-              markValid(input);
-              console.log(`Pulando validação para (ramo diferente): ${input.id || input.name}`);
-              return;
-          }
+        if (!shouldValidate) {
+            markValid(input);
+            console.log(`Pulando validação para (ramo diferente): ${input.id || input.name}`);
+            return;
+        }
 
-          const isValidField = validateField(input);
-          if (!isValidField) {
-              allValid = false;
-              const message = input.getAttribute('data-invalid') || 'Campo inválido ou vazio.';
-              let fieldName = input.previousElementSibling ? input.previousElementSibling.textContent.replace(':', '').trim() : input.placeholder || input.id || input.name;
-              invalidMessages.push(`${fieldName}: ${message}`);
-              if (!firstInvalidField) {
-                  firstInvalidField = input;
-              }
-          }
-      });
+        const isValidField = validateField(input);
+        if (!isValidField) {
+            allValid = false;
+            const message = input.getAttribute('data-invalid') || 'Campo inválido ou vazio.';
+            let fieldName = input.previousElementSibling ? input.previousElementSibling.textContent.replace(':', '').trim() : input.placeholder || input.id || input.name;
+            invalidMessages.push(`${fieldName}: ${message}`);
+            if (!firstInvalidField) {
+                firstInvalidField = input;
+            }
+        }
+    });
 
-      // Validação específica para o Step 1 (duplicidade de nome e telefone)
-      if (currentStep === 1) {
-          const nomeInput = document.getElementById('nome');
-          const telefoneInput = document.getElementById('telefone');
-      }
+    // Validação específica para o Step 2 (confirmação de senha)
+    if (currentStep === 2) {
+        const senha = document.getElementById('senha');
+        const confSenha = document.getElementById('conf_senha');
+        if (senha.value !== confSenha.value) {
+            markInvalid(confSenha, 'As senhas não coincidem.');
+            invalidMessages.push('Confirmação de Senha: As senhas não coincidem.');
+            allValid = false;
+            if (!firstInvalidField) firstInvalidField = confSenha;
+        } else {
+            markValid(confSenha);
+        }
+    }
 
-      // Validação específica para o Step 2 (confirmação de senha)
-      if (currentStep === 2) {
-          const senha = document.getElementById('senha');
-          const confSenha = document.getElementById('conf_senha');
-          if (senha.value !== confSenha.value) {
-              markInvalid(confSenha, 'As senhas não coincidem.');
-              invalidMessages.push('Confirmação de Senha: As senhas não coincidem.');
-              allValid = false;
-              if (!firstInvalidField) firstInvalidField = confSenha;
-          } else {
-              markValid(confSenha);
-          }
-      }
-
-
-      if (!allValid) {
-          let errorMessageHTML = invalidMessages.map(msg => `<li>${msg}</li>`).join('');
-          Swal.fire({
-              icon: 'error',
-              title: 'Erro de Validação!',
-              html: `Por favor, corrija os seguintes campos antes de prosseguir:<ul class="text-left mt-2">${errorMessageHTML}</ul>`,
-              confirmButtonText: 'Ok',
-              customClass: {
-                  popup: 'swal2-responsive-popup'
-              }
-          });
-          if (firstInvalidField) {
-              firstInvalidField.focus(); // Foca no primeiro campo inválido
-          }
-          console.log("Validação falhou para a etapa atual. Campos inválidos:", invalidMessages);
-          return false;
-      }
-      console.log("Validação bem-sucedida para a etapa atual.");
-      return true;
-  }
+    if (!allValid) {
+        let errorMessageHTML = invalidMessages.map(msg => `<li>${msg}</li>`).join('');
+        Swal.fire({
+            icon: 'error',
+            title: 'Erro de Validação!',
+            html: `Por favor, corrija os seguintes campos antes de prosseguir:<ul class="text-left mt-2">${errorMessageHTML}</ul>`,
+            confirmButtonText: 'Ok',
+            customClass: {
+                popup: 'swal2-responsive-popup'
+            }
+        });
+        if (firstInvalidField) {
+            firstInvalidField.focus();
+        }
+        console.log("Validação falhou para a etapa atual. Campos inválidos:", invalidMessages);
+        return false;
+    }
+    console.log("Validação bem-sucedida para a etapa atual.");
+    return true;
+}
 
 
   // --- NAVEGAÇÃO ENTRE ETAPAS ---
@@ -1190,20 +1196,35 @@ function nextStep() {
   }
 
   function handleStatusVeiculoChange() {
-      const statusVeiculoSelect = document.getElementById('status_veiculo');
-      const valorAluguelInput = document.getElementById('valor_aluguel');
-      const valorAluguelDiv = valorAluguelInput.closest('div');
+    const statusVeiculoSelect = document.getElementById('status_veiculo');
+    const valorAluguelInput = document.getElementById('valor_aluguel');
+    const frequenciaAluguelSelect = document.getElementById('frequencia_aluguel');
 
-      if (statusVeiculoSelect && statusVeiculoSelect.value === 'alugado') {
-          valorAluguelDiv.style.display = 'block';
-          valorAluguelInput.setAttribute('required', 'required');
-      } else {
-          valorAluguelDiv.style.display = 'none';
-          valorAluguelInput.removeAttribute('required');
-          valorAluguelInput.value = '';
-          markValid(valorAluguelInput);
-      }
-  }
+    // É importante garantir que os elementos existem antes de manipulá-los
+    if (!statusVeiculoSelect || !valorAluguelInput || !frequenciaAluguelSelect) {
+        return;
+    }
+
+    const valorAluguelDiv = valorAluguelInput.closest('div.form-group');
+    const frequenciaAluguelDiv = frequenciaAluguelSelect.closest('div.form-group');
+
+    if (statusVeiculoSelect.value === 'alugado') {
+        valorAluguelDiv.style.display = 'block';
+        frequenciaAluguelDiv.style.display = 'block'; // Mostra o novo campo
+        valorAluguelInput.setAttribute('required', 'required');
+        frequenciaAluguelSelect.setAttribute('required', 'required'); // Torna o novo campo obrigatório
+    } else {
+        valorAluguelDiv.style.display = 'none';
+        frequenciaAluguelDiv.style.display = 'none'; // Esconde o novo campo
+        valorAluguelInput.removeAttribute('required');
+        frequenciaAluguelSelect.removeAttribute('required'); // Remove a obrigatoriedade
+        valorAluguelInput.value = '';
+        frequenciaAluguelSelect.value = ''; // Limpa o valor do novo campo
+        // Garante que o estado de validação seja limpo
+        markValid(valorAluguelInput);
+        markValid(frequenciaAluguelSelect);
+    }
+}
 
   // --- TOGGLE VISIBILIDADE DA SENHA ---
   function togglePasswordVisibility(fieldId, buttonId) {

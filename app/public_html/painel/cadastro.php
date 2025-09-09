@@ -848,17 +848,29 @@
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
                     <div>
-                        <label class="block text-sm font-medium">Status do Veículo</label>
-                        <select name="status_veiculo" id="status_veiculo" class="form-input w-full uber-obrigatorio" required onchange="handleStatusVeiculoChange(); validateField(this)">
-                            <option value="" disabled selected>Selecione</option>
-                            <option value="proprio">Próprio</option>
-                            <option value="alugado">Alugado</option>
-                        </select>
+                      <label class="block text-sm font-medium">Status do Veículo</label>
+                      <select name="status_veiculo" id="status_veiculo" class="form-input w-full uber-obrigatorio" required onchange="handleStatusVeiculoChange(); validateField(this)">
+                        <option value="" disabled selected>Selecione</option>
+                        <option value="proprio">Próprio</option>
+                        <option value="alugado">Alugado</option>
+                      </select>
                     </div>
                     <div>
-                        <label class="block text-sm font-medium">Valor do Aluguel</label>
-                        <input type="text" name="valor_aluguel" id="valor_aluguel" class="form-input w-full uber-obrigatorio" placeholder="R$" min="0" step="0.01" onblur="validateField(this)">
+                      <label class="block text-sm font-medium">Valor do Aluguel</label>
+                      <input type="text" name="valor_aluguel" id="valor_aluguel" class="form-input w-full uber-obrigatorio" placeholder="R$" min="0" step="0.01" onblur="validateField(this)">
                     </div>
+
+                    <div>
+                      <label class="block text-sm font-medium">Frequência do Aluguel</label>
+                      <select name="frequencia_aluguel" id="frequencia_aluguel" class="form-input w-full uber-obrigatorio" onblur="validateField(this)">
+                        <option value="" disabled selected>Selecione</option>
+                        <option value="diario">Diário</option>
+                        <option value="semanal">Semanal</option>
+                        <option value="quinzenal">Quinzenal</option>
+                        <option value="mensal">Mensal</option>
+                      </select>
+                    </div>
+   
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
@@ -1728,21 +1740,38 @@ function carregarImgContracheque() {
         }
     }
 
-    function handleStatusVeiculoChange() {
-        const statusVeiculoSelect = document.getElementById('status_veiculo');
-        const valorAluguelInput = document.getElementById('valor_aluguel');
-        const valorAluguelDiv = valorAluguelInput.closest('div');
+// --- LÓGICA CONDICIONAL PARA CAMPOS DE VEÍCULO ---
+function handleStatusVeiculoChange() {
+    const statusVeiculoSelect = document.getElementById('status_veiculo');
+    const valorAluguelInput = document.getElementById('valor_aluguel');
+    const frequenciaAluguelInput = document.getElementById('frequencia_aluguel');
 
-        if (statusVeiculoSelect && statusVeiculoSelect.value === 'alugado') {
-            valorAluguelDiv.style.display = 'block';
-            valorAluguelInput.setAttribute('required', 'required');
-        } else {
-            valorAluguelDiv.style.display = 'none';
-            valorAluguelInput.removeAttribute('required');
-            valorAluguelInput.value = '';
-            markValid(valorAluguelInput);
-        }
+    const valorAluguelDiv = valorAluguelInput.closest('div');
+    const frequenciaAluguelDiv = frequenciaAluguelInput.closest('div');
+
+    if (statusVeiculoSelect && statusVeiculoSelect.value === 'alugado') {
+        // Mostra ambos os campos
+        valorAluguelDiv.style.display = 'block';
+        frequenciaAluguelDiv.style.display = 'block';
+
+        // Torna ambos os campos obrigatórios
+        valorAluguelInput.setAttribute('required', 'required');
+        frequenciaAluguelInput.setAttribute('required', 'required');
+    } else {
+        // Esconde ambos os campos
+        valorAluguelDiv.style.display = 'none';
+        frequenciaAluguelDiv.style.display = 'none';
+
+        // Remove a obrigatoriedade e limpa os valores
+        valorAluguelInput.removeAttribute('required');
+        valorAluguelInput.value = '';
+        markValid(valorAluguelInput);
+
+        frequenciaAluguelInput.removeAttribute('required');
+        frequenciaAluguelInput.value = '';
+        markValid(frequenciaAluguelInput);
     }
+}
 
     // --- TOGGLE VISIBILIDADE DA SENHA ---
     function togglePasswordVisibility(fieldId, buttonId) {

@@ -110,8 +110,9 @@ if ($linhas == 0) {
                 </button>
                 
                 <div class="d-flex justify-content-end w-100 mb-3">
-                  <a class="color-theme font-12 me-1" href="painel/paginas/cadastro.php">
-                      <span class="opacity-70">Ainda não possui cadastro? <span style="color: #97cc5e">Cadastre-se</span></span>
+                  <a href="painel/paginas/cadastro.php"
+                    class="btn btn-full gradient-blue rounded-xs text-uppercase font-600 w-100 btn-s mt-1 mb-2">
+                      Cadastre-se
                   </a>
                 </div>
 								<a href="#" class="d-flex pb-2" data-trigger-switch="salvar_acesso">

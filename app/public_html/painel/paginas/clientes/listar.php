@@ -391,16 +391,16 @@ if ($linhas > 0) {
             $('#dados_deb').hide();
         }
 
-        if (validado === '0' || validado === 'false') {
-            const btnValidar = `
-                <button class="btn btn-success btn-validar-cliente" onclick="validarCliente('${id}', '${nome}')">
-                    <i class="fa fa-check-circle"></i> Validar Cliente
-                </button>
-            `;
-            document.getElementById('div_botao_validar').innerHTML = btnValidar;
-        } else {
-            document.getElementById('div_botao_validar').innerHTML = '';
-        }
+        // if (validado === '0' || validado === 'false') {
+        //     const btnValidar = `
+        //         <button class="btn btn-success btn-validar-cliente" onclick="validarCliente('${id}', '${nome}')">
+        //             <i class="fa fa-check-circle"></i> Validar Cliente
+        //         </button>
+        //     `;
+        //     document.getElementById('div_botao_validar').innerHTML = btnValidar;
+        // } else {
+        //     document.getElementById('div_botao_validar').innerHTML = '';
+        // }
 
 
         $('#titulo_dados').text(nome);

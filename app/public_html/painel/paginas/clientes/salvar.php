@@ -40,6 +40,7 @@ $placa = htmlspecialchars(trim($_POST['placa_veiculo'] ?? ''));
 $modelo_veiculo = null;
 $status_veiculo = null;
 $valor_aluguel = null;
+$frequencia_aluguel = null;
 
 $funcao_autonomo = null;
 $empresa_autonomo = null;
@@ -475,6 +476,7 @@ if ($ramo === 'uber') {
     $modelo_veiculo = htmlspecialchars(trim(@$_POST['modelo_veiculo']));
     $status_veiculo = htmlspecialchars(trim(@$_POST['status_veiculo']));
     $valor_aluguel = isset($_POST['valor_aluguel']) ? str_replace(',', '.', str_replace(['R$', '.', ' '], '', $_POST['valor_aluguel'])) : 0;
+    $frequencia_aluguel = htmlspecialchars(trim(@$_POST['frequencia_aluguel'] ?? ''));
 } else if ($ramo === 'autonomo') {
     $funcao_autonomo = htmlspecialchars(trim(@$_POST['funcao_autonomo']));
     $empresa_autonomo = htmlspecialchars(trim(@$_POST['empresa_autonomo']));
@@ -528,6 +530,7 @@ if($id == ""){
         status_veiculo = :status_veiculo,
         placa = :placa,
         valor_aluguel = :valor_aluguel,
+        frequencia_aluguel = :frequencia_aluguel,
         print_perfil_app = :print_perfil_app,
         print_veiculo_app = :print_veiculo_app,
         print_ganhos_hoje = :print_ganhos_hoje,
@@ -585,6 +588,7 @@ if($id == ""){
         status_veiculo = :status_veiculo,
         placa = :placa,
         valor_aluguel = :valor_aluguel,
+        frequencia_aluguel = :frequencia_aluguel,
         print_perfil_app = :print_perfil_app,
         print_veiculo_app = :print_veiculo_app,
         print_ganhos_hoje = :print_ganhos_hoje,
@@ -639,6 +643,7 @@ $query->bindValue(":referencia_parentesco", $referencia_parentesco);
 $query->bindValue(":modelo_veiculo", $modelo_veiculo);
 $query->bindValue(":status_veiculo", $status_veiculo);
 $query->bindValue(":placa", $placa);
+$query->bindValue(":frequencia_aluguel", $frequencia_aluguel);
 
 // Binda valores monetários
 $query->bindValue(":valor_aluguel", $valor_aluguel);
