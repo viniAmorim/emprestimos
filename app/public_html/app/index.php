@@ -91,7 +91,7 @@ if ($linhas == 0) {
 				<div class="card-center">
 					<div class="card card-style">
 						<div class="content">
-							<h2 class="text-center font-800 font-30 mb-2"><br><img src="../img/logo_ucred.png" width="70%"></h2><br>
+							<h2 class="text-center font-800 font-30 mb-2"><br><img src="../img/logo_ucred.png" width="50%"></h2><br>
 							<form method="post" action="autenticar.php">
 								<div class="form-custom form-label form-icon mb-3">
 									<i class="bi bi-person-circle font-14"></i>
@@ -109,12 +109,12 @@ if ($linhas == 0) {
 									type="submit">Logar
                 </button>
                 
-                <div class="d-flex justify-content-end w-100 mb-3">
+                <!-- <div class="d-flex justify-content-end w-100 mb-3">
                   <a href="painel/paginas/cadastro.php"
                     class="btn btn-full gradient-blue rounded-xs text-uppercase font-600 w-100 btn-s mt-1 mb-2">
                       Cadastre-se
                   </a>
-                </div>
+                </div> -->
 								<a href="#" class="d-flex pb-2" data-trigger-switch="salvar_acesso">
 									<div class="align-self-center">
 										<h6 class="mb-0 font-12">Salvar Acesso</h6>

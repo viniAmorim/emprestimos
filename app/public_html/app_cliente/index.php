@@ -96,7 +96,7 @@ if ($linhas == 0) {
 				<div class="card-center">
 					<div class="card card-style">
 						<div class="content">
-							<h2 class="text-center font-800 font-30 mb-2"><br><img src="../img/logo_ucred.png" width="70%"></h2><br>
+							<h2 class="text-center font-800 font-30 mb-2"><br><img src="../img/logo_ucred.png" width="50%"></h2><br>
 							<form method="post" action="autenticar.php">
 								<div class="form-custom form-label form-icon mb-3">
 									<i class="bi bi-person-circle font-14"></i>
@@ -124,6 +124,7 @@ if ($linhas == 0) {
 									<div class="align-self-center">
 										<h6 class="mb-0 font-12">Salvar Acesso</h6>
 									</div>
+                
 									<div class="ms-auto align-self-center">
 										<div class="form-switch android-switch switch-green switch-m">
 											<input type="checkbox" value="Sim" class="android-input" id="salvar_acesso" name="salvar">
@@ -131,7 +132,18 @@ if ($linhas == 0) {
 										</div>
 									</div>
 								</a>
+                
 							</form>
+
+              <div class="d-flex">
+								<div>
+									<a class="color-theme opacity-30 font-12" href="../app/index.php" data-bs-toggle="offcanvas"
+										data-bs-target="#menu-forgot" class="list-group-item">
+										<div>Login Gestão</div>
+									</a>
+								</div>
+							</div>
+						</div>
 							
 						</div>
 					</div>
