@@ -743,8 +743,8 @@ $data_atual = date('Y-m-d');
     // Função para verificar a URL atual e redirecionar
     function redirectToApp() {
       // Redireciona apenas se for um dispositivo mobile e a URL não for a rota /app
-      if (isMobile() && window.location.pathname !== '/app') {
-          window.location.href = '/app';
+      if (isMobile() && window.location.pathname !== '/app_cliente') {
+          window.location.href = '/app_cliente';
       }
     }
 

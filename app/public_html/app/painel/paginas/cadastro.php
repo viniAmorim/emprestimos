@@ -529,7 +529,7 @@
         </form>
 
         <div class="mt-8 text-center text-gray-500">
-            Já possui cadastro? <a href="#" class="text-link">Fazer Login</a>
+            Já possui cadastro? <a href="../../../app_cliente/index.php" class="text-link">Fazer Login</a>
         </div>
     </div>
 
