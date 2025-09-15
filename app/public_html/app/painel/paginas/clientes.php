@@ -151,7 +151,7 @@ if ($pag_proxima == $num_paginas) {
   $endereco = $res[$i]['endereco'];
   $data_nasc = $res[$i]['data_nasc'];
   $data_cad = $res[$i]['data_cad'];
-  $obs = $res[$i]['obs'];
+  $obs = $res[$i]['obs'] ?? '';
   $pix = $res[$i]['pix'];
   $indicacao = $res[$i]['indicacao'];
   $bairro = $res[$i]['bairro'];
