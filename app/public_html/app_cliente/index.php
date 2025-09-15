@@ -4,14 +4,14 @@ require_once("../conexao.php");
 $mensagem_sessao = @$_SESSION['msg'];
 
 
-$query = $pdo->query("SELECT * from usuarios where nivel = 'Administrador'");
-$res = $query->fetchAll(PDO::FETCH_ASSOC);
-$linhas = @count($res);
-$senha = '123';
-$senha_crip = password_hash($senha, PASSWORD_DEFAULT);
-if ($linhas == 0) {
-	$pdo->query("INSERT INTO usuarios SET nome = '$nome_sistema', email = '$email_sistema', senha_crip = '$senha_crip', nivel = 'Administrador', ativo = 'Sim', foto = 'sem-foto.jpg', telefone = '$telefone_sistema', data = curDate() ");
-}
+// $query = $pdo->query("SELECT * from usuarios where nivel = 'Administrador'");
+// $res = $query->fetchAll(PDO::FETCH_ASSOC);
+// $linhas = @count($res);
+// $senha = '123';
+// $senha_crip = password_hash($senha, PASSWORD_DEFAULT);
+// if ($linhas == 0) {
+// 	$pdo->query("INSERT INTO usuarios SET nome = '$nome_sistema', email = '$email_sistema', senha_crip = '$senha_crip', nivel = 'Administrador', ativo = 'Sim', foto = 'sem-foto.jpg', telefone = '$telefone_sistema', data = curDate() ");
+// }
 
 ?>
 <!DOCTYPE HTML>
@@ -106,8 +106,8 @@ if ($linhas == 0) {
 								</div>
 								<div class="form-custom form-label form-icon mb-3">
 									<i class="bi bi-lock-fill font-12"></i>
-									<input type="password" type="text" name="senha" value="" class="form-control rounded-xs" id="c2"
-										placeholder="Senha (123) se você não se cadastrou" required />
+									<input type="password" type="text" name="senha" class="form-control rounded-xs" id="c2"
+										placeholder="Senha" required />
 									<label class="color-theme">Senha</label>
 								</div>
 								<button class="btn btn-full gradient-green rounded-xs text-uppercase font-700 w-100 btn-s mt-4 mb-2"

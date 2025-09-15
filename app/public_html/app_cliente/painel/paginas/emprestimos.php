@@ -7,7 +7,7 @@ $pag = 'emprestimos';
 $itens_pag = 10;
 
 $cliente = @$_POST['cliente_busca'];
-$ativo = @$_POST['ativo']; // Adicionar esta linha para capturar o valor do filtro
+$ativo = @$_POST['ativo'];
 $status = @$_POST['status_busca'];
 
 if($cliente > 0){
@@ -16,14 +16,14 @@ if($cliente > 0){
   $sql_cliente = "";
 }
 
+$cor_btn_ativo = '#f2f2f2';
+$cor_texto_btn_ativo = '#000';
+$cor_btn_finalizado = '#f2f2f2';
+$cor_texto_btn_finalizado = '#000';
+$cor_btn_perdido = '#f2f2f2';
+$cor_texto_btn_perdido = '#000';
 
-if($status == ""){
-  $sql_status = ' and status is null';
-  $cor_btn_ativo = '#436399';
-  $cor_texto_btn_ativo = '#FFF';
-}
-
-if($status == "Ativos"){
+if($status == "" || $status == "Ativos"){
   $sql_status = ' and status is null';
   $cor_btn_ativo = '#436399';
   $cor_texto_btn_ativo = '#FFF';
