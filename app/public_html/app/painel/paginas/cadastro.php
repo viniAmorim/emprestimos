@@ -173,8 +173,8 @@
                 <div class="form-group mb-4">
                   <div class="flex-1">
                     <label class="block text-gray-700">CNH ou RG</label>
-                    <!-- <input type="file" id="comprovante_rg" name="comprovante_rg" onchange="handleFile('comprovante_rg'); validateField(this)" accept=".jpg,.jpeg,.png,.heic,.webp,.avif" capture="environment" class="form-input w-full" required> -->
-                    <input type="file" id="comprovante_rg" name="comprovante_rg" onchange="handleFile('comprovante_rg'); validateField(this)" accept="image/*" capture="environment" class="form-input w-full" required>
+                    <input type="file" id="comprovante_rg" name="comprovante_rg" onchange="handleFile('comprovante_rg'); validateField(this)" accept=".jpg,.jpeg,.png,.heic,.webp,.avif" class="form-input w-full" required>
+                    <!-- <input type="file" id="comprovante_rg" name="comprovante_rg" onchange="handleFile('comprovante_rg'); validateField(this)" accept="image/*" capture="environment" class="form-input w-full" required> -->
                   </div>
                 </div>
 
