@@ -424,22 +424,22 @@
                       <div class="form-group mb-4">
                           <label class="block text-sm font-medium">Print da Tela de Perfil dos Apps</label>
                           <!-- <input type="file" name="print_perfil_app" id="print_perfil_app" onchange="handleFile('print_perfil_app');validateField(this)" accept=".jpg,.jpeg,.png,.pdf,.heic,.webp,.avif" class="form-input w-full uber-obrigatorio" required> -->
-                          <input type="file" name="print_perfil_app" id="print_perfil_app" onchange="handleFile('print_perfil_app');validateField(this)" accept="image/*" class="form-input w-full uber-obrigatorio" required>
+                          <input type="file" name="print_perfil_app" id="print_perfil_app" onchange="handleFile('print_perfil_app');validateField(this)" accept="image/*"  capture="filesystem" class="form-input w-full uber-obrigatorio" required>
                       </div>
 
                       <div class="form-group mb-4">
                           <label class="block text-sm font-medium">Print da Tela de Veículos dos Apps</label>
-                          <input type="file" name="print_veiculo_app" id="print_veiculo_app" onchange="handleFile('print_veiculo_app');validateField(this)" accept="image/*" class="form-input w-full uber-obrigatorio" required>
+                          <input type="file" name="print_veiculo_app" id="print_veiculo_app" onchange="handleFile('print_veiculo_app');validateField(this)" accept="image/*"  capture="filesystem" class="form-input w-full uber-obrigatorio" required>
                       </div>
 
                       <div class="form-group mb-4">
                           <label class="block text-sm font-medium">Print dos Ganhos no App (Semana Atual)</label>
-                          <input type="file" name="print_ganhos_hoje" id="print_ganhos_hoje" onchange="handleFile('print_ganhos_hoje');validateField(this)" accept="image/*" class="form-input w-full uber-obrigatorio" required>
+                          <input type="file" name="print_ganhos_hoje" id="print_ganhos_hoje" onchange="handleFile('print_ganhos_hoje');validateField(this)" accept="image/*"  capture="filesystem" class="form-input w-full uber-obrigatorio" required>
                       </div>
 
                       <div class="form-group mb-4">
                           <label class="block text-sm font-medium">Print dos Ganhos nos Apps (Últimos 30 dias)</label>
-                          <input type="file" name="print_ganhos_30dias" id="print_ganhos_30dias" onchange="handleFile('print_ganhos_30dias');validateField(this)" accept="image/*" class="form-input w-full uber-obrigatorio" required>
+                          <input type="file" name="print_ganhos_30dias" id="print_ganhos_30dias" onchange="handleFile('print_ganhos_30dias');validateField(this)" accept="image/*"  capture="filesystem" class="form-input w-full uber-obrigatorio" required>
                       </div>
                 </div>
 
