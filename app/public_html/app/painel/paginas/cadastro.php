@@ -291,22 +291,25 @@
 
                 <div class="form-group mb-4">
                     <label for="quadra" class="block text-gray-700">Quadra</label>
-                    <input type="text" id="quadra" name="quadra">
+                    <input type="text" id="quadra" name="quadra" required>
+                    <p class="text-xs text-red-500 mt-1">Se não tiver, preencha com 0.</p>
                 </div>
 
                 <div class="form-group mb-4">
                     <label for="lote" class="block text-gray-700">Lote</label>
-                    <input type="text" id="lote" name="lote">
+                    <input type="text" id="lote" name="lote" required>
+                    <p class="text-xs text-red-500 mt-1">Se não tiver, preencha com 0.</p>
                 </div>
 
                 <div class="form-group mb-4">
                     <label for="numero" class="block text-gray-700">Número</label>
-                    <input type="text" id="numero" name="numero">
+                    <input type="text" id="numero" name="numero" required>
+                    <p class="text-xs text-red-500 mt-1">Se não tiver, preencha com 0.</p>
                 </div>
 
                 <div class="form-group mb-4">
                     <label for="complemento" class="block text-gray-700">Complemento</label>
-                    <input type="text" id="complemento" name="complemento" required>
+                    <input type="text" id="complemento" name="complemento">
                 </div>
 
                 <div class="flex justify-between mt-6">
