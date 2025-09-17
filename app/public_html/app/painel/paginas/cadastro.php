@@ -173,14 +173,14 @@
                 <div class="form-group mb-4">
                   <div class="flex-1">
                     <label class="block text-gray-700">CNH ou RG</label>
-                    <input type="file" id="comprovante_rg" name="comprovante_rg" onchange="handleFile('comprovante_rg'); validateField(this)" accept=".jpg,.jpeg,.png,.heic,.webp,.avif" class="form-input w-full" required>
+                    <input type="file" id="comprovante_rg" name="comprovante_rg" onchange="handleFile('comprovante_rg'); validateField(this)" accept=".jpg,.jpeg,.png,.heic,.webp,.avif" capture="environment" class="form-input w-full" required>
                   </div>
                 </div>
 
                 <div class="form-group mb-4">
                     <div class="flex-1">
-                        <label class="block text-gray-700">Comprovante de Endereço</label>
-                        <input type="file" name="comprovante_endereco" id="comprovante_endereco" onchange="handleFile('comprovante_endereco');validateField(this)" accept=".jpg,.jpeg,.png,.heic,.webp,.avif" class="form-input w-full" required>
+                      <label class="block text-gray-700">Comprovante de Endereço</label>
+                      <input type="file" name="comprovante_endereco" id="comprovante_endereco" onchange="handleFile('comprovante_endereco');validateField(this)" accept=".jpg,.jpeg,.png,.heic,.webp,.avif" capture="environment" class="form-input w-full" required>
                     </div>
                 </div>
                 
