@@ -323,7 +323,12 @@
             </div>
 
             <div id="step-4" class="step-content hidden">
-                <h3 class="text-xl font-semibold mb-6 text-gray-700">4. Referência(parente de primeiro grau)</h3>
+              <h3 class="text-xl font-semibold mb-2 text-gray-700">
+                4. Referência
+                <span class="block text-sm text-gray-500 font-normal mt-1">
+                  (parente de primeiro grau)
+                </span>
+              </h3>
                 
                 <div class="form-group mb-4">
                     <label for="referencia_nome" class="block text-gray-700">Nome Completo</label>
@@ -331,8 +336,8 @@
                 </div>
                 
                 <div class="form-group mb-4">
-                    <label for="referencia_contato" class="block text-gray-700">Celular(Whatsapp)</label>
-                    <input type="text" id="referencia_contato" name="referencia_contato" placeholder="email@dominio.com" required>
+                    <label for="referencia_contato" class="block text-gray-700">Celular (Whatsapp)</label>
+                    <input type="text" id="referencia_contato" name="referencia_contato" placeholder="(XX- XXXX-XXXX)" required>
                 </div>
 
                 <div class="form-group mb-4">
@@ -358,7 +363,7 @@
                     </select>
                 </div>
 
-                <label class="block text-md font-medium text-blue-700 mt-6 mb-6">Quem te indicou?</label>
+                <h3 class="text-xl font-semibold mb-6 mt-6 text-gray-700">4.1 Quem te indicou? </h3>
                 
                 <div class="form-group mb-4">
                     <label for="indicacao" class="block text-gray-700">Nome completo</label>
@@ -366,8 +371,8 @@
                 </div>
                 
                 <div class="form-group mb-4">
-                    <label for="indicacao_contato" class="block text-gray-700">Celular(Whatsapp)</label>
-                    <input type="text" id="indicacao_contato" name="indicacao_contato" placeholder="Indicado por" required>
+                    <label for="indicacao_contato" class="block text-gray-700">Celular (Whatsapp)</label>
+                    <input type="text" id="indicacao_contato" name="indicacao_contato" placeholder="(XX- XXXX-XXXX)" required>
                 </div>
                 
                 <div class="flex justify-between mt-6">
