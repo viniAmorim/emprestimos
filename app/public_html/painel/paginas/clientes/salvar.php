@@ -77,7 +77,7 @@ $conf_senha = $_POST['conf_senha'] ?? '';
 
 // Formata valores monetários, removendo R$, pontos e substituindo vírgula por ponto
 $valor_desejado = isset($_POST['valor_desejado']) ? str_replace(',', '.', str_replace(['R$', '.', ' '], '', $_POST['valor_desejado'])) : 0;
-$valor_parcela_desejada = isset($_POST['parcela_desejada']) ? str_replace(',', '.', str_replace(['R$', '.', ' '], '', $_POST['parcela_desejada'])) : 0;
+// $valor_parcela_desejada = isset($_POST['parcela_desejada']) ? str_replace(',', '.', str_replace(['R$', '.', ' '], '', $_POST['parcela_desejada'])) : 0;
 
 // Validação de senhas para novo cadastro de cliente
 if($cliente_cadastro == "Sim"){
@@ -542,7 +542,6 @@ if($id == ""){
         empresa_assalariado = :empresa_assalariado,
         contracheque = :contracheque,
         valor_desejado = :valor_desejado,
-        valor_parcela_desejada = :valor_parcela_desejada,
         comprovante_extra_autonomo = :comprovante_extra_autonomo,
         comprovante_extra_assalariado = :comprovante_extra_assalariado
     ");
@@ -600,7 +599,6 @@ if($id == ""){
         empresa_assalariado = :empresa_assalariado,
         contracheque = :contracheque,
         valor_desejado = :valor_desejado,
-        valor_parcela_desejada = :valor_parcela_desejada,
         comprovante_extra_autonomo = :comprovante_extra_autonomo,
         comprovante_extra_assalariado = :comprovante_extra_assalariado
         where id = :id
@@ -648,7 +646,7 @@ $query->bindValue(":frequencia_aluguel", $frequencia_aluguel);
 // Binda valores monetários
 $query->bindValue(":valor_aluguel", $valor_aluguel);
 $query->bindValue(":valor_desejado", $valor_desejado);
-$query->bindValue(":valor_parcela_desejada", $valor_parcela_desejada);
+// $query->bindValue(":valor_parcela_desejada", $valor_parcela_desejada);
 
 // Bind dos novos campos de ramo (autônomo e assalariado)
 $query->bindValue(":funcao_autonomo", $funcao_autonomo);

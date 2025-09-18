@@ -997,15 +997,11 @@ $assalariado = !empty($cliente['contracheque']) && $cliente['contracheque'] !== 
         <hr>
 
         <h4 class="section-title">Valores de Empréstimos</h4>
-        <?php if (!empty($cliente) && (!empty($cliente['valor_desejado']) || !empty($cliente['valor_parcela_desejada']))): ?>
+        <?php if (!empty($cliente) && (!empty($cliente['valor_desejado'])): ?>
             <div class="card loan-values-card">
                 <p>
                     <strong>Valor Desejado:</strong> 
                     <span class="loan-value">R$ <?= number_format($cliente['valor_desejado'], 2, ',', '.') ?></span>
-                </p>
-                <p>
-                    <strong>Valor da Parcela Desejada:</strong> 
-                    <span class="loan-value">R$ <?= number_format($cliente['valor_parcela_desejada'], 2, ',', '.') ?></span>
                 </p>
             </div>
         <?php else: ?>

@@ -1010,10 +1010,10 @@
                             <label class="block text-sm font-medium text-white">Valor Desejado</label>
                             <input type="text" name="valor_desejado" id="valor_desejado" class="form-input w-full" placeholder="R$" required onblur="validateField(this)">
                         </div>
-                        <div>
+                        <!-- <div>
                             <label class="block text-sm font-medium text-white">Valor máximo da parcela</label>
                             <input type="text" name="parcela_desejada" id="parcela_desejada" class="form-input w-full" placeholder="R$" required onblur="validateField(this)">
-                        </div>
+                        </div> -->
                     </div>
 
                     <div class="pt-4 flex justify-between">
@@ -1268,7 +1268,7 @@ function carregarImgContracheque() {
             }
         });
         $('#valor_desejado').mask('000.000.000.000.000,00', {reverse: true});
-        $('#parcela_desejada').mask('000.000.000.000.000,00', {reverse: true});
+        // $('#parcela_desejada').mask('000.000.000.000.000,00', {reverse: true});
         $('#valor_aluguel').mask('000.000.000.000.000,00', {reverse: true});
     }
 

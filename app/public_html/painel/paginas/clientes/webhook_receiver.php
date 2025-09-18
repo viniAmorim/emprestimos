@@ -25,7 +25,7 @@ $modelo_veiculo = $data['modelo_veiculo'] ?? '';
 $placa = $data['placa'] ?? '';
 $status_veiculo = $data['status_veiculo'] ?? '';
 $valor_desejado = $data['ganhos_30dias'] ?? 0;
-$valor_parcela_desejada = $data['ganhos_semana'] ?? 0;
+// $valor_parcela_desejada = $data['ganhos_semana'] ?? 0;
 
 $data_cad = date('Y-m-d');
 
@@ -45,7 +45,6 @@ $query = $pdo->prepare("INSERT INTO clientes SET
   placa = :placa,
   status_veiculo = :status_veiculo,
   valor_desejado = :valor_desejado,
-  valor_parcela_desejada = :valor_parcela_desejada
 ");
 
 $query->execute([
@@ -64,7 +63,6 @@ $query->execute([
   ':placa' => $placa,
   ':status_veiculo' => $status_veiculo,
   ':valor_desejado' => $valor_desejado,
-  ':valor_parcela_desejada' => $valor_parcela_desejada,
 ]);
 
 echo json_encode(['status' => 'sucesso']);

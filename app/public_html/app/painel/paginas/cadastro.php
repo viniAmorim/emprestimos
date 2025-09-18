@@ -499,6 +499,10 @@
                       </div>
                     </div>
 
+                    <span class="block text-sm text-gray-500 mt-2">
+                        Para enviar mais de um arquivo, clique em +Comprovante
+                    </span>
+
                     <button type="button" id="btn-mostrar-comprovante-extra-autonomo" class="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50">
                       + Comprovante
                     </button>
@@ -535,6 +539,10 @@
       
                     </div>
 
+                    <span class="block text-sm text-gray-500 mt-2">
+                        Para enviar mais de um arquivo, clique em +Comprovante
+                    </span>
+
                     <button type="button" id="btn-mostrar-comprovante-extra-assalariado" class="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50">
                       + Comprovante
                     </button>
@@ -554,10 +562,10 @@
                     <input type="text" id="valor_desejado" name="valor_desejado" placeholder="Valor desejado" required>
                 </div>
                 
-                <div class="form-group mb-4">
+                <!-- <div class="form-group mb-4">
                     <label for="parcela_desejada" class="block text-gray-700">Valor máximo da parcela</label>
                     <input type="text" id="parcela_desejada" name="parcela_desejada" placeholder="Valor máximo da parcela" required>
-                </div>
+                </div> -->
 
                 <div class="flex justify-between items-center mt-6">
                     <button type="button" class="btn btn-secondary" onclick="prevStep()">Anterior</button>
@@ -725,7 +733,7 @@
       $('#placa_veiculo').mask(plateMasks);
 
       $('#valor_desejado').mask('000.000.000.000.000,00', {reverse: true});
-      $('#parcela_desejada').mask('000.000.000.000.000,00', {reverse: true});
+      // $('#parcela_desejada').mask('000.000.000.000.000,00', {reverse: true});
       $('#valor_aluguel').mask('000.000.000.000.000,00', {reverse: true});
   }
 

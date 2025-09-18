@@ -55,7 +55,6 @@ $sql = "SELECT
             c.endereco,
             c.cidade,
             c.valor_desejado as valor_solicitado,
-            c.valor_parcela_desejada as parcelamento,
             a.verificado_nome_cnh,
             a.verificado_endereco_cnh,
             a.verificado_cidade_cnh,
