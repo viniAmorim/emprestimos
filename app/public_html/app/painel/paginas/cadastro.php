@@ -185,6 +185,58 @@
 
                 <div class="form-group mb-4">
                   <div class="flex-1">
+                    <label for="teste" class="block text-gray-700">camrera,image/*</label>
+                    <input type="file" id="teste" name="teste" onchange="handleFile('teste'); validateField(this)" accept="capture=camera,image/*" class="hidden" required>
+                    
+                    <button type="button" class="custom-file-upload mt-2 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50" onclick="document.getElementById('teste').click()">
+                        <i class="fas fa-upload mr-2"></i> Selecionar Arquivo
+                    </button>
+                    
+                    <span id="file-name-teste" class="block text-sm text-gray-500 mt-2">Nenhum arquivo selecionado</span>
+                  </div>
+                </div>
+
+                <div class="form-group mb-4">
+                  <div class="flex-1">
+                    <label for="teste2" class="block text-gray-700">image/*</label>
+                    <input type="file" id="teste2" name="teste2" onchange="handleFile('teste2'); validateField(this)" accept="image/*" class="hidden" required>
+                    
+                    <button type="button" class="custom-file-upload mt-2 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50" onclick="document.getElementById('teste2').click()">
+                        <i class="fas fa-upload mr-2"></i> Selecionar Arquivo
+                    </button>
+                    
+                    <span id="file-name-teste2" class="block text-sm text-gray-500 mt-2">Nenhum arquivo selecionado</span>
+                  </div>
+                </div>
+
+                <div class="form-group mb-4">
+                  <div class="flex-1">
+                    <label for="teste3" class="block text-gray-700">accept=".jpg,.jpeg,.png,.heic,.webp,.avif"</label>
+                    <input type="file" id="teste3" name="teste3" onchange="handleFile('teste3'); validateField(this)" accept=".jpg,.jpeg,.png,.heic,.webp,.avif" class="hidden" required>
+                    
+                    <button type="button" class="custom-file-upload mt-2 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50" onclick="document.getElementById('teste3').click()">
+                        <i class="fas fa-upload mr-2"></i> Selecionar Arquivo
+                    </button>
+                    
+                    <span id="file-name-teste3" class="block text-sm text-gray-500 mt-2">Nenhum arquivo selecionado</span>
+                  </div>
+                </div>
+
+                <div class="form-group mb-4">
+                  <div class="flex-1">
+                    <label for="teste4" class="block text-gray-700">accept="image/*" capture</label>
+                    <input type="file" id="teste4" name="teste4" onchange="handleFile('teste4'); validateField(this)" accept="image/*" capture class="hidden" required>
+                    
+                    <button type="button" class="custom-file-upload mt-2 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50" onclick="document.getElementById('teste4').click()">
+                        <i class="fas fa-upload mr-2"></i> Selecionar Arquivo
+                    </button>
+                    
+                    <span id="file-name-teste4" class="block text-sm text-gray-500 mt-2">Nenhum arquivo selecionado</span>
+                  </div>
+                </div>
+
+                <div class="form-group mb-4">
+                  <div class="flex-1">
                       <label for="comprovante_endereco" class="block text-gray-700">Comprovante de Endereço</label>
                       <input type="file" name="comprovante_endereco" id="comprovante_endereco" onchange="handleFile('comprovante_endereco');validateField(this)" accept=".jpg,.jpeg,.png,.heic,.webp,.avif" class="hidden" required>
                       
