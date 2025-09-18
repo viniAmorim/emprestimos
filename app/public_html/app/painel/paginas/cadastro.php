@@ -237,6 +237,32 @@
 
                 <div class="form-group mb-4">
                   <div class="flex-1">
+                    <label for="teste5" class="block text-gray-700"> accept="image/*,application/pdf"</label>
+                    <input type="file" id="teste5" name="teste5" onchange="handleFile('teste5'); validateField(this)" accept="image/*,application/pdf" capture class="hidden" required>
+                    
+                    <button type="button" class="custom-file-upload mt-2 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50" onclick="document.getElementById('teste5').click()">
+                        <i class="fas fa-upload mr-2"></i> Selecionar Arquivo
+                    </button>
+                    
+                    <span id="file-name-teste5" class="block text-sm text-gray-500 mt-2">Nenhum arquivo selecionado</span>
+                  </div>
+                </div>
+
+                <div class="form-group mb-4">
+                  <div class="flex-1">
+                    <label for="teste6" class="block text-gray-700">  accept=".jpg,.jpeg,.png,.heic,.webp,.avif,application/pdf</label>
+                    <input type="file" id="teste6" name="teste6" onchange="handleFile('teste6'); validateField(this)" accept=".jpg,.jpeg,.png,.heic,.webp,.avif,application/pdf" capture class="hidden" required>
+                    
+                    <button type="button" class="custom-file-upload mt-2 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50" onclick="document.getElementById('teste6').click()">
+                        <i class="fas fa-upload mr-2"></i> Selecionar Arquivo
+                    </button>
+                    
+                    <span id="file-name-teste6" class="block text-sm text-gray-500 mt-2">Nenhum arquivo selecionado</span>
+                  </div>
+                </div>
+
+                <div class="form-group mb-4">
+                  <div class="flex-1">
                       <label for="comprovante_endereco" class="block text-gray-700">Comprovante de Endereço</label>
                       <input type="file" name="comprovante_endereco" id="comprovante_endereco" onchange="handleFile('comprovante_endereco');validateField(this)" accept=".jpg,.jpeg,.png,.heic,.webp,.avif" class="hidden" required>
                       
