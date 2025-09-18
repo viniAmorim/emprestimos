@@ -184,10 +184,16 @@
                 </div>
 
                 <div class="form-group mb-4">
-                    <div class="flex-1">
-                        <label class="block text-gray-700">Comprovante de Endereço</label>
-                        <input type="file" name="comprovante_endereco" id="comprovante_endereco" onchange="handleFile('comprovante_endereco');validateField(this)" accept=".jpg,.jpeg,.png,.heic,.webp,.avif" class="form-input w-full" required>
-                    </div>
+                  <div class="flex-1">
+                      <label for="comprovante_endereco" class="block text-gray-700">Comprovante de Endereço</label>
+                      <input type="file" name="comprovante_endereco" id="comprovante_endereco" onchange="handleFile('comprovante_endereco');validateField(this)" accept=".jpg,.jpeg,.png,.heic,.webp,.avif" class="hidden" required>
+                      
+                      <button type="button" class="custom-file-upload mt-2 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50" onclick="document.getElementById('comprovante_endereco').click()">
+                          <i class="fas fa-upload mr-2"></i> Selecionar Arquivo
+                      </button>
+                      
+                      <span id="file-name-comprovante_endereco" class="block text-sm text-gray-500 mt-2">Nenhum arquivo selecionado</span>
+                  </div>
                 </div>
                 
                 <div class="flex justify-end mt-6">
@@ -425,22 +431,46 @@
    
                       <div class="form-group mb-4">
                           <label class="block text-sm font-medium">Print da Tela de Perfil dos Apps</label>
-                          <input type="file" name="print_perfil_app" id="print_perfil_app" onchange="handleFile('print_perfil_app');validateField(this)" accept=".jpg,.jpeg,.png,.pdf,.heic,.webp,.avif" class="form-input w-full uber-obrigatorio" required>
+                          <input type="file" name="print_perfil_app" id="print_perfil_app" onchange="handleFile('print_perfil_app');validateField(this)" accept=".jpg,.jpeg,.png,.pdf,.heic,.webp,.avif" class="hidden uber-obrigatorio" required>
+                          
+                          <button type="button" class="custom-file-upload mt-2 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50" onclick="document.getElementById('print_perfil_app').click()">
+                              <i class="fas fa-upload mr-2"></i> Selecionar Arquivo
+                          </button>
+                          
+                          <span id="file-name-print_perfil_app" class="block text-sm text-gray-500 mt-2">Nenhum arquivo selecionado</span>
                       </div>
 
                       <div class="form-group mb-4">
                           <label class="block text-sm font-medium">Print da Tela de Veículos dos Apps</label>
-                          <input type="file" name="print_veiculo_app" id="print_veiculo_app" onchange="handleFile('print_veiculo_app');validateField(this)" accept=".jpg,.jpeg,.png,.pdf,.heic,.webp,.avif" class="form-input w-full uber-obrigatorio" required>
+                          <input type="file" name="print_veiculo_app" id="print_veiculo_app" onchange="handleFile('print_veiculo_app');validateField(this)" accept=".jpg,.jpeg,.png,.pdf,.heic,.webp,.avif" class="hidden uber-obrigatorio" required>
+                          
+                          <button type="button" class="custom-file-upload mt-2 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50" onclick="document.getElementById('print_veiculo_app').click()">
+                              <i class="fas fa-upload mr-2"></i> Selecionar Arquivo
+                          </button>
+                          
+                          <span id="file-name-print_veiculo_app" class="block text-sm text-gray-500 mt-2">Nenhum arquivo selecionado</span>
                       </div>
 
                       <div class="form-group mb-4">
                           <label class="block text-sm font-medium">Print dos Ganhos no App (Semana Atual)</label>
-                          <input type="file" name="print_ganhos_hoje" id="print_ganhos_hoje" onchange="handleFile('print_ganhos_hoje');validateField(this)" accept=".jpg,.jpeg,.png,.pdf,.heic,.webp,.avif" class="form-input w-full uber-obrigatorio" required>
+                          <input type="file" name="print_ganhos_hoje" id="print_ganhos_hoje" onchange="handleFile('print_ganhos_hoje');validateField(this)" accept=".jpg,.jpeg,.png,.pdf,.heic,.webp,.avif" class="hidden uber-obrigatorio" required>
+                          
+                          <button type="button" class="custom-file-upload mt-2 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50" onclick="document.getElementById('print_ganhos_hoje').click()">
+                              <i class="fas fa-upload mr-2"></i> Selecionar Arquivo
+                          </button>
+                          
+                          <span id="file-name-print_ganhos_hoje" class="block text-sm text-gray-500 mt-2">Nenhum arquivo selecionado</span>
                       </div>
 
                       <div class="form-group mb-4">
                           <label class="block text-sm font-medium">Print dos Ganhos nos Apps (Últimos 30 dias)</label>
-                          <input type="file" name="print_ganhos_30dias" id="print_ganhos_30dias" onchange="handleFile('print_ganhos_30dias');validateField(this)" accept=".jpg,.jpeg,.png,.pdf,.heic,.webp,.avif" class="form-input w-full uber-obrigatorio" required>
+                          <input type="file" name="print_ganhos_30dias" id="print_ganhos_30dias" onchange="handleFile('print_ganhos_30dias');validateField(this)" accept=".jpg,.jpeg,.png,.pdf,.heic,.webp,.avif" class="hidden uber-obrigatorio" required>
+                          
+                          <button type="button" class="custom-file-upload mt-2 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50" onclick="document.getElementById('print_ganhos_30dias').click()">
+                              <i class="fas fa-upload mr-2"></i> Selecionar Arquivo
+                          </button>
+                          
+                          <span id="file-name-print_ganhos_30dias" class="block text-sm text-gray-500 mt-2">Nenhum arquivo selecionado</span>
                       </div>
                 </div>
 
@@ -458,7 +488,13 @@
 
                     <div class="form-group mb-4">
                       <label class="block text-sm font-medium">Extrato dos Últimos 90 Dias</label>
-                      <input type="file" name="extrato_90dias" id="extrato_90dias" onchange="handleFile('extrato_90dias');validateField(this)" accept=".jpg,.jpeg,.png,.pdf,.heic,.webp,.avif" class="form-input w-full autonomo-obrigatorio" required>
+                      <input type="file" name="extrato_90dias" id="extrato_90dias" onchange="handleFile('extrato_90dias');validateField(this)" accept=".jpg,.jpeg,.png,.pdf,.heic,.webp,.avif" class="hidden autonomo-obrigatorio" required>
+                      
+                      <button type="button" class="custom-file-upload mt-2 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50" onclick="document.getElementById('extrato_90dias').click()">
+                          <i class="fas fa-upload mr-2"></i> Selecionar Arquivo
+                      </button>
+                      
+                      <span id="file-name-extrato_90dias" class="block text-sm text-gray-500 mt-2">Nenhum arquivo selecionado</span>
                     </div>
                     
 
@@ -490,8 +526,14 @@
                     </div>
 
                     <div class="form-group mb-4">
-                        <label class="block text-sm font-medium">Contracheque</label>
-                        <input type="file" name="contracheque" id="contracheque" onchange="handleFile('contracheque');validateField(this)" accept=".jpg,.jpeg,.png,.pdf,.heic,.webp,.avif" class="form-input w-full assalariado-obrigatorio" required>
+                      <label class="block text-sm font-medium">Contracheque</label>
+                      <input type="file" name="contracheque" id="contracheque" onchange="handleFile('contracheque');validateField(this)" accept=".jpg,.jpeg,.png,.pdf,.heic,.webp,.avif" class="hidden assalariado-obrigatorio" required>
+                      
+                      <button type="button" class="custom-file-upload mt-2 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50" onclick="document.getElementById('contracheque').click()">
+                          <i class="fas fa-upload mr-2"></i> Selecionar Arquivo
+                      </button>
+                      
+                      <span id="file-name-contracheque" class="block text-sm text-gray-500 mt-2">Nenhum arquivo selecionado</span>
                     </div>
 
                     <div id="campo-comprovante-extra-assalariado" class="hidden mt-4">
