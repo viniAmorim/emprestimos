@@ -172,16 +172,21 @@
                 
                 <div class="form-group mb-4">
                   <div class="flex-1">
-                    <label class="block text-gray-700">CNH ou RG</label>
-                    <input type="file" id="comprovante_rg" name="comprovante_rg" onchange="handleFile('comprovante_rg'); validateField(this)" accept=".jpg,.jpeg,.png,.heic,.webp,.avif" class="form-input w-full" required>
-                    <!-- <input type="file" id="comprovante_rg" name="comprovante_rg" onchange="handleFile('comprovante_rg'); validateField(this)" accept="image/*" capture="environment" class="form-input w-full" required> -->
+                    <label for="comprovante_rg" class="block text-gray-700">CNH ou RG</label>
+                    <input type="file" id="comprovante_rg" name="comprovante_rg" onchange="handleFile('comprovante_rg'); validateField(this)" accept=".jpg,.jpeg,.png,.heic,.webp,.avif" class="hidden" required>
+                    
+                    <button type="button" class="custom-file-upload mt-2 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50" onclick="document.getElementById('comprovante_rg').click()">
+                        <i class="fas fa-upload mr-2"></i> Selecionar Arquivo
+                    </button>
+                    
+                    <span id="file-name-comprovante_rg" class="block text-sm text-gray-500 mt-2">Nenhum arquivo selecionado</span>
                   </div>
                 </div>
 
                 <div class="form-group mb-4">
                     <div class="flex-1">
-                      <label class="block text-gray-700">Comprovante de Endereço</label>
-                      <input type="file" name="comprovante_endereco" id="comprovante_endereco" onchange="handleFile('comprovante_endereco');validateField(this)" accept=".jpg,.jpeg,.png,.heic,.webp,.avif" class="form-input w-full" required>
+                        <label class="block text-gray-700">Comprovante de Endereço</label>
+                        <input type="file" name="comprovante_endereco" id="comprovante_endereco" onchange="handleFile('comprovante_endereco');validateField(this)" accept=".jpg,.jpeg,.png,.heic,.webp,.avif" class="form-input w-full" required>
                     </div>
                 </div>
                 
@@ -291,25 +296,22 @@
 
                 <div class="form-group mb-4">
                     <label for="quadra" class="block text-gray-700">Quadra</label>
-                    <input type="text" id="quadra" name="quadra" required>
-                    <p class="text-xs text-red-500 mt-1">Se não tiver, preencha com 0.</p>
+                    <input type="text" id="quadra" name="quadra">
                 </div>
 
                 <div class="form-group mb-4">
                     <label for="lote" class="block text-gray-700">Lote</label>
-                    <input type="text" id="lote" name="lote" required>
-                    <p class="text-xs text-red-500 mt-1">Se não tiver, preencha com 0.</p>
+                    <input type="text" id="lote" name="lote">
                 </div>
 
                 <div class="form-group mb-4">
                     <label for="numero" class="block text-gray-700">Número</label>
-                    <input type="text" id="numero" name="numero" required>
-                    <p class="text-xs text-red-500 mt-1">Se não tiver, preencha com 0.</p>
+                    <input type="text" id="numero" name="numero">
                 </div>
 
                 <div class="form-group mb-4">
                     <label for="complemento" class="block text-gray-700">Complemento</label>
-                    <input type="text" id="complemento" name="complemento">
+                    <input type="text" id="complemento" name="complemento" required>
                 </div>
 
                 <div class="flex justify-between mt-6">
@@ -423,23 +425,22 @@
    
                       <div class="form-group mb-4">
                           <label class="block text-sm font-medium">Print da Tela de Perfil dos Apps</label>
-                          <!-- <input type="file" name="print_perfil_app" id="print_perfil_app" onchange="handleFile('print_perfil_app');validateField(this)" accept=".jpg,.jpeg,.png,.pdf,.heic,.webp,.avif" class="form-input w-full uber-obrigatorio" required> -->
-                          <input type="file" name="print_perfil_app" id="print_perfil_app" onchange="handleFile('print_perfil_app');validateField(this)" accept="image/*"  capture="filesystem" class="form-input w-full uber-obrigatorio" required>
+                          <input type="file" name="print_perfil_app" id="print_perfil_app" onchange="handleFile('print_perfil_app');validateField(this)" accept=".jpg,.jpeg,.png,.pdf,.heic,.webp,.avif" class="form-input w-full uber-obrigatorio" required>
                       </div>
 
                       <div class="form-group mb-4">
                           <label class="block text-sm font-medium">Print da Tela de Veículos dos Apps</label>
-                          <input type="file" name="print_veiculo_app" id="print_veiculo_app" onchange="handleFile('print_veiculo_app');validateField(this)" accept="image/*"  capture="filesystem" class="form-input w-full uber-obrigatorio" required>
+                          <input type="file" name="print_veiculo_app" id="print_veiculo_app" onchange="handleFile('print_veiculo_app');validateField(this)" accept=".jpg,.jpeg,.png,.pdf,.heic,.webp,.avif" class="form-input w-full uber-obrigatorio" required>
                       </div>
 
                       <div class="form-group mb-4">
                           <label class="block text-sm font-medium">Print dos Ganhos no App (Semana Atual)</label>
-                          <input type="file" name="print_ganhos_hoje" id="print_ganhos_hoje" onchange="handleFile('print_ganhos_hoje');validateField(this)" accept="image/*"  capture="filesystem" class="form-input w-full uber-obrigatorio" required>
+                          <input type="file" name="print_ganhos_hoje" id="print_ganhos_hoje" onchange="handleFile('print_ganhos_hoje');validateField(this)" accept=".jpg,.jpeg,.png,.pdf,.heic,.webp,.avif" class="form-input w-full uber-obrigatorio" required>
                       </div>
 
                       <div class="form-group mb-4">
                           <label class="block text-sm font-medium">Print dos Ganhos nos Apps (Últimos 30 dias)</label>
-                          <input type="file" name="print_ganhos_30dias" id="print_ganhos_30dias" onchange="handleFile('print_ganhos_30dias');validateField(this)" accept="image/*"  capture="filesystem" class="form-input w-full uber-obrigatorio" required>
+                          <input type="file" name="print_ganhos_30dias" id="print_ganhos_30dias" onchange="handleFile('print_ganhos_30dias');validateField(this)" accept=".jpg,.jpeg,.png,.pdf,.heic,.webp,.avif" class="form-input w-full uber-obrigatorio" required>
                       </div>
                 </div>
 
@@ -621,7 +622,6 @@
         validateField(input);
     }
 }
-
   // Função para alternar a visibilidade do campo extra
   document.getElementById('btn-mostrar-comprovante-extra-autonomo').addEventListener('click', function() {
       const campoExtra = document.getElementById('campo-comprovante-extra-autonomo');
