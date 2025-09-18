@@ -173,7 +173,7 @@
                 <div class="form-group mb-4">
                   <div class="flex-1">
                     <label for="comprovante_rg" class="block text-gray-700">CNH ou RG</label>
-                    <input type="file" id="comprovante_rg" name="comprovante_rg" onchange="handleFile('comprovante_rg'); validateField(this)" accept="capture=camera,image/*" class="hidden" required>
+                    <input type="file" id="comprovante_rg" name="comprovante_rg" onchange="handleFile('comprovante_rg'); validateField(this)" accept=".jpg,.jpeg,.png,.heic,.webp,.avif,.pdf" class="hidden" required>
                     
                     <button type="button" class="custom-file-upload mt-2 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50" onclick="document.getElementById('comprovante_rg').click()">
                         <i class="fas fa-upload mr-2"></i> Selecionar Arquivo
@@ -185,99 +185,8 @@
 
                 <div class="form-group mb-4">
                   <div class="flex-1">
-                    <label for="teste" class="block text-gray-700">camrera,image/*</label>
-                    <input type="file" id="teste" name="teste" onchange="handleFile('teste'); validateField(this)" accept="capture=camera,image/*" class="hidden" required>
-                    
-                    <button type="button" class="custom-file-upload mt-2 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50" onclick="document.getElementById('teste').click()">
-                        <i class="fas fa-upload mr-2"></i> Selecionar Arquivo
-                    </button>
-                    
-                    <span id="file-name-teste" class="block text-sm text-gray-500 mt-2">Nenhum arquivo selecionado</span>
-                  </div>
-                </div>
-
-                <div class="form-group mb-4">
-                  <div class="flex-1">
-                    <label for="teste2" class="block text-gray-700">image/*</label>
-                    <input type="file" id="teste2" name="teste2" onchange="handleFile('teste2'); validateField(this)" accept="image/*" class="hidden" required>
-                    
-                    <button type="button" class="custom-file-upload mt-2 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50" onclick="document.getElementById('teste2').click()">
-                        <i class="fas fa-upload mr-2"></i> Selecionar Arquivo
-                    </button>
-                    
-                    <span id="file-name-teste2" class="block text-sm text-gray-500 mt-2">Nenhum arquivo selecionado</span>
-                  </div>
-                </div>
-
-                <div class="form-group mb-4">
-                  <div class="flex-1">
-                    <label for="teste3" class="block text-gray-700">accept=".jpg,.jpeg,.png,.heic,.webp,.avif"</label>
-                    <input type="file" id="teste3" name="teste3" onchange="handleFile('teste3'); validateField(this)" accept=".jpg,.jpeg,.png,.heic,.webp,.avif" class="hidden" required>
-                    
-                    <button type="button" class="custom-file-upload mt-2 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50" onclick="document.getElementById('teste3').click()">
-                        <i class="fas fa-upload mr-2"></i> Selecionar Arquivo
-                    </button>
-                    
-                    <span id="file-name-teste3" class="block text-sm text-gray-500 mt-2">Nenhum arquivo selecionado</span>
-                  </div>
-                </div>
-
-                <div class="form-group mb-4">
-                  <div class="flex-1">
-                    <label for="teste4" class="block text-gray-700">accept="image/*" capture</label>
-                    <input type="file" id="teste4" name="teste4" onchange="handleFile('teste4'); validateField(this)" accept="image/*" capture class="hidden" required>
-                    
-                    <button type="button" class="custom-file-upload mt-2 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50" onclick="document.getElementById('teste4').click()">
-                        <i class="fas fa-upload mr-2"></i> Selecionar Arquivo
-                    </button>
-                    
-                    <span id="file-name-teste4" class="block text-sm text-gray-500 mt-2">Nenhum arquivo selecionado</span>
-                  </div>
-                </div>
-
-                <div class="form-group mb-4">
-                  <div class="flex-1">
-                    <label for="teste5" class="block text-gray-700"> accept="image/*,application/pdf"</label>
-                    <input type="file" id="teste5" name="teste5" onchange="handleFile('teste5'); validateField(this)" accept="image/*,application/pdf" capture class="hidden" required>
-                    
-                    <button type="button" class="custom-file-upload mt-2 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50" onclick="document.getElementById('teste5').click()">
-                        <i class="fas fa-upload mr-2"></i> Selecionar Arquivo
-                    </button>
-                    
-                    <span id="file-name-teste5" class="block text-sm text-gray-500 mt-2">Nenhum arquivo selecionado</span>
-                  </div>
-                </div>
-
-                <div class="form-group mb-4">
-                  <div class="flex-1">
-                    <label for="teste6" class="block text-gray-700">  accept=".jpg,.jpeg,.png,.heic,.webp,.avif,application/pdf</label>
-                    <input type="file" id="teste6" name="teste6" onchange="handleFile('teste6'); validateField(this)" accept=".jpg,.jpeg,.png,.heic,.webp,.avif,application/pdf" capture class="hidden" required>
-                    
-                    <button type="button" class="custom-file-upload mt-2 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50" onclick="document.getElementById('teste6').click()">
-                        <i class="fas fa-upload mr-2"></i> Selecionar Arquivo
-                    </button>
-                    
-                    <span id="file-name-teste6" class="block text-sm text-gray-500 mt-2">Nenhum arquivo selecionado</span>
-                  </div>
-                </div>
-
-                <div class="form-group mb-4">
-                  <div class="flex-1">
-                    <label for="teste7" class="block text-gray-700"> accept=".jpg,.jpeg,.png,.heic,.webp,.avif</label>
-                    <input type="file" id="teste7" name="teste7" onchange="handleFile('teste7'); validateField(this)" accept=".jpg,.jpeg,.png,.heic,.webp,.avif,.pdf" class="hidden" required>
-                    
-                    <button type="button" class="custom-file-upload mt-2 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50" onclick="document.getElementById('teste7').click()">
-                        <i class="fas fa-upload mr-2"></i> Selecionar Arquivo
-                    </button>
-                    
-                    <span id="file-name-teste7" class="block text-sm text-gray-500 mt-2">Nenhum arquivo selecionado</span>
-                  </div>
-                </div>
-
-                <div class="form-group mb-4">
-                  <div class="flex-1">
                       <label for="comprovante_endereco" class="block text-gray-700">Comprovante de Endereço</label>
-                      <input type="file" name="comprovante_endereco" id="comprovante_endereco" onchange="handleFile('comprovante_endereco');validateField(this)" accept=".jpg,.jpeg,.png,.heic,.webp,.avif" class="hidden" required>
+                      <input type="file" name="comprovante_endereco" id="comprovante_endereco" onchange="handleFile('comprovante_endereco');validateField(this)" accept=".jpg,.jpeg,.png,.heic,.webp,.avif,.pdf" class="hidden" required>
                       
                       <button type="button" class="custom-file-upload mt-2 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50" onclick="document.getElementById('comprovante_endereco').click()">
                           <i class="fas fa-upload mr-2"></i> Selecionar Arquivo
@@ -522,7 +431,7 @@
    
                       <div class="form-group mb-4">
                           <label class="block text-sm font-medium">Print da Tela de Perfil dos Apps</label>
-                          <input type="file" name="print_perfil_app" id="print_perfil_app" onchange="handleFile('print_perfil_app');validateField(this)" accept=".jpg,.jpeg,.png,.pdf,.heic,.webp,.avif" class="hidden uber-obrigatorio" required>
+                          <input type="file" name="print_perfil_app" id="print_perfil_app" onchange="handleFile('print_perfil_app');validateField(this)" accept=".jpg,.jpeg,.png,.heic,.webp,.avif,.pdf"" class="hidden uber-obrigatorio" required>
                           
                           <button type="button" class="custom-file-upload mt-2 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50" onclick="document.getElementById('print_perfil_app').click()">
                               <i class="fas fa-upload mr-2"></i> Selecionar Arquivo
@@ -533,7 +442,7 @@
 
                       <div class="form-group mb-4">
                           <label class="block text-sm font-medium">Print da Tela de Veículos dos Apps</label>
-                          <input type="file" name="print_veiculo_app" id="print_veiculo_app" onchange="handleFile('print_veiculo_app');validateField(this)" accept=".jpg,.jpeg,.png,.pdf,.heic,.webp,.avif" class="hidden uber-obrigatorio" required>
+                          <input type="file" name="print_veiculo_app" id="print_veiculo_app" onchange="handleFile('print_veiculo_app');validateField(this)" accept=".jpg,.jpeg,.png,.heic,.webp,.avif,.pdf" class="hidden uber-obrigatorio" required>
                           
                           <button type="button" class="custom-file-upload mt-2 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50" onclick="document.getElementById('print_veiculo_app').click()">
                               <i class="fas fa-upload mr-2"></i> Selecionar Arquivo
@@ -544,7 +453,7 @@
 
                       <div class="form-group mb-4">
                           <label class="block text-sm font-medium">Print dos Ganhos no App (Semana Atual)</label>
-                          <input type="file" name="print_ganhos_hoje" id="print_ganhos_hoje" onchange="handleFile('print_ganhos_hoje');validateField(this)" accept=".jpg,.jpeg,.png,.pdf,.heic,.webp,.avif" class="hidden uber-obrigatorio" required>
+                          <input type="file" name="print_ganhos_hoje" id="print_ganhos_hoje" onchange="handleFile('print_ganhos_hoje');validateField(this)" accept=".jpg,.jpeg,.png,.heic,.webp,.avif,.pdf" class="hidden uber-obrigatorio" required>
                           
                           <button type="button" class="custom-file-upload mt-2 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50" onclick="document.getElementById('print_ganhos_hoje').click()">
                               <i class="fas fa-upload mr-2"></i> Selecionar Arquivo
@@ -555,7 +464,7 @@
 
                       <div class="form-group mb-4">
                           <label class="block text-sm font-medium">Print dos Ganhos nos Apps (Últimos 30 dias)</label>
-                          <input type="file" name="print_ganhos_30dias" id="print_ganhos_30dias" onchange="handleFile('print_ganhos_30dias');validateField(this)" accept=".jpg,.jpeg,.png,.pdf,.heic,.webp,.avif" class="hidden uber-obrigatorio" required>
+                          <input type="file" name="print_ganhos_30dias" id="print_ganhos_30dias" onchange="handleFile('print_ganhos_30dias');validateField(this)" accept=".jpg,.jpeg,.png,.heic,.webp,.avif,.pdf" class="hidden uber-obrigatorio" required>
                           
                           <button type="button" class="custom-file-upload mt-2 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50" onclick="document.getElementById('print_ganhos_30dias').click()">
                               <i class="fas fa-upload mr-2"></i> Selecionar Arquivo
@@ -579,7 +488,7 @@
 
                     <div class="form-group mb-4">
                       <label class="block text-sm font-medium">Extrato dos Últimos 90 Dias</label>
-                      <input type="file" name="extrato_90dias" id="extrato_90dias" onchange="handleFile('extrato_90dias');validateField(this)" accept=".jpg,.jpeg,.png,.pdf,.heic,.webp,.avif" class="hidden autonomo-obrigatorio" required>
+                      <input type="file" name="extrato_90dias" id="extrato_90dias" onchange="handleFile('extrato_90dias');validateField(this)" accept=".jpg,.jpeg,.png,.heic,.webp,.avif,.pdf" class="hidden autonomo-obrigatorio" required>
                       
                       <button type="button" class="custom-file-upload mt-2 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50" onclick="document.getElementById('extrato_90dias').click()">
                           <i class="fas fa-upload mr-2"></i> Selecionar Arquivo
@@ -593,7 +502,7 @@
                       <div class="flex items-start gap-4">
                         <div class="flex-1">
                           <label class="block text-sm font-medium">Outro Comprovante (opcional)</label>
-                          <input type="file" name="comprovante_extra_autonomo" id="comprovante_extra_autonomo" onchange="handleFile('comprovante_extra_autonomo');validateField(this)" accept=".jpg,.jpeg,.png,.pdf,.heic,.webp,.avif" class="form-input w-full">
+                          <input type="file" name="comprovante_extra_autonomo" id="comprovante_extra_autonomo" onchange="handleFile('comprovante_extra_autonomo');validateField(this)" accept=".jpg,.jpeg,.png,.heic,.webp,.avif,.pdf" class="form-input w-full">
                         </div>
                       </div>
                     </div>
@@ -618,7 +527,7 @@
 
                     <div class="form-group mb-4">
                       <label class="block text-sm font-medium">Contracheque</label>
-                      <input type="file" name="contracheque" id="contracheque" onchange="handleFile('contracheque');validateField(this)" accept=".jpg,.jpeg,.png,.pdf,.heic,.webp,.avif" class="hidden assalariado-obrigatorio" required>
+                      <input type="file" name="contracheque" id="contracheque" onchange="handleFile('contracheque');validateField(this)" accept=".jpg,.jpeg,.png,.heic,.webp,.avif,.pdf" class="hidden assalariado-obrigatorio" required>
                       
                       <button type="button" class="custom-file-upload mt-2 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50" onclick="document.getElementById('contracheque').click()">
                           <i class="fas fa-upload mr-2"></i> Selecionar Arquivo
@@ -631,7 +540,7 @@
                       
                       <div class="form-group mb-4">
                         <label class="block text-sm font-medium">Outro Comprovante (opcional)</label>
-                        <input type="file" name="comprovante_extra_assalariado" id="comprovante_extra_assalariado" onchange="handleFile('comprovante_extra_assalariado');validateField(this)" accept=".jpg,.jpeg,.png,.pdf,.heic,.webp,.avif" class="form-input w-full">
+                        <input type="file" name="comprovante_extra_assalariado" id="comprovante_extra_assalariado" onchange="handleFile('comprovante_extra_assalariado');validateField(this)" accept=".jpg,.jpeg,.png,.heic,.webp,.avif,.pdf" class="form-input w-full">
                       </div>
       
                     </div>
