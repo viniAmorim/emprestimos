@@ -738,16 +738,12 @@ $alertas_duplicidade = $query_alertas->fetchAll(PDO::FETCH_ASSOC);
       <div class="validation-card">
         <h6 class="section-title text-start mb-3">Validações:</h6>
         <div class="form-group custom-control custom-checkbox small-checkbox my-1">
-            <input type="checkbox" class="custom-control-input" id="check_foto_perfil" name="check_foto_perfil" value="1" <?= $cliente['check_foto_perfil'] == 1 ? 'checked' : '' ?>>
-            <label class="custom-control-label" for="check_foto_perfil">Foto de perfil</label>
-        </div>
-        <div class="form-group custom-control custom-checkbox small-checkbox my-1">
             <input type="checkbox" class="custom-control-input" id="check_validade_cnh" name="check_validade_cnh" value="1" <?= $cliente['check_validade_cnh'] == 1 ? 'checked' : '' ?>>
             <label class="custom-control-label" for="check_validade_cnh">Validade da CNH</label>
         </div>
         <div class="form-group custom-control custom-checkbox small-checkbox my-1">
             <input type="checkbox" class="custom-control-input" id="check_nome_documento" name="check_nome_documento" value="1" <?= $cliente['check_nome_documento'] == 1 ? 'checked' : '' ?>>
-            <label class="custom-control-label" for="check_nome_documento">Confere com Documento</label>
+            <label class="custom-control-label" for="check_nome_documento">Nome preenchido confere com Documento</label>
         </div>
         <div class="form-group custom-control custom-checkbox small-checkbox my-1">
             <input type="checkbox" class="custom-control-input" id="check_nome_whatsapp" name="check_nome_whatsapp" value="1" <?= $cliente['check_nome_whatsapp'] == 1 ? 'checked' : '' ?>>
@@ -997,7 +993,7 @@ $assalariado = !empty($cliente['contracheque']) && $cliente['contracheque'] !== 
         <hr>
 
         <h4 class="section-title">Valores de Empréstimos</h4>
-        <?php if (!empty($cliente) && (!empty($cliente['valor_desejado'])): ?>
+        <?php if (!empty($cliente)): ?>
             <div class="card loan-values-card">
                 <p>
                     <strong>Valor Desejado:</strong> 

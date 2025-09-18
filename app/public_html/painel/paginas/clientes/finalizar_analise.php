@@ -37,7 +37,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // 3. Processa e atualiza o estado de cada checkbox.
     // Usa uma lista segura (whitelist) para evitar injeção de SQL.
     $campos_validacao = [
-        'check_foto_perfil',
         'check_validade_cnh',
         'check_nome_documento',
         'check_nome_whatsapp',
