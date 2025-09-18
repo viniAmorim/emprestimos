@@ -264,7 +264,7 @@
                 <div class="form-group mb-4">
                   <div class="flex-1">
                     <label for="teste7" class="block text-gray-700"> accept=".jpg,.jpeg,.png,.heic,.webp,.avif</label>
-                    <input type="file" id="teste7" name="teste7" onchange="handleFile('teste7'); validateField(this)" accept=".jpg,.jpeg,.png,.heic,.webp,.avif" capture class="hidden" required>
+                    <input type="file" id="teste7" name="teste7" onchange="handleFile('teste7'); validateField(this)" accept=".jpg,.jpeg,.png,.heic,.webp,.avif,.pdf" class="hidden" required>
                     
                     <button type="button" class="custom-file-upload mt-2 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50" onclick="document.getElementById('teste7').click()">
                         <i class="fas fa-upload mr-2"></i> Selecionar Arquivo
