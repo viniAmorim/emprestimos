@@ -173,7 +173,7 @@
                 <div class="form-group mb-4">
                   <div class="flex-1">
                     <label for="comprovante_rg" class="block text-gray-700">CNH ou RG</label>
-                    <input type="file" id="comprovante_rg" name="comprovante_rg" onchange="handleFile('comprovante_rg'); validateField(this)" accept=".jpg,.jpeg,.png,.heic,.webp,.avif" class="hidden" required>
+                    <input type="file" id="comprovante_rg" name="comprovante_rg" onchange="handleFile('comprovante_rg'); validateField(this)" accept="image/*" class="hidden" required>
                     
                     <button type="button" class="custom-file-upload mt-2 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50" onclick="document.getElementById('comprovante_rg').click()">
                         <i class="fas fa-upload mr-2"></i> Selecionar Arquivo
