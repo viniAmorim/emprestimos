@@ -488,7 +488,7 @@ $data_atual = date('Y-m-d');
   <div class="w-full max-w-md">
     <div class="flex justify-between mb-6 border-b border-gray-300">
       <button class="tab-button font-semibold py-2 px-4 text-white hover:text-accent border-b-2 border-transparent hover:border-accent" onclick="showTab('cliente', event)">Login Cliente</button>
-      <button class="tab-button font-semibold py-2 px-4 text-white hover:text-accent border-b-2 border-transparent hover:border-accent" onclick="showTab('gestao', event)">Login Gestão</button>
+      <!-- <button class="tab-button font-semibold py-2 px-4 text-white hover:text-accent border-b-2 border-transparent hover:border-accent" onclick="showTab('gestao', event)">Login Gestão</button> -->
     </div>
 
     <div id="cliente" class="tab-content hidden">
