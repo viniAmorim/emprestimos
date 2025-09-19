@@ -42,6 +42,16 @@ $mensagem_sessao = @$_SESSION['msg'];
 	<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
 
 	<link rel="icon" type="image/png" href="../img/icone.png" sizes="32x32">
+  <style>
+    .show-password-toggle {
+      position: absolute;
+      right: 15px; 
+      top: 50%;
+      transform: translateY(-50%);
+      cursor: pointer;
+      z-index: 10;
+    }
+  </style>
 
 </head>
 
@@ -85,10 +95,7 @@ $mensagem_sessao = @$_SESSION['msg'];
   </div>
 </div>
 
-
 	<div id="page">
-
-
 
 		<!-- MODAL RESETAR SENHA-->
 		<div class="page-content pb-0 mb-0">
@@ -105,11 +112,11 @@ $mensagem_sessao = @$_SESSION['msg'];
 									<label class="color-theme">CPF</label>
 								</div>
 								<div class="form-custom form-label form-icon mb-3">
-									<i class="bi bi-lock-fill font-12"></i>
-									<input type="password" type="text" name="senha" class="form-control rounded-xs" id="c2"
-										placeholder="Senha" required />
-									<label class="color-theme">Senha</label>
-								</div>
+                  <i class="bi bi-lock-fill font-12"></i>
+                  <input type="password" name="senha" class="form-control rounded-xs" id="c2" placeholder="Senha" required />
+                  <label class="color-theme">Senha</label>
+                  <i class="bi bi-eye-slash-fill font-12 show-password-toggle" id="togglePassword"></i>
+                </div>
 								<button class="btn btn-full gradient-green rounded-xs text-uppercase font-700 w-100 btn-s mt-4 mb-2"
 									type="submit">Logar
                 </button>
@@ -150,23 +157,16 @@ $mensagem_sessao = @$_SESSION['msg'];
 				</div>
 			</div>
 		</div>
-
-
-
 		<!-- End of Page Content-->
 
 	</div>
 	<!--End of Page ID-->
-
-
 
 	<form action="autenticar.php" method="post" style="display:none">
 		<input type="text" name="id" id="id_usua">
 		<input type="text" name="pagina" id="pagina_salva">
 		<button type="submit" id="btn_auto"></button>
 	</form>
-
-
 
 	<script src="painel/scripts/bootstrap.min.js"></script>
 	<script src="painel/scripts/custom.js"></script>
@@ -273,6 +273,17 @@ $mensagem_sessao = @$_SESSION['msg'];
 		}
 	}
 
-  
-	
+</script>
+
+<script>
+  const togglePassword = document.querySelector('#togglePassword');
+  const password = document.querySelector('#c2');
+
+  togglePassword.addEventListener('click', function (e) {
+    const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
+    password.setAttribute('type', type);
+    
+    this.classList.toggle('bi-eye-fill');
+    this.classList.toggle('bi-eye-slash-fill');
+  });
 </script>
