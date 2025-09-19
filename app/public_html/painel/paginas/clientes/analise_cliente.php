@@ -27,6 +27,7 @@ $query_alertas->bindValue(":id_cliente", $id_cliente);
 $query_alertas->execute();
 $alertas_duplicidade = $query_alertas->fetchAll(PDO::FETCH_ASSOC);
 
+
 ?>
 
 <!DOCTYPE html>
@@ -619,6 +620,32 @@ $alertas_duplicidade = $query_alertas->fetchAll(PDO::FETCH_ASSOC);
     border-color: #004a99;
 }
 
+/* Estiliza todos os campos de formulário padrão */
+.form-control, .form-select {
+    border-radius: 8px; /* Borda arredondada */
+    border: 1px solid #ced4da; /* Cor da borda suave */
+    padding: 10px 15px; /* Espaçamento interno */
+    transition: all 0.3s ease-in-out; /* Transição suave para efeitos */
+}
+
+/* Efeito quando o campo está em foco (selecionado) */
+.form-control:focus, .form-select:focus {
+    border-color: #80bdff; /* Cor da borda em foco */
+    box-shadow: 0 0 0 0.25rem rgba(0, 123, 255, 0.25); /* Sombra suave */
+    outline: none; /* Remove o contorno padrão */
+}
+
+/* Estilo para labels (rótulos) */
+.form-group label {
+    font-weight: 600;
+    color: #495057;
+}
+
+/* Estilo específico para botões de arquivo (input type="file") */
+.form-control[type="file"] {
+    padding: 10px; /* Um pouco menos de padding para se ajustar melhor */
+}
+
     </style>
 </head>
 <body>
@@ -705,35 +732,65 @@ $alertas_duplicidade = $query_alertas->fetchAll(PDO::FETCH_ASSOC);
 <div class="row mb-4">
     <div class="col-md-6 text-center">
         <h5 class="section-title">Comprovante de RG:</h5>
-        <?php if (!empty($cliente['comprovante_rg']) && $cliente['comprovante_rg'] !== 'sem-foto.png'): ?>
-            <img src="/painel/images/comprovantes/<?= htmlspecialchars($cliente['comprovante_rg'] ?? '') ?>" alt="Comprovante de RG" class="img-fluid rounded shadow-sm" style="max-width: 500px; border: 2px solid #ddd; display: block; margin: 0 auto;">
-        <?php else: ?>
-            <p>Não enviado.</p>
-        <?php endif; ?>
+          <?php if (!empty($cliente['comprovante_rg']) && $cliente['comprovante_rg'] !== 'sem-foto.png'): ?>
+                <img src="/painel/images/comprovantes/<?= htmlspecialchars($cliente['comprovante_rg'] ?? '') ?>" alt="Comprovante de RG" class="img-fluid rounded shadow-sm" style="max-width: 500px; border: 2px solid #ddd; display: block; margin: 0 auto;">
+            <?php else: ?>
+                <p>Não enviado.</p>
+            <?php endif; ?>
+            <div class="form-group mt-3">
+                <label for="novo_comprovante_rg">Substituir Comprovante:</label>
+                <input type="file" class="form-control" id="novo_comprovante_rg" name="novo_comprovante_rg">
+          </div>
 
         <h5 class="section-title">Foto de perfil:</h5>
         <?php if (!empty($cliente['foto']) && $cliente['foto'] !== 'sem-foto.png'): ?>
-            <img src="/painel/images/clientes/<?= htmlspecialchars($cliente['foto'] ?? '') ?>" alt="Foto de perfil" class="img-fluid rounded shadow-sm" style="max-width: 200px; border: 2px solid #ddd; display: block; margin: 0 auto;">
-        <?php else: ?>
-            <p>Não enviado.</p>
-        <?php endif; ?>
+                <img src="/painel/images/clientes/<?= htmlspecialchars($cliente['foto'] ?? '') ?>" alt="Foto de perfil" class="img-fluid rounded shadow-sm" style="max-width: 200px; border: 2px solid #ddd; display: block; margin: 0 auto;">
+            <?php else: ?>
+                <p>Não enviado.</p>
+            <?php endif; ?>
+            <div class="form-group mt-3">
+                <label for="nova_foto_perfil">Substituir Foto:</label>
+                <input type="file" class="form-control" id="nova_foto_perfil" name="nova_foto_perfil">
+            </div>
     </div>
 
     <div class="col-md-6">
       <div class="data-card mt-4">
           <h6 class="section-title text-start">Dados Pessoais:</h6>
-          <p>
-              <strong>Nome Completo:</strong> <span><?= htmlspecialchars($cliente['nome']  ?? '') ?></span>
-          </p>
-          <p>
-              <strong>CPF:</strong> <span><?= htmlspecialchars($cliente['cpf']  ?? '') ?></span>
-          </p>
-          <p>
-              <strong>RG:</strong> <span><?= htmlspecialchars($cliente['rg']  ?? '') ?></span>
-          </p>
-          <p>
-              <strong>Celular:</strong> <span><?= htmlspecialchars($cliente['telefone']  ?? '')  ?></span>
-          </p>
+          <div class="form-group mb-2">
+            <label for="nome"><strong>Nome Completo:</strong></label>
+            <input type="text" class="form-control" id="nome" name="nome" value="<?= htmlspecialchars($cliente['nome'] ?? '') ?>">
+        </div>
+        
+        <div class="form-group mb-2">
+            <label for="email"><strong>Email:</strong></label>
+            <input type="email" class="form-control" id="email" name="email" value="<?= htmlspecialchars($cliente['email'] ?? '') ?>">
+        </div>
+        
+        <div class="form-group mb-2">
+            <label for="telefone"><strong>Celular:</strong></label>
+            <input type="tel" class="form-control" id="telefone" name="telefone" value="<?= htmlspecialchars($cliente['telefone'] ?? '') ?>">
+        </div>
+        
+        <div class="form-group mb-2">
+            <label for="cpf"><strong>CPF:</strong></label>
+            <input type="text" class="form-control" id="cpf" name="cpf" value="<?= htmlspecialchars($cliente['cpf'] ?? '') ?>">
+        </div>
+        
+        <div class="form-group mb-2">
+            <label for="rg"><strong>RG:</strong></label>
+            <input type="text" class="form-control" id="rg" name="rg" value="<?= htmlspecialchars($cliente['rg'] ?? '') ?>">
+        </div>
+        
+        <div class="form-group mb-2">
+            <label for="data_nasc"><strong>Data Nascimento:</strong></label>
+            <input type="date" class="form-control" id="data_nasc" name="data_nasc" value="<?= !empty($cliente['data_nasc']) ? htmlspecialchars((new DateTime($cliente['data_nasc']))->format('Y-m-d')) : '' ?>">
+        </div>
+        
+        <div class="form-group mb-2">
+            <label for="pix"><strong>Chave Pix:</strong></label>
+            <input type="text" class="form-control" id="pix" name="pix" value="<?= htmlspecialchars($cliente['pix'] ?? '') ?>">
+        </div>
       </div>
       <div class="validation-card">
         <h6 class="section-title text-start mb-3">Validações:</h6>
@@ -781,10 +838,15 @@ $alertas_duplicidade = $query_alertas->fetchAll(PDO::FETCH_ASSOC);
     <div class="col-md-6">
         <h5 class="section-title">Comprovante de Endereço:</h5>
         <?php if (!empty($cliente['comprovante_endereco']) && $cliente['comprovante_endereco'] !== 'sem-foto.png'): ?>
-            <img src="/painel/images/comprovantes/<?= htmlspecialchars($cliente['comprovante_endereco'] ?? '') ?>" alt="Comprovante de Endereço" class="img-fluid rounded shadow-sm" style="max-width: 500px; border: 2px solid #ddd; display: block; margin: 0 auto;">
-        <?php else: ?>
-            <p>Não enviado.</p>
-        <?php endif; ?>
+      <img src="/painel/images/comprovantes/<?= htmlspecialchars($cliente['comprovante_endereco'] ?? '') ?>" alt="Comprovante de Endereço" class="img-fluid rounded shadow-sm" style="max-width: 500px; border: 2px solid #ddd; display: block; margin: 0 auto;">
+      <?php else: ?>
+          <p>Não enviado.</p>
+      <?php endif; ?>
+
+      <div class="form-group mt-3">
+          <label for="novo_comprovante_endereco">Substituir Comprovante:</label>
+          <input type="file" class="form-control" id="novo_comprovante_endereco" name="novo_comprovante_endereco">
+      </div>
     </div>
     <div class="col-md-6">
         <div class="validation-card">
@@ -809,29 +871,79 @@ $alertas_duplicidade = $query_alertas->fetchAll(PDO::FETCH_ASSOC);
 
         <div class="data-card mt-4">
           <h6 class="section-title text-start">Endereço Registrado:</h6>
-          <p>
-              <strong>Endereço:</strong> <span><?= htmlspecialchars($cliente['endereco'] ?? '') ?>, Nº <?= htmlspecialchars($cliente['numero']?? '') ?></span>
-          </p>
-          <p>
-              <strong>Quadra:</strong> <span><?= htmlspecialchars($cliente['quadra']?? '') ?></span>
-          </p>
-          <p>
-              <strong>Lote:</strong> <span><?= htmlspecialchars($cliente['lote']?? '') ?></span>
-          </p>
-          <p>
-              <strong>Bairro:</strong> <span><?= htmlspecialchars($cliente['bairro']?? '') ?></span>
-          </p>
-          <p>
-              <strong>Cidade/Estado:</strong> <span><?= htmlspecialchars($cliente['cidade']?? '') ?> - <?= htmlspecialchars($cliente['estado']?? '') ?></span>
-          </p>
-          <p>
-              <strong>CEP:</strong> <span><?= htmlspecialchars($cliente['cep']?? '') ?></span>
-          </p>
-          <?php if (!empty($cliente['complemento'])): ?>
-              <p>
-                  <strong>Complemento:</strong> <span><?= htmlspecialchars($cliente['complemento'] ?? '') ?></span>
-              </p>
-          <?php endif; ?>
+          <div class="form-group mb-2">
+        <label for="endereco"><strong>Endereço:</strong></label>
+        <input type="text" class="form-control" id="endereco" name="endereco" value="<?= htmlspecialchars($cliente['endereco'] ?? '') ?>">
+    </div>
+    
+    <div class="form-group mb-2">
+        <label for="numero"><strong>Número:</strong></label>
+        <input type="text" class="form-control" id="numero" name="numero" value="<?= htmlspecialchars($cliente['numero'] ?? '') ?>">
+    </div>
+    
+    <div class="form-group mb-2">
+        <label for="quadra"><strong>Quadra:</strong></label>
+        <input type="text" class="form-control" id="quadra" name="quadra" value="<?= htmlspecialchars($cliente['quadra'] ?? '') ?>">
+    </div>
+    
+    <div class="form-group mb-2">
+        <label for="lote"><strong>Lote:</strong></label>
+        <input type="text" class="form-control" id="lote" name="lote" value="<?= htmlspecialchars($cliente['lote'] ?? '') ?>">
+    </div>
+    
+    <div class="form-group mb-2">
+        <label for="bairro"><strong>Bairro:</strong></label>
+        <input type="text" class="form-control" id="bairro" name="bairro" value="<?= htmlspecialchars($cliente['bairro'] ?? '') ?>">
+    </div>
+    
+    <div class="form-group mb-2">
+        <label for="cidade"><strong>Cidade:</strong></label>
+        <input type="text" class="form-control" id="cidade" name="cidade" value="<?= htmlspecialchars($cliente['cidade'] ?? '') ?>">
+    </div>
+    
+    <div class="form-group mb-2">
+    <label for="estado"><strong>Estado:</strong></label>
+    <select class="form-control" id="estado" name="estado">
+        <option value="">Selecione um estado</option>
+        <option value="AC" <?= ($cliente['estado'] ?? '') == 'AC' ? 'selected' : '' ?>>Acre</option>
+        <option value="AL" <?= ($cliente['estado'] ?? '') == 'AL' ? 'selected' : '' ?>>Alagoas</option>
+        <option value="AP" <?= ($cliente['estado'] ?? '') == 'AP' ? 'selected' : '' ?>>Amapá</option>
+        <option value="AM" <?= ($cliente['estado'] ?? '') == 'AM' ? 'selected' : '' ?>>Amazonas</option>
+        <option value="BA" <?= ($cliente['estado'] ?? '') == 'BA' ? 'selected' : '' ?>>Bahia</option>
+        <option value="CE" <?= ($cliente['estado'] ?? '') == 'CE' ? 'selected' : '' ?>>Ceará</option>
+        <option value="DF" <?= ($cliente['estado'] ?? '') == 'DF' ? 'selected' : '' ?>>Distrito Federal</option>
+        <option value="ES" <?= ($cliente['estado'] ?? '') == 'ES' ? 'selected' : '' ?>>Espírito Santo</option>
+        <option value="GO" <?= ($cliente['estado'] ?? '') == 'GO' ? 'selected' : '' ?>>Goiás</option>
+        <option value="MA" <?= ($cliente['estado'] ?? '') == 'MA' ? 'selected' : '' ?>>Maranhão</option>
+        <option value="MT" <?= ($cliente['estado'] ?? '') == 'MT' ? 'selected' : '' ?>>Mato Grosso</option>
+        <option value="MS" <?= ($cliente['estado'] ?? '') == 'MS' ? 'selected' : '' ?>>Mato Grosso do Sul</option>
+        <option value="MG" <?= ($cliente['estado'] ?? '') == 'MG' ? 'selected' : '' ?>>Minas Gerais</option>
+        <option value="PA" <?= ($cliente['estado'] ?? '') == 'PA' ? 'selected' : '' ?>>Pará</option>
+        <option value="PB" <?= ($cliente['estado'] ?? '') == 'PB' ? 'selected' : '' ?>>Paraíba</option>
+        <option value="PR" <?= ($cliente['estado'] ?? '') == 'PR' ? 'selected' : '' ?>>Paraná</option>
+        <option value="PE" <?= ($cliente['estado'] ?? '') == 'PE' ? 'selected' : '' ?>>Pernambuco</option>
+        <option value="PI" <?= ($cliente['estado'] ?? '') == 'PI' ? 'selected' : '' ?>>Piauí</option>
+        <option value="RJ" <?= ($cliente['estado'] ?? '') == 'RJ' ? 'selected' : '' ?>>Rio de Janeiro</option>
+        <option value="RN" <?= ($cliente['estado'] ?? '') == 'RN' ? 'selected' : '' ?>>Rio Grande do Norte</option>
+        <option value="RS" <?= ($cliente['estado'] ?? '') == 'RS' ? 'selected' : '' ?>>Rio Grande do Sul</option>
+        <option value="RO" <?= ($cliente['estado'] ?? '') == 'RO' ? 'selected' : '' ?>>Rondônia</option>
+        <option value="RR" <?= ($cliente['estado'] ?? '') == 'RR' ? 'selected' : '' ?>>Roraima</option>
+        <option value="SC" <?= ($cliente['estado'] ?? '') == 'SC' ? 'selected' : '' ?>>Santa Catarina</option>
+        <option value="SP" <?= ($cliente['estado'] ?? '') == 'SP' ? 'selected' : '' ?>>São Paulo</option>
+        <option value="SE" <?= ($cliente['estado'] ?? '') == 'SE' ? 'selected' : '' ?>>Sergipe</option>
+        <option value="TO" <?= ($cliente['estado'] ?? '') == 'TO' ? 'selected' : '' ?>>Tocantins</option>
+    </select>
+</div>
+    
+    <div class="form-group mb-2">
+        <label for="cep"><strong>CEP:</strong></label>
+        <input type="text" class="form-control" id="cep" name="cep" value="<?= htmlspecialchars($cliente['cep'] ?? '') ?>">
+    </div>
+    
+    <div class="form-group mb-2">
+        <label for="complemento"><strong>Complemento:</strong></label>
+        <textarea class="form-control" id="complemento" name="complemento"><?= htmlspecialchars($cliente['complemento'] ?? '') ?></textarea>
+    </div>
       </div>
     </div>
 </div>
@@ -842,12 +954,48 @@ $alertas_duplicidade = $query_alertas->fetchAll(PDO::FETCH_ASSOC);
             <div class="col-md-6">
                 <div class="data-card">
                     <h6 class="section-title text-start">Dados da Referência:</h6>
-                    <p>
-                        <strong>Nome Completo:</strong> <span><?= htmlspecialchars($cliente['referencia_nome']?? '') ?></span>
-                    </p>
-                    <p>
-                        <strong>Celular (WhatsApp):</strong> <span><?= htmlspecialchars($cliente['referencia_contato'] ?? '') ?></span>
-                    </p>
+                    <div class="form-group mb-2">
+                      <label for="referencia_nome"><strong>Nome Completo:</strong></label>
+                      <input type="text" class="form-control" id="referencia_nome" name="referencia_nome" value="<?= htmlspecialchars($cliente['referencia_nome'] ?? '') ?>">
+                    </div>
+
+                    <div class="form-group mb-2">
+                      <label for="referencia_contato"><strong>Celular (WhatsApp):</strong></label>
+                      <input type="tel" class="form-control" id="referencia_contato" name="referencia_contato" value="<?= htmlspecialchars($cliente['referencia_contato'] ?? '') ?>">
+                    </div>
+
+                    <div class="form-group mb-2">
+                    <label for="referencia_parentesco" class="block text-gray-700">Grau de parentesco</label>
+                    <select id="referencia_parentesco" name="referencia_parentesco" class="form-control rounded-lg mt-1 w-full p-2 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+                        <option value="" disabled selected>Selecione</option>
+                        <option value="Pai">Pai</option>
+                        <option value="Mãe">Mãe</option>
+                        <option value="Marido">Marido</option>
+                        <option value="Esposa">Esposa</option>
+                        <option value="Filho">Filho</option>
+                        <option value="Filha">Filha</option>
+                        <option value="Irmão">Irmão</option>
+                        <option value="Irmã">Irmã</option>
+                        <option value="Tio">Tio</option>
+                        <option value="Tia">Tia</option>
+                        <option value="Avô">Avô</option>
+                        <option value="Avó">Avó</option>
+                        <option value="Primo">Primo</option>
+                        <option value="Prima">Prima</option>
+                        <option value="Sogro">Sogro</option>
+                        <option value="Sogra">Sogra</option>
+                    </select>
+                    </div>
+
+                    <div class="form-group mb-2">
+                      <label for="indicacao"><strong>Quem te indicou:</strong></label>
+                      <input type="text" class="form-control" id="indicacao" name="indicacao" value="<?= htmlspecialchars($cliente['indicacao'] ?? '') ?>">
+                    </div>
+
+                    <div class="form-group mb-2">
+                      <label for="indicacao_contato"><strong>Celular (Whatsapp):</strong></label>
+                      <input type="tel" class="form-control" id="indicacao_contato" name="indicacao_contato" value="<?= htmlspecialchars($cliente['indicacao_contato'] ?? '') ?>">
+                    </div>
                 </div>
             </div>
             <div class="col-md-6">
@@ -868,7 +1016,7 @@ $alertas_duplicidade = $query_alertas->fetchAll(PDO::FETCH_ASSOC);
                 </div>
             </div>
         </div>
-        <h4 class="section-title">Ramo de Atuação</h4>
+        <!-- <h4 class="section-title">Ramo de Atuação</h4>
 
 <?php
 $motorista = !empty($cliente['print_perfil_app']) && $cliente['print_perfil_app'] !== 'sem-foto.png' ||
@@ -990,7 +1138,7 @@ $assalariado = !empty($cliente['contracheque']) && $cliente['contracheque'] !== 
         </div>
     </div>
 <?php endif; ?>
-        <hr>
+        <hr> -->
 
         <h4 class="section-title">Valores de Empréstimos</h4>
         <?php if (!empty($cliente)): ?>
