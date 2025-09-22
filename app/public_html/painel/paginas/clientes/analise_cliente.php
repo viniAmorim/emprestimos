@@ -1,32 +1,25 @@
 <?php
-// Inclui a conexão com o banco de dados.
 require_once("../conexao.php");
 
-// Verifica se o ID do cliente foi fornecido na URL.
 if (!isset($_GET['id']) || empty($_GET['id'])) {
     die("ID do cliente não fornecido.");
 }
 
-// Obtém o ID do cliente da URL.
 $id_cliente = $_GET['id'];
 
-// Prepara e executa a consulta para buscar todos os dados do cliente.
 $query = $pdo->prepare("SELECT * FROM clientes WHERE id = :id");
 $query->bindValue(":id", $id_cliente);
 $query->execute();
 $cliente = $query->fetch(PDO::FETCH_ASSOC);
 
-// Se nenhum cliente for encontrado, exibe uma mensagem de erro.
 if (!$cliente) {
     die("Cliente não encontrado.");
 }
 
-// Prepara e executa a consulta para buscar todos os alertas de duplicidade.
 $query_alertas = $pdo->prepare("SELECT * FROM alertas_duplicidade WHERE id_cliente_cadastrado = :id_cliente ORDER BY data_alerta DESC");
 $query_alertas->bindValue(":id_cliente", $id_cliente);
 $query_alertas->execute();
 $alertas_duplicidade = $query_alertas->fetchAll(PDO::FETCH_ASSOC);
-
 
 ?>
 
@@ -728,7 +721,8 @@ $alertas_duplicidade = $query_alertas->fetchAll(PDO::FETCH_ASSOC);
         </div>
 
         <h4 class="section-title">Comprovantes</h4>
-        <form id="form-analise" action="/painel/paginas/clientes/finalizar_analise.php" method="POST">
+        <form id="form-analise" action="/painel/paginas/clientes/finalizar_analise.php" method="POST" enctype="multipart/form-data">
+          <input type="hidden" name="id_cliente" value="<?= htmlspecialchars($cliente['id'] ?? '') ?>">
 <div class="row mb-4">
     <div class="col-md-6 text-center">
         <h5 class="section-title">Comprovante de RG:</h5>
@@ -749,8 +743,8 @@ $alertas_duplicidade = $query_alertas->fetchAll(PDO::FETCH_ASSOC);
                 <p>Não enviado.</p>
             <?php endif; ?>
             <div class="form-group mt-3">
-                <label for="nova_foto_perfil">Substituir Foto:</label>
-                <input type="file" class="form-control" id="nova_foto_perfil" name="nova_foto_perfil">
+                <label for="foto_usuario">Substituir Foto:</label>
+                <input type="file" class="form-control" id="foto_usuario" name="foto_usuario">
             </div>
     </div>
 
@@ -966,7 +960,7 @@ $alertas_duplicidade = $query_alertas->fetchAll(PDO::FETCH_ASSOC);
 
                     <div class="form-group mb-2">
                     <label for="referencia_parentesco" class="block text-gray-700">Grau de parentesco</label>
-                    <select id="referencia_parentesco" name="referencia_parentesco" class="form-control rounded-lg mt-1 w-full p-2 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+                    <select id="referencia_parentesco" name="referencia_parentesco" class="form-control rounded-lg mt-1 w-full p-2 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500">
                         <option value="" disabled selected>Selecione</option>
                         <option value="Pai">Pai</option>
                         <option value="Mãe">Mãe</option>
@@ -1016,276 +1010,291 @@ $alertas_duplicidade = $query_alertas->fetchAll(PDO::FETCH_ASSOC);
                 </div>
             </div>
         </div>
+
         <h4 class="section-title">Ramo de Atuação</h4>
 
 <?php
-$motorista = !empty($cliente['print_perfil_app']) && $cliente['print_perfil_app'] !== 'sem-foto.png' ||
-             !empty($cliente['print_veiculo_app']) && $cliente['print_veiculo_app'] !== 'sem-foto.png' ||
-             !empty($cliente['print_ganhos_hoje']) && $cliente['print_ganhos_hoje'] !== 'sem-foto.png' ||
-             !empty($cliente['print_ganhos_30dias']) && $cliente['print_ganhos_30dias'] !== 'sem-foto.png';
-
-$autonomo = !empty($cliente['extrato_90dias']) && $cliente['extrato_90dias'] !== 'sem-foto.png';
-$assalariado = !empty($cliente['contracheque']) && $cliente['contracheque'] !== 'sem-foto.png';
+$motorista = ($cliente['ramo'] === 'uber');
+$autonomo = ($cliente['ramo'] === 'autonomo');
+$assalariado = ($cliente['ramo'] === 'assalariado');
 ?>
 <div class="row">
+  <div class="col-md-6">
+    <div class="validation-card">
+      <h6>Comprovantes Genéricos</h6>
+      <hr>
+      <div class="form-group custom-control custom-checkbox small-checkbox my-1">
+        <input type="checkbox" class="custom-control-input" id="check_nome" name="check_nome" value="1" <?= $cliente['check_nome'] == 1 ? 'checked' : '' ?>>
+        <label class="custom-control-label" for="check_nome">Nome</label>
+      </div>
+      <div class="form-group custom-control custom-checkbox small-checkbox my-1">
+        <input type="checkbox" class="custom-control-input" id="check_data" name="check_data" value="1" <?= $cliente['check_data'] == 1 ? 'checked' : '' ?>>
+        <label class="custom-control-label" for="check_data">Data</label>
+      </div>
+      <div class="form-group custom-control custom-checkbox small-checkbox my-1">
+        <input type="checkbox" class="custom-control-input" id="check_ganhos" name="check_ganhos" value="1" <?= $cliente['check_ganhos'] == 1 ? 'checked' : '' ?>>
+        <label class="custom-control-label" for="check_ganhos">Ganhos</label>
+      </div>
+    </div>
+  </div>
+
+  <?php if ($motorista): ?>
     <div class="col-md-6">
-        <div class="validation-card">
-            <h6>Comprovantes Genéricos</h6>
-            <hr>
-            <div class="form-group custom-control custom-checkbox small-checkbox my-1">
-                <input type="checkbox" class="custom-control-input" id="check_nome" name="check_nome" value="1" <?= $cliente['check_nome'] == 1 ? 'checked' : '' ?>>
-                <label class="custom-control-label" for="check_nome">Nome</label>
-            </div>
-            <div class="form-group custom-control custom-checkbox small-checkbox my-1">
-                <input type="checkbox" class="custom-control-input" id="check_data" name="check_data" value="1" <?= $cliente['check_data'] == 1 ? 'checked' : '' ?>>
-                <label class="custom-control-label" for="check_data">Data</label>
-            </div>
-            <div class="form-group custom-control custom-checkbox small-checkbox my-1">
-                <input type="checkbox" class="custom-control-input" id="check_ganhos" name="check_ganhos" value="1" <?= $cliente['check_ganhos'] == 1 ? 'checked' : '' ?>>
-                <label class="custom-control-label" for="check_ganhos">Ganhos</label>
-            </div>
+      <div class="validation-card">
+        <h6>Validação de Motorista</h6>
+        <hr>
+        <div class="form-group custom-control custom-checkbox small-checkbox my-1">
+          <input type="checkbox" class="custom-control-input" id="check_taxa_aceitacao" name="check_taxa_aceitacao" value="1" <?= $cliente['check_taxa_aceitacao'] == 1 ? 'checked' : '' ?>>
+          <label class="custom-control-label" for="check_taxa_aceitacao">Taxa de Aceitação</label>
         </div>
-    </div>
-
-    <?php if ($motorista): ?>
-        <div class="col-md-6">
-            <div class="validation-card">
-                <h6>Validação de Motorista</h6>
-                <hr>
-                <div class="form-group custom-control custom-checkbox small-checkbox my-1">
-                    <input type="checkbox" class="custom-control-input" id="check_taxa_aceitacao" name="check_taxa_aceitacao" value="1" <?= $cliente['check_taxa_aceitacao'] == 1 ? 'checked' : '' ?>>
-                    <label class="custom-control-label" for="check_taxa_aceitacao">Taxa de Aceitação</label>
-                </div>
-                <div class="form-group custom-control custom-checkbox small-checkbox my-1">
-                    <input type="checkbox" class="custom-control-input" id="check_confere"name="check_confere" value="1" <?= $cliente['check_confere'] == 1 ? 'checked' : '' ?>> 
-                    <label class="custom-control-label" for="check_confere">Confere</label>
-                </div>
-                <div class="form-group custom-control custom-checkbox small-checkbox my-1">
-                    <input type="checkbox" class="custom-control-input" id="check_ativo" name="check_ativo" value="1" <?= $cliente['check_ativo'] == 1 ? 'checked' : '' ?>>
-                    <label class="custom-control-label" for="check_ativo">Está ativo</label>
-                </div>
-                <div class="form-group custom-control custom-checkbox small-checkbox my-1">
-                    <input type="checkbox" class="custom-control-input" id="check_cabecalhos" name="check_cabecalhos" value="1" <?= $cliente['check_cabecalhos'] == 1 ? 'checked' : '' ?>>
-                    <label class="custom-control-label" for="check_cabecalhos">Cabeçalhos/Horários prints</label>
-                </div>
-
-                <div class="data-card">
-                    <h6 class="section-title text-start">Dados:</h6>
-                    <div class="form-group mb-2">
-                      <label for="modelo_veiculo"><strong>Modelo do veículo:</strong></label>
-                      <input type="text" class="form-control" id="modelo_veiculo" name="modelo_veiculo" value="<?= htmlspecialchars($cliente['modelo_veiculo'] ?? '') ?>">
-                    </div>
-
-                    <div class="form-group mb-2">
-                      <label for="placa_veiculo"><strong>Placa:</strong></label>
-                      <input type="text" class="form-control" id="placa_veiculo" name="placa_veiculo" value="<?= htmlspecialchars($cliente['placa_veiculo'] ?? '') ?>">
-                    </div>
-
-                    <div class="form-group mb-2">
-                    <label for="status_veiculo" class="block text-gray-700">Status do veículo</label>
-                    <select id="status_veiculo" name="status_veiculo" class="form-control rounded-lg mt-1 w-full p-2 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500" required>
-                        <option value="" disabled selected>Selecione</option>
-                        <option value="proprio">Próprio</option>
-                        <option value="alugado">Alugado</option>
-                    </select>
-                    </div>
-
-                    <div class="form-group mb-2">
-                      <label for="valor_aluguel"><strong>Valor do aluguel:</strong></label>
-                      <input type="text" class="form-control" id="valor_aluguel" name="valor_aluguel" value="<?= htmlspecialchars($cliente['valor_aluguel'] ?? '') ?>">
-                    </div>
-
-
-                    <div class="form-group mb-2">
-                    <label for="frequencia_aluguel" class="block text-gray-700">Frequência do aluguel</label>
-                    <select id="frequencia_aluguel" name="frequencia_aluguel" class="form-control rounded-lg mt-1 w-full p-2 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500" required>
-                        <option value="" disabled selected>Selecione</option>
-                        <option value="diario">Diário</option>
-                        <option value="semanal">Semanal</option>
-                        <option value="quinzenal">Quinzenal</option>
-                        <option value="mensal">Mensal</option>
-                    </select>
-                    </div>
-                </div>
-            </div>
+        <div class="form-group custom-control custom-checkbox small-checkbox my-1">
+          <input type="checkbox" class="custom-control-input" id="check_confere" name="check_confere" value="1" <?= $cliente['check_confere'] == 1 ? 'checked' : '' ?>>
+          <label class="custom-control-label" for="check_confere">Confere</label>
         </div>
-    <?php endif; ?>
-</div>
-
-<?php if ($motorista): ?>
-    <div class="row mb-6">
-        <div class="col-md-6 text-center">
-            <h5 class="section-title">Print Perfil App:</h5>
-            <?php if (!empty($cliente['print_perfil_app']) && $cliente['print_perfil_app'] !== 'sem-foto.png'): ?>
-                <img src="/painel/images/comprovantes/<?= htmlspecialchars($cliente['print_perfil_app'] ?? '') ?>" alt="Print Perfil App" class="img-fluid rounded shadow-sm" style="max-width: 350px; border: 2px solid #ddd; display: block; margin: 0 auto;">
-            <?php else: ?>
-                <p>Não enviado.</p>
-            <?php endif; ?>
+        <div class="form-group custom-control custom-checkbox small-checkbox my-1">
+          <input type="checkbox" class="custom-control-input" id="check_ativo" name="check_ativo" value="1" <?= $cliente['check_ativo'] == 1 ? 'checked' : '' ?>>
+          <label class="custom-control-label" for="check_ativo">Está ativo</label>
         </div>
-        <div class="col-md-6 text-center">
-            <h5 class="section-title">Print Veículo App:</h5>
-            <?php if (!empty($cliente['print_veiculo_app']) && $cliente['print_veiculo_app'] !== 'sem-foto.png'): ?>
-                <img src="/painel/images/comprovantes/<?= htmlspecialchars($cliente['print_veiculo_app'] ?? '') ?>" alt="Print Veículo App" class="img-fluid rounded shadow-sm" style="max-width: 350px; border: 2px solid #ddd; display: block; margin: 0 auto;">
-            <?php else: ?>
-                <p>Não enviado.</p>
-            <?php endif; ?>
+        <div class="form-group custom-control custom-checkbox small-checkbox my-1">
+          <input type="checkbox" class="custom-control-input" id="check_cabecalhos" name="check_cabecalhos" value="1" <?= $cliente['check_cabecalhos'] == 1 ? 'checked' : '' ?>>
+          <label class="custom-control-label" for="check_cabecalhos">Cabeçalhos/Horários prints</label>
         </div>
-        
-    </div>
-    <div class="row mb-6">
-        <div class="col-md-6 text-center">
-            <h5 class="section-title">Print Ganhos 30 Dias:</h5>
-            <?php if (!empty($cliente['print_ganhos_30dias']) && $cliente['print_ganhos_30dias'] !== 'sem-foto.png'): ?>
-                <img src="/painel/images/comprovantes/<?= htmlspecialchars($cliente['print_ganhos_30dias'] ?? '') ?>" alt="Print Ganhos 30 Dias" class="img-fluid rounded shadow-sm" style="max-width: 350px; border: 2px solid #ddd; display: block; margin: 0 auto;">
-            <?php else: ?>
-                <p>Não enviado.</p>
-            <?php endif; ?>
-        </div>
-        <div class="col-md-6 text-center">
-            <h5 class="section-title">Print Ganhos Hoje:</h5>
-            <?php if (!empty($cliente['print_ganhos_hoje']) && $cliente['print_ganhos_hoje'] !== 'sem-foto.png'): ?>
-                <img src="/painel/images/comprovantes/<?= htmlspecialchars($cliente['print_ganhos_hoje'] ?? '') ?>" alt="Print Ganhos Hoje" class="img-fluid rounded shadow-sm" style="max-width: 350px; border: 2px solid #ddd; display: block; margin: 0 auto;">
-            <?php else: ?>
-                <p>Não enviado.</p>
-            <?php endif; ?>
-        </div>
-    </div>
-<?php endif; ?>
-
-<?php if ($autonomo): ?>
-    <div class="row mb-4">
-        <div class="col-md-6 text-center">
-            <h5 class="section-title">Extrato 90 Dias:</h5>
-            <?php if (!empty($cliente['extrato_90dias']) && $cliente['extrato_90dias'] !== 'sem-foto.png'): ?>
-                <img src="/painel/images/comprovantes/<?= htmlspecialchars($cliente['extrato_90dias'] ?? '') ?>" alt="Extrato 90 Dias" class="img-fluid rounded shadow-sm" style="max-width: 450px; border: 2px solid #ddd; display: block; margin: 0 auto;">
-            <?php else: ?>
-                <p>Não enviado.</p>
-            <?php endif; ?>
-        </div>
-        <div class="col-md-6">
-          <div class="data-card">
-            <h6 class="section-title text-start">Dados do autônomo:</h6>
-            <div class="form-group mb-2">
-              <label for="funcao_autonomo"><strong>Função exercida:</strong></label>
-              <input type="text" class="form-control" id="funcao_autonomo" name="funcao_autonomo" value="<?= htmlspecialchars($cliente['funcao_autonomo'] ?? '') ?>">
-            </div>
-
-            <div class="form-group mb-2">
-              <label for="empresa_autonomo"><strong>Nome da empresa:</strong></label>
-              <input type="text" class="form-control" id="empresa_autonomo" name="empresa_autonomo" value="<?= htmlspecialchars($cliente['empresa_autonomo'] ?? '') ?>">
-            </div>    
+        <div class="data-card">
+          <h6 class="section-title text-start">Dados:</h6>
+          <div class="form-group mb-2">
+            <label for="modelo_veiculo"><strong>Modelo do veículo:</strong></label>
+            <input type="text" class="form-control" id="modelo_veiculo" name="modelo_veiculo" value="<?= htmlspecialchars($cliente['modelo_veiculo'] ?? '') ?>">
+          </div>
+          <div class="form-group mb-2">
+            <label for="placa_veiculo"><strong>Placa:</strong></label>
+            <input type="text" class="form-control" id="placa_veiculo" name="placa_veiculo" value="<?= htmlspecialchars($cliente['placa_veiculo'] ?? '') ?>">
+          </div>
+          <div class="form-group mb-2">
+            <label for="status_veiculo" class="block text-gray-700">Status do veículo</label>
+            <select id="status_veiculo" name="status_veiculo" class="form-control rounded-lg mt-1 w-full p-2 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500">
+              <option value="" disabled selected>Selecione</option>
+              <option value="proprio">Próprio</option>
+              <option value="alugado">Alugado</option>
+            </select>
+          </div>
+          <div class="form-group mb-2">
+            <label for="valor_aluguel"><strong>Valor do aluguel:</strong></label>
+            <input type="text" class="form-control" id="valor_aluguel" name="valor_aluguel" value="<?= htmlspecialchars($cliente['valor_aluguel'] ?? '') ?>">
+          </div>
+          <div class="form-group mb-2">
+            <label for="frequencia_aluguel" class="block text-gray-700">Frequência do aluguel</label>
+            <select id="frequencia_aluguel" name="frequencia_aluguel" class="form-control rounded-lg mt-1 w-full p-2 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500">
+              <option value="" disabled selected>Selecione</option>
+              <option value="diario">Diário</option>
+              <option value="semanal">Semanal</option>
+              <option value="quinzenal">Quinzenal</option>
+              <option value="mensal">Mensal</option>
+            </select>
           </div>
         </div>
-    </div>    
+      </div>
+    </div>
+    <div class="row mb-6">
+      <div class="col-md-6 text-center">
+        <h5 class="section-title">Print Perfil App:</h5>
+        <?php if (!empty($cliente['print_perfil_app']) && $cliente['print_perfil_app'] !== 'sem-foto.png'): ?>
+          <img src="/painel/images/comprovantes/<?= htmlspecialchars($cliente['print_perfil_app'] ?? '') ?>" alt="Print Perfil App" class="img-fluid rounded shadow-sm" style="max-width: 350px; border: 2px solid #ddd; display: block; margin: 0 auto;">
+        <?php else: ?>
+          <p>Não enviado.</p>
+        <?php endif; ?>
+        <div class="form-group mt-3">
+          <label for="print_perfil_app">Substituir Print:</label>
+          <input type="file" class="form-control" id="print_perfil_app" name="print_perfil_app">
+        </div>
+      </div>
+      <div class="col-md-6 text-center">
+        <h5 class="section-title">Print Veículo App:</h5>
+        <?php if (!empty($cliente['print_veiculo_app']) && $cliente['print_veiculo_app'] !== 'sem-foto.png'): ?>
+          <img src="/painel/images/comprovantes/<?= htmlspecialchars($cliente['print_veiculo_app'] ?? '') ?>" alt="Print Veículo App" class="img-fluid rounded shadow-sm" style="max-width: 350px; border: 2px solid #ddd; display: block; margin: 0 auto;">
+        <?php else: ?>
+          <p>Não enviado.</p>
+        <?php endif; ?>
+        <div class="form-group mt-3">
+          <label for="print_veiculo_app">Substituir Print:</label>
+          <input type="file" class="form-control" id="print_veiculo_app" name="print_veiculo_app">
+        </div>
+      </div>
+    </div>
+    <div class="row mb-6">
+      <div class="col-md-6 text-center">
+        <h5 class="section-title">Print Ganhos 30 Dias:</h5>
+        <?php if (!empty($cliente['print_ganhos_30dias']) && $cliente['print_ganhos_30dias'] !== 'sem-foto.png'): ?>
+          <img src="/painel/images/comprovantes/<?= htmlspecialchars($cliente['print_ganhos_30dias'] ?? '') ?>" alt="Print Ganhos 30 Dias" class="img-fluid rounded shadow-sm" style="max-width: 350px; border: 2px solid #ddd; display: block; margin: 0 auto;">
+        <?php else: ?>
+          <p>Não enviado.</p>
+        <?php endif; ?>
+        <div class="form-group mt-3">
+          <label for="print_ganhos_30dias">Substituir Print:</label>
+          <input type="file" class="form-control" id="print_ganhos_30dias" name="print_ganhos_30dias">
+        </div>
+      </div>
+      <div class="col-md-6 text-center">
+        <h5 class="section-title">Print Ganhos Hoje:</h5>
+        <?php if (!empty($cliente['print_ganhos_hoje']) && $cliente['print_ganhos_hoje'] !== 'sem-foto.png'): ?>
+          <img src="/painel/images/comprovantes/<?= htmlspecialchars($cliente['print_ganhos_hoje'] ?? '') ?>" alt="Print Ganhos Hoje" class="img-fluid rounded shadow-sm" style="max-width: 350px; border: 2px solid #ddd; display: block; margin: 0 auto;">
+        <?php else: ?>
+          <p>Não enviado.</p>
+        <?php endif; ?>
+        <div class="form-group mt-3">
+          <label for="print_ganhos_hoje">Substituir Print:</label>
+          <input type="file" class="form-control" id="print_ganhos_hoje" name="print_ganhos_hoje">
+        </div>
+      </div>
+    </div>
+  <?php endif; ?>
+</div>
+
+<?php if ($autonomo): ?>
+  <div class="row mb-4">
+    <div class="col-md-6 text-center">
+      <h5 class="section-title">Extrato 90 Dias:</h5>
+      <?php if (!empty($cliente['extrato_90dias']) && $cliente['extrato_90dias'] !== 'sem-foto.png'): ?>
+        <img src="/painel/images/comprovantes/<?= htmlspecialchars($cliente['extrato_90dias'] ?? '') ?>" alt="Extrato 90 Dias" class="img-fluid rounded shadow-sm" style="max-width: 450px; border: 2px solid #ddd; display: block; margin: 0 auto;">
+      <?php else: ?>
+        <p>Não enviado.</p>
+      <?php endif; ?>
+      <div class="form-group mt-3">
+        <label for="extrato_90dias">Substituir Extrato:</label>
+        <input type="file" class="form-control" id="extrato_90dias" name="extrato_90dias">
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="data-card">
+        <h6 class="section-title text-start">Dados do autônomo:</h6>
+        <div class="form-group mb-2">
+          <label for="funcao_autonomo"><strong>Função exercida:</strong></label>
+          <input type="text" class="form-control" id="funcao_autonomo" name="funcao_autonomo" value="<?= htmlspecialchars($cliente['funcao_autonomo'] ?? '') ?>">
+        </div>
+        <div class="form-group mb-2">
+          <label for="empresa_autonomo"><strong>Nome da empresa:</strong></label>
+          <input type="text" class="form-control" id="empresa_autonomo" name="empresa_autonomo" value="<?= htmlspecialchars($cliente['empresa_autonomo'] ?? '') ?>">
+        </div>
+      </div>
+    </div>
+  </div>
 <?php endif; ?>
 
 <?php if ($assalariado): ?>
-    <div class="row mb-6">
-        <div class="col-md-6 text-center">
-            <h5 class="section-title">Contracheque:</h5>
-            <?php if (!empty($cliente['contracheque']) && $cliente['contracheque'] !== 'sem-foto.png'): ?>
-                <img src="/painel/images/comprovantes/<?= htmlspecialchars($cliente['contracheque'] ?? '') ?>" alt="Contracheque" class="img-fluid rounded shadow-sm" style="max-width: 450px; border: 2px solid #ddd; display: block; margin: 0 auto;">
-            <?php else: ?>
-                <p>Não enviado.</p>
-            <?php endif; ?>
+  <div class="row mb-6">
+    <div class="col-md-6 text-center">
+      <h5 class="section-title">Contracheque:</h5>
+      <?php if (!empty($cliente['contracheque']) && $cliente['contracheque'] !== 'sem-foto.png'): ?>
+        <img src="/painel/images/comprovantes/<?= htmlspecialchars($cliente['contracheque'] ?? '') ?>" alt="Contracheque" class="img-fluid rounded shadow-sm" style="max-width: 450px; border: 2px solid #ddd; display: block; margin: 0 auto;">
+      <?php else: ?>
+        <p>Não enviado.</p>
+      <?php endif; ?>
+      <div class="form-group mt-3">
+        <label for="contracheque">Substituir Contracheque:</label>
+        <input type="file" class="form-control" id="contracheque" name="contracheque">
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="data-card">
+        <h6 class="section-title text-start">Dados do assalariado:</h6>
+        <div class="form-group mb-2">
+          <label for="funcao_assalariado"><strong>Função exercida:</strong></label>
+          <input type="text" class="form-control" id="funcao_assalariado" name="funcao_assalariado" value="<?= htmlspecialchars($cliente['funcao_assalariado'] ?? '') ?>">
         </div>
+        <div class="form-group mb-2">
+          <label for="empresa_assalariado"><strong>Nome da empresa:</strong></label>
+          <input type="text" class="form-control" id="empresa_assalariado" name="empresa_assalariado" value="<?= htmlspecialchars($cliente['empresa_assalariado'] ?? '') ?>">
+        </div>
+      </div>
+    </div>
+  </div>
+<?php endif; ?>
 
-        <div class="col-md-6">
-          <div class="data-card">
-            <h6 class="section-title text-start">Dados do assalariado:</h6>
-            <div class="form-group mb-2">
-              <label for="funcao_assalariado"><strong>Função exercida:</strong></label>
-              <input type="text" class="form-control" id="funcao_assalariado" name="funcao_assalariado" value="<?= htmlspecialchars($cliente['funcao_assalariado'] ?? '') ?>">
-            </div>
+<hr>
 
-            <div class="form-group mb-2">
-              <label for="empresa_assalariado"><strong>Nome da empresa:</strong></label>
-              <input type="text" class="form-control" id="empresa_assalariado" name="empresa_assalariado" value="<?= htmlspecialchars($cliente['empresa_assalariado'] ?? '') ?>">
-            </div>    
-          </div>
+<h4 class="section-title">Valores de Empréstimos</h4>
+<?php if (!empty($cliente)): ?>
+    <div class="card loan-values-card">
+        <p>
+            <strong>Valor Desejado:</strong>
+            <span class="loan-value">R$ <?= number_format($cliente['valor_desejado'], 2, ',', '.') ?></span>
+        </p>
+        <div class="form-group mb-2">
+            <label for="valor_desejado"><strong>Valor do empréstimo</strong></label>
+            <input type="text" class="form-control" id="valor_desejado" name="valor_desejado" value="<?= htmlspecialchars($cliente['valor_desejado'] ?? '') ?>">
         </div>
     </div>
+<?php else: ?>
+    <p>Nenhum valor de empréstimo desejado registrado.</p>
 <?php endif; ?>
-        <hr>
 
-        <h4 class="section-title">Valores de Empréstimos</h4>
-        <?php if (!empty($cliente)): ?>
-            <div class="card loan-values-card">
-                <p>
-                    <strong>Valor Desejado:</strong> 
-                    <span class="loan-value">R$ <?= number_format($cliente['valor_desejado'], 2, ',', '.') ?></span>
-                </p>
-                <div class="form-group mb-2">
-                  <label for="valor_desejado"><strong>Valor do empréstimo</strong></label>
-                  <input type="text" class="form-control" id="valor_desejado" name="valor_desejado" value="<?= htmlspecialchars($cliente['valor_desejado'] ?? '') ?>">
-                </div>    
+<hr>
+
+<h4 class="section-title">Finalizar Análise</h4>
+<div class="row justify-content-center">
+    <div class="col-md-12">
+        <div class="form-card mt-4">
+
+            <input type="hidden" name="id_cliente" value="<?= htmlspecialchars($id_cliente ?? '') ?>">
+
+            <div class="form-group mb-3">
+                <label for="status_final" class="form-label">Selecione o status final:</label>
+                <select class="form-select form-control" id="status_final" name="status_final">
+                    <option value="" selected disabled>Escolha uma opção</option>
+                    <option value="Aprovado">Aprovado</option>
+                    <option value="Reprovado">Reprovado</option>
+                    <option value="Pendente">Pendente</option>
+                    <option value="NaoValidado">Não Validado</option>
+                    <option value="Ativo">Ativo</option>
+                    <option value="Inativo">Inativo</option>
+                    <option value="EmAtraso">Em Atraso</option>
+                    <option value="Negativado">Negativado</option>
+                    <option value="EmAnalise">Em Análise</option>
+                    <option value="NaoTemInteresse">Não tem Interesse</option>
+                </select>
             </div>
-        <?php else: ?>
-            <p>Nenhum valor de empréstimo desejado registrado.</p>
-        <?php endif; ?>
 
-      <hr>
+            <div id="observacoes-reprovado" class="col-md-6" style="display: none;">
+                <div class="form-group">
+                    <label for="observacoes_reprovado">Observações (Reprovado):</label>
+                    <select name="observacoes" id="observacoes_reprovado" class="form-select">
+                        <option value="">Selecione uma opção</option>
+                        <option value="Outra cidade">Outra cidade</option>
+                        <option value="Fraude">Fraude</option>
+                        <option value="Inadimplente">Inadimplente</option>
+                        <option value="Negado consulta">Negado consulta</option>
+                        <option value="Rendimentos baixos">Rendimentos baixos</option>
+                        <option value="Solicitou cancelamento">Solicitou cancelamento</option>
+                        <option value="CNH vencida">CNH vencida</option>
+                        <option value="Não tem endereço no nome">Não tem endereço no nome</option>
+                    </select>
+                </div>
+            </div>
 
-      <h4 class="section-title">Finalizar Análise</h4>
-      <div class="row justify-content-center">
-          <div class="col-md-12">
-              <div class="form-card mt-4">
-                  
-                      <input type="hidden" name="id_cliente" value="<?= htmlspecialchars($id_cliente ?? '') ?>">
+            <div id="observacoes-pendente" class="col-md-12" style="display: none;">
+                <div class="form-group">
+                    <label for="observacoes_pendente">Descrição (Pendente):</label>
+                    <textarea name="observacoes_pendente_desc" id="observacoes_pendente" class="form-control" rows="3"></textarea>
+                </div>
+            </div>
 
-                      <div class="form-group mb-3">
-                          <label for="status_final" class="form-label">Selecione o status final:</label>
-                          <select class="form-select form-control" id="status_final" name="status_final" required>
-                              <option value="" selected disabled>Escolha uma opção</option>
-                              <option value="Aprovado">Aprovado</option>
-                              <option value="Reprovado">Reprovado</option>
-                              <option value="Pendente">Pendente</option>
-                              <option value="NaoValidado">Não Validado</option>
-                              <option value="Ativo">Ativo</option>
-                              <option value="Inativo">Inativo</option>
-                              <option value="EmAtraso">Em Atraso</option>
-                              <option value="Negativado">Negativado</option>
-                              <option value="EmAnalise">Em Análise</option>
-                              <option value="NaoTemInteresse">Não tem Interesse</option>
-                          </select>
-                      </div>
+            <div id="observacoes-genericas" class="col-md-12" style="display: none;">
+                <div class="form-group">
+                    <label for="observacoes_genericas">Observações:</label>
+                    <textarea name="observacoes_genericas_desc" id="observacoes_genericas" class="form-control" rows="3"></textarea>
+                </div>
+            </div>
 
-                      <div id="observacoes-reprovado" class="col-md-6" style="display: none;">
-                          <div class="form-group">
-                              <label for="observacoes_reprovado">Observações (Reprovado):</label>
-                              <select name="observacoes" id="observacoes_reprovado" class="form-select">
-                                  <option value="">Selecione uma opção</option>
-                                  <option value="Outra cidade">Outra cidade</option>
-                                  <option value="Fraude">Fraude</option>
-                                  <option value="Inadimplente">Inadimplente</option>
-                                  <option value="Negado consulta">Negado consulta</option>
-                                  <option value="Rendimentos baixos">Rendimentos baixos</option>
-                                  <option value="Solicitou cancelamento">Solicitou cancelamento</option>
-                                  <option value="CNH vencida">CNH vencida</option>
-                                  <option value="Não tem endereço no nome">Não tem endereço no nome</option>
-                              </select>
-                          </div>
-                      </div>
+            <div class="d-grid gap-2">
+                <a href="index.php?pagina=clientes" id="btn-sair" class="btn btn-outline-danger btn-lg mt-3">Sair sem Salvar</a>
+                <button type="submit" class="btn btn-primary btn-lg mt-3">Finalizar Análise</button>
+            </div>
+        </div>
+    </div>
+</div>
+</form> 
 
-                      <div id="observacoes-pendente" class="col-md-12" style="display: none;">
-                          <div class="form-group">
-                              <label for="observacoes_pendente">Descrição (Pendente):</label>
-                              <textarea name="observacoes_pendente_desc" id="observacoes_pendente" class="form-control" rows="3"></textarea>
-                          </div>
-                      </div>
 
-                      <div id="observacoes-genericas" class="col-md-12" style="display: none;">
-                        <div class="form-group">
-                            <label for="observacoes_genericas">Observações:</label>
-                            <textarea name="observacoes_genericas_desc" id="observacoes_genericas" class="form-control" rows="3"></textarea>
-                        </div>
-                      </div>
 
-                      <div class="d-grid gap-2">
-                          <a href="index.php?pagina=clientes" class="btn btn-outline-danger btn-lg mt-3">Sair sem Salvar</a>
-                          <button type="submit" class="btn btn-primary btn-lg mt-3">Finalizar Análise</button>
-                      </div>
-                  </form>
               </div>
           </div>
       </div>
@@ -1293,6 +1302,27 @@ $assalariado = !empty($cliente['contracheque']) && $cliente['contracheque'] !== 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
 $(document).ready(function() {
+
+  // Adicione este código dentro da função $(document).ready()
+$('#btn-sair').on('click', function(e) {
+    e.preventDefault(); // Impede a ação padrão do botão (que não tem, mas é uma boa prática)
+
+    Swal.fire({
+        title: 'Tem certeza?',
+        text: "Todas as alterações feitas nesta página serão perdidas.",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#d33',
+        cancelButtonColor: '#3085d6',
+        confirmButtonText: 'Sim, sair!',
+        cancelButtonText: 'Cancelar'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            // Se o usuário confirmar, redirecione para a página de clientes
+            window.location.href = 'index.php?pagina=clientes';
+        }
+    });
+});
     // --- LÓGICA DO FORMULÁRIO DE FINALIZAÇÃO DE ANÁLISE ---
 
     // Lógica para mostrar/esconder campos de observação

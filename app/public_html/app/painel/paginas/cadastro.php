@@ -432,7 +432,7 @@
    
                       <div class="form-group mb-4">
                           <label class="block text-sm font-medium">Print da Tela de Perfil dos Apps</label>
-                          <input type="file" name="print_perfil_app" id="print_perfil_app" onchange="handleFile('print_perfil_app');validateField(this)" accept=".jpg,.jpeg,.png,.heic,.webp,.avif,application/pdf"" class="hidden uber-obrigatorio" required>
+                          <input type="file" name="print_perfil_app" id="print_perfil_app" onchange="handleFile('print_perfil_app');validateField(this)" accept=".jpg,.jpeg,.png,.heic,.webp,.avif,application/pdf" class="hidden uber-obrigatorio" required>
                           
                           <button type="button" class="custom-file-upload mt-2 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50" onclick="document.getElementById('print_perfil_app').click()">
                               <i class="fas fa-upload mr-2"></i> Selecionar Arquivo
