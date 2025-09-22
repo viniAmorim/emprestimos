@@ -624,7 +624,7 @@ $alertas_duplicidade = $query_alertas->fetchAll(PDO::FETCH_ASSOC);
 .form-control, .form-select {
     border-radius: 8px; /* Borda arredondada */
     border: 1px solid #ced4da; /* Cor da borda suave */
-    padding: 10px 15px; /* Espaçamento interno */
+    padding: 8px 15px; /* Espaçamento interno */
     transition: all 0.3s ease-in-out; /* Transição suave para efeitos */
 }
 
@@ -1016,7 +1016,7 @@ $alertas_duplicidade = $query_alertas->fetchAll(PDO::FETCH_ASSOC);
                 </div>
             </div>
         </div>
-        <!-- <h4 class="section-title">Ramo de Atuação</h4>
+        <h4 class="section-title">Ramo de Atuação</h4>
 
 <?php
 $motorista = !empty($cliente['print_perfil_app']) && $cliente['print_perfil_app'] !== 'sem-foto.png' ||
@@ -1068,6 +1068,45 @@ $assalariado = !empty($cliente['contracheque']) && $cliente['contracheque'] !== 
                     <input type="checkbox" class="custom-control-input" id="check_cabecalhos" name="check_cabecalhos" value="1" <?= $cliente['check_cabecalhos'] == 1 ? 'checked' : '' ?>>
                     <label class="custom-control-label" for="check_cabecalhos">Cabeçalhos/Horários prints</label>
                 </div>
+
+                <div class="data-card">
+                    <h6 class="section-title text-start">Dados:</h6>
+                    <div class="form-group mb-2">
+                      <label for="modelo_veiculo"><strong>Modelo do veículo:</strong></label>
+                      <input type="text" class="form-control" id="modelo_veiculo" name="modelo_veiculo" value="<?= htmlspecialchars($cliente['modelo_veiculo'] ?? '') ?>">
+                    </div>
+
+                    <div class="form-group mb-2">
+                      <label for="placa_veiculo"><strong>Placa:</strong></label>
+                      <input type="text" class="form-control" id="placa_veiculo" name="placa_veiculo" value="<?= htmlspecialchars($cliente['placa_veiculo'] ?? '') ?>">
+                    </div>
+
+                    <div class="form-group mb-2">
+                    <label for="status_veiculo" class="block text-gray-700">Status do veículo</label>
+                    <select id="status_veiculo" name="status_veiculo" class="form-control rounded-lg mt-1 w-full p-2 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+                        <option value="" disabled selected>Selecione</option>
+                        <option value="proprio">Próprio</option>
+                        <option value="alugado">Alugado</option>
+                    </select>
+                    </div>
+
+                    <div class="form-group mb-2">
+                      <label for="valor_aluguel"><strong>Valor do aluguel:</strong></label>
+                      <input type="text" class="form-control" id="valor_aluguel" name="valor_aluguel" value="<?= htmlspecialchars($cliente['valor_aluguel'] ?? '') ?>">
+                    </div>
+
+
+                    <div class="form-group mb-2">
+                    <label for="frequencia_aluguel" class="block text-gray-700">Frequência do aluguel</label>
+                    <select id="frequencia_aluguel" name="frequencia_aluguel" class="form-control rounded-lg mt-1 w-full p-2 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+                        <option value="" disabled selected>Selecione</option>
+                        <option value="diario">Diário</option>
+                        <option value="semanal">Semanal</option>
+                        <option value="quinzenal">Quinzenal</option>
+                        <option value="mensal">Mensal</option>
+                    </select>
+                    </div>
+                </div>
             </div>
         </div>
     <?php endif; ?>
@@ -1115,7 +1154,7 @@ $assalariado = !empty($cliente['contracheque']) && $cliente['contracheque'] !== 
 
 <?php if ($autonomo): ?>
     <div class="row mb-4">
-        <div class="col-md-4 text-center">
+        <div class="col-md-6 text-center">
             <h5 class="section-title">Extrato 90 Dias:</h5>
             <?php if (!empty($cliente['extrato_90dias']) && $cliente['extrato_90dias'] !== 'sem-foto.png'): ?>
                 <img src="/painel/images/comprovantes/<?= htmlspecialchars($cliente['extrato_90dias'] ?? '') ?>" alt="Extrato 90 Dias" class="img-fluid rounded shadow-sm" style="max-width: 450px; border: 2px solid #ddd; display: block; margin: 0 auto;">
@@ -1123,12 +1162,26 @@ $assalariado = !empty($cliente['contracheque']) && $cliente['contracheque'] !== 
                 <p>Não enviado.</p>
             <?php endif; ?>
         </div>
-    </div>
+        <div class="col-md-6">
+          <div class="data-card">
+            <h6 class="section-title text-start">Dados do autônomo:</h6>
+            <div class="form-group mb-2">
+              <label for="funcao_autonomo"><strong>Função exercida:</strong></label>
+              <input type="text" class="form-control" id="funcao_autonomo" name="funcao_autonomo" value="<?= htmlspecialchars($cliente['funcao_autonomo'] ?? '') ?>">
+            </div>
+
+            <div class="form-group mb-2">
+              <label for="empresa_autonomo"><strong>Nome da empresa:</strong></label>
+              <input type="text" class="form-control" id="empresa_autonomo" name="empresa_autonomo" value="<?= htmlspecialchars($cliente['empresa_autonomo'] ?? '') ?>">
+            </div>    
+          </div>
+        </div>
+    </div>    
 <?php endif; ?>
 
 <?php if ($assalariado): ?>
-    <div class="row mb-4">
-        <div class="col-md-4 text-center">
+    <div class="row mb-6">
+        <div class="col-md-6 text-center">
             <h5 class="section-title">Contracheque:</h5>
             <?php if (!empty($cliente['contracheque']) && $cliente['contracheque'] !== 'sem-foto.png'): ?>
                 <img src="/painel/images/comprovantes/<?= htmlspecialchars($cliente['contracheque'] ?? '') ?>" alt="Contracheque" class="img-fluid rounded shadow-sm" style="max-width: 450px; border: 2px solid #ddd; display: block; margin: 0 auto;">
@@ -1136,9 +1189,24 @@ $assalariado = !empty($cliente['contracheque']) && $cliente['contracheque'] !== 
                 <p>Não enviado.</p>
             <?php endif; ?>
         </div>
+
+        <div class="col-md-6">
+          <div class="data-card">
+            <h6 class="section-title text-start">Dados do assalariado:</h6>
+            <div class="form-group mb-2">
+              <label for="funcao_assalariado"><strong>Função exercida:</strong></label>
+              <input type="text" class="form-control" id="funcao_assalariado" name="funcao_assalariado" value="<?= htmlspecialchars($cliente['funcao_assalariado'] ?? '') ?>">
+            </div>
+
+            <div class="form-group mb-2">
+              <label for="empresa_assalariado"><strong>Nome da empresa:</strong></label>
+              <input type="text" class="form-control" id="empresa_assalariado" name="empresa_assalariado" value="<?= htmlspecialchars($cliente['empresa_assalariado'] ?? '') ?>">
+            </div>    
+          </div>
+        </div>
     </div>
 <?php endif; ?>
-        <hr> -->
+        <hr>
 
         <h4 class="section-title">Valores de Empréstimos</h4>
         <?php if (!empty($cliente)): ?>
@@ -1147,6 +1215,10 @@ $assalariado = !empty($cliente['contracheque']) && $cliente['contracheque'] !== 
                     <strong>Valor Desejado:</strong> 
                     <span class="loan-value">R$ <?= number_format($cliente['valor_desejado'], 2, ',', '.') ?></span>
                 </p>
+                <div class="form-group mb-2">
+                  <label for="valor_desejado"><strong>Valor do empréstimo</strong></label>
+                  <input type="text" class="form-control" id="valor_desejado" name="valor_desejado" value="<?= htmlspecialchars($cliente['valor_desejado'] ?? '') ?>">
+                </div>    
             </div>
         <?php else: ?>
             <p>Nenhum valor de empréstimo desejado registrado.</p>
