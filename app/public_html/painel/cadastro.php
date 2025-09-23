@@ -562,6 +562,7 @@
                         <div>
                             <label class="block text-sm font-medium text-white">CPF</label>
                             <input type="text" name="cpf" id="cpf" placeholder="CPF" class="form-input w-full" required onblur="validateCPF(this)">
+                            <div id="cpf-error-backend" class="text-red-500 text-sm mt-1"></div>
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-white">RG</label>
@@ -1286,46 +1287,141 @@ function carregarImgContracheque() {
         return re.test(String(email).toLowerCase());
     }
 
+    function checkCpfDuplicado(cpf, inputElement) {
+    const errorDiv = document.getElementById('cpf-error-backend');
+    const nextButton = document.querySelector('#step-1 .btn-primary'); 
+
+    errorDiv.innerText = 'Verificando...';
+    nextButton.disabled = true;
+
+    // Ajuste a chamada fetch para enviar JSON
+    fetch('/painel/paginas/check_cpf.php', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json' // Define o tipo de conteúdo como JSON
+        },
+        body: JSON.stringify({ cpf: cpf }) // Converte os dados para uma string JSON
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (!data.success) {
+            errorDiv.innerText = data.message;
+            markInvalid(inputElement, '');
+        } else {
+            errorDiv.innerText = '';
+            markValid(inputElement);
+        }
+        
+        const isCpfValid = !inputElement.classList.contains('is-invalid');
+        if (isCpfValid && data.success) {
+            nextButton.disabled = false;
+        } else {
+            nextButton.disabled = true;
+        }
+    })
+    .catch(error => {
+        console.error('Erro na requisição:', error);
+        errorDiv.innerText = 'Erro ao verificar o CPF. Tente novamente.';
+        nextButton.disabled = true;
+    });
+}
+
     function validateCPF(input) {
-        const cpf = input.value.replace(/\D/g, '');
-        if (cpf.length !== 11 || /^(\d)\1{10}$/.test(cpf)) {
-            markInvalid(input, 'CPF inválido.');
-            return false;
-        }
+      const cpf = input.value.replace(/\D/g, '');
+      const errorBackendDiv = document.getElementById('cpf-error-backend');
+      const nextButton = document.querySelector('#step-1 .btn-primary');
 
-        let sum = 0;
-        let remainder;
+      // 1. Validação de formato e dígitos (local)
+      if (cpf.length !== 11 || /^(\d)\1{10}$/.test(cpf)) {
+          markInvalid(input, 'CPF inválido.');
+          errorBackendDiv.innerText = '';
+          nextButton.disabled = true; // Desabilita o botão
+          return false;
+      }
 
-        for (let i = 1; i <= 9; i++) {
-            sum = sum + parseInt(cpf.substring(i - 1, i)) * (11 - i);
-        }
-        remainder = (sum * 10) % 11;
+      let sum = 0;
+      let remainder;
 
-        if ((remainder === 10) || (remainder === 11)) {
-            remainder = 0;
-        }
-        if (remainder !== parseInt(cpf.substring(9, 10))) {
-            markInvalid(input, 'CPF inválido.');
-            return false;
-        }
+      // Lógica do primeiro dígito verificador
+      for (let i = 1; i <= 9; i++) {
+          sum += parseInt(cpf.substring(i - 1, i)) * (11 - i);
+      }
+      remainder = (sum * 10) % 11;
 
-        sum = 0;
-        for (let i = 1; i <= 10; i++) {
-            sum = sum + parseInt(cpf.substring(i - 1, i)) * (12 - i);
-        }
-        remainder = (sum * 10) % 11;
+      if ((remainder === 10) || (remainder === 11)) {
+          remainder = 0;
+      }
+      if (remainder !== parseInt(cpf.substring(9, 10))) {
+          markInvalid(input, 'CPF inválido.');
+          errorBackendDiv.innerText = '';
+          nextButton.disabled = true; // Desabilita o botão
+          return false;
+      }
 
-        if ((remainder === 10) || (remainder === 11)) {
-            remainder = 0;
-        }
-        if (remainder !== parseInt(cpf.substring(10, 11))) {
-            markInvalid(input, 'CPF inválido.');
-            return false;
-        }
+      // Lógica do segundo dígito verificador
+      sum = 0;
+      for (let i = 1; i <= 10; i++) {
+          sum += parseInt(cpf.substring(i - 1, i)) * (12 - i);
+      }
+      remainder = (sum * 10) % 11;
 
-        markValid(input);
-        return true;
+      if ((remainder === 10) || (remainder === 11)) {
+          remainder = 0;
+      }
+      if (remainder !== parseInt(cpf.substring(10, 11))) {
+          markInvalid(input, 'CPF inválido.');
+          errorBackendDiv.innerText = '';
+          nextButton.disabled = true; // Desabilita o botão
+          return false;
+      }
+      
+      // Se a validação local passar, chame a verificação no banco de dados.
+      markValid(input);
+      checkCpfDuplicado(cpf, input);
+      
+      return true;
     }
+
+    // function validateCPF(input) {
+    //     const cpf = input.value.replace(/\D/g, '');
+    //     if (cpf.length !== 11 || /^(\d)\1{10}$/.test(cpf)) {
+    //         markInvalid(input, 'CPF inválido.');
+    //         return false;
+    //     }
+
+    //     let sum = 0;
+    //     let remainder;
+
+    //     for (let i = 1; i <= 9; i++) {
+    //         sum = sum + parseInt(cpf.substring(i - 1, i)) * (11 - i);
+    //     }
+    //     remainder = (sum * 10) % 11;
+
+    //     if ((remainder === 10) || (remainder === 11)) {
+    //         remainder = 0;
+    //     }
+    //     if (remainder !== parseInt(cpf.substring(9, 10))) {
+    //         markInvalid(input, 'CPF inválido.');
+    //         return false;
+    //     }
+
+    //     sum = 0;
+    //     for (let i = 1; i <= 10; i++) {
+    //         sum = sum + parseInt(cpf.substring(i - 1, i)) * (12 - i);
+    //     }
+    //     remainder = (sum * 10) % 11;
+
+    //     if ((remainder === 10) || (remainder === 11)) {
+    //         remainder = 0;
+    //     }
+    //     if (remainder !== parseInt(cpf.substring(10, 11))) {
+    //         markInvalid(input, 'CPF inválido.');
+    //         return false;
+    //     }
+
+    //     markValid(input);
+    //     return true;
+    // }
 
     // NOVA FUNÇÃO DE VALIDAÇÃO DE DATA DE NASCIMENTO
     function validateDataNascimento(input) {
