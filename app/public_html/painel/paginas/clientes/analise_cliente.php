@@ -958,27 +958,29 @@ $alertas_duplicidade = $query_alertas->fetchAll(PDO::FETCH_ASSOC);
                       <input type="tel" class="form-control" id="referencia_contato" name="referencia_contato" value="<?= htmlspecialchars($cliente['referencia_contato'] ?? '') ?>">
                     </div>
 
+               
+
                     <div class="form-group mb-2">
-                    <label for="referencia_parentesco" class="block text-gray-700">Grau de parentesco</label>
-                    <select id="referencia_parentesco" name="referencia_parentesco" class="form-control rounded-lg mt-1 w-full p-2 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500">
-                        <option value="" disabled selected>Selecione</option>
-                        <option value="Pai">Pai</option>
-                        <option value="Mãe">Mãe</option>
-                        <option value="Marido">Marido</option>
-                        <option value="Esposa">Esposa</option>
-                        <option value="Filho">Filho</option>
-                        <option value="Filha">Filha</option>
-                        <option value="Irmão">Irmão</option>
-                        <option value="Irmã">Irmã</option>
-                        <option value="Tio">Tio</option>
-                        <option value="Tia">Tia</option>
-                        <option value="Avô">Avô</option>
-                        <option value="Avó">Avó</option>
-                        <option value="Primo">Primo</option>
-                        <option value="Prima">Prima</option>
-                        <option value="Sogro">Sogro</option>
-                        <option value="Sogra">Sogra</option>
-                    </select>
+                        <label for="referencia_parentesco" class="block text-gray-700">Grau de parentesco</label>
+                        <select id="referencia_parentesco" name="referencia_parentesco" class="form-control rounded-lg mt-1 w-full p-2 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            <option value="" disabled selected>Selecione</option>
+                            <option value="Pai" <?= ($cliente['referencia_parentesco'] ?? '') == 'Pai' ? 'selected' : '' ?>>Pai</option>
+                            <option value="Mãe" <?= ($cliente['referencia_parentesco'] ?? '') == 'Mãe' ? 'selected' : '' ?>>Mãe</option>
+                            <option value="Marido" <?= ($cliente['referencia_parentesco'] ?? '') == 'Marido' ? 'selected' : '' ?>>Marido</option>
+                            <option value="Esposa" <?= ($cliente['referencia_parentesco'] ?? '') == 'Esposa' ? 'selected' : '' ?>>Esposa</option>
+                            <option value="Filho" <?= ($cliente['referencia_parentesco'] ?? '') == 'Filho' ? 'selected' : '' ?>>Filho</option>
+                            <option value="Filha" <?= ($cliente['referencia_parentesco'] ?? '') == 'Filha' ? 'selected' : '' ?>>Filha</option>
+                            <option value="Irmão" <?= ($cliente['referencia_parentesco'] ?? '') == 'Irmão' ? 'selected' : '' ?>>Irmão</option>
+                            <option value="Irmã" <?= ($cliente['referencia_parentesco'] ?? '') == 'Irmã' ? 'selected' : '' ?>>Irmã</option>
+                            <option value="Tio" <?= ($cliente['referencia_parentesco'] ?? '') == 'Tio' ? 'selected' : '' ?>>Tio</option>
+                            <option value="Tia" <?= ($cliente['referencia_parentesco'] ?? '') == 'Tia' ? 'selected' : '' ?>>Tia</option>
+                            <option value="Avô" <?= ($cliente['referencia_parentesco'] ?? '') == 'Avô' ? 'selected' : '' ?>>Avô</option>
+                            <option value="Avó" <?= ($cliente['referencia_parentesco'] ?? '') == 'Avó' ? 'selected' : '' ?>>Avó</option>
+                            <option value="Primo" <?= ($cliente['referencia_parentesco'] ?? '') == 'Primo' ? 'selected' : '' ?>>Primo</option>
+                            <option value="Prima" <?= ($cliente['referencia_parentesco'] ?? '') == 'Prima' ? 'selected' : '' ?>>Prima</option>
+                            <option value="Sogro" <?= ($cliente['referencia_parentesco'] ?? '') == 'Sogro' ? 'selected' : '' ?>>Sogro</option>
+                            <option value="Sogra" <?= ($cliente['referencia_parentesco'] ?? '') == 'Sogra' ? 'selected' : '' ?>>Sogra</option>
+                        </select>
                     </div>
 
                     <div class="form-group mb-2">
@@ -1073,8 +1075,8 @@ $assalariado = ($cliente['ramo'] === 'assalariado');
             <label for="status_veiculo" class="block text-gray-700">Status do veículo</label>
             <select id="status_veiculo" name="status_veiculo" class="form-control rounded-lg mt-1 w-full p-2 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500">
               <option value="" disabled selected>Selecione</option>
-              <option value="proprio">Próprio</option>
-              <option value="alugado">Alugado</option>
+              <option value="proprio" <?= ($cliente['status_veiculo'] ?? '') == 'proprio' ? 'selected' : '' ?>>Próprio</option>
+              <option value="alugado"<?= ($cliente['status_veiculo'] ?? '') == 'alugado' ? 'selected' : '' ?>>Alugado</option>
             </select>
           </div>
           <div class="form-group mb-2">
@@ -1085,10 +1087,10 @@ $assalariado = ($cliente['ramo'] === 'assalariado');
             <label for="frequencia_aluguel" class="block text-gray-700">Frequência do aluguel</label>
             <select id="frequencia_aluguel" name="frequencia_aluguel" class="form-control rounded-lg mt-1 w-full p-2 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500">
               <option value="" disabled selected>Selecione</option>
-              <option value="diario">Diário</option>
-              <option value="semanal">Semanal</option>
-              <option value="quinzenal">Quinzenal</option>
-              <option value="mensal">Mensal</option>
+              <option value="diario"<?= ($cliente['frequencia_aluguel'] ?? '') == 'diario' ? 'selected' : '' ?>>Diário</option>
+              <option value="semanal"<?= ($cliente['frequencia_aluguel'] ?? '') == 'semanal' ? 'selected' : '' ?>>Semanal</option>
+              <option value="quinzenal"<?= ($cliente['frequencia_aluguel'] ?? '') == 'quinzenal' ? 'selected' : '' ?>>Quinzenal</option>
+              <option value="mensal"<?= ($cliente['frequencia_aluguel'] ?? '') == 'mensal' ? 'selected' : '' ?>>Mensal</option>
             </select>
           </div>
         </div>
@@ -1268,6 +1270,10 @@ $assalariado = ($cliente['ramo'] === 'assalariado');
                         <option value="Não tem endereço no nome">Não tem endereço no nome</option>
                     </select>
                 </div>
+                <!-- <div class="form-group mb-2" id="div-observacoes">
+                  <label for="observacoes_reprovacao" class="block text-gray-700">Observações (motivo da reprovação)</label>
+                  <textarea id="observacoes_reprovacao" name="observacoes_reprovacao" rows="4" class="form-control rounded-lg mt-1 w-full p-2 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
+                </div> -->
             </div>
 
             <div id="observacoes-pendente" class="col-md-12" style="display: none;">

@@ -76,7 +76,7 @@ if ($linhas > 0) {
         $data_nascF = implode('/', array_reverse(explode('-', $data_nasc ?? '')));
         $data_cadF = implode('/', array_reverse(explode('-', $data_cad ?? '')));
 
-        $tel_whatsF = '55' . preg_replace('/[ ()-]+/', '', $telefone);
+        $tel_whatsF = '55' . preg_replace('/[ ()-]+/', '', $telefone ?? '');
 
         // --- LÓGICA CORRIGIDA: MOVIDA PARA O INÍCIO DO LOOP ---
         $cor = '';
