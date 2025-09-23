@@ -1,33 +1,26 @@
 <?php
-// Inclui a conexão com o banco de dados.
 require_once("../../../conexao.php");
 
-// ====================================================================================
-// FUNÇÃO AUXILIAR PARA PROCESSAR UPLOADS (REVISADA E CORRIGIDA)
-// ====================================================================================
 function processUpload($file_input_name, $db_column_name, &$db_field_variable, $target_dir, $prefix, $allowed_extensions, $quality = 20) {
     global $pdo, $id_cliente;
 
     if (isset($_FILES[$file_input_name]) && $_FILES[$file_input_name]['name'] != "") {
-        // Obter o nome do arquivo antigo do banco de dados antes de atualizar
         $sql_old_file = "SELECT {$db_column_name} FROM clientes WHERE id = :id_cliente";
         $query_old_file = $pdo->prepare($sql_old_file);
         $query_old_file->bindValue(":id_cliente", $id_cliente);
         $query_old_file->execute();
         $old_file_name = $query_old_file->fetchColumn();
 
-        // Limpar o nome do arquivo para um formato seguro
         $nome_img = date('d-m-Y-H-i-s') . '-' . $prefix . '-' . preg_replace('/[^a-zA-Z0-9.\-]+/', '-', $_FILES[$file_input_name]['name']);
         $caminho = $target_dir . $nome_img;
         $imagem_temp = $_FILES[$file_input_name]['tmp_name'];
         $ext = strtolower(pathinfo($nome_img, PATHINFO_EXTENSION));
 
         if (in_array($ext, $allowed_extensions)) {
-            // Exclui o arquivo antigo se existir e não for o default
             if (!empty($old_file_name) && $old_file_name != "sem-foto.png" && $old_file_name != "sem-foto.jpg" && file_exists($target_dir . $old_file_name)) {
                 @unlink($target_dir . $old_file_name);
             }
-            $db_field_variable = $nome_img; // Atualiza a variável para o novo nome do arquivo
+            $db_field_variable = $nome_img; 
 
             // Tipos de arquivo que não são imagens
             $document_extensions = ['pdf', 'rar', 'zip', 'doc', 'docx', 'xlsx', 'xlsm', 'xls', 'xml'];
@@ -93,7 +86,6 @@ function processUpload($file_input_name, $db_column_name, &$db_field_variable, $
         $db_field_variable = $db_field_variable ?? 'sem-foto.png';
     }
 }
-// ====================================================================================
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $id_cliente = $_POST['id_cliente'] ?? null;
@@ -143,6 +135,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $funcao_assalariado = $_POST['funcao_assalariado'] ?? null;
     $empresa_assalariado = $_POST['empresa_assalariado'] ?? null;
     $valor_desejado = $_POST['valor_desejado'] ?? null;
+    $observacoes = trim($_POST['observacoes_reprovacao'] ?? '');
 
     // Obtém os nomes dos arquivos atuais para não sobrescrever se não houver novo upload
     $sql_get_files = "SELECT foto, comprovante_rg, comprovante_endereco, print_ganhos_hoje, extrato_90dias, contracheque FROM clientes WHERE id = :id";
@@ -176,6 +169,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // 2. Constrói a query de atualização com todos os campos editáveis.
     $sql_update_cliente = "UPDATE clientes SET 
     status = :status_final, 
+    observacoes_reprovacao = :observacoes_reprovacao, 
     observacoes = :observacoes, 
     estagio_cliente = :estagio_cliente,
     nome = :nome, 
@@ -237,6 +231,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $query_update_cliente = $pdo->prepare($sql_update_cliente);
 
     $query_update_cliente->bindValue(":status_final", $status_final);
+    $query_update_cliente->bindValue(":observacoes_reprovacao", $observacoes);
     $query_update_cliente->bindValue(":observacoes", $observacoes);
     $query_update_cliente->bindValue(":estagio_cliente", $status_final);
     $query_update_cliente->bindValue(":nome", $nome);

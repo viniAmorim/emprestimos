@@ -1255,7 +1255,7 @@ $assalariado = ($cliente['ramo'] === 'assalariado');
                 </select>
             </div>
 
-            <div id="observacoes-reprovado" class="col-md-6" style="display: none;">
+            <div id="observacoes-reprovado" class="row" style="display: none;">
                 <div class="form-group">
                     <label for="observacoes_reprovado">Observações (Reprovado):</label>
                     <select name="observacoes" id="observacoes_reprovado" class="form-select">
@@ -1269,11 +1269,11 @@ $assalariado = ($cliente['ramo'] === 'assalariado');
                         <option value="CNH vencida">CNH vencida</option>
                         <option value="Não tem endereço no nome">Não tem endereço no nome</option>
                     </select>
-                </div>
-                <!-- <div class="form-group mb-2" id="div-observacoes">
-                  <label for="observacoes_reprovacao" class="block text-gray-700">Observações (motivo da reprovação)</label>
-                  <textarea id="observacoes_reprovacao" name="observacoes_reprovacao" rows="4" class="form-control rounded-lg mt-1 w-full p-2 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
-                </div> -->
+                  </div>
+                  <div class="form-group mb-2" id="div-observacoes">
+                    <label for="observacoes_reprovacao" class="block text-gray-700">Observações (motivo da reprovação)</label>
+                    <textarea id="observacoes_reprovacao" name="observacoes_reprovacao" rows="4" class="form-control rounded-lg mt-1 w-full p-2 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
+                  </div>
             </div>
 
             <div id="observacoes-pendente" class="col-md-12" style="display: none;">
