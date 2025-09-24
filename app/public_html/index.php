@@ -492,7 +492,7 @@ $data_atual = date('Y-m-d');
     </div>
 
     <div id="cliente" class="tab-content hidden">
-      <form action="autenticar_cliente.php" method="post" class="space-y-4">
+      <form id="form-login-cliente" class="space-y-4">
         <input type="text" id="cpf" name="cpf" placeholder="Seu CPF" class="form-input w-full" required />
         <input type="password" name="senha" placeholder="Senha" class="form-input w-full" required />
         <button type="submit" class="btn-primary w-full">Entrar</button>
@@ -750,6 +750,49 @@ $data_atual = date('Y-m-d');
 
     // Chama a função ao carregar a página
     window.onload = redirectToApp;
+
+     // Novo código para autenticação com AJAX
+     const formLoginCliente = document.getElementById('form-login-cliente');
+
+    if (formLoginCliente) {
+        formLoginCliente.addEventListener('submit', function(event) {
+            event.preventDefault(); // Impede o envio padrão do formulário
+
+            const formData = new FormData(this);
+
+            fetch('autenticar_cliente.php', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('A resposta da rede não foi ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data.status === 'sucesso') {
+                   
+                  window.location.href = data.redirecionar;
+                    
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Erro!',
+                        text: data.mensagem,
+                    });
+                }
+            })
+            .catch(error => {
+                console.error('Erro na requisição:', error);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Erro!',
+                    text: 'Houve um problema ao processar o login. Tente novamente.',
+                });
+            });
+        });
+    }
 
 
 </script>
