@@ -252,6 +252,14 @@ $query = $pdo->query("SELECT * from emprestimos where status = 'Finalizado'");
 $res = $query->fetchAll(PDO::FETCH_ASSOC);
 $emprestimos_finalizados = @count($res);
 
+// Contagem de alertas de duplicidade
+$query_alertas = $pdo->query("SELECT COUNT(*) FROM alertas_duplicidade WHERE resolvido = 0");
+$total_alertas_nao_resolvidos = $query_alertas->fetchColumn();
+
+// Contagem de clientes para analisar
+$query_para_analise = $pdo->query("SELECT COUNT(*) FROM clientes WHERE estagio_cliente IN ('Pendente', 'Nao validado', 'Em Analise')");
+$total_clientes_para_analise = $query_para_analise->fetchColumn();
+
  ?>
 
  <style>
@@ -554,36 +562,42 @@ $(document).ready(function() {
     });
 
     // Lógica para mostrar o SweetAlert
-    var clientesParaValidar = <?php echo $total_clientes_debitos; ?>;
-    var alertasParaAnalisar = 2; // Substitua pelo valor real
-
-    // Mostra o SweetAlert a cada vez que a página é carregada (após o login)
-    Swal.fire({
-      title: '👋 Bem-vindo(a) ao seu Painel!',
-      html: `
-          <div class="swal-modern">
-              <p>Seu sistema tem algumas atualizações importantes para você:</p>
-              <div class="swal-info-item">
-                  <span class="info-label azul-destaque">Clientes para validar:</span> 
-                  <span class="info-valor">${clientesParaValidar}</span>
-              </div>
-              <div class="swal-info-item">
-                  <span class="info-label vermelho-destaque">Alertas para analisar:</span> 
-                  <span class="info-valor">${alertasParaAnalisar}</span>
-              </div>
-          </div>
-      `,
-      icon: 'success',
-      confirmButtonText: 'Ver Detalhes',
-      showCloseButton: true,
-      focusConfirm: false,
-      customClass: {
-          popup: 'swal-popup-modern',
-          title: 'swal-title-modern',
-          htmlContainer: 'swal-html-container-modern',
-          confirmButton: 'swal-confirm-button-modern'
-      }
-  });
+    var clientesParaAnalisar = <?php echo $total_clientes_para_analise; ?>;
+    var alertasParaAnalisar = <?php echo $total_alertas_nao_resolvidos; ?>;
+   
+    if (clientesParaAnalisar > 0 || alertasParaAnalisar > 0) {
+      Swal.fire({
+        title: '👋 Bem-vindo(a) ao seu Painel!',
+        html: `
+            <div class="swal-modern">
+                <p>Seu sistema tem algumas atualizações importantes para você:</p>
+                <div class="swal-info-item">
+                    <span class="info-label azul-destaque">Clientes novos para analisar:</span> 
+                    <span class="info-valor">${clientesParaAnalisar}</span>
+                </div>
+                <div class="swal-info-item">
+                    <span class="info-label vermelho-destaque">Alertas para analisar:</span> 
+                    <span class="info-valor">${alertasParaAnalisar}</span>
+                </div>
+            </div>
+        `,
+        icon: 'success',
+        confirmButtonText: 'Ver Detalhes',
+        showCloseButton: true,
+        focusConfirm: false,
+        customClass: {
+            popup: 'swal-popup-modern',
+            title: 'swal-title-modern',
+            htmlContainer: 'swal-html-container-modern',
+            confirmButton: 'swal-confirm-button-modern'
+        }
+      }).then((result) => {
+        // Redireciona a página se o botão "Ver Detalhes" for clicado
+        if (result.isConfirmed) {
+            window.location.href = 'index.php?pagina=clientes';
+        }
+    });
+    }
 
     // Dados e configuração para o gráfico
     var meses = "<?=$datas_apuracao_final?>";

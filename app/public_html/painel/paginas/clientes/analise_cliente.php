@@ -1245,13 +1245,13 @@ $assalariado = ($cliente['ramo'] === 'assalariado');
                     <option value="Aprovado">Aprovado</option>
                     <option value="Reprovado">Reprovado</option>
                     <option value="Pendente">Pendente</option>
-                    <option value="NaoValidado">Não Validado</option>
+                    <option value="Nao Validado">Não Validado</option>
                     <option value="Ativo">Ativo</option>
                     <option value="Inativo">Inativo</option>
-                    <option value="EmAtraso">Em Atraso</option>
+                    <option value="Em Atraso">Em Atraso</option>
                     <option value="Negativado">Negativado</option>
-                    <option value="EmAnalise">Em Análise</option>
-                    <option value="NaoTemInteresse">Não tem Interesse</option>
+                    <option value="Em Analise">Em Análise</option>
+                    <option value="Nao Tem Interesse">Não tem Interesse</option>
                 </select>
             </div>
 

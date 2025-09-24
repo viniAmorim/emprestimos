@@ -5,14 +5,35 @@ require_once("../../../conexao.php");
 $data_atual = date('Y-m-d');
 
 $status = @$_POST['p1'];
-$validado = @$_POST['p2'];
+$estagio_cliente = @$_POST['p2'];
+$alerta_busca = @$_POST['p3'];
 
+// Sempre utilize o alias 'c' para a tabela principal
+$tabela_com_alias = 'clientes c';
+$join = "";
 $filtros = [];
-if ($status != "") {
-    $filtros[] = "status_cliente = '$status'";
+
+// Lógica de filtro padrão para a primeira carga da página
+if ($estagio_cliente == "") {
+    // Se nenhum filtro de estágio for enviado, aplica o filtro padrão
+    $filtros[] = "c.estagio_cliente IN ('Em análise', 'pendente', 'Nao validado')";
+} else {
+    // Se o filtro de estágio for enviado, use-o
+    $filtros[] = "c.estagio_cliente = '$estagio_cliente'";
 }
-if ($validado != "") {
-    $filtros[] = "validado = '$validado'";
+
+// Filtros adicionais (status e alerta)
+if ($status != "") {
+    $filtros[] = "c.status_cliente = '$status'";
+}
+
+// Lógica para o filtro de alerta de duplicidade
+if ($alerta_busca == "ComAlerta") {
+    $join = "INNER JOIN alertas_duplicidade ad ON ad.id_cliente_cadastrado = c.id";
+    $filtros[] = "ad.resolvido = 0";
+} else if ($alerta_busca == "SemAlerta") {
+    $join = "LEFT JOIN alertas_duplicidade ad ON ad.id_cliente_cadastrado = c.id";
+    $filtros[] = "ad.id_cliente_cadastrado IS NULL";
 }
 
 $sql_where = "";
@@ -20,9 +41,10 @@ if (count($filtros) > 0) {
     $sql_where = "WHERE " . implode(" AND ", $filtros);
 }
 
-$query = $pdo->query("SELECT * from $tabela $sql_where order by id desc");
+$query = $pdo->query("SELECT DISTINCT c.* FROM $tabela_com_alias $join $sql_where ORDER BY c.id DESC");
 $res = $query->fetchAll(PDO::FETCH_ASSOC);
 $linhas = @count($res);
+
 if ($linhas > 0) {
     echo <<<HTML
     <small>
@@ -93,7 +115,7 @@ if ($linhas > 0) {
         }
 
         // Verifica se existem alertas de duplicidade para este cliente
-        $query_alerta = $pdo->prepare("SELECT COUNT(*) AS total_alertas FROM alertas_duplicidade WHERE id_cliente_cadastrado = :id");
+        $query_alerta = $pdo->prepare("SELECT COUNT(*) AS total_alertas FROM alertas_duplicidade WHERE id_cliente_cadastrado = :id AND resolvido = 0");
         $query_alerta->bindValue(":id", $id);
         $query_alerta->execute();
         $res_alerta = $query_alerta->fetch(PDO::FETCH_ASSOC);
@@ -167,7 +189,6 @@ if ($linhas > 0) {
         <td class="esc">{$grupo}</td>
         <td class="esc"><img src="images/clientes/{$foto}" width="25px"></td>
         <td>
-        <!-- <big><a href="#" onclick="mostrarAlertas('{$id}', '{$nome}')" title="Ver Alertas" class="{$btn_alerta_class}"><i class="fa fa-exclamation-triangle text-warning"></i></a></big> -->
         <big><a href="#" onclick="editar('{$id}','{$nome}','{$telefone}','{$cpf}','{$email}','{$enderecoF2}','{$data_nascF}', '{$pix}', '{$indicacao}', '{$bairro}', '{$cidade}', '{$estado}', '{$cep}', '{$pessoa}', '{$nome_sec}', '{$telefone_sec}', '{$endereco_sec}', '{$grupo}', '{$tumb_comprovante_endereco}', '{$tumb_comprovante_rg}', '{$telefone2}', '{$foto}', '{$status_cliente}')" title="Editar Dados"><i class="fa fa-edit text-primary"></i></a></big>
 
         <li class="dropdown head-dpdn2" style="display: inline-block;">
@@ -232,60 +253,60 @@ if ($linhas > 0) {
 }
 /* Estilo para o título "ALERTAS:" */
 .alertas-titulo {
-  font-size: 1.25rem;
-  font-weight: 600;
-  color: #333;
-  border-bottom: 2px solid #e53935;
-  padding-bottom: 0.5rem;
-  margin-bottom: 1.5rem;
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #333;
+    border-bottom: 2px solid #e53935;
+    padding-bottom: 0.5rem;
+    margin-bottom: 1.5rem;
 }
 
 /* Estilo de cada item de alerta */
 .alerta-item {
-  padding: 1rem 0;
-  color: #555;
-  line-height: 1.6;
-  position: relative;
-  padding-left: 2.5rem; /* Espaço para o ícone */
-  border-bottom: 1px solid #eee;
+    padding: 1rem 0;
+    color: #555;
+    line-height: 1.6;
+    position: relative;
+    padding-left: 2.5rem; /* Espaço para o ícone */
+    border-bottom: 1px solid #eee;
 }
 
 /* Para o último item de alerta, remove a borda inferior */
 .alerta-item:last-child {
-  border-bottom: none;
+    border-bottom: none;
 }
 
 /* Pseudo-elemento para o ícone de alerta */
 .alerta-item::before {
-  content: "!";
-  position: absolute;
-  left: 1rem;
-  top: 50%;
-  transform: translateY(-50%);
-  background-color: #e53935;
-  color: #fff;
-  font-weight: 700;
-  font-size: 0.9rem;
-  width: 1.5rem;
-  height: 1.5rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 50%;
+    content: "!";
+    position: absolute;
+    left: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: #e53935;
+    color: #fff;
+    font-weight: 700;
+    font-size: 0.9rem;
+    width: 1.5rem;
+    height: 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
 }
 
 /* Estilo para os textos importantes em negrito */
 .alerta-item strong {
-  font-weight: 700; /* Negrito mais forte */
-  color: #e53935; /* Usa o vermelho para destacar o texto */
+    font-weight: 700; /* Negrito mais forte */
+    color: #e53935; /* Usa o vermelho para destacar o texto */
 }
 
 /* Estilo para a mensagem de nenhum alerta encontrado */
 .alerta-vazio {
-  color: #888;
-  font-style: italic;
-  font-size: 1rem;
-  margin: 1rem 0;
+    color: #888;
+    font-style: italic;
+    font-size: 1rem;
+    margin: 1rem 0;
 }
 </style>
 
@@ -460,37 +481,37 @@ if ($linhas > 0) {
         },
         dataType: 'json',
         success: function(response) {
-          if (response.success && response.alertas.length > 0) {
-              let alertasHTML = '<h5 class="alertas-titulo">ALERTAS:</h5>';
-              let nomeClienteAlerta = $('#nome-cliente-alerta').text();
+            if (response.success && response.alertas.length > 0) {
+                let alertasHTML = '<h5 class="alertas-titulo">ALERTAS:</h5>';
+                let nomeClienteAlerta = $('#nome-cliente-alerta').text();
 
-              response.alertas.forEach(alerta => {
-                  if (alerta.tipo_alerta === 'Nome Duplicado') {
-                      alertasHTML += `
-                          <div class="alerta-item">
-                              <p>- O nome <strong>${alerta.valor_duplicado}</strong> já existe para o cliente <strong>${alerta.nome_duplicado}</strong>.</p>
-                          </div>
-                      `;
-                  } else if (alerta.tipo_alerta === 'Telefone Duplicado') {
-                      alertasHTML += `
-                          <div class="alerta-item">
-                              <p>- O telefone <strong>${alerta.valor_duplicado}</strong> já foi utilizado em outro cadastro do cliente <strong>${alerta.nome_duplicado}</strong>.</p>
-                          </div>
-                      `;
-                  } else {
-                      alertasHTML += `
-                          <div class="alerta-item">
-                              <p class="mb-0"><span class="alerta-tipo">${alerta.tipo_alerta}:</span> <span class="alerta-valor"><strong>${alerta.valor_duplicado}</strong></span></p>
-                              <p class="alerta-data">Data do Alerta: ${alerta.data_alerta}</p>
-                          </div>
-                      `;
-                  }
-              });
-              $('#lista-alertas').html(alertasHTML);
-          } else {
-              $('#lista-alertas').html('<p class="text-center alerta-vazio">Nenhum alerta de duplicidade encontrado para este cliente.</p>');
-          }
-},
+                response.alertas.forEach(alerta => {
+                    if (alerta.tipo_alerta === 'Nome Duplicado') {
+                        alertasHTML += `
+                            <div class="alerta-item">
+                                <p>- O nome <strong>${alerta.valor_duplicado}</strong> já existe para o cliente <strong>${alerta.nome_duplicado}</strong>.</p>
+                            </div>
+                        `;
+                    } else if (alerta.tipo_alerta === 'Telefone Duplicado') {
+                        alertasHTML += `
+                            <div class="alerta-item">
+                                <p>- O telefone <strong>${alerta.valor_duplicado}</strong> já foi utilizado em outro cadastro do cliente <strong>${alerta.nome_duplicado}</strong>.</p>
+                            </div>
+                        `;
+                    } else {
+                        alertasHTML += `
+                            <div class="alerta-item">
+                                <p class="mb-0"><span class="alerta-tipo">${alerta.tipo_alerta}:</span> <span class="alerta-valor"><strong>${alerta.valor_duplicado}</strong></span></p>
+                                <p class="alerta-data">Data do Alerta: ${alerta.data_alerta}</p>
+                            </div>
+                        `;
+                    }
+                });
+                $('#lista-alertas').html(alertasHTML);
+            } else {
+                $('#lista-alertas').html('<p class="text-center alerta-vazio">Nenhum alerta de duplicidade encontrado para este cliente.</p>');
+            }
+        },
         error: function() {
             $('#lista-alertas').html('<p class="text-danger text-center">Erro ao carregar os alertas. Tente novamente.</p>');
         }

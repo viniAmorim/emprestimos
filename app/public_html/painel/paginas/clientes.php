@@ -109,10 +109,26 @@ if($verificar_pagamentos != 'Não'){
 	</li>
 
   <li class="" style="display: inline-block;">
-    <select class="form-control mt-2" name="validado_busca" id="validado_busca" onchange="buscar()">
-      <option value="">Filtrar Por Validação</option>
-      <option value="1">Validados</option>
-      <option value="0">Não validados</option>
+    <select class="form-control mt-2" name="estagio_cliente_busca" id="estagio_cliente_busca" onchange="buscar()">
+      <option value="">Filtrar por Estágio</option>
+      <option value="Aprovado">Aprovado</option>
+      <option value="Reprovado">Reprovado</option>
+      <option value="Pendente">Pendente</option>
+      <option value="Nao Validado">Não Validado</option>
+      <option value="Ativo">Ativo</option>
+      <option value="Inativo">Inativo</option>
+      <option value="Em Atraso">Em Atraso</option>
+      <option value="Negativado">Negativado</option>
+      <option value="Em Analise">Em Análise</option>
+      <option value="Nao Tem Interesse">Não tem Interesse</option>
+      </select>
+  </li>
+
+  <li class="" style="display: inline-block;">
+    <select class="form-control mt-2" name="alerta_busca" id="alerta_busca" onchange="buscar()">
+      <option value="">Filtrar por alertas</option>
+      <option value="ComAlerta">Apenas com Alertas</option>
+      <option value="SemAlerta">Sem Alertas</option>
     </select>
   </li>
 
@@ -399,10 +415,6 @@ if($verificar_pagamentos != 'Não'){
     </div>
 </div>
 
-
-
-
-
 <!-- Modal Dados -->
 <div class="modal fade" id="modalDados" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" style="overflow: scroll; height:100%; scrollbar-width: thin;">
 	<div class="modal-dialog">
@@ -642,13 +654,6 @@ if($verificar_pagamentos != 'Não'){
 		</div>
 </div>
 
-
-
-
-
-
-
-
 	<!-- Modal Arquivos Conta-->
 	<div class="modal fade" id="modalArquivos_conta" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" style="z-index: 2000">
 		<div class="modal-dialog">
@@ -674,9 +679,6 @@ if($verificar_pagamentos != 'Não'){
 									<img src="images/arquivos/sem-foto.png"  width="60px" id="target-arquivos_conta">									
 								</div>					
 							</div>
-
-
-
 
 						</div>
 
@@ -705,11 +707,6 @@ if($verificar_pagamentos != 'Não'){
 			</div>
 		</div>
 </div>
-
-
-
-
-
 
 <!-- Modal Empréstimo -->
 <div class="modal fade" id="modalEmprestimo" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -746,9 +743,6 @@ if($verificar_pagamentos != 'Não'){
 								<label>Data</label>
 								<input type="date" class="form-control" id="data_emp" name="data"  value="<?php echo $data_atual ?>" required>							
 						</div>
-
-
-						
 					</div>
 
 				
@@ -865,15 +859,6 @@ if($verificar_pagamentos != 'Não'){
 	</div>
 </div>
 
-
-
-
-
-
-
-
-
-
 <!-- Modal Cobranca -->
 <div class="modal fade" id="modalCobranca" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
 	<div class="modal-dialog">
@@ -939,14 +924,8 @@ if($verificar_pagamentos != 'Não'){
 									<option value="Não">Não</option>
 								</select>						
 						</div>
-
-
-						
-
 						
 					</div>
-
-
 
 					<div class="row">
 						<div class="col-md-4">							
@@ -968,9 +947,6 @@ if($verificar_pagamentos != 'Não'){
 						</div>
 					</div>
 
-								
-
-
 					<input type="hidden" class="form-control" id="id_cob" name="id">					
 
 				<br>
@@ -983,10 +959,6 @@ if($verificar_pagamentos != 'Não'){
 		</div>
 	</div>
 </div>
-
-
-
-
 
 <!-- Modal Parcelas -->
 <div class="modal fade" id="modalParcelas" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -1009,8 +981,6 @@ if($verificar_pagamentos != 'Não'){
 		</div>
 	</div>
 </div>
-
-
 
 <!-- Modal Baixar -->
 <div class="modal fade" id="modalBaixar" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -1042,8 +1012,6 @@ if($verificar_pagamentos != 'Não'){
 								<label>Multa R$</label>
 								<input type="text" class="form-control" id="multa_baixar" name="multa_baixar" placeholder="Multa se Houver" onkeyup="calcular()" >							
 						</div>
-
-
 						
 					</div>
 
@@ -1077,11 +1045,7 @@ if($verificar_pagamentos != 'Não'){
 								<input type="text" class="form-control" id="valor_final" name="valor_final" placeholder="Total Pago" required onkeyup="mascara_valor('valor_final')">							
 
 						</div>	
-
-
-												
-
-						
+										
 					</div>
 
 					<div class="row" align="right">
@@ -1096,16 +1060,8 @@ if($verificar_pagamentos != 'Não'){
 						    <label for="residuo" style="display:inline-block;"><small>Resíduo Próxima Parcela</small></label>
 						  </span>
 						</div>
-
 						
 					</div>
-
-					
-
-
-					
-
-
 					<input type="hidden" class="form-control" id="id_baixar" name="id">					
 
 				<br>
@@ -1118,11 +1074,6 @@ if($verificar_pagamentos != 'Não'){
 		</div>
 	</div>
 </div>
-
-
-
-
-
 
 <!-- Modal Baixar -->
 <div class="modal fade" id="modalBaixarEmprestimo" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -1185,11 +1136,6 @@ if($verificar_pagamentos != 'Não'){
 
 						
 					</div>
-
-				
-								
-
-
 					<input type="hidden" class="form-control" id="id_do_emp" name="id">		
 					<input type="hidden" class="form-control" id="id_do_cliente" name="id_cliente">					
 
@@ -1209,10 +1155,6 @@ if($verificar_pagamentos != 'Não'){
 		</div>
 	</div>
 </div>
-
-
-
-
 
 <!-- Modal Nova Parcela -->
 <div class="modal fade" id="modalNovaParcela" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -1259,11 +1201,6 @@ if($verificar_pagamentos != 'Não'){
 
 											
 					</div>
-
-				
-								
-
-
 					<input type="hidden" class="form-control" id="id_nova_parcela" name="id">	
 					<input type="hidden" class="form-control" id="id_nova_parcela_cliente" name="id_cliente">	
 									
@@ -1278,13 +1215,6 @@ if($verificar_pagamentos != 'Não'){
 		</div>
 	</div>
 </div>
-
-
-
-
-
-
-
 
 <!-- Modal Amortizar -->
 <div class="modal fade" id="modalAmortizar" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -1322,10 +1252,6 @@ if($verificar_pagamentos != 'Não'){
 											
 					</div>
 
-				
-								
-
-
 					<input type="hidden" class="form-control" id="id_amortizar" name="id">	
 					<input type="hidden" class="form-control" id="id_amortizar_cliente" name="id_cliente">	
 									
@@ -1340,10 +1266,6 @@ if($verificar_pagamentos != 'Não'){
 		</div>
 	</div>
 </div>
-
-
-
-
 
 <!-- Modal Ediitar Emp -->
 <div class="modal fade" id="modalEditar" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -1371,13 +1293,8 @@ if($verificar_pagamentos != 'Não'){
 								<label>Multa R$</label>
 								<input type="text" class="form-control" id="multa_empr" name="multa" placeholder="Multa se Houver"  onkeyup="mascara_valor('multa_empr')">							
 						</div>
-
-
-					
 						
 					</div>
-			
-
 
 					<input type="hidden" class="form-control" id="id_empr" name="id">					
 
@@ -1391,11 +1308,6 @@ if($verificar_pagamentos != 'Não'){
 		</div>
 	</div>
 </div>
-
-
-
-
-
 
 <div class="modal fade" id="importarXlsModal" tabindex="-1" role="dialog" aria-labelledby="importarXlsModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg" role="document">
@@ -1432,8 +1344,6 @@ if($verificar_pagamentos != 'Não'){
 						<label>Caso não tenha todas as colunas, deixe as que não tiver com dados vazio, mas preencha o cabeçalho delas, conforme o modelo acima ou modelo em anexo, as datas precisam estar no modelo americano (ano-mês-dia)</label>
 					</div>
 </div>
-      
-     
 
     </div>
   </div>
@@ -1451,14 +1361,8 @@ if($verificar_pagamentos != 'Não'){
   </body>
 </html>
 
-
-
 <script type="text/javascript">var pag = "<?=$pag?>"</script>
 <script src="js/ajax.js"></script>
-
-
-
-
 
 <script type="text/javascript">
       function verificaRamoAtuacao() {
@@ -1548,8 +1452,6 @@ if($verificar_pagamentos != 'Não'){
 	}
 </script>
 
-
-
 <script type="text/javascript">
 	
 
@@ -1592,17 +1494,9 @@ $("#form-arquivos").submit(function () {
 });
 </script>
 
-
-
-
-
-
 <script type="text/javascript">
 	
-
 $("#form_emp").submit(function () {
-
-
 
 	$('#mensagem_emp').text('Carregando');
 	$('#btn_emprestimo').hide();
@@ -1685,10 +1579,6 @@ $("#form_emp").submit(function () {
 	}
 </script>
 
-
-
-
-
 <script type="text/javascript">
 
 $("#form_baixar").submit(function () {
@@ -1754,11 +1644,6 @@ $("#form_baixar").submit(function () {
 });
 </script>
 
-
-
-
-
-
 <script type="text/javascript">
 
 $("#form_baixar_emprestimo").submit(function () {
@@ -1822,12 +1707,6 @@ $("#form_baixar_emprestimo").submit(function () {
 });
 </script>
 
-
-
-
-
-
-
 <script type="text/javascript">
 	
 
@@ -1890,9 +1769,6 @@ $("#form_cob").submit(function () {
 
 	}
 </script>
-
-
-
 
 <script>
     
@@ -1966,11 +1842,6 @@ $("#form_cob").submit(function () {
 
     </script>
 
-
-
-
-
-
 <script type="text/javascript">
 	
 
@@ -2031,9 +1902,6 @@ $("#form_nova_parcela").submit(function () {
 	}
 </script>
 
-
-
-
 <script type="text/javascript">
 	function listarDebitos(id){			
 		 $.ajax({
@@ -2065,12 +1933,6 @@ $("#form_nova_parcela").submit(function () {
 
 	}
 </script>
-
-
-
-
-
-
 
 <script type="text/javascript">
 			function carregarImgArquivos_conta() {
@@ -2144,8 +2006,6 @@ $("#form_nova_parcela").submit(function () {
 	}
 </script>
 
-
-
 <script type="text/javascript">
 	
 
@@ -2188,10 +2048,6 @@ $("#form-arquivos_conta").submit(function () {
 });
 </script>
 
-
-
-
-
 <script type="text/javascript">
 	function carregarImgComprovanteEndereco() {
 		var target = document.getElementById('target-comprovante-endereco');
@@ -2228,9 +2084,6 @@ $("#form-arquivos_conta").submit(function () {
 	}
 </script>
 
-
-
-
 <script type="text/javascript">
 	function carregarImgComprovanteRG() {
 		var target = document.getElementById('target-comprovante-rg');
@@ -2266,11 +2119,6 @@ $("#form-arquivos_conta").submit(function () {
 		}
 	}
 </script>
-
-
-
-
-
 
 <script type="text/javascript">
 	
@@ -2319,10 +2167,6 @@ $("#form_amortizar").submit(function () {
 });
 </script>
 
-
-
-
-
 <script type="text/javascript">
 	function carregarImg() {
 		var target = document.getElementById('target');
@@ -2346,9 +2190,6 @@ $("#form_amortizar").submit(function () {
 		}
 	}
 </script>
-
-
-
 
 <script type="text/javascript">
 	
@@ -2423,8 +2264,9 @@ function atualizarCorStatus_busca() {
 <script type="text/javascript">
 	function buscar(){
 		var status = $('#status_cliente_busca').val();
-    var validado = $('#validado_busca').val();    
-		listar(status, validado)
+    var estagio = $('#estagio_cliente_busca').val();    
+    var alerta = $('#alerta_busca').val();
+		listar(status, estagio, alerta);
 	}
 </script>
 
@@ -2446,9 +2288,6 @@ function atualizarCorStatus_busca() {
     }
   });
 </script>
-
-
-
 
 <script type="text/javascript">
 	
