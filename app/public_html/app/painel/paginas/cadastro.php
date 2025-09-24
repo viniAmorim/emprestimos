@@ -146,7 +146,7 @@
                 </div>
 
                 <div class="form-group mb-4">
-                    <label class="block text-gray-700">Celular(Whatsapp)</label>
+                    <label class="block text-gray-700">Celular (Whatsapp)</label>
                     <input type="text" name="telefone" id="telefone" placeholder="Telefone" class="form-input w-full" required onblur="validateField(this)">
                 </div>
 

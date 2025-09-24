@@ -723,7 +723,7 @@
                           <label class="block text-sm font-medium text-white">Quadra</label>
                           <div class="info-icon">
                               <i class="fas fa-info-circle" style="color: #fff; cursor: pointer;"></i>
-                              <span class="info-tooltip">Exemplo: Q-10.</span>
+                              <span class="info-tooltip">Q-10.</span>
                           </div>
                         </div>
                         <input type="text" name="quadra" id="quadra" class="form-input w-full" required onblur="validateField(this)">
@@ -769,7 +769,7 @@
                           <input type="text" id="referencia_nome" name="referencia_nome" placeholder="Nome Completo" class="form-input w-full" required onblur="validateField(this)">
                         </div>
                         <div>
-                          <label class="block text-sm font-medium text-white">Celular(Whatsapp)</label>
+                          <label class="block text-sm font-medium text-white">Celular (Whatsapp)</label>
                           <input type="text" name="referencia_contato" id="referencia_contato" placeholder="(XX)XXXX-XXX)" class="form-input w-full" required onblur="validateField(this)">
                         </div>
                         <div>
@@ -805,7 +805,7 @@
                       </div>
 
                       <div>
-                        <label class="block text-sm font-medium text-white">Celular(Whatsapp)</label>
+                        <label class="block text-sm font-medium text-white">Celular (Whatsapp)</label>
                         <input type="text" id="indicacao_contato" name="indicacao_contato" placeholder="Indicado por" class="form-input w-full" onblur="validateField(this)">
                       </div>
                     </div>
