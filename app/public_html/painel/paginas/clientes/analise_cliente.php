@@ -634,9 +634,44 @@ $alertas_duplicidade = $query_alertas->fetchAll(PDO::FETCH_ASSOC);
     color: #495057;
 }
 
-/* Estilo específico para botões de arquivo (input type="file") */
 .form-control[type="file"] {
-    padding: 10px; /* Um pouco menos de padding para se ajustar melhor */
+    padding: 10px;
+}
+
+.alerta-resolvido {
+    background-color: #e6ffe6; 
+    border: 1px solid #00cc00; 
+    padding: 15px;
+    box-shadow: 0 0 5px rgba(0, 204, 0, 0.5); 
+    color: #006600; 
+}
+
+/* Estilos base para todos os cards de alerta */
+.alerta-card-item {
+    padding: 15px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    transition: background-color 0.3s, border-color 0.3s;
+}
+
+/* Estilo para Alertas PENDENTES (VERMELHO) */
+.alerta-pendente {
+    background-color: #ffeaea; /* Vermelho muito claro */
+    border-left: 5px solid #d9534f; /* Borda lateral vermelha */
+}
+
+/* Estilo para Alertas RESOLVIDOS/IGNORADOS (VERDE) */
+.alerta-resolvido {
+    background-color: #e6ffe6; /* Verde muito claro */
+    border-left: 5px solid #5cb85c; /* Borda lateral verde */
+    opacity: 0.8; /* Leve opacidade para indicar que foi resolvido */
+}
+
+/* Opcional: Estilo para o badge de ignorado */
+.alerta-resolvido .badge {
+    font-size: 0.75rem;
+    padding: 0.4em 0.8em;
 }
 
     </style>
@@ -661,64 +696,80 @@ $alertas_duplicidade = $query_alertas->fetchAll(PDO::FETCH_ASSOC);
         <hr>
 
         <h4 class="section-title">Alertas de Duplicidade</h4>
-        <div class="alert-duplicidade-card">
-            <?php 
-            $has_unresolved_alerts = false;
-            if (count($alertas_duplicidade) > 0): ?>
-                <?php foreach ($alertas_duplicidade as $alerta): 
-                    if ($alerta['resolvido'] == 1) continue;
-                    $has_unresolved_alerts = true;
+<div class="alert-duplicidade-card">
+    <?php 
+    $has_unresolved_alerts = false; 
+    
+    if (count($alertas_duplicidade) > 0): ?>
+        <?php foreach ($alertas_duplicidade as $alerta): 
+            
+            // Define a classe CSS e verifica o status
+            $is_resolvido = ($alerta['resolvido'] == 1);
+            $alerta_class = $is_resolvido ? 'alerta-resolvido' : 'alerta-pendente';
+            
+            // Define se há algum alerta pendente para a mensagem final
+            if (!$is_resolvido) {
+                $has_unresolved_alerts = true;
+            }
 
-                    $data_alerta_formatada = date('d/m/Y', strtotime($alerta['data_alerta']));
-                    $nome_cliente_duplicado = "Não encontrado";
+            $data_alerta_formatada = date('d/m/Y', strtotime($alerta['data_alerta']));
+            $nome_cliente_duplicado = "Não encontrado";
 
-                    // Tenta buscar o nome do cliente duplicado se o valor_duplicado não for N/A
-                    if ($alerta['valor_duplicado'] !== 'N/A' && !empty($alerta['valor_duplicado'])) {
-                        if ($alerta['tipo_alerta'] === 'Nome Duplicado') {
-                            $query_cliente_dup = $pdo->prepare("SELECT nome FROM clientes WHERE nome = :valor AND id != :id_original LIMIT 1");
-                            $query_cliente_dup->bindValue(":valor", $alerta['valor_duplicado']);
-                            $query_cliente_dup->bindValue(":id_original", $id_cliente);
-                        } else if ($alerta['tipo_alerta'] === 'Telefone Duplicado' || $alerta['tipo_alerta'] === 'CPF Duplicado' || $alerta['tipo_alerta'] === 'Email Duplicado') {
-                            // Assumindo que 'valor_duplicado' contém o telefone/CPF/email duplicado
-                            $campo_busca = '';
-                            if ($alerta['tipo_alerta'] === 'Telefone Duplicado') $campo_busca = 'telefone';
-                            else if ($alerta['tipo_alerta'] === 'CPF Duplicado') $campo_busca = 'cpf';
-                            else if ($alerta['tipo_alerta'] === 'Email Duplicado') $campo_busca = 'email';
-
-                            if (!empty($campo_busca)) {
-                                $query_cliente_dup = $pdo->prepare("SELECT nome FROM clientes WHERE {$campo_busca} = :valor AND id != :id_original LIMIT 1");
-                                $query_cliente_dup->bindValue(":valor", $alerta['valor_duplicado']);
-                                $query_cliente_dup->bindValue(":id_original", $id_cliente);
-                            }
-                        }
-
-                        if (isset($query_cliente_dup)) {
-                            $query_cliente_dup->execute();
-                            $res_dup = $query_cliente_dup->fetch(PDO::FETCH_ASSOC);
-                            if ($res_dup) {
-                                $nome_cliente_duplicado = $res_dup['nome'];
-                            }
-                        }
+            // Lógica de busca pelo nome do cliente duplicado
+            if ($alerta['valor_duplicado'] !== 'N/A' && !empty($alerta['valor_duplicado'])) {
+                if ($alerta['tipo_alerta'] === 'Nome Duplicado') {
+                    $query_cliente_dup = $pdo->prepare("SELECT nome FROM clientes WHERE nome = :valor AND id != :id_original LIMIT 1");
+                    $query_cliente_dup->bindValue(":valor", $alerta['valor_duplicado']);
+                    $query_cliente_dup->bindValue(":id_original", $id_cliente);
+                } else if ($alerta['tipo_alerta'] === 'Telefone Duplicado' || $alerta['tipo_alerta'] === 'CPF Duplicado' || $alerta['tipo_alerta'] === 'Email Duplicado' || $alerta['tipo_alerta'] === 'Telefone de Referência Duplicado') {
+                    
+                    $campo_busca = '';
+                    if ($alerta['tipo_alerta'] === 'Telefone Duplicado') $campo_busca = 'telefone';
+                    else if ($alerta['tipo_alerta'] === 'CPF Duplicado') $campo_busca = 'cpf';
+                    else if ($alerta['tipo_alerta'] === 'Email Duplicado') $campo_busca = 'email';
+                    // **USAR O NOME EXATO DA COLUNA AQUI:**
+                    else if ($alerta['tipo_alerta'] === 'Telefone de Referência Duplicado') $campo_busca = 'referencia_contato'; 
+                
+                    if (!empty($campo_busca)) {
+                        $query_cliente_dup = $pdo->prepare("SELECT nome FROM clientes WHERE {$campo_busca} = :valor AND id != :id_original LIMIT 1");
+                        $query_cliente_dup->bindValue(":valor", $alerta['valor_duplicado']);
+                        $query_cliente_dup->bindValue(":id_original", $id_cliente);
                     }
-                ?>
-                    <div id="alerta-<?= htmlspecialchars($alerta['id'] ?? '') ?>">
-                        <h5 class="section-title-alt">Alerta: <?= htmlspecialchars($alerta['tipo_alerta']) ?></h5>
-                        <p class="mb-2"><strong>Valor Duplicado:</strong> <span class="form-control-plaintext py-1"><?= htmlspecialchars($alerta['valor_duplicado'] ?? '') ?></span></p>
-                        <p class="mb-2"><strong>Cliente Duplicado:</strong> <span class="form-control-plaintext py-1"><?= htmlspecialchars($nome_cliente_duplicado  ?? '') ?></span></p>
-                        <p class="mb-2"><strong>Data do Alerta:</strong> <span class="form-control-plaintext py-1"><?= $data_alerta_formatada ?></span></p>
-                        
-                        <button style="background-color: #8b0000; color: white" class="btn btn-sm btn-resolvido" data-id="<?= htmlspecialchars($alerta['id']  ?? '') ?>">
-                            <i class="fas fa-check"></i> Ignorar
-                        </button>
-                        
-                        <hr class="my-3">
-                    </div>
-                <?php endforeach; ?>
+                }
+
+                if (isset($query_cliente_dup)) {
+                    $query_cliente_dup->execute();
+                    $res_dup = $query_cliente_dup->fetch(PDO::FETCH_ASSOC);
+                    if ($res_dup) {
+                        $nome_cliente_duplicado = $res_dup['nome'];
+                    }
+                }
+            }
+        ?>
+        
+        <div id="alerta-<?= htmlspecialchars($alerta['id'] ?? '') ?>" class="alerta-card-item <?= $alerta_class ?>">
+            <h5 class="section-title-alt">Alerta: <?= htmlspecialchars($alerta['tipo_alerta']) ?></h5>
+            <p class="mb-2"><strong>Valor Duplicado:</strong> <span class="form-control-plaintext py-1"><?= htmlspecialchars($alerta['valor_duplicado'] ?? '') ?></span></p>
+            <p class="mb-2"><strong>Cliente Duplicado:</strong> <span class="form-control-plaintext py-1"><?= htmlspecialchars($nome_cliente_duplicado ?? '') ?></span></p>
+            <p class="mb-2"><strong>Data do Alerta:</strong> <span class="form-control-plaintext py-1"><?= $data_alerta_formatada ?></span></p>
+            
+            <?php if (!$is_resolvido): // Mostra o botão APENAS se não estiver resolvido ?>
+                <button style="background-color: #8b0000; color: white" class="btn btn-sm btn-resolvido" data-id="<?= htmlspecialchars($alerta['id'] ?? '') ?>">
+                    <i class="fas fa-check"></i> Ignorar
+                </button>
+            <?php else: // Mostra o status se estiver resolvido ?>
+                <span class="badge bg-success text-white">IGNORADO</span>
             <?php endif; ?>
-            <?php if (!$has_unresolved_alerts): ?>
-                <p>Nenhum alerta de duplicidade pendente para este cliente.</p>
-            <?php endif; ?>
+
+            <hr class="my-3">
         </div>
+    <?php endforeach; ?>
+    <?php endif; ?>
+    
+    <?php if (!$has_unresolved_alerts): ?>
+        <p>Nenhum alerta de duplicidade pendente para este cliente.</p>
+    <?php endif; ?>
+</div>
 
         <h4 class="section-title">Comprovantes</h4>
         <form id="form-analise" action="/painel/paginas/clientes/finalizar_analise.php" method="POST" enctype="multipart/form-data">
@@ -1401,62 +1452,63 @@ $('#btn-sair').on('click', function(e) {
 
     // --- LÓGICA DOS ALERTAS DE DUPLICIDADE (mantida) ---
 
-    // Escuta o clique em qualquer botão com a classe 'btn-resolvido'
     $(document).on('click', '.btn-resolvido', function() {
-        var alertaId = $(this).data('id');
-        var alertaElemento = $('#alerta-' + alertaId);
-        
-        // Confirmação via SweetAlert
-        Swal.fire({
-            title: 'Tem certeza?',
-            text: "Você irá marcar este alerta como resolvido e ele não será mais exibido.",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Sim, resolver!',
-            cancelButtonText: 'Cancelar'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                $.ajax({
-                    url: '/painel/paginas/clientes/marca_alerta_resolvido.php',
-                    type: 'POST',
-                    data: {
-                        id: alertaId
-                    },
-                    success: function(response) {
-                        if (response.trim() === 'sucesso') {
-                            alertaElemento.fadeOut('slow', function() {
-                                $(this).remove();
-                                // Verifica se ainda existem alertas visíveis
-                                if ($('.alert-duplicidade-card').children('div').length === 0) {
-                                    $('.alert-duplicidade-card').html('<p>Nenhum alerta de duplicidade pendente para este cliente.</p>');
-                                }
-                                Swal.fire(
-                                    'Resolvido!',
-                                    'O alerta foi marcado como resolvido.',
-                                    'success'
-                                );
-                            });
-                        } else {
-                            Swal.fire(
-                                'Erro!',
-                                'Não foi possível resolver o alerta. Tente novamente.',
-                                'error'
-                            );
-                        }
-                    },
-                    error: function() {
+    var botao = $(this); // Captura o botão que foi clicado
+    var alertaId = botao.data('id');
+    var alertaElemento = $('#alerta-' + alertaId);
+    
+    Swal.fire({
+        title: 'Tem certeza?',
+        text: "Você irá marcar este alerta como resolvido/ignorado. Ele mudará para a cor verde.",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#5cb85c', // Mudando a cor do botão de confirmação para verde
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Sim, Ignorar!',
+        cancelButtonText: 'Cancelar'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $.ajax({
+                url: '/painel/paginas/clientes/marca_alerta_resolvido.php',
+                type: 'POST',
+                data: {
+                    id: alertaId
+                },
+                success: function(response) {
+                    if (response.trim() === 'sucesso') {
+                        // 1. Remove a classe de pendente e adiciona a de resolvido (VERDE)
+                        alertaElemento.removeClass('alerta-pendente').addClass('alerta-resolvido');
+                        
+                        // 2. Substitui o botão "Ignorar" por um badge/status
+                        botao.replaceWith('<span class="badge bg-success text-white">IGNORADO</span>'); 
+                        
+                        // A mensagem de "Nenhum alerta pendente" será controlada pelo PHP no próximo carregamento
+                        // Mas podemos dar um feedback instantâneo sobre a resolução:
+                        
+                        Swal.fire(
+                            'Ignorado!',
+                            'O alerta foi ignorado.',
+                            'success'
+                        );
+                    } else {
                         Swal.fire(
                             'Erro!',
-                            'Ocorreu um erro na requisição. Verifique sua conexão.',
+                            'Não foi possível resolver o alerta. Tente novamente.',
                             'error'
                         );
                     }
-                });
-            }
-        });
+                },
+                error: function() {
+                    Swal.fire(
+                        'Erro!',
+                        'Ocorreu um erro na requisição. Verifique sua conexão.',
+                        'error'
+                    );
+                }
+            });
+        }
     });
+});
 });
 </script>
 </body>

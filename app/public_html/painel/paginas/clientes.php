@@ -129,6 +129,7 @@ if($verificar_pagamentos != 'Não'){
       <option value="">Filtrar por alertas</option>
       <option value="ComAlerta">Apenas com Alertas</option>
       <option value="SemAlerta">Sem Alertas</option>
+      <option value="ApenasIgnorados">Alertas Ignorados</option>
     </select>
   </li>
 

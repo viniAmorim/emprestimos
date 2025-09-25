@@ -27,13 +27,24 @@ if ($status != "") {
     $filtros[] = "c.status_cliente = '$status'";
 }
 
-// Lógica para o filtro de alerta de duplicidade
 if ($alerta_busca == "ComAlerta") {
-    $join = "INNER JOIN alertas_duplicidade ad ON ad.id_cliente_cadastrado = c.id";
-    $filtros[] = "ad.resolvido = 0";
+  // Clientes que possuem ALERTA (PENDENTE OU IGNORADO)
+  // Usamos um WHERE com subconsulta para evitar duplicação de linhas e manter a performance
+  $filtros[] = "c.id IN (SELECT id_cliente_cadastrado FROM alertas_duplicidade)";
+  
+} else if ($alerta_busca == "Pendentes") {
+  // Clientes que possuem pelo menos um ALERTA PENDENTE (resolvido = 0)
+  $filtros[] = "c.id IN (SELECT id_cliente_cadastrado FROM alertas_duplicidade WHERE resolvido = 0)";
+  
+} else if ($alerta_busca == "ApenasIgnorados") {
+  // Clientes que possuem alertas, mas TODOS estão RESOLVIDOS (resolvido = 1)
+  // É a intersecção: clientes que estão na tabela de alertas, MAS não estão na lista de clientes com alertas PENDENTES.
+  $filtros[] = "c.id IN (SELECT id_cliente_cadastrado FROM alertas_duplicidade)";
+  $filtros[] = "c.id NOT IN (SELECT id_cliente_cadastrado FROM alertas_duplicidade WHERE resolvido = 0)";
+  
 } else if ($alerta_busca == "SemAlerta") {
-    $join = "LEFT JOIN alertas_duplicidade ad ON ad.id_cliente_cadastrado = c.id";
-    $filtros[] = "ad.id_cliente_cadastrado IS NULL";
+  // Clientes que NÃO possuem alertas
+  $filtros[] = "c.id NOT IN (SELECT id_cliente_cadastrado FROM alertas_duplicidade)";
 }
 
 $sql_where = "";
@@ -41,7 +52,7 @@ if (count($filtros) > 0) {
     $sql_where = "WHERE " . implode(" AND ", $filtros);
 }
 
-$query = $pdo->query("SELECT DISTINCT c.* FROM $tabela_com_alias $join $sql_where ORDER BY c.id DESC");
+$query = $pdo->query("SELECT c.* FROM $tabela_com_alias $sql_where ORDER BY c.id DESC");
 $res = $query->fetchAll(PDO::FETCH_ASSOC);
 $linhas = @count($res);
 

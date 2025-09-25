@@ -553,7 +553,7 @@
                             <input type="email" id="email" name="email" placeholder="Email" class="form-input w-full" required onblur="validateField(this)">
                         </div>
                         <div>
-                            <label class="block text-sm font-medium text-white">Celular(Whatsapp)</label>
+                            <label class="block text-sm font-medium text-white">Celular (Whatsapp)</label>
                             <input type="text" name="telefone" id="telefone" placeholder="Telefone" class="form-input w-full" required onblur="validateField(this)">
                         </div>
                     </div>
