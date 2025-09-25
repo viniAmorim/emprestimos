@@ -91,6 +91,52 @@ $alertas_duplicidade = $query_alertas->fetchAll(PDO::FETCH_ASSOC);
             line-height: 1.5rem;
         }
 
+        .custom-control-input:checked ~ .custom-control-label-cnh::before {
+            background-color: #007bff;
+            border-color: #007bff;
+        }
+
+        .custom-control-label-cnh::before {
+            top: .25rem;
+            left: 0;
+            width: 1.5rem;
+            height: 1.5rem;
+            border-radius: 0.25rem;
+            background-color: #e9f5ff;
+            border: 1px solid #b3d7ff;
+        }
+
+        .custom-control-label-cnh::after {
+            top: .25rem;
+            left: 0;
+            width: 1.5rem;
+            height: 1.5rem;
+            line-height: 1.5rem;
+        }
+
+        .custom-control-input:checked ~ .custom-control-label-perfil::before {
+            background-color: #007bff;
+            border-color: #007bff;
+        }
+
+        .custom-control-label-perfil::before {
+            top: .25rem;
+            left: 0;
+            width: 1.5rem;
+            height: 1.5rem;
+            border-radius: 0.25rem;
+            background-color: #e9f5ff;
+            border: 1px solid #b3d7ff;
+        }
+
+        .custom-control-label-perfil::after {
+            top: .25rem;
+            left: 0;
+            width: 1.5rem;
+            height: 1.5rem;
+            line-height: 1.5rem;
+        }
+
         /* Alertas de duplicidade com fundo levemente vermelho */
         .alert-duplicidade {
             background-color: #ffebe6;
@@ -307,14 +353,39 @@ $alertas_duplicidade = $query_alertas->fetchAll(PDO::FETCH_ASSOC);
             transition: opacity 0.2s ease-in-out;
         }
 
-       
-
         .custom-control-input:checked ~ .custom-control-label::after {
             opacity: 1;
         }
 
         /* Estilo para o foco (acessibilidade com teclado) */
         .custom-control-input:focus ~ .custom-control-label::before {
+            box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+        }
+
+
+
+         /* Estilo da marca de verificação (o ::after) */
+         .custom-control-label-cnh::after {
+            content: '';
+            display: block;
+            position: absolute;
+            top: 50%;
+            left: 0.2rem;
+            transform: translateY(-50%) rotate(45deg);
+            width: 0.6rem;
+            height: 1.2rem;
+            border: solid white;
+            border-width: 0 4px 4px 0;
+            opacity: 0;
+            transition: opacity 0.2s ease-in-out;
+        }
+
+        .custom-control-input:checked ~ .custom-control-label-cnh::after {
+            opacity: 1;
+        }
+
+        /* Estilo para o foco (acessibilidade com teclado) */
+        .custom-control-input:focus ~ .custom-control-label-cnh::before {
             box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
         }
         /* --- Estilo Moderno para o Título Principal da Página --- */
@@ -330,6 +401,43 @@ $alertas_duplicidade = $query_alertas->fetchAll(PDO::FETCH_ASSOC);
             text-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
 
+        /* Estilo da marca de verificação (o ::after) */
+        .custom-control-label-perfil::after {
+            content: '';
+            display: block;
+            position: absolute;
+            top: 50%;
+            left: 0.2rem;
+            transform: translateY(-50%) rotate(45deg);
+            width: 0.6rem;
+            height: 1.2rem;
+            border: solid white;
+            border-width: 0 4px 4px 0;
+            opacity: 0;
+            transition: opacity 0.2s ease-in-out;
+        }
+
+        .custom-control-input:checked ~ .custom-control-label-perfil::after {
+            opacity: 1;
+        }
+
+        /* Estilo para o foco (acessibilidade com teclado) */
+        .custom-control-input:focus ~ .custom-control-label-perfil::before {
+            box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+        }
+
+        /* --- Estilo Moderno para o Título Principal da Página --- */
+        .main-page-title {
+            font-family: 'Inter', sans-serif;
+            font-size: 2.8em;
+            font-weight: 700;
+            color: #2c3e50;
+            letter-spacing: -0.03em;
+            margin-bottom: 40px;
+            position: relative;
+            padding-bottom: 15px;
+            text-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
         /* Linha decorativa abaixo do título */
         .main-page-title::after {
             content: '';
@@ -495,7 +603,7 @@ $alertas_duplicidade = $query_alertas->fetchAll(PDO::FETCH_ASSOC);
 
 /* Estilo do label (texto) do checkbox */
 .custom-control-label {
-    padding-left: 45px;
+    padding-left: 25px;
     font-size: 1.05em;
     color: #495057;
     line-height: 1.6rem;
@@ -552,6 +660,131 @@ $alertas_duplicidade = $query_alertas->fetchAll(PDO::FETCH_ASSOC);
 .custom-control-input:focus ~ .custom-control-label::before {
     box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
 }
+
+/* Estilo do label (texto) do checkbox */
+.custom-control-label-cnh {
+    margin-left: -160px !important;
+    padding-left: 0px;
+    font-size: 1.05em;
+    color: #495057;
+    line-height: 1.6rem;
+    margin-left: 0.5rem;
+    padding-top: 2px;
+    flex-grow: 1;
+}
+
+/* Estilo do quadrado do checkbox (o ::before) */
+.custom-control-label-cnh::before {
+    content: '';
+    display: block;
+    position: absolute;
+    top: 50%;
+    left: 0;
+    transform: translateY(-50%);
+    width: 1.8rem;
+    height: 1.8rem;
+    border-radius: 0.4rem;
+    background-color: #e9f5ff;
+    border: 2px solid #a8d6ff;
+    box-shadow: inset 0 1px 4px rgba(0, 0, 0, 0.08);
+    transition: background-color 0.2s ease-in-out, border-color 0.2s ease-in-out;
+}
+
+/* Estilo da marca de verificação (o ::after) */
+.custom-control-label-cnh::after {
+    content: '';
+    display: block;
+    position: absolute;
+    top: 50%;
+    left: 0.2rem;
+    transform: translateY(-50%) rotate(45deg);
+    width: 0.6rem;
+    height: 1.2rem;
+    border: solid white;
+    border-width: 0 4px 4px 0;
+    opacity: 0;
+    transition: opacity 0.2s ease-in-out;
+}
+
+/* Estilo do checkbox quando marcado */
+.custom-control-input:checked ~ .custom-control-label-cnh::before {
+    background-color: #007bff;
+    border-color: #007bff;
+    box-shadow: inset 0 1px 4px rgba(0, 0, 0, 0.2), 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+.custom-control-input:checked ~ .custom-control-label-cnh::after {
+    opacity: 1;
+}
+
+/* Estilo para o foco (acessibilidade com teclado) */
+.custom-control-input:focus ~ .custom-control-label-cnh::before {
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+
+/* Estilo do label (texto) do checkbox */
+.custom-control-label-perfil {
+    margin-left: -70px !important;
+    padding-left: 0px;
+    font-size: 1.05em;
+    color: #495057;
+    line-height: 1.6rem;
+    margin-left: 0.5rem;
+    padding-top: 2px;
+    flex-grow: 1;
+}
+
+/* Estilo do quadrado do checkbox (o ::before) */
+.custom-control-label-perfil::before {
+    content: '';
+    display: block;
+    position: absolute;
+    top: 50%;
+    left: 0;
+    transform: translateY(-50%);
+    width: 1.8rem;
+    height: 1.8rem;
+    border-radius: 0.4rem;
+    background-color: #e9f5ff;
+    border: 2px solid #a8d6ff;
+    box-shadow: inset 0 1px 4px rgba(0, 0, 0, 0.08);
+    transition: background-color 0.2s ease-in-out, border-color 0.2s ease-in-out;
+}
+
+/* Estilo da marca de verificação (o ::after) */
+.custom-control-label-perfil::after {
+    content: '';
+    display: block;
+    position: absolute;
+    top: 50%;
+    left: 0.2rem;
+    transform: translateY(-50%) rotate(45deg);
+    width: 0.6rem;
+    height: 1.2rem;
+    border: solid white;
+    border-width: 0 4px 4px 0;
+    opacity: 0;
+    transition: opacity 0.2s ease-in-out;
+}
+
+/* Estilo do checkbox quando marcado */
+.custom-control-input:checked ~ .custom-control-label-perfil::before {
+    background-color: #007bff;
+    border-color: #007bff;
+    box-shadow: inset 0 1px 4px rgba(0, 0, 0, 0.2), 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+.custom-control-input:checked ~ .custom-control-label-perfil::after {
+    opacity: 1;
+}
+
+/* Estilo para o foco (acessibilidade com teclado) */
+.custom-control-input:focus ~ .custom-control-label-perfil::before {
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+
 /* Estilo para a seção de dados pessoais e endereço */
 .data-card {
     background-color: #fff;
@@ -776,7 +1009,7 @@ $alertas_duplicidade = $query_alertas->fetchAll(PDO::FETCH_ASSOC);
           <input type="hidden" name="id_cliente" value="<?= htmlspecialchars($cliente['id'] ?? '') ?>">
 <div class="row mb-4">
     <div class="col-md-6 text-center">
-        <h5 class="section-title">Comprovante de RG:</h5>
+        <h5 class="section-title">Comprovante RG ou CNH:</h5>
           <?php if (!empty($cliente['comprovante_rg']) && $cliente['comprovante_rg'] !== 'sem-foto.png'): ?>
                 <img src="/painel/images/comprovantes/<?= htmlspecialchars($cliente['comprovante_rg'] ?? '') ?>" alt="Comprovante de RG" class="img-fluid rounded shadow-sm" style="max-width: 500px; border: 2px solid #ddd; display: block; margin: 0 auto;">
             <?php else: ?>
@@ -785,6 +1018,11 @@ $alertas_duplicidade = $query_alertas->fetchAll(PDO::FETCH_ASSOC);
             <div class="form-group mt-3">
                 <label for="novo_comprovante_rg">Substituir Comprovante:</label>
                 <input type="file" class="form-control" id="novo_comprovante_rg" name="novo_comprovante_rg">
+          </div>
+
+          <div class="form-group custom-control custom-checkbox small-checkbox my-1" id="cnh-spacing">
+            <input type="checkbox" class="custom-control-input" id="check_validade_cnh" name="check_validade_cnh" value="1" <?= $cliente['check_validade_cnh'] == 1 ? 'checked' : '' ?>>
+            <label class="custom-control-label-cnh" for="check_validade_cnh">Validade da CNH</label>
           </div>
 
         <h5 class="section-title">Foto de perfil:</h5>
@@ -797,6 +1035,10 @@ $alertas_duplicidade = $query_alertas->fetchAll(PDO::FETCH_ASSOC);
                 <label for="foto_usuario">Substituir Foto:</label>
                 <input type="file" class="form-control" id="foto_usuario" name="foto_usuario">
             </div>
+            <div class="form-group custom-control custom-checkbox small-checkbox my-1">
+              <input type="checkbox" class="custom-control-input" id="check_foto_usuario_confere" name="check_foto_usuario_confere" value="1" <?= $cliente['check_foto_usuario_confere'] == 1 ? 'checked' : '' ?>>
+              <label class="custom-control-label-perfil" for="check_foto_usuario_confere">Foto do usuário confere com Documento</label>
+            </div>
     </div>
 
     <div class="col-md-6">
@@ -805,7 +1047,11 @@ $alertas_duplicidade = $query_alertas->fetchAll(PDO::FETCH_ASSOC);
           <div class="form-group mb-2">
             <label for="nome"><strong>Nome Completo:</strong></label>
             <input type="text" class="form-control" id="nome" name="nome" value="<?= htmlspecialchars($cliente['nome'] ?? '') ?>">
-        </div>
+          </div>
+          <div class="form-group custom-control custom-checkbox small-checkbox my-1">
+            <input type="checkbox" class="custom-control-input" id="check_nome_documento" name="check_nome_documento" value="1" <?= $cliente['check_nome_documento'] == 1 ? 'checked' : '' ?>>
+            <label class="custom-control-label" for="check_nome_documento">Nome preenchido confere com Documento</label>
+          </div>
         
         <div class="form-group mb-2">
             <label for="email"><strong>Email:</strong></label>
@@ -816,15 +1062,29 @@ $alertas_duplicidade = $query_alertas->fetchAll(PDO::FETCH_ASSOC);
             <label for="telefone"><strong>Celular:</strong></label>
             <input type="tel" class="form-control" id="telefone" name="telefone" value="<?= htmlspecialchars($cliente['telefone'] ?? '') ?>">
         </div>
+        <div class="form-group custom-control custom-checkbox small-checkbox my-1">
+            <input type="checkbox" class="custom-control-input" id="check_celular_confere" name="check_celular_confere" value="1" <?= $cliente['check_celular_confere'] == 1 ? 'checked' : '' ?>>
+            <label class="custom-control-label" for="check_celular_confere">Celular confere</label>
+        </div>
         
         <div class="form-group mb-2">
             <label for="cpf"><strong>CPF:</strong></label>
             <input type="text" class="form-control" id="cpf" name="cpf" value="<?= htmlspecialchars($cliente['cpf'] ?? '') ?>">
         </div>
+
+        <div class="form-group custom-control custom-checkbox small-checkbox my-1">
+            <input type="checkbox" class="custom-control-input" id="check_cpf_confere_documento" name="check_cpf_confere_documento" value="1" <?= $cliente['check_cpf_confere_documento'] == 1 ? 'checked' : '' ?>>
+            <label class="custom-control-label" for="check_cpf_confere_documento">Confere CPF com Documento</label>
+        </div>
         
         <div class="form-group mb-2">
             <label for="rg"><strong>RG:</strong></label>
             <input type="text" class="form-control" id="rg" name="rg" value="<?= htmlspecialchars($cliente['rg'] ?? '') ?>">
+        </div>
+
+        <div class="form-group custom-control custom-checkbox small-checkbox my-1">
+            <input type="checkbox" class="custom-control-input" id="check_rg_confere_documento" name="check_rg_confere_documento" value="1" <?= $cliente['check_rg_confere_documento'] == 1 ? 'checked' : '' ?>>
+            <label class="custom-control-label" for="check_rg_confere_documento">Confere RG com Documento</label>
         </div>
         
         <div class="form-group mb-2">
@@ -839,14 +1099,14 @@ $alertas_duplicidade = $query_alertas->fetchAll(PDO::FETCH_ASSOC);
       </div>
       <div class="validation-card">
         <h6 class="section-title text-start mb-3">Validações:</h6>
-        <div class="form-group custom-control custom-checkbox small-checkbox my-1">
+        <!-- <div class="form-group custom-control custom-checkbox small-checkbox my-1">
             <input type="checkbox" class="custom-control-input" id="check_validade_cnh" name="check_validade_cnh" value="1" <?= $cliente['check_validade_cnh'] == 1 ? 'checked' : '' ?>>
             <label class="custom-control-label" for="check_validade_cnh">Validade da CNH</label>
-        </div>
-        <div class="form-group custom-control custom-checkbox small-checkbox my-1">
+        </div> -->
+        <!-- <div class="form-group custom-control custom-checkbox small-checkbox my-1">
             <input type="checkbox" class="custom-control-input" id="check_nome_documento" name="check_nome_documento" value="1" <?= $cliente['check_nome_documento'] == 1 ? 'checked' : '' ?>>
             <label class="custom-control-label" for="check_nome_documento">Nome preenchido confere com Documento</label>
-        </div>
+        </div> -->
         <div class="form-group custom-control custom-checkbox small-checkbox my-1">
             <input type="checkbox" class="custom-control-input" id="check_nome_whatsapp" name="check_nome_whatsapp" value="1" <?= $cliente['check_nome_whatsapp'] == 1 ? 'checked' : '' ?>>
             <label class="custom-control-label" for="check_nome_whatsapp">Busca em Whatsapp</label>
@@ -855,22 +1115,22 @@ $alertas_duplicidade = $query_alertas->fetchAll(PDO::FETCH_ASSOC);
             <input type="checkbox" class="custom-control-input" id="check_nome_consulta" name="check_nome_consulta" value="1" <?= $cliente['check_nome_consulta'] == 1 ? 'checked' : '' ?>>
             <label class="custom-control-label" for="check_nome_consulta">Consulta</label>
         </div>
-        <div class="form-group custom-control custom-checkbox small-checkbox my-1">
+        <!-- <div class="form-group custom-control custom-checkbox small-checkbox my-1">
             <input type="checkbox" class="custom-control-input" id="check_cpf_confere_documento" name="check_cpf_confere_documento" value="1" <?= $cliente['check_cpf_confere_documento'] == 1 ? 'checked' : '' ?>>
             <label class="custom-control-label" for="check_cpf_confere_documento">Confere CPF com Documento</label>
-        </div>
-        <div class="form-group custom-control custom-checkbox small-checkbox my-1">
+        </div> -->
+        <!-- <div class="form-group custom-control custom-checkbox small-checkbox my-1">
             <input type="checkbox" class="custom-control-input" id="check_rg_confere_documento" name="check_rg_confere_documento" value="1" <?= $cliente['check_rg_confere_documento'] == 1 ? 'checked' : '' ?>>
             <label class="custom-control-label" for="check_rg_confere_documento">Confere RG com Documento</label>
-        </div>
-        <div class="form-group custom-control custom-checkbox small-checkbox my-1">
+        </div> -->
+        <!-- <div class="form-group custom-control custom-checkbox small-checkbox my-1">
             <input type="checkbox" class="custom-control-input" id="check_foto_usuario_confere" name="check_foto_usuario_confere" value="1" <?= $cliente['check_foto_usuario_confere'] == 1 ? 'checked' : '' ?>>
             <label class="custom-control-label" for="check_foto_usuario_confere">Foto do usuário confere com Documento</label>
-        </div>
-        <div class="form-group custom-control custom-checkbox small-checkbox my-1">
+        </div> -->
+        <!-- <div class="form-group custom-control custom-checkbox small-checkbox my-1">
             <input type="checkbox" class="custom-control-input" id="check_celular_confere" name="check_celular_confere" value="1" <?= $cliente['check_celular_confere'] == 1 ? 'checked' : '' ?>>
             <label class="custom-control-label" for="check_celular_confere">Celular confere</label>
-        </div>
+        </div> -->
   </div>
 
 
@@ -893,6 +1153,7 @@ $alertas_duplicidade = $query_alertas->fetchAll(PDO::FETCH_ASSOC);
           <input type="file" class="form-control" id="novo_comprovante_endereco" name="novo_comprovante_endereco">
       </div>
     </div>
+    
     <div class="col-md-6">
         <div class="validation-card">
             <h6 class="section-title text-start mb-3">Validação do Endereço:</h6>
@@ -900,90 +1161,128 @@ $alertas_duplicidade = $query_alertas->fetchAll(PDO::FETCH_ASSOC);
                 <input type="checkbox" class="custom-control-input" id="check_titular_aceito" name="check_titular_aceito" value="1" <?= $cliente['check_titular_aceito'] == 1 ? 'checked' : '' ?>>
                 <label class="custom-control-label" for="check_titular_aceito">Titular Aceito</label>
             </div>
-            <div class="form-group custom-control custom-checkbox small-checkbox my-1">
+            <!-- <div class="form-group custom-control custom-checkbox small-checkbox my-1">
                 <input type="checkbox" class="custom-control-input" id="check_cidade_atendemos" name="check_cidade_atendemos" value="1" <?= $cliente['check_cidade_atendemos'] == 1 ? 'checked' : '' ?>>
                 <label class="custom-control-label" for="check_cidade_atendemos">Cidade que atendemos</label>
-            </div>
+            </div> -->
             <div class="form-group custom-control custom-checkbox small-checkbox my-1">
                 <input type="checkbox" class="custom-control-input" id="check_emissao_prazo" name="check_emissao_prazo" value="1" <?= $cliente['check_emissao_prazo'] == 1 ? 'checked' : '' ?>>
                 <label class="custom-control-label" for="check_emissao_prazo">Emissão dentro do prazo</label>
             </div>
-            <div class="form-group custom-control custom-checkbox small-checkbox my-1">
+            <!-- <div class="form-group custom-control custom-checkbox small-checkbox my-1">
                 <input type="checkbox" class="custom-control-input" id="check_endereco_confere_comprovante" name="check_endereco_confere_comprovante" value="1" <?= $cliente['check_endereco_confere_comprovante'] == 1 ? 'checked' : '' ?>>
                 <label class="custom-control-label" for="check_endereco_confere_comprovante">Endereço confere com comprovante</label>
-            </div>
+            </div> -->
         </div>        
 
         <div class="data-card mt-4">
           <h6 class="section-title text-start">Endereço Registrado:</h6>
           <div class="form-group mb-2">
-        <label for="endereco"><strong>Endereço:</strong></label>
-        <input type="text" class="form-control" id="endereco" name="endereco" value="<?= htmlspecialchars($cliente['endereco'] ?? '') ?>">
-    </div>
+            <label for="endereco"><strong>Endereço:</strong></label>
+            <input type="text" class="form-control" id="endereco" name="endereco" value="<?= htmlspecialchars($cliente['endereco'] ?? '') ?>">
+          </div>
+
+          <div class="form-group custom-control custom-checkbox small-checkbox my-1">
+            <input type="checkbox" class="custom-control-input" id="check_endereco_confere_comprovante" name="check_endereco_confere_comprovante" value="1" <?= $cliente['check_endereco_confere_comprovante'] == 1 ? 'checked' : '' ?>>
+            <label class="custom-control-label" for="check_endereco_confere_comprovante">Endereço confere com comprovante</label>
+          </div>
     
-    <div class="form-group mb-2">
-        <label for="numero"><strong>Número:</strong></label>
-        <input type="text" class="form-control" id="numero" name="numero" value="<?= htmlspecialchars($cliente['numero'] ?? '') ?>">
-    </div>
+          <div class="row">
+
+            <div class="col-md-4">
+                <div class="form-group mb-2">
+                    <label for="numero"><strong>Número:</strong></label>
+                    <input type="text" class="form-control" id="numero" name="numero" value="<?= htmlspecialchars($cliente['numero'] ?? '') ?>">
+                </div>
+            </div>
+            
+            <div class="col-md-4">
+                <div class="form-group mb-2">
+                    <label for="quadra"><strong>Quadra:</strong></label>
+                    <input type="text" class="form-control" id="quadra" name="quadra" value="<?= htmlspecialchars($cliente['quadra'] ?? '') ?>">
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="form-group mb-2">
+                    <label for="lote"><strong>Lote:</strong></label>
+                    <input type="text" class="form-control" id="lote" name="lote" value="<?= htmlspecialchars($cliente['lote'] ?? '') ?>">
+                </div>
+            </div>
+
+          </div>
+          
+          <div class="row">
+
+              
+              
+              <div class="col-md-6">
+                  <div class="form-group mb-2">
+                      <label for="bairro"><strong>Bairro:</strong></label>
+                      <input type="text" class="form-control" id="bairro" name="bairro" value="<?= htmlspecialchars($cliente['bairro'] ?? '') ?>">
+                  </div>
+              </div>
+              <div class="col-md-6">
+                <div class="form-group mb-2">
+                <label for="cidade"><strong>Cidade:</strong></label>
+                <input type="text" class="form-control" id="cidade" name="cidade" value="<?= htmlspecialchars($cliente['cidade'] ?? '') ?>">
+
+              </div>
+          </div>
+
+          </div>
+          
+          <div class="form-group custom-control custom-checkbox small-checkbox my-1">
+            <input type="checkbox" class="custom-control-input" id="check_cidade_atendemos" name="check_cidade_atendemos" value="1" <?= $cliente['check_cidade_atendemos'] == 1 ? 'checked' : '' ?>>
+            <label class="custom-control-label" for="check_cidade_atendemos">Cidade que atendemos</label>
+          </div>
     
-    <div class="form-group mb-2">
-        <label for="quadra"><strong>Quadra:</strong></label>
-        <input type="text" class="form-control" id="quadra" name="quadra" value="<?= htmlspecialchars($cliente['quadra'] ?? '') ?>">
-    </div>
-    
-    <div class="form-group mb-2">
-        <label for="lote"><strong>Lote:</strong></label>
-        <input type="text" class="form-control" id="lote" name="lote" value="<?= htmlspecialchars($cliente['lote'] ?? '') ?>">
-    </div>
-    
-    <div class="form-group mb-2">
-        <label for="bairro"><strong>Bairro:</strong></label>
-        <input type="text" class="form-control" id="bairro" name="bairro" value="<?= htmlspecialchars($cliente['bairro'] ?? '') ?>">
-    </div>
-    
-    <div class="form-group mb-2">
-        <label for="cidade"><strong>Cidade:</strong></label>
-        <input type="text" class="form-control" id="cidade" name="cidade" value="<?= htmlspecialchars($cliente['cidade'] ?? '') ?>">
-    </div>
-    
-    <div class="form-group mb-2">
-    <label for="estado"><strong>Estado:</strong></label>
-    <select class="form-control" id="estado" name="estado">
-        <option value="">Selecione um estado</option>
-        <option value="AC" <?= ($cliente['estado'] ?? '') == 'AC' ? 'selected' : '' ?>>Acre</option>
-        <option value="AL" <?= ($cliente['estado'] ?? '') == 'AL' ? 'selected' : '' ?>>Alagoas</option>
-        <option value="AP" <?= ($cliente['estado'] ?? '') == 'AP' ? 'selected' : '' ?>>Amapá</option>
-        <option value="AM" <?= ($cliente['estado'] ?? '') == 'AM' ? 'selected' : '' ?>>Amazonas</option>
-        <option value="BA" <?= ($cliente['estado'] ?? '') == 'BA' ? 'selected' : '' ?>>Bahia</option>
-        <option value="CE" <?= ($cliente['estado'] ?? '') == 'CE' ? 'selected' : '' ?>>Ceará</option>
-        <option value="DF" <?= ($cliente['estado'] ?? '') == 'DF' ? 'selected' : '' ?>>Distrito Federal</option>
-        <option value="ES" <?= ($cliente['estado'] ?? '') == 'ES' ? 'selected' : '' ?>>Espírito Santo</option>
-        <option value="GO" <?= ($cliente['estado'] ?? '') == 'GO' ? 'selected' : '' ?>>Goiás</option>
-        <option value="MA" <?= ($cliente['estado'] ?? '') == 'MA' ? 'selected' : '' ?>>Maranhão</option>
-        <option value="MT" <?= ($cliente['estado'] ?? '') == 'MT' ? 'selected' : '' ?>>Mato Grosso</option>
-        <option value="MS" <?= ($cliente['estado'] ?? '') == 'MS' ? 'selected' : '' ?>>Mato Grosso do Sul</option>
-        <option value="MG" <?= ($cliente['estado'] ?? '') == 'MG' ? 'selected' : '' ?>>Minas Gerais</option>
-        <option value="PA" <?= ($cliente['estado'] ?? '') == 'PA' ? 'selected' : '' ?>>Pará</option>
-        <option value="PB" <?= ($cliente['estado'] ?? '') == 'PB' ? 'selected' : '' ?>>Paraíba</option>
-        <option value="PR" <?= ($cliente['estado'] ?? '') == 'PR' ? 'selected' : '' ?>>Paraná</option>
-        <option value="PE" <?= ($cliente['estado'] ?? '') == 'PE' ? 'selected' : '' ?>>Pernambuco</option>
-        <option value="PI" <?= ($cliente['estado'] ?? '') == 'PI' ? 'selected' : '' ?>>Piauí</option>
-        <option value="RJ" <?= ($cliente['estado'] ?? '') == 'RJ' ? 'selected' : '' ?>>Rio de Janeiro</option>
-        <option value="RN" <?= ($cliente['estado'] ?? '') == 'RN' ? 'selected' : '' ?>>Rio Grande do Norte</option>
-        <option value="RS" <?= ($cliente['estado'] ?? '') == 'RS' ? 'selected' : '' ?>>Rio Grande do Sul</option>
-        <option value="RO" <?= ($cliente['estado'] ?? '') == 'RO' ? 'selected' : '' ?>>Rondônia</option>
-        <option value="RR" <?= ($cliente['estado'] ?? '') == 'RR' ? 'selected' : '' ?>>Roraima</option>
-        <option value="SC" <?= ($cliente['estado'] ?? '') == 'SC' ? 'selected' : '' ?>>Santa Catarina</option>
-        <option value="SP" <?= ($cliente['estado'] ?? '') == 'SP' ? 'selected' : '' ?>>São Paulo</option>
-        <option value="SE" <?= ($cliente['estado'] ?? '') == 'SE' ? 'selected' : '' ?>>Sergipe</option>
-        <option value="TO" <?= ($cliente['estado'] ?? '') == 'TO' ? 'selected' : '' ?>>Tocantins</option>
-    </select>
-</div>
-    
-    <div class="form-group mb-2">
-        <label for="cep"><strong>CEP:</strong></label>
-        <input type="text" class="form-control" id="cep" name="cep" value="<?= htmlspecialchars($cliente['cep'] ?? '') ?>">
-    </div>
+          <div class="row">
+
+            <div class="col-md-6">
+                <div class="form-group mb-2">
+                    <label for="estado"><strong>Estado:</strong></label>
+                    <select class="form-control" id="estado" name="estado">
+                        <option value="">Selecione um estado</option>
+                        <option value="AC" <?= ($cliente['estado'] ?? '') == 'AC' ? 'selected' : '' ?>>Acre</option>
+                        <option value="AL" <?= ($cliente['estado'] ?? '') == 'AL' ? 'selected' : '' ?>>Alagoas</option>
+                        <option value="AP" <?= ($cliente['estado'] ?? '') == 'AP' ? 'selected' : '' ?>>Amapá</option>
+                        <option value="AM" <?= ($cliente['estado'] ?? '') == 'AM' ? 'selected' : '' ?>>Amazonas</option>
+                        <option value="BA" <?= ($cliente['estado'] ?? '') == 'BA' ? 'selected' : '' ?>>Bahia</option>
+                        <option value="CE" <?= ($cliente['estado'] ?? '') == 'CE' ? 'selected' : '' ?>>Ceará</option>
+                        <option value="DF" <?= ($cliente['estado'] ?? '') == 'DF' ? 'selected' : '' ?>>Distrito Federal</option>
+                        <option value="ES" <?= ($cliente['estado'] ?? '') == 'ES' ? 'selected' : '' ?>>Espírito Santo</option>
+                        <option value="GO" <?= ($cliente['estado'] ?? '') == 'GO' ? 'selected' : '' ?>>Goiás</option>
+                        <option value="MA" <?= ($cliente['estado'] ?? '') == 'MA' ? 'selected' : '' ?>>Maranhão</option>
+                        <option value="MT" <?= ($cliente['estado'] ?? '') == 'MT' ? 'selected' : '' ?>>Mato Grosso</option>
+                        <option value="MS" <?= ($cliente['estado'] ?? '') == 'MS' ? 'selected' : '' ?>>Mato Grosso do Sul</option>
+                        <option value="MG" <?= ($cliente['estado'] ?? '') == 'MG' ? 'selected' : '' ?>>Minas Gerais</option>
+                        <option value="PA" <?= ($cliente['estado'] ?? '') == 'PA' ? 'selected' : '' ?>>Pará</option>
+                        <option value="PB" <?= ($cliente['estado'] ?? '') == 'PB' ? 'selected' : '' ?>>Paraíba</option>
+                        <option value="PR" <?= ($cliente['estado'] ?? '') == 'PR' ? 'selected' : '' ?>>Paraná</option>
+                        <option value="PE" <?= ($cliente['estado'] ?? '') == 'PE' ? 'selected' : '' ?>>Pernambuco</option>
+                        <option value="PI" <?= ($cliente['estado'] ?? '') == 'PI' ? 'selected' : '' ?>>Piauí</option>
+                        <option value="RJ" <?= ($cliente['estado'] ?? '') == 'RJ' ? 'selected' : '' ?>>Rio de Janeiro</option>
+                        <option value="RN" <?= ($cliente['estado'] ?? '') == 'RN' ? 'selected' : '' ?>>Rio Grande do Norte</option>
+                        <option value="RS" <?= ($cliente['estado'] ?? '') == 'RS' ? 'selected' : '' ?>>Rio Grande do Sul</option>
+                        <option value="RO" <?= ($cliente['estado'] ?? '') == 'RO' ? 'selected' : '' ?>>Rondônia</option>
+                        <option value="RR" <?= ($cliente['estado'] ?? '') == 'RR' ? 'selected' : '' ?>>Roraima</option>
+                        <option value="SC" <?= ($cliente['estado'] ?? '') == 'SC' ? 'selected' : '' ?>>Santa Catarina</option>
+                        <option value="SP" <?= ($cliente['estado'] ?? '') == 'SP' ? 'selected' : '' ?>>São Paulo</option>
+                        <option value="SE" <?= ($cliente['estado'] ?? '') == 'SE' ? 'selected' : '' ?>>Sergipe</option>
+                        <option value="TO" <?= ($cliente['estado'] ?? '') == 'TO' ? 'selected' : '' ?>>Tocantins</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="form-group mb-2">
+                    <label for="cep"><strong>CEP:</strong></label>
+                    <input type="text" class="form-control" id="cep" name="cep" value="<?= htmlspecialchars($cliente['cep'] ?? '') ?>">
+                </div>
+            </div>
+
+          </div>
     
     <div class="form-group mb-2">
         <label for="complemento"><strong>Complemento:</strong></label>
@@ -1034,6 +1333,8 @@ $alertas_duplicidade = $query_alertas->fetchAll(PDO::FETCH_ASSOC);
                         </select>
                     </div>
 
+                    <h6 class="section-title text-start" style="margin-top: 60px; !important">Dados da Indicação:</h6>
+
                     <div class="form-group mb-2">
                       <label for="indicacao"><strong>Quem te indicou:</strong></label>
                       <input type="text" class="form-control" id="indicacao" name="indicacao" value="<?= htmlspecialchars($cliente['indicacao'] ?? '') ?>">
@@ -1047,7 +1348,7 @@ $alertas_duplicidade = $query_alertas->fetchAll(PDO::FETCH_ASSOC);
             </div>
             <div class="col-md-6">
                 <div class="validation-card">
-                    <h6 class="section-title text-start mb-3">Validações:</h6>
+                    <h6 class="section-title text-start mb-3">Validações da Referência:</h6>
                     <div class="form-group custom-control custom-checkbox small-checkbox my-1">
                         <input type="checkbox" class="custom-control-input" id="check_sobrenome_confere" name="check_sobrenome_confere" value="1" <?= $cliente['check_sobrenome_confere'] == 1 ? 'checked' : '' ?>>
                         <label class="custom-control-label" for="check_sobrenome_confere">Sobrenome confere</label>
@@ -1056,6 +1357,14 @@ $alertas_duplicidade = $query_alertas->fetchAll(PDO::FETCH_ASSOC);
                         <input type="checkbox" class="custom-control-input" id="check_num_com_whatsapp" name="check_num_com_whatsapp" value="1" <?= $cliente['check_num_com_whatsapp'] == 1 ? 'checked' : '' ?>>
                         <label class="custom-control-label" for="check_num_com_whatsapp">Número com WhatsApp</label>
                     </div>
+                    
+                </div>
+            </div>
+
+            <div class="col-md-6" style="margin-top: 130px;">
+                <div class="validation-card">
+                    <h6 class="section-title text-start mb-3">Validações da Indicação:</h6>
+                    
                     <div class="form-group custom-control custom-checkbox small-checkbox my-1">
                         <input type="checkbox" class="custom-control-input" id="check_cliente_bom" name="check_cliente_bom" value="1" <?= $cliente['check_cliente_bom'] == 1 ? 'checked' : '' ?>>
                         <label class="custom-control-label" for="check_cliente_bom">Cliente bom?</label>
@@ -1072,48 +1381,58 @@ $autonomo = ($cliente['ramo'] === 'autonomo');
 $assalariado = ($cliente['ramo'] === 'assalariado');
 ?>
 <div class="row">
-  <div class="col-md-6">
-    <div class="validation-card">
-      <h6>Comprovantes Genéricos</h6>
-      <hr>
-      <div class="form-group custom-control custom-checkbox small-checkbox my-1">
-        <input type="checkbox" class="custom-control-input" id="check_nome" name="check_nome" value="1" <?= $cliente['check_nome'] == 1 ? 'checked' : '' ?>>
-        <label class="custom-control-label" for="check_nome">Nome</label>
+  <?php if ($motorista): ?>
+    <div class="row">
+      <div class="col-md-6 text-center">
+        <h5 class="section-title">Print Perfil App:</h5>
+        <?php if (!empty($cliente['print_perfil_app']) && $cliente['print_perfil_app'] !== 'sem-foto.png'): ?>
+          <img src="/painel/images/comprovantes/<?= htmlspecialchars($cliente['print_perfil_app'] ?? '') ?>" alt="Print Perfil App" class="img-fluid rounded shadow-sm" style="max-width: 350px; border: 2px solid #ddd; display: block; margin: 0 auto;">
+        <?php else: ?>
+          <p>Não enviado.</p>
+        <?php endif; ?>
+        <div class="form-group mt-3">
+          <label for="print_perfil_app">Substituir Print:</label>
+          <input type="file" class="form-control" id="print_perfil_app" name="print_perfil_app">
+        </div>
       </div>
-      <div class="form-group custom-control custom-checkbox small-checkbox my-1">
-        <input type="checkbox" class="custom-control-input" id="check_data" name="check_data" value="1" <?= $cliente['check_data'] == 1 ? 'checked' : '' ?>>
-        <label class="custom-control-label" for="check_data">Data</label>
-      </div>
-      <div class="form-group custom-control custom-checkbox small-checkbox my-1">
-        <input type="checkbox" class="custom-control-input" id="check_ganhos" name="check_ganhos" value="1" <?= $cliente['check_ganhos'] == 1 ? 'checked' : '' ?>>
-        <label class="custom-control-label" for="check_ganhos">Ganhos</label>
+      <div class="col-md-6">
+        <div class="validation-card">
+          <h6>Validação de Motorista</h6>
+          <hr>
+          <div class="form-group custom-control custom-checkbox small-checkbox my-1">
+            <input type="checkbox" class="custom-control-input" id="check_nome" name="check_nome" value="1" <?= $cliente['check_nome'] == 1 ? 'checked' : '' ?>>
+            <label class="custom-control-label" for="check_nome">Nome</label>
+          </div>
+          <div class="form-group custom-control custom-checkbox small-checkbox my-1">
+            <input type="checkbox" class="custom-control-input" id="check_taxa_aceitacao" name="check_taxa_aceitacao" value="1" <?= $cliente['check_taxa_aceitacao'] == 1 ? 'checked' : '' ?>>
+            <label class="custom-control-label" for="check_taxa_aceitacao">Taxa de Aceitação</label>
+          </div>
+        
+        </div>
       </div>
     </div>
-  </div>
 
-  <?php if ($motorista): ?>
-    <div class="col-md-6">
-      <div class="validation-card">
-        <h6>Validação de Motorista</h6>
-        <hr>
-        <div class="form-group custom-control custom-checkbox small-checkbox my-1">
-          <input type="checkbox" class="custom-control-input" id="check_taxa_aceitacao" name="check_taxa_aceitacao" value="1" <?= $cliente['check_taxa_aceitacao'] == 1 ? 'checked' : '' ?>>
-          <label class="custom-control-label" for="check_taxa_aceitacao">Taxa de Aceitação</label>
+    <div class="row">
+      <div class="col-md-6 text-center">
+        <h5 class="section-title">Print Veículo App:</h5>
+        <?php if (!empty($cliente['print_veiculo_app']) && $cliente['print_veiculo_app'] !== 'sem-foto.png'): ?>
+          <img src="/painel/images/comprovantes/<?= htmlspecialchars($cliente['print_veiculo_app'] ?? '') ?>" alt="Print Veículo App" class="img-fluid rounded shadow-sm" style="max-width: 350px; border: 2px solid #ddd; display: block; margin: 0 auto;">
+        <?php else: ?>
+          <p>Não enviado.</p>
+        <?php endif; ?>
+        <div class="form-group mt-3">
+          <label for="print_veiculo_app">Substituir Print:</label>
+          <input type="file" class="form-control" id="print_veiculo_app" name="print_veiculo_app">
         </div>
-        <div class="form-group custom-control custom-checkbox small-checkbox my-1">
-          <input type="checkbox" class="custom-control-input" id="check_confere" name="check_confere" value="1" <?= $cliente['check_confere'] == 1 ? 'checked' : '' ?>>
-          <label class="custom-control-label" for="check_confere">Confere</label>
-        </div>
-        <div class="form-group custom-control custom-checkbox small-checkbox my-1">
-          <input type="checkbox" class="custom-control-input" id="check_ativo" name="check_ativo" value="1" <?= $cliente['check_ativo'] == 1 ? 'checked' : '' ?>>
-          <label class="custom-control-label" for="check_ativo">Está ativo</label>
-        </div>
-        <div class="form-group custom-control custom-checkbox small-checkbox my-1">
-          <input type="checkbox" class="custom-control-input" id="check_cabecalhos" name="check_cabecalhos" value="1" <?= $cliente['check_cabecalhos'] == 1 ? 'checked' : '' ?>>
-          <label class="custom-control-label" for="check_cabecalhos">Cabeçalhos/Horários prints</label>
-        </div>
+      </div>
+
+      <div class="col-md-6">
         <div class="data-card">
-          <h6 class="section-title text-start">Dados:</h6>
+          <h6 class="section-title text-start">Dados do Veículo:</h6>
+          <div class="form-group custom-control custom-checkbox small-checkbox my-1">
+            <input type="checkbox" class="custom-control-input" id="check_confere" name="check_confere" value="1" <?= $cliente['check_confere'] == 1 ? 'checked' : '' ?>>
+            <label class="custom-control-label" for="check_confere">Confere</label>
+          </div>
           <div class="form-group mb-2">
             <label for="modelo_veiculo"><strong>Modelo do veículo:</strong></label>
             <input type="text" class="form-control" id="modelo_veiculo" name="modelo_veiculo" value="<?= htmlspecialchars($cliente['modelo_veiculo'] ?? '') ?>">
@@ -1147,45 +1466,8 @@ $assalariado = ($cliente['ramo'] === 'assalariado');
         </div>
       </div>
     </div>
-    <div class="row mb-6">
-      <div class="col-md-6 text-center">
-        <h5 class="section-title">Print Perfil App:</h5>
-        <?php if (!empty($cliente['print_perfil_app']) && $cliente['print_perfil_app'] !== 'sem-foto.png'): ?>
-          <img src="/painel/images/comprovantes/<?= htmlspecialchars($cliente['print_perfil_app'] ?? '') ?>" alt="Print Perfil App" class="img-fluid rounded shadow-sm" style="max-width: 350px; border: 2px solid #ddd; display: block; margin: 0 auto;">
-        <?php else: ?>
-          <p>Não enviado.</p>
-        <?php endif; ?>
-        <div class="form-group mt-3">
-          <label for="print_perfil_app">Substituir Print:</label>
-          <input type="file" class="form-control" id="print_perfil_app" name="print_perfil_app">
-        </div>
-      </div>
-      <div class="col-md-6 text-center">
-        <h5 class="section-title">Print Veículo App:</h5>
-        <?php if (!empty($cliente['print_veiculo_app']) && $cliente['print_veiculo_app'] !== 'sem-foto.png'): ?>
-          <img src="/painel/images/comprovantes/<?= htmlspecialchars($cliente['print_veiculo_app'] ?? '') ?>" alt="Print Veículo App" class="img-fluid rounded shadow-sm" style="max-width: 350px; border: 2px solid #ddd; display: block; margin: 0 auto;">
-        <?php else: ?>
-          <p>Não enviado.</p>
-        <?php endif; ?>
-        <div class="form-group mt-3">
-          <label for="print_veiculo_app">Substituir Print:</label>
-          <input type="file" class="form-control" id="print_veiculo_app" name="print_veiculo_app">
-        </div>
-      </div>
-    </div>
-    <div class="row mb-6">
-      <div class="col-md-6 text-center">
-        <h5 class="section-title">Print Ganhos 30 Dias:</h5>
-        <?php if (!empty($cliente['print_ganhos_30dias']) && $cliente['print_ganhos_30dias'] !== 'sem-foto.png'): ?>
-          <img src="/painel/images/comprovantes/<?= htmlspecialchars($cliente['print_ganhos_30dias'] ?? '') ?>" alt="Print Ganhos 30 Dias" class="img-fluid rounded shadow-sm" style="max-width: 350px; border: 2px solid #ddd; display: block; margin: 0 auto;">
-        <?php else: ?>
-          <p>Não enviado.</p>
-        <?php endif; ?>
-        <div class="form-group mt-3">
-          <label for="print_ganhos_30dias">Substituir Print:</label>
-          <input type="file" class="form-control" id="print_ganhos_30dias" name="print_ganhos_30dias">
-        </div>
-      </div>
+
+    <div class="row">
       <div class="col-md-6 text-center">
         <h5 class="section-title">Print Ganhos Hoje:</h5>
         <?php if (!empty($cliente['print_ganhos_hoje']) && $cliente['print_ganhos_hoje'] !== 'sem-foto.png'): ?>
@@ -1198,7 +1480,75 @@ $assalariado = ($cliente['ramo'] === 'assalariado');
           <input type="file" class="form-control" id="print_ganhos_hoje" name="print_ganhos_hoje">
         </div>
       </div>
+
+      <div class="col-md-6">
+        <div class="validation-card">
+          <h6>Validação de Inatividade</h6>
+          <hr>
+          <div class="form-group custom-control custom-checkbox small-checkbox my-1">
+            <input type="checkbox" class="custom-control-input" id="check_ativo" name="check_ativo" value="1" <?= $cliente['check_ativo'] == 1 ? 'checked' : '' ?>>
+            <label class="custom-control-label" for="check_ativo">Está ativo</label>
+          </div>
+        </div>
+      </div>
     </div>
+
+    <div class="row">
+      <div class="col-md-6 text-center">
+        <h5 class="section-title">Print Ganhos 30 Dias:</h5>
+        <?php if (!empty($cliente['print_ganhos_30dias']) && $cliente['print_ganhos_30dias'] !== 'sem-foto.png'): ?>
+          <img src="/painel/images/comprovantes/<?= htmlspecialchars($cliente['print_ganhos_30dias'] ?? '') ?>" alt="Print Ganhos 30 Dias" class="img-fluid rounded shadow-sm" style="max-width: 350px; border: 2px solid #ddd; display: block; margin: 0 auto;">
+        <?php else: ?>
+          <p>Não enviado.</p>
+        <?php endif; ?>
+        <div class="form-group mt-3">
+          <label for="print_ganhos_30dias">Substituir Print:</label>
+          <input type="file" class="form-control" id="print_ganhos_30dias" name="print_ganhos_30dias">
+        </div>
+      </div>
+
+      <div class="col-md-6">
+        <div class="validation-card">
+          <h6>Validação de Comprovante de Ganhos</h6>
+          <hr>
+          <div class="form-group custom-control custom-checkbox small-checkbox my-1">
+            <input type="checkbox" class="custom-control-input" id="check_data" name="check_data" value="1" <?= $cliente['check_data'] == 1 ? 'checked' : '' ?>>
+            <label class="custom-control-label" for="check_data">Data</label>
+          </div>
+          <div class="form-group custom-control custom-checkbox small-checkbox my-1">
+            <input type="checkbox" class="custom-control-input" id="check_ganhos" name="check_ganhos" value="1" <?= $cliente['check_ganhos'] == 1 ? 'checked' : '' ?>>
+            <label class="custom-control-label" for="check_ganhos">Ganhos</label>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+
+    <div class="col-md-12">
+        <div class="validation-card">
+          <h6>Validação de todos os prints</h6>
+          <hr>
+          <div class="form-group custom-control custom-checkbox small-checkbox my-1">
+            <input type="checkbox" class="custom-control-input" id="check_cabecalhos" name="check_cabecalhos" value="1" <?= $cliente['check_cabecalhos'] == 1 ? 'checked' : '' ?>>
+            <label class="custom-control-label" for="check_cabecalhos">Cabeçalhos/Horários prints</label>
+          </div>
+        </div>
+      </div>
+
+      <!-- <div class="col-md-12">
+
+        
+        <div class="validation-card">
+          <h6>Validação de todos os prints</h6>
+          <div class="form-group custom-control custom-checkbox small-checkbox my-1">
+            <input type="checkbox" class="custom-control-input" id="check_cabecalhos" name="check_cabecalhos" value="1" <?= $cliente['check_cabecalhos'] == 1 ? 'checked' : '' ?>>
+            <label class="custom-control-label" for="check_cabecalhos">Cabeçalhos/Horários prints</label>
+          </div>
+        </div>
+      </div> -->
+    </div>
+
   <?php endif; ?>
 </div>
 
@@ -1229,6 +1579,27 @@ $assalariado = ($cliente['ramo'] === 'assalariado');
         </div>
       </div>
     </div>
+
+    <div class="col-md-6">
+      <div class="validation-card">
+        <h6>Comprovantes do Autônomo</h6>
+        <hr>
+        <div class="form-group custom-control custom-checkbox small-checkbox my-1">
+          <input type="checkbox" class="custom-control-input" id="check_nome" name="check_nome" value="1" <?= $cliente['check_nome'] == 1 ? 'checked' : '' ?>>
+          <label class="custom-control-label" for="check_nome">Nome</label>
+        </div>
+        <div class="form-group custom-control custom-checkbox small-checkbox my-1">
+          <input type="checkbox" class="custom-control-input" id="check_data" name="check_data" value="1" <?= $cliente['check_data'] == 1 ? 'checked' : '' ?>>
+          <label class="custom-control-label" for="check_data">Data</label>
+        </div>
+        <div class="form-group custom-control custom-checkbox small-checkbox my-1">
+          <input type="checkbox" class="custom-control-input" id="check_ganhos" name="check_ganhos" value="1" <?= $cliente['check_ganhos'] == 1 ? 'checked' : '' ?>>
+          <label class="custom-control-label" for="check_ganhos">Ganhos</label>
+        </div>
+      </div>
+    </div>
+
+    
   </div>
 <?php endif; ?>
 
@@ -1259,7 +1630,26 @@ $assalariado = ($cliente['ramo'] === 'assalariado');
         </div>
       </div>
     </div>
+    <div class="col-md-6">
+      <div class="validation-card">
+        <h6>Comprovantes do Assalariado</h6>
+        <hr>
+        <div class="form-group custom-control custom-checkbox small-checkbox my-1">
+          <input type="checkbox" class="custom-control-input" id="check_nome" name="check_nome" value="1" <?= $cliente['check_nome'] == 1 ? 'checked' : '' ?>>
+          <label class="custom-control-label" for="check_nome">Nome</label>
+        </div>
+        <div class="form-group custom-control custom-checkbox small-checkbox my-1">
+          <input type="checkbox" class="custom-control-input" id="check_data" name="check_data" value="1" <?= $cliente['check_data'] == 1 ? 'checked' : '' ?>>
+          <label class="custom-control-label" for="check_data">Data</label>
+        </div>
+        <div class="form-group custom-control custom-checkbox small-checkbox my-1">
+          <input type="checkbox" class="custom-control-input" id="check_ganhos" name="check_ganhos" value="1" <?= $cliente['check_ganhos'] == 1 ? 'checked' : '' ?>>
+          <label class="custom-control-label" for="check_ganhos">Ganhos</label>
+        </div>
+      </div>
+    </div>
   </div>
+  
 <?php endif; ?>
 
 <hr>
@@ -1291,18 +1681,18 @@ $assalariado = ($cliente['ramo'] === 'assalariado');
 
             <div class="form-group mb-3">
                 <label for="status_final" class="form-label">Selecione o status final:</label>
-                <select class="form-select form-control" id="status_final" name="status_final">
+                <select class="form-select form-control" id="status_final" name="status_final" required>
                     <option value="" selected disabled>Escolha uma opção</option>
-                    <option value="Aprovado">Aprovado</option>
-                    <option value="Reprovado">Reprovado</option>
-                    <option value="Pendente">Pendente</option>
-                    <option value="Nao Validado">Não Validado</option>
-                    <option value="Ativo">Ativo</option>
-                    <option value="Inativo">Inativo</option>
-                    <option value="Em Atraso">Em Atraso</option>
-                    <option value="Negativado">Negativado</option>
-                    <option value="Em Analise">Em Análise</option>
-                    <option value="Nao Tem Interesse">Não tem Interesse</option>
+                    <option value="Aprovado" <?= ($cliente['status'] ?? '') == 'Aprovado' ? 'selected' : '' ?>>Aprovado</option>
+                    <option value="Reprovado" <?= ($cliente['status'] ?? '') == 'Reprovado' ? 'selected' : '' ?>>Reprovado</option>
+                    <option value="Pendente" <?= ($cliente['status'] ?? '') == 'Pendente' ? 'selected' : '' ?>>Pendente</option>
+                    <option value="Nao Validado" <?= ($cliente['status'] ?? '') == 'Nao Validado' ? 'selected' : '' ?>>Não Validado</option>
+                    <option value="Ativo" <?= ($cliente['status'] ?? '') == 'Ativo' ? 'selected' : '' ?>>Ativo</option>
+                    <option value="Inativo" <?= ($cliente['status'] ?? '') == 'Inativo' ? 'selected' : '' ?>>Inativo</option>
+                    <option value="Em Atraso" <?= ($cliente['status'] ?? '') == 'Em Atraso' ? 'selected' : '' ?>>Em Atraso</option>
+                    <option value="Negativado" <?= ($cliente['status'] ?? '') == 'Negativado' ? 'selected' : '' ?>>Negativado</option>
+                    <option value="Em Analise" <?= ($cliente['status'] ?? '') == 'Em Analise' ? 'selected' : '' ?>>Em Análise</option>
+                    <option value="Nao Tem Interesse" <?= ($cliente['status'] ?? '') == 'Nao Tem Interesse' ? 'selected' : '' ?>>Não tem Interesse</option>
                 </select>
             </div>
 
