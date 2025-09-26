@@ -1,11 +1,9 @@
 <?php
 $tabela = 'clientes';
-require_once("../../../conexao.php"); // Inclui o arquivo de conexão com o banco de dados
+require_once("../../../conexao.php"); 
 
-// Configuração de resposta JSON
 header('Content-Type: application/json');
 
-// --- 1. Coleta e sanitiza os dados do POST ---
 $nome = htmlspecialchars(trim($_POST['nome'] ?? ''));
 $email = htmlspecialchars(trim($_POST['email'] ?? ''));
 $telefone = trim($_POST['telefone'] ?? '');
@@ -79,16 +77,26 @@ $conf_senha = $_POST['conf_senha'] ?? '';
 $valor_desejado = isset($_POST['valor_desejado']) ? str_replace(',', '.', str_replace(['R$', '.', ' '], '', $_POST['valor_desejado'])) : 0;
 // $valor_parcela_desejada = isset($_POST['parcela_desejada']) ? str_replace(',', '.', str_replace(['R$', '.', ' '], '', $_POST['parcela_desejada'])) : 0;
 
-// Validação de senhas para novo cadastro de cliente
-if($cliente_cadastro == "Sim"){
-    if($senha != $conf_senha){
-        echo json_encode(['success' => false, 'message' => 'As senhas não são iguais!']);
-        exit();
-    }
-} else {
-    $senha = '123'; // Senha padrão se não for um cadastro de cliente
+// 1. Validação de Senha: Checa se as senhas de confirmação batem, se for um cadastro NOVO.
+if($senha != $conf_senha){
+  // Este bloco é executado se as senhas não coincidirem.
+  echo json_encode(['success' => false, 'message' => 'As senhas não são iguais!']);
+  exit();
 }
-$senha_crip = password_hash($senha, PASSWORD_DEFAULT); // Criptografa a senha
+
+// 2. Se a senha está vazia em um NOVO cadastro, impede (Recomendado).
+if($id == "" && empty($senha)){
+  echo json_encode(['success' => false, 'message' => 'A senha é obrigatória para novos cadastros.']);
+  exit();
+}
+
+// 3. Criptografa a senha se for um novo cadastro ou se uma nova senha foi fornecida para edição.
+// Caso contrário, a variável $senha_crip será preenchida com a senha existente na Parte 2 do script.
+if(!empty($senha)){
+  $senha_crip = password_hash($senha, PASSWORD_DEFAULT); 
+}
+
+// --- Fim da Lógica de Senha ---
 
 // Validação de CPF duplicado (ainda impede o cadastro)
 if($cpf != ""){
