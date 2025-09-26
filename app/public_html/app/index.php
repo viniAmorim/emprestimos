@@ -129,10 +129,10 @@ if ($linhas == 0) {
 							</form>
 							<div class="d-flex">
 								<div>
-									<a class="color-theme opacity-30 font-12" href="#" data-bs-toggle="offcanvas"
-										data-bs-target="#menu-forgot" class="list-group-item">
-										<div>Recuperar Senha</div>
-									</a>
+                  <a class="color-theme opacity-30 font-12" href="#" data-bs-toggle="offcanvas"
+                    data-bs-target="#menu-forgot">
+                    <div>Recuperar Senha</div>
+                  </a>
 								</div>
 							</div>
 						</div>
