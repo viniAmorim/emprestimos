@@ -1556,11 +1556,19 @@ $assalariado = ($cliente['ramo'] === 'assalariado');
   <div class="row mb-4">
     <div class="col-md-6 text-center">
       <h5 class="section-title">Extrato 90 Dias:</h5>
+      
       <?php if (!empty($cliente['extrato_90dias']) && $cliente['extrato_90dias'] !== 'sem-foto.png'): ?>
-        <img src="/painel/images/comprovantes/<?= htmlspecialchars($cliente['extrato_90dias'] ?? '') ?>" alt="Extrato 90 Dias" class="img-fluid rounded shadow-sm" style="max-width: 450px; border: 2px solid #ddd; display: block; margin: 0 auto;">
+        <iframe 
+            src="/painel/images/comprovantes/<?= htmlspecialchars($cliente['extrato_90dias'] ?? '') ?>" 
+            style="width: 100%; height: 600px; border: 2px solid #ddd; display: block; margin: 0 auto;" 
+            frameborder="0"
+        >
+            <p>Seu navegador não suporta a visualização de PDF. <a href="/painel/images/comprovantes/<?= htmlspecialchars($cliente['extrato_90dias'] ?? '') ?>" target="_blank">Clique aqui para baixar o PDF.</a></p>
+        </iframe>
       <?php else: ?>
-        <p>Não enviado.</p>
+          <p>Não enviado.</p>
       <?php endif; ?>
+
       <div class="form-group mt-3">
         <label for="extrato_90dias">Substituir Extrato:</label>
         <input type="file" class="form-control" id="extrato_90dias" name="extrato_90dias">

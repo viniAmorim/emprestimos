@@ -500,6 +500,11 @@ $data_atual = date('Y-m-d');
           Ainda não possui cadastro?
           <a href="cadastro" class="text-accent font-semibold hover:underline">Cadastre-se</a>
         </p>
+        <p class="text-sm mt-4 text-center text-left">
+          <a href="#" class="text-accent font-semibold hover:underline" onclick="openModal('forgot-password-modal'); return false;">
+            Recuperar Senha
+          </a>
+        </p>
       </form>
     </div>
 
@@ -512,6 +517,40 @@ $data_atual = date('Y-m-d');
     </div>
   </div>
 </div>
+
+<div id="forgot-password-modal" class="hidden fixed inset-0 z-50 overflow-y-auto bg-black bg-opacity-75 flex items-center justify-center transition-opacity duration-300" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+  <div class="bg-white rounded-lg shadow-xl w-full max-w-sm mx-auto p-6 transform transition-transform duration-300 scale-95 opacity-0">
+    <div class="flex justify-between items-center border-b pb-3 mb-4">
+      <h3 class="text-lg font-semibold text-primary">Recuperar Senha</h3>
+      <button type="button" class="text-gray-400 hover:text-gray-600" onclick="closeModal('forgot-password-modal')">
+        <span class="sr-only">Fechar</span>
+        <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+        </svg>
+      </button>
+    </div>
+
+    <form method="post" id="form-recuperar-modal">
+      <div class="mb-4 relative">
+        <!-- <i class="fas fa-at input-icon"></i> -->
+        <input type="email" name="email" id="email-recuperar-modal" placeholder="Digite seu Email" class="form-input w-full pl-10" required />
+        <!-- <p class="text-black mt-1">Insira seu email cadastrado</p> -->
+      </div>
+      
+      <button type="submit" id="submit-forgot-modal" class="btn-primary w-full mt-4">
+        RESETAR SENHA
+      </button>
+
+      <p id="mensagem-recuperar-modal" class="text-sm text-center mt-3 text-success hidden">
+        Link de recuperação enviado para seu Email ou WhatsApp!
+      </p>
+      <div class="row">
+				<div class="col-12 text-start">
+						<p class="font-11 pt-3 text-black" align="center">Verifique seu whatsapp para redefinir a senha!</p>
+				</div>
+			</div>
+    </form>
+  </div>
 
   </div>
   
@@ -793,6 +832,81 @@ $data_atual = date('Y-m-d');
             });
         });
     }
+
+    // Funções para abrir e fechar o modal
+    function openModal(modalId) {
+        const modal = document.getElementById(modalId);
+        if (modal) {
+            modal.classList.remove('hidden');
+            setTimeout(() => {
+                modal.querySelector('div:last-child').classList.remove('scale-95', 'opacity-0');
+                modal.querySelector('div:last-child').classList.add('scale-100', 'opacity-100');
+            }, 10);
+        }
+    }
+
+    function closeModal(modalId) {
+        const modal = document.getElementById(modalId);
+        if (modal) {
+            modal.querySelector('div:last-child').classList.remove('scale-100', 'opacity-100');
+            modal.querySelector('div:last-child').classList.add('scale-95', 'opacity-0');
+            setTimeout(() => {
+                modal.classList.add('hidden');
+            }, 300); // Deve ser igual à duração da transição CSS
+        }
+    }
+
+    // Lógica de Submissão do Formulário de Recuperação (AJAX)
+    $(document).ready(function() {
+        $("#form-recuperar-modal").submit(function(event) {
+            event.preventDefault(); 
+            
+            const $form = $(this);
+            const $submitBtn = $('#submit-forgot-modal');
+            const $message = $('#mensagem-recuperar-modal');
+
+            $submitBtn.text('ENVIANDO...');
+            $submitBtn.prop('disabled', true);
+            $message.addClass('hidden');
+            
+            // Chamada AJAX
+            $.ajax({
+                url: "recuperar-senha-cliente.php", 
+                type: 'POST',
+                data: $form.serialize(),
+                success: function(response) {
+                    // AQUI ESTÁ A CHAVE: LENDO A RESPOSTA DO PHP
+                    response = response.trim(); // Limpa espaços em branco
+
+                    if (response === "Recuperado com Sucesso") {
+                        
+                        $submitBtn.text('RESETAR SENHA');
+                        $submitBtn.prop('disabled', false);
+
+                        // Exibe a mensagem de sucesso e limpa o campo
+                        $message.text('Link de recuperação enviado para seu Email ou WhatsApp!').removeClass('hidden text-danger').addClass('text-success');
+                        $('#email-recuperar-modal').val('');
+                        // Você pode fechar o modal aqui, se desejar: closeModal('forgot-password-modal');
+
+                    } else {
+                        // SE O PHP RETORNOU UMA MENSAGEM DE ERRO (ex: 'Esse email não está Cadastrado!')
+                        $submitBtn.text('RESETAR SENHA');
+                        $submitBtn.prop('disabled', false);
+                        // Usa a mensagem de erro que veio do PHP
+                        $message.text(response).removeClass('hidden text-success').addClass('text-danger');
+                    }
+                },
+                error: function() {
+                    // ESTE BLOCO SÓ DEVE SER ACIONADO POR ERROS DE CONEXÃO HTTP (404, 500, etc.)
+                    $submitBtn.text('RESETAR SENHA');
+                    $submitBtn.prop('disabled', false);
+                    $message.text('Falha na comunicação com o servidor. Tente novamente.').removeClass('hidden text-success').addClass('text-danger');
+                }
+            });
+        });
+    });
+
+
 
 
 </script>
