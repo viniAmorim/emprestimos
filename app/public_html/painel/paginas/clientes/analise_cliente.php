@@ -1386,9 +1386,15 @@ $assalariado = ($cliente['ramo'] === 'assalariado');
       <div class="col-md-6 text-center">
         <h5 class="section-title">Print Perfil App:</h5>
         <?php if (!empty($cliente['print_perfil_app']) && $cliente['print_perfil_app'] !== 'sem-foto.png'): ?>
-          <img src="/painel/images/comprovantes/<?= htmlspecialchars($cliente['print_perfil_app'] ?? '') ?>" alt="Print Perfil App" class="img-fluid rounded shadow-sm" style="max-width: 350px; border: 2px solid #ddd; display: block; margin: 0 auto;">
+        <iframe 
+            src="/painel/images/comprovantes/<?= htmlspecialchars($cliente['print_perfil_app'] ?? '') ?>" 
+            style="width: 100%; height: 600px; border: 2px solid #ddd; display: block; margin: 0 auto;" 
+            frameborder="0"
+        >
+            <p>Seu navegador não suporta a visualização de PDF. <a href="/painel/images/comprovantes/<?= htmlspecialchars($cliente['print_perfil_app'] ?? '') ?>" target="_blank">Clique aqui para baixar o PDF.</a></p>
+        </iframe>
         <?php else: ?>
-          <p>Não enviado.</p>
+            <p>Não enviado.</p>
         <?php endif; ?>
         <div class="form-group mt-3">
           <label for="print_perfil_app">Substituir Print:</label>
@@ -1416,9 +1422,15 @@ $assalariado = ($cliente['ramo'] === 'assalariado');
       <div class="col-md-6 text-center">
         <h5 class="section-title">Print Veículo App:</h5>
         <?php if (!empty($cliente['print_veiculo_app']) && $cliente['print_veiculo_app'] !== 'sem-foto.png'): ?>
-          <img src="/painel/images/comprovantes/<?= htmlspecialchars($cliente['print_veiculo_app'] ?? '') ?>" alt="Print Veículo App" class="img-fluid rounded shadow-sm" style="max-width: 350px; border: 2px solid #ddd; display: block; margin: 0 auto;">
+        <iframe 
+            src="/painel/images/comprovantes/<?= htmlspecialchars($cliente['print_veiculo_app'] ?? '') ?>" 
+            style="width: 100%; height: 600px; border: 2px solid #ddd; display: block; margin: 0 auto;" 
+            frameborder="0"
+        >
+            <p>Seu navegador não suporta a visualização de PDF. <a href="/painel/images/comprovantes/<?= htmlspecialchars($cliente['print_veiculo_app'] ?? '') ?>" target="_blank">Clique aqui para baixar o PDF.</a></p>
+        </iframe>
         <?php else: ?>
-          <p>Não enviado.</p>
+            <p>Não enviado.</p>
         <?php endif; ?>
         <div class="form-group mt-3">
           <label for="print_veiculo_app">Substituir Print:</label>
@@ -1471,9 +1483,15 @@ $assalariado = ($cliente['ramo'] === 'assalariado');
       <div class="col-md-6 text-center">
         <h5 class="section-title">Print Ganhos Hoje:</h5>
         <?php if (!empty($cliente['print_ganhos_hoje']) && $cliente['print_ganhos_hoje'] !== 'sem-foto.png'): ?>
-          <img src="/painel/images/comprovantes/<?= htmlspecialchars($cliente['print_ganhos_hoje'] ?? '') ?>" alt="Print Ganhos Hoje" class="img-fluid rounded shadow-sm" style="max-width: 350px; border: 2px solid #ddd; display: block; margin: 0 auto;">
+        <iframe 
+            src="/painel/images/comprovantes/<?= htmlspecialchars($cliente['print_ganhos_hoje'] ?? '') ?>" 
+            style="width: 100%; height: 600px; border: 2px solid #ddd; display: block; margin: 0 auto;" 
+            frameborder="0"
+        >
+            <p>Seu navegador não suporta a visualização de PDF. <a href="/painel/images/comprovantes/<?= htmlspecialchars($cliente['print_ganhos_hoje'] ?? '') ?>" target="_blank">Clique aqui para baixar o PDF.</a></p>
+        </iframe>
         <?php else: ?>
-          <p>Não enviado.</p>
+            <p>Não enviado.</p>
         <?php endif; ?>
         <div class="form-group mt-3">
           <label for="print_ganhos_hoje">Substituir Print:</label>
@@ -1497,10 +1515,17 @@ $assalariado = ($cliente['ramo'] === 'assalariado');
       <div class="col-md-6 text-center">
         <h5 class="section-title">Print Ganhos 30 Dias:</h5>
         <?php if (!empty($cliente['print_ganhos_30dias']) && $cliente['print_ganhos_30dias'] !== 'sem-foto.png'): ?>
-          <img src="/painel/images/comprovantes/<?= htmlspecialchars($cliente['print_ganhos_30dias'] ?? '') ?>" alt="Print Ganhos 30 Dias" class="img-fluid rounded shadow-sm" style="max-width: 350px; border: 2px solid #ddd; display: block; margin: 0 auto;">
+        <iframe 
+            src="/painel/images/comprovantes/<?= htmlspecialchars($cliente['print_ganhos_30dias'] ?? '') ?>" 
+            style="width: 100%; height: 600px; border: 2px solid #ddd; display: block; margin: 0 auto;" 
+            frameborder="0"
+        >
+            <p>Seu navegador não suporta a visualização de PDF. <a href="/painel/images/comprovantes/<?= htmlspecialchars($cliente['print_ganhos_30dias'] ?? '') ?>" target="_blank">Clique aqui para baixar o PDF.</a></p>
+        </iframe>
         <?php else: ?>
-          <p>Não enviado.</p>
+            <p>Não enviado.</p>
         <?php endif; ?>
+
         <div class="form-group mt-3">
           <label for="print_ganhos_30dias">Substituir Print:</label>
           <input type="file" class="form-control" id="print_ganhos_30dias" name="print_ganhos_30dias">
@@ -1615,11 +1640,19 @@ $assalariado = ($cliente['ramo'] === 'assalariado');
   <div class="row mb-6">
     <div class="col-md-6 text-center">
       <h5 class="section-title">Contracheque:</h5>
+
       <?php if (!empty($cliente['contracheque']) && $cliente['contracheque'] !== 'sem-foto.png'): ?>
-        <img src="/painel/images/comprovantes/<?= htmlspecialchars($cliente['contracheque'] ?? '') ?>" alt="Contracheque" class="img-fluid rounded shadow-sm" style="max-width: 450px; border: 2px solid #ddd; display: block; margin: 0 auto;">
+        <iframe 
+            src="/painel/images/comprovantes/<?= htmlspecialchars($cliente['contracheque'] ?? '') ?>" 
+            style="width: 100%; height: 600px; border: 2px solid #ddd; display: block; margin: 0 auto;" 
+            frameborder="0"
+        >
+            <p>Seu navegador não suporta a visualização de PDF. <a href="/painel/images/comprovantes/<?= htmlspecialchars($cliente['contracheque'] ?? '') ?>" target="_blank">Clique aqui para baixar o PDF.</a></p>
+        </iframe>
       <?php else: ?>
-        <p>Não enviado.</p>
+          <p>Não enviado.</p>
       <?php endif; ?>
+
       <div class="form-group mt-3">
         <label for="contracheque">Substituir Contracheque:</label>
         <input type="file" class="form-control" id="contracheque" name="contracheque">
