@@ -762,7 +762,7 @@
                 </div>
 
                 <div class="form-step hidden" id="step-4">
-                    <h2 class="text-xl font-bold mb-4">4. Referência(parente de primeiro grau)</h2>
+                    <h2 class="text-xl font-bold mb-4">4. Referência (parente de primeiro grau)</h2>
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                         <div>
                           <label class="block text-sm font-medium text-white">Nome Completo</label>
@@ -796,7 +796,9 @@
                         </div>
                     </div>
 
-                    <label class="block text-md font-medium text-white mt-6 mb-6">Quem te indicou?</label>
+                    <!-- <label class="block text-md font-medium text-white mt-6 mb-6">Quem te indicou?</label> -->
+
+                    <h2 class="text-xl font-bold mb-4 mt-4">4.1 Quem te indicou ?</h2>
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div>
@@ -863,7 +865,7 @@
 
                     <div>
                       <label class="block text-sm font-medium">Frequência do Aluguel</label>
-                      <select name="frequencia_aluguel" id="frequencia_aluguel" class="form-input w-full uber-obrigatorio" onblur="validateField(this)">
+                      <select name="frequencia_aluguel" id="frequencia_aluguel" class="form-input w-full" onblur="validateField(this)">
                         <option value="" disabled selected>Selecione</option>
                         <option value="diario">Diário</option>
                         <option value="semanal">Semanal</option>
@@ -977,7 +979,7 @@
                         <input type="file" name="contracheque" id="contracheque" onchange="carregarImgContracheque(); validateField(this)" accept=".jpg,.jpeg,.png,.pdf,.heic,.webp,.avif" class="form-input w-full assalariado-obrigatorio" required>
                     </div>
                     <div class="w-20 h-20 border border-gray-300 rounded overflow-hidden bg-white flex items-center justify-center">
-                        <img src="https://placehold.co/80x80/cccccc/333333?text=Cheque" id="target-contracheque" class="object-cover w-full h-full" onerror="this.src='https://placehold.co/80x80/cccccc/333333?text=Cheque'">
+                        <img src="https://placehold.co/80x80/cccccc/333333?text=Contracheque" id="target-contracheque" class="object-cover w-full h-full" onerror="this.src='https://placehold.co/80x80/cccccc/333333?text=Contracheque'">
                     </div>
                 </div>
 
@@ -1008,9 +1010,14 @@
                     <h2 class="text-xl font-bold mb-4">6. Finalização</h2>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
-                            <label class="block text-sm font-medium text-white">Valor Desejado</label>
+                            <label class="block text-sm font-medium text-white">Valor de empréstimo</label>
                             <input type="text" name="valor_desejado" id="valor_desejado" class="form-input w-full" placeholder="R$" required onblur="validateField(this)">
+                            <div class="text-md text-gray-300 mt-4 text-left">
+                              <p>*Sujeito a análise de crédito</p>
+                            </div>
                         </div>
+
+                       
                         <!-- <div>
                             <label class="block text-sm font-medium text-white">Valor máximo da parcela</label>
                             <input type="text" name="parcela_desejada" id="parcela_desejada" class="form-input w-full" placeholder="R$" required onblur="validateField(this)">
@@ -1188,7 +1195,7 @@ function carregarImgExtrato90Dias() {
 }
 
 function carregarImgContracheque() {
-    handleImageUpload('contracheque', 'target-contracheque', 'Cheque');
+    handleImageUpload('contracheque', 'target-contracheque', 'cheque');
 }
 
     // Função para alternar a visibilidade do campo extra
@@ -1808,7 +1815,7 @@ function carregarImgContracheque() {
                 if (input.id === 'print_ganhos_hoje') document.getElementById('target-print-ganhos-hoje').src = "https://placehold.co/80x80/cccccc/333333?text=GanhosSemana";
                 if (input.id === 'print_ganhos_30dias') document.getElementById('target-print-ganhos-30dias').src = "https://placehold.co/80x80/cccccc/333333?text=Ganhos30D";
                 if (input.id === 'extrato_90dias') document.getElementById('target-extrato-90dias').src = "https://placehold.co/80x80/cccccc/333333?text=Extrato";
-                if (input.id === 'contracheque') document.getElementById('target-contracheque').src = "https://placehold.co/80x80/cccccc/333333?text=Cheque";
+                if (input.id === 'contracheque') document.getElementById('target-contracheque').src = "https://placehold.co/80x80/cccccc/333333?text=Contracheque";
             }
             markValid(input); // Marca como válido
         });
