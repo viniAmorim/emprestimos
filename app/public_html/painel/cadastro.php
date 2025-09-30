@@ -1065,12 +1065,12 @@ async function handleImageUpload(inputId, imgDisplayId, defaultTextPlaceholder =
         if (typeof validateField === 'function') {
             validateField(input);
         }
-        Swal.fire({
-            icon: 'info',
-            title: 'Arquivo PDF selecionado',
-            text: 'Pré-visualizações de PDF não são suportadas diretamente no navegador. O arquivo será enviado.',
-            confirmButtonText: 'Ok'
-        });
+        // Swal.fire({
+        //     icon: 'info',
+        //     title: 'Arquivo PDF selecionado',
+        //     text: 'Pré-visualizações de PDF não são suportadas diretamente no navegador. O arquivo será enviado.',
+        //     confirmButtonText: 'Ok'
+        // });
         return;
     }
 
