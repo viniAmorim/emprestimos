@@ -63,6 +63,7 @@ if ($linhas > 0) {
     <thead>
     <tr>
     <th>Nome</th>
+    <th class="esc">CPF / CNPJ</th> 
     <th class="esc">Telefone</th>
     <th class="esc">Status</th>
     <th class="esc">Email</th>
@@ -91,6 +92,9 @@ if ($linhas > 0) {
         $estado = $res[$i]['estado'];
         $cep = $res[$i]['cep'];
         $pessoa = $res[$i]['pessoa'];
+
+        $cpf = $res[$i]['cpf'];
+        $cpf_sem_mascara = preg_replace("/[^0-9]/", "", $cpf); 
 
         $nome_sec = @$res[$i]['nome_sec'];
         $telefone_sec = @$res[$i]['telefone_sec'];
@@ -193,6 +197,7 @@ if ($linhas > 0) {
         <i class="fa fa-square" style="color:{$cor}; display:{$ocultar_cor}"></i>
         {$nome}
         </td>
+        <td class="esc" data-search="{$cpf_sem_mascara}">{$cpf}</td>
         <td class="esc">{$telefone}</td>
         <td class="esc"><span class="me-1 my-2 p-1" style="color:{$cor};">{$status_cliente}</span></td>
         <td class="esc">{$email}</td>
