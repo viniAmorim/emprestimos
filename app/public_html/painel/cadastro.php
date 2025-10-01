@@ -803,12 +803,12 @@
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div>
                         <label class="block text-sm font-medium text-white">Nome Completo</label>
-                        <input type="text" id="indicacao" name="indicacao" placeholder="Indicado por" class="form-input w-full" onblur="validateField(this)">
+                        <input type="text" id="indicacao" name="indicacao" placeholder="Indicado por" class="form-input w-full" onblur="validateField(this)" required>
                       </div>
 
                       <div>
                         <label class="block text-sm font-medium text-white">Celular (Whatsapp)</label>
-                        <input type="text" id="indicacao_contato" name="indicacao_contato" placeholder="Indicado por" class="form-input w-full" onblur="validateField(this)">
+                        <input type="text" id="indicacao_contato" name="indicacao_contato" placeholder="Indicado por" class="form-input w-full" onblur="validateField(this)" required>
                       </div>
                     </div>
                   
@@ -1569,7 +1569,7 @@ function carregarImgContracheque() {
                         errorMessage = 'Data de Nascimento inválida.';
                     }
                 }
-            } else if (id === 'telefone' || id === 'referencia_contato') {
+            } else if (id === 'telefone' || id === 'referencia_contato'  || id === 'indicacao_contato') {
                 if (input.value.replace(/\D/g, '').length < 11) {
                     isValid = false;
                     errorMessage = 'Telefone inválido (mínimo 11 dígitos incluindo DDD).';
