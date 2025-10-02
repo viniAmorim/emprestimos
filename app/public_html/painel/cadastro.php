@@ -1534,78 +1534,89 @@ function carregarImgContracheque() {
         }
     }
 
-    // Validação genérica de campo
-    function validateField(input) {
-        console.log(`Validando campo: ${input.id || input.name}, Valor: "${input.value}"`);
-        console.log("Campo validado:", input.id, input.value ? "Com valor" : "Sem valor");
-        const type = input.type;
-        const id = input.id;
-        let isValid = true;
-        let errorMessage = '';
+  // Validação genérica de campo
+  function validateField(input) {
+    console.log(`Validando campo: ${input.id || input.name}, Valor: "${input.value}"`);
+    console.log("Campo validado:", input.id, input.value ? "Com valor" : "Sem valor");
+    const type = input.type;
+    const id = input.id;
+    let isValid = true;
+    let errorMessage = '';
 
-        // Verifica campos obrigatórios primeiro
-        if (input.hasAttribute('required') && input.value.trim() === '') {
+    if (input.hasAttribute('required') && input.value.trim() === '') {
+      isValid = false;
+      errorMessage = 'Este campo é obrigatório.';
+    } else {
+      if (id === 'nome' || id === 'referencia_nome' || id === 'indicacao') {
+        const nomeCompleto = input.value.trim();
+        // Verifica se o nome completo tem pelo menos 2 palavras (Nome + Sobrenome)
+        // A expressão /\s+/ considera um ou mais espaços como separador
+        if (nomeCompleto.split(/\s+/).length < 2) {
             isValid = false;
-            errorMessage = 'Este campo é obrigatório.';
-        } else {
-            // Validações específicas
-            if (id === 'email') {
-                if (!validateEmail(input.value)) {
-                    isValid = false;
-                    errorMessage = 'Email inválido.';
-                }
-            } else if (id === 'cpf') {
-                isValid = validateCPF(input);
-                if (!isValid) errorMessage = input.getAttribute('data-invalid');
-            } else if (id === 'data_nasc') { // NOVO: VALIDAÇÃO DA DATA DE NASCIMENTO
-                isValid = validateDataNascimento(input);
-                // A função validateDataNascimento já marca como inválido e define a mensagem
-                if (!isValid) {
-                    // Tenta obter a mensagem da própria função de validação de data
-                    let errorMessageElement = input.nextElementSibling;
-                    if (errorMessageElement && errorMessageElement.classList.contains('error-message')) {
-                        errorMessage = errorMessageElement.textContent;
-                    } else {
-                        errorMessage = 'Data de Nascimento inválida.';
-                    }
-                }
-            } else if (id === 'telefone' || id === 'referencia_contato'  || id === 'indicacao_contato') {
-                if (input.value.replace(/\D/g, '').length < 11) {
-                    isValid = false;
-                    errorMessage = 'Telefone inválido (mínimo 11 dígitos incluindo DDD).';
-                }
-            } else if (id === 'senha' || id === 'conf_senha') {
-                isValid = validatePassword(input);
-                if (!isValid) errorMessage = input.getAttribute('data-invalid');
-            } else if (id === 'placa_veiculo') {
-                isValid = validatePlaca(input);
-                if (!isValid) errorMessage = input.getAttribute('data-invalid');
-            } else if (type === 'file') {
-                if (input.hasAttribute('required') && input.files.length === 0) {
-                    isValid = false;
-                    errorMessage = 'Por favor, anexe o arquivo.';
-                }
-            } else if (type === 'number') {
-                if (input.hasAttribute('required') && input.value.trim() === '') {
-                    isValid = false;
-                    errorMessage = 'Este campo é obrigatório.';
-                } else if (input.min && parseFloat(input.value) < parseFloat(input.min)) {
-                    isValid = false;
-                    errorMessage = `O valor mínimo é ${input.min}.`;
-                }
-            } else if (input.tagName === 'SELECT' && input.value === '') {
+            errorMessage = 'Por favor, insira o nome completo (nome e pelo menos um sobrenome).';
+        }
+      } 
+        
+        // VALIDAÇÕES ANTIGAS (Usando 'else if' para evitar conflitos)
+        else if (id === 'email') {
+            if (!validateEmail(input.value)) {
                 isValid = false;
-                errorMessage = 'Por favor, selecione uma opção.';
+                errorMessage = 'Email inválido.';
             }
+        } else if (id === 'cpf') {
+            isValid = validateCPF(input);
+            if (!isValid) errorMessage = input.getAttribute('data-invalid');
+        } else if (id === 'data_nasc') { // VALIDAÇÃO DA DATA DE NASCIMENTO
+            isValid = validateDataNascimento(input);
+            // A função validateDataNascimento já marca como inválido e define a mensagem
+            if (!isValid) {
+                // Tenta obter a mensagem da própria função de validação de data
+                let errorMessageElement = input.nextElementSibling;
+                if (errorMessageElement && errorMessageElement.classList.contains('error-message')) {
+                    errorMessage = errorMessageElement.textContent;
+                } else {
+                    errorMessage = 'Data de Nascimento inválida.';
+                }
+            }
+        } else if (id === 'telefone' || id === 'referencia_contato' || id === 'indicacao_contato') {
+            if (input.value.replace(/\D/g, '').length < 11) {
+                isValid = false;
+                errorMessage = 'Telefone inválido (mínimo 11 dígitos incluindo DDD).';
+            }
+        } else if (id === 'senha' || id === 'conf_senha') {
+            isValid = validatePassword(input);
+            if (!isValid) errorMessage = input.getAttribute('data-invalid');
+        } else if (id === 'placa_veiculo') {
+            isValid = validatePlaca(input);
+            if (!isValid) errorMessage = input.getAttribute('data-invalid');
+        } else if (type === 'file') {
+            if (input.hasAttribute('required') && input.files.length === 0) {
+                isValid = false;
+                errorMessage = 'Por favor, anexe o arquivo.';
+            }
+        } else if (type === 'number') {
+            if (input.hasAttribute('required') && input.value.trim() === '') {
+                isValid = false;
+                errorMessage = 'Este campo é obrigatório.';
+            } else if (input.min && parseFloat(input.value) < parseFloat(input.min)) {
+                isValid = false;
+                errorMessage = `O valor mínimo é ${input.min}.`;
+            }
+        } else if (input.tagName === 'SELECT' && input.value === '') {
+            isValid = false;
+            errorMessage = 'Por favor, selecione uma opção.';
         }
+    }
 
-        if (isValid) {
-            markValid(input);
-        } else {
-            markInvalid(input, errorMessage);
-        }
-        console.log(`Campo ${input.id || input.name} é válido: ${isValid}`);
-        return isValid;
+    // 3. Aplica o resultado da validação
+    if (isValid) {
+        // Assume que 'markValid' e 'markInvalid' são funções que manipulam classes CSS e mensagens de erro
+        markValid(input);
+    } else {
+        markInvalid(input, errorMessage);
+    }
+    console.log(`Campo ${input.id || input.name} é válido: ${isValid}`);
+    return isValid;
     }
 
     // Validação da etapa atual antes de prosseguir

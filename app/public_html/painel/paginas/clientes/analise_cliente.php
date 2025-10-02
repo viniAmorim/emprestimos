@@ -1837,63 +1837,67 @@ $assalariado = ($cliente['ramo'] === 'assalariado');
     <script>
 $(document).ready(function() {
 
-  // Adicione este código dentro da função $(document).ready()
-$('#btn-sair').on('click', function(e) {
-    e.preventDefault(); // Impede a ação padrão do botão (que não tem, mas é uma boa prática)
+    // --- LÓGICA DO BOTÃO SAIR ---
+    $('#btn-sair').on('click', function(e) {
+        e.preventDefault(); 
 
-    Swal.fire({
-        title: 'Tem certeza?',
-        text: "Todas as alterações feitas nesta página serão perdidas.",
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#d33',
-        cancelButtonColor: '#3085d6',
-        confirmButtonText: 'Sim, sair!',
-        cancelButtonText: 'Cancelar'
-    }).then((result) => {
-        if (result.isConfirmed) {
-            // Se o usuário confirmar, redirecione para a página de clientes
-            window.location.href = 'index.php?pagina=clientes';
-        }
+        Swal.fire({
+            title: 'Tem certeza?',
+            text: "Todas as alterações feitas nesta página serão perdidas.",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: 'Sim, sair!',
+            cancelButtonText: 'Cancelar'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location.href = 'index.php?pagina=clientes';
+            }
+        });
     });
-});
-    // --- LÓGICA DO FORMULÁRIO DE FINALIZAÇÃO DE ANÁLISE ---
 
-    // Lógica para mostrar/esconder campos de observação
+    // --- LÓGICA DE MOSTRAR/ESCONDER CAMPOS DE OBSERVAÇÃO ---
     $('#status_final').on('change', function() {
         var status = $(this).val();
 
+        // **Ajuste de IDs para os campos de VALOR**
+        // Assumindo que os IDs dos campos de valor são: #observacoes_reprovacao e #observacoes_pendente_desc
+        
         // Esconde e limpa todos os campos de observação
         $('#observacoes-reprovado').hide().find('select').val('');
         $('#observacoes-pendente').hide().find('textarea').val('');
         $('#observacoes-genericas').hide().find('textarea').val('');
 
-        // Remove o atributo 'required' de todos os campos de observação
-        $('#observacoes_reprovado').removeAttr('required');
-        $('#observacoes_pendente').removeAttr('required');
+        // Remove o atributo 'required' dos campos de valor
+        $('#observacoes_reprovacao').removeAttr('required');
+        $('#observacoes_pendente_desc').removeAttr('required');
 
         // Exibe o campo de observação apropriado e o torna obrigatório se necessário
         if (status === 'Reprovado') {
             $('#observacoes-reprovado').show();
-            $('#observacoes_reprovado').attr('required', 'required');
+            $('#observacoes_reprovacao').attr('required', 'required');
         } else if (status === 'Pendente') {
             $('#observacoes-pendente').show();
-            $('#observacoes_pendente').attr('required', 'required');
+            $('#observacoes_pendente_desc').attr('required', 'required');
         } else {
             // Para todos os outros status, mostra o campo de observação genérico
             $('#observacoes-genericas').show();
         }
-    });
+    }).trigger('change'); // Dispara para configurar o estado inicial
 
-    // Lógica de validação na submissão do formulário
+    // --- LÓGICA DE VALIDAÇÃO E SUBMISSÃO AJAX ---
     $('#form-analise').on('submit', function(e) {
+        // SEMPRE CHAME O preventDefault() primeiro, pois faremos a submissão via AJAX
+        e.preventDefault(); 
+        
+        var form = $(this);
         var statusFinal = $('#status_final').val();
         
-        // **NOVA LÓGICA DE VALIDAÇÃO PARA O STATUS "APROVADO"**
+        // --- 1. VALIDAÇÕES DO LADO DO CLIENTE (JS) ---
+
+        // Validação de Checkboxes para APROVADO
         if (statusFinal === 'Aprovado') {
-            // Seleciona todas as checkboxes de validação
-            // O seletor '.validation-card input[type="checkbox"]' é mais seguro
-            // pois só pega as checkboxes dentro dos blocos de validação.
             var totalCheckboxes = $('.validation-card input[type="checkbox"]').length;
             var checkedCheckboxes = $('.validation-card input[type="checkbox"]:checked').length;
             
@@ -1903,90 +1907,149 @@ $('#btn-sair').on('click', function(e) {
                     text: 'Para aprovar o cliente, todas as validações devem ser marcadas.',
                     icon: 'warning'
                 });
-                e.preventDefault(); // Impede o envio do formulário
+                return false; // Sai da função
             }
         }
 
-        // Validação para status com observações obrigatórias
-        if (statusFinal === 'Pendente' && $('#observacoes_pendente').val().trim() === '') {
+        // Validação para status Pendente (Observação Obrigatória)
+        var obsPendente = $('#observacoes_pendente_desc');
+        // VERIFICA: Se status é Pendente E (se o campo existe E se o valor está vazio)
+        if (statusFinal === 'Pendente' && obsPendente.length && obsPendente.val().trim() === '') {
             Swal.fire({
                 title: 'Atenção!',
                 text: 'A descrição para o status "Pendente" é obrigatória.',
                 icon: 'warning'
             });
-            e.preventDefault();
+            return false;
         }
 
-        if (statusFinal === 'Reprovado' && $('#observacoes_reprovado').val().trim() === '') {
+        // Validação para status Reprovado (Observação Obrigatória)
+        var obsReprovado = $('#observacoes_reprovacao');
+        // VERIFICA: Se status é Reprovado E (se o campo existe E se o valor está vazio)
+        if (statusFinal === 'Reprovado' && obsReprovado.length && obsReprovado.val().trim() === '') {
             Swal.fire({
                 title: 'Atenção!',
                 text: 'A observação para o status "Reprovado" é obrigatória.',
                 icon: 'warning'
             });
-            e.preventDefault();
+            return false;
         }
+
+        // --- 2. PREPARAÇÃO E ENVIO AJAX ---
+
+        var formData = new FormData(this);
+        
+        // Desabilita o botão para evitar cliques duplicados
+        var submitButton = form.find('button[type="submit"]');
+        submitButton.prop('disabled', true).text('Processando...');
+
+        $.ajax({
+            url: 'paginas/clientes/finalizar_analise.php',
+            type: 'POST',
+            data: formData,
+            dataType: 'json', // Esperamos um retorno JSON do PHP
+            contentType: false, // Necessário para enviar FormData com uploads
+            processData: false, // Necessário para enviar FormData com uploads
+            
+            success: function(data) {
+                // 3. PROCESSAMENTO DO JSON RETORNADO PELO PHP
+                
+                if (data.status === 'sucesso') {
+                    Swal.fire({
+                        title: 'Sucesso!',
+                        html: data.mensagem,
+                        icon: 'success',
+                        timer: 3000,
+                        showConfirmButton: false
+                    }).then(() => {
+                        // Redireciona para a tabela de clientes após o sucesso
+                        window.location.href = 'index.php?pagina=clientes&status=sucesso'; 
+                    });
+                } else {
+                    // Erro de validação PHP (Ex: Restrição de Duplicidade)
+                    Swal.fire({
+                        title: 'Alerta!',
+                        html: data.mensagem, 
+                        icon: 'error',
+                        confirmButtonText: 'Entendi'
+                    });
+                }
+            },
+            error: function(xhr, status, error) {
+                console.error("Erro AJAX:", xhr.responseText);
+
+                // Tratamento especial para o problema de retorno HTML em vez de JSON
+                if (xhr.responseText.includes('<!DOCTYPE HTML>')) {
+                    Swal.fire('Erro no PHP!', 'O arquivo `finalizar_analise.php` retornou uma página HTML em vez de JSON. Verifique se existe algum `header("Location: ...")` ou `die()` sem o retorno JSON.', 'error');
+                } else {
+                    Swal.fire('Erro Crítico', 'Ocorreu um erro de comunicação com o servidor (' + xhr.status + '). Verifique o console para mais detalhes.', 'error');
+                }
+            },
+            complete: function() {
+                // Reabilita o botão após a conclusão (sucesso ou erro)
+                submitButton.prop('disabled', false).text('Finalizar Análise');
+            }
+        });
     });
 
     // --- LÓGICA DOS ALERTAS DE DUPLICIDADE (mantida) ---
 
     $(document).on('click', '.btn-resolvido', function() {
-    var botao = $(this); // Captura o botão que foi clicado
-    var alertaId = botao.data('id');
-    var alertaElemento = $('#alerta-' + alertaId);
-    
-    Swal.fire({
-        title: 'Tem certeza?',
-        text: "Você irá marcar este alerta como resolvido/ignorado. Ele mudará para a cor verde.",
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#5cb85c', // Mudando a cor do botão de confirmação para verde
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Sim, Ignorar!',
-        cancelButtonText: 'Cancelar'
-    }).then((result) => {
-        if (result.isConfirmed) {
-            $.ajax({
-                url: '/painel/paginas/clientes/marca_alerta_resolvido.php',
-                type: 'POST',
-                data: {
-                    id: alertaId
-                },
-                success: function(response) {
-                    if (response.trim() === 'sucesso') {
-                        // 1. Remove a classe de pendente e adiciona a de resolvido (VERDE)
-                        alertaElemento.removeClass('alerta-pendente').addClass('alerta-resolvido');
-                        
-                        // 2. Substitui o botão "Ignorar" por um badge/status
-                        botao.replaceWith('<span class="badge bg-success text-white">IGNORADO</span>'); 
-                        
-                        // A mensagem de "Nenhum alerta pendente" será controlada pelo PHP no próximo carregamento
-                        // Mas podemos dar um feedback instantâneo sobre a resolução:
-                        
-                        Swal.fire(
-                            'Ignorado!',
-                            'O alerta foi ignorado.',
-                            'success'
-                        );
-                    } else {
+        var botao = $(this);
+        var alertaId = botao.data('id');
+        var alertaElemento = $('#alerta-' + alertaId);
+        
+        Swal.fire({
+            title: 'Tem certeza?',
+            text: "Você irá marcar este alerta como resolvido/ignorado. Ele mudará para a cor verde.",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#5cb85c', 
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Sim, Ignorar!',
+            cancelButtonText: 'Cancelar'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    url: '/painel/paginas/clientes/marca_alerta_resolvido.php',
+                    type: 'POST',
+                    data: {
+                        id: alertaId
+                    },
+                    success: function(response) {
+                        if (response.trim() === 'sucesso') {
+                            // 1. Remove a classe de pendente e adiciona a de resolvido (VERDE)
+                            alertaElemento.removeClass('alerta-pendente').addClass('alerta-resolvido');
+                            
+                            // 2. Substitui o botão "Ignorar" por um badge/status
+                            botao.replaceWith('<span class="badge bg-success text-white">IGNORADO</span>'); 
+                            
+                            Swal.fire(
+                                'Ignorado!',
+                                'O alerta foi ignorado.',
+                                'success'
+                            );
+                        } else {
+                            Swal.fire(
+                                'Erro!',
+                                'Não foi possível resolver o alerta. Tente novamente.',
+                                'error'
+                            );
+                        }
+                    },
+                    error: function() {
                         Swal.fire(
                             'Erro!',
-                            'Não foi possível resolver o alerta. Tente novamente.',
+                            'Ocorreu um erro na requisição. Verifique sua conexão.',
                             'error'
                         );
                     }
-                },
-                error: function() {
-                    Swal.fire(
-                        'Erro!',
-                        'Ocorreu um erro na requisição. Verifique sua conexão.',
-                        'error'
-                    );
-                }
-            });
-        }
+                });
+            }
+        });
     });
 });
-});
 </script>
+
 </body>
 </html>
