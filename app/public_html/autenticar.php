@@ -18,7 +18,7 @@ if($linhas > 0){
 
 	if(!password_verify($senha, $res[0]['senha_crip'])){
 		echo '<script>window.alert("Dados Incorretos!!")</script>'; 
-		echo '<script>window.location="index.php"</script>';  
+		echo '<script>window.location="https://app.ucredcredito.com/login"</script>';  
 		exit();
 	}
 
@@ -35,7 +35,7 @@ if($linhas > 0){
 	echo '<script>window.location="painel"</script>';
 }else{
 	echo '<script>window.alert("Dados Incorretos!!")</script>'; 
-	echo '<script>window.location="index.php"</script>';  
+	echo '<script>window.location="https://app.ucredcredito.com/login"</script>';  
 }
 
 
