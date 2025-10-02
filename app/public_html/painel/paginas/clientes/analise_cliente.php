@@ -1598,6 +1598,27 @@ $assalariado = ($cliente['ramo'] === 'assalariado');
         <label for="extrato_90dias">Substituir Extrato:</label>
         <input type="file" class="form-control" id="extrato_90dias" name="extrato_90dias">
       </div>
+
+      <?php 
+      
+      if (!empty($cliente['campo-comprovante-extra-autonomo']) && $cliente['campo-comprovante-extra-autonomo'] !== 'sem-foto.png'): 
+      ?>
+        <h2>Comprovante Extra Autônomo</h2>
+        <div style="margin-bottom: 20px;">
+            <iframe 
+                src="/painel/images/comprovantes/<?= htmlspecialchars($cliente['campo-comprovante-extra-autonomo'] ?? '') ?>" 
+                style="width: 100%; height: 600px; border: 2px solid #ddd; display: block; margin: 0 auto;" 
+                frameborder="0"
+            >
+                <p>Seu navegador não suporta a visualização de PDF. 
+                <a href="/painel/images/comprovantes/<?= htmlspecialchars($cliente['campo-comprovante-extra-autonomo'] ?? '') ?>" target="_blank">Clique aqui para baixar o arquivo.</a></p>
+            </iframe>
+        </div>
+        <div class="form-group mt-3">
+        <label for="campo-comprovante-extra-autonomo">Substituir Extrato:</label>
+        <input type="file" class="form-control" id="campo-comprovante-extra-autonomo" name="campo-comprovante-extra-autonomo">
+      </div>
+      <?php endif; ?>
     </div>
     <div class="col-md-6">
       <div class="data-card">
@@ -1657,6 +1678,34 @@ $assalariado = ($cliente['ramo'] === 'assalariado');
         <label for="contracheque">Substituir Contracheque:</label>
         <input type="file" class="form-control" id="contracheque" name="contracheque">
       </div>
+
+      <?php 
+      
+      if (!empty($cliente['comprovante_extra_assalariado']) && $cliente['comprovante_extra_assalariado'] !== 'sem-foto.png'): 
+      ?>
+        <h2>Comprovante Extra Autônomo</h2>
+        <div style="margin-bottom: 20px;">
+            <iframe 
+                src="/painel/images/comprovantes/<?= htmlspecialchars($cliente['comprovante_extra_assalariado'] ?? '') ?>" 
+                style="width: 100%; height: 600px; border: 2px solid #ddd; display: block; margin: 0 auto;" 
+                frameborder="0"
+            >
+                <p>Seu navegador não suporta a visualização de PDF. 
+                <a href="/painel/images/comprovantes/<?= htmlspecialchars($cliente['comprovante_extra_assalariado'] ?? '') ?>" target="_blank">Clique aqui para baixar o arquivo.</a></p>
+            </iframe>
+        </div>
+        <div class="form-group mt-3">
+        <label for="comprovante_extra_assalariado">Substituir Extrato:</label>
+        <input type="file" class="form-control" id="comprovante_extra_assalariado" name="comprovante_extra_assalariado">
+      </div>
+
+      <div class="form-group mt-3">
+        <label for="contracheque">Substituir:</label>
+        <input type="file" class="form-control" id="contracheque" name="contracheque">
+      </div>
+      <?php endif; ?>
+
+      
     </div>
     <div class="col-md-6">
       <div class="data-card">
