@@ -1695,14 +1695,11 @@ $assalariado = ($cliente['ramo'] === 'assalariado');
             </iframe>
         </div>
         <div class="form-group mt-3">
-        <label for="comprovante_extra_assalariado">Substituir Extrato:</label>
+        <label for="comprovante_extra_assalariado">Substituir:</label>
         <input type="file" class="form-control" id="comprovante_extra_assalariado" name="comprovante_extra_assalariado">
       </div>
 
-      <div class="form-group mt-3">
-        <label for="contracheque">Substituir:</label>
-        <input type="file" class="form-control" id="contracheque" name="contracheque">
-      </div>
+      
       <?php endif; ?>
 
       
