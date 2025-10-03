@@ -906,6 +906,26 @@ $alertas_duplicidade = $query_alertas->fetchAll(PDO::FETCH_ASSOC);
     font-size: 0.75rem;
     padding: 0.4em 0.8em;
 }
+.cliente-duplicado-link {
+    /* Aparência da Tag/Badge */
+    display: inline-block;
+    padding: 3px 8px;
+    border-radius: 4px; /* Cantos arredondados */
+    background-color: #e6f7ff; /* Fundo azul claro (suave) */
+    border: 1px solid #91d5ff; /* Borda sutil */
+    
+    /* Texto */
+    color: #0050b3; /* Azul escuro para o texto */
+    text-decoration: none; /* Remove o sublinhado padrão */
+    font-size: 0.9em; /* Levemente menor que o texto padrão */
+    transition: background-color 0.2s; /* Transição suave */
+}
+
+.cliente-duplicado-link:hover {
+    background-color: #bae0ff; /* Fundo um pouco mais escuro ao passar o mouse */
+    color: #003a8c; /* Cor do texto ligeiramente mais escura */
+    text-decoration: underline; /* Adiciona sublinhado ao passar o mouse */
+}
 
     </style>
 </head>
@@ -931,50 +951,132 @@ $alertas_duplicidade = $query_alertas->fetchAll(PDO::FETCH_ASSOC);
         <h4 class="section-title">Alertas de Duplicidade</h4>
 <div class="alert-duplicidade-card">
     <?php 
+    // Certifique-se de que $pdo (conexão), $id_cliente (ID do cliente em análise) e $alertas_duplicidade 
+    // (resultado do fetchAll da sua query inicial) estejam definidos antes deste bloco.
+
+    // --- FUNÇÃO AUXILIAR PARA NORMALIZAÇÃO SQL (Remoção de formatação para CPF/Telefones) ---
+    // Esta função remove parênteses, pontos, hífens e espaços de uma coluna do banco de dados.
+    function get_sql_normalization($field_name) {
+        return "REPLACE(REPLACE(REPLACE(REPLACE(REPLACE({$field_name}, '(', ''), ')', ''), '-', ''), '.', ''), ' ', '')";
+    }
+
     $has_unresolved_alerts = false; 
     
-    if (count($alertas_duplicidade) > 0): ?>
+    if (isset($alertas_duplicidade) && count($alertas_duplicidade) > 0): ?>
         <?php foreach ($alertas_duplicidade as $alerta): 
             
             // Define a classe CSS e verifica o status
             $is_resolvido = ($alerta['resolvido'] == 1);
             $alerta_class = $is_resolvido ? 'alerta-resolvido' : 'alerta-pendente';
             
-            // Define se há algum alerta pendente para a mensagem final
+            // Define se há algum alerta pendente
             if (!$is_resolvido) {
                 $has_unresolved_alerts = true;
             }
 
             $data_alerta_formatada = date('d/m/Y', strtotime($alerta['data_alerta']));
             $nome_cliente_duplicado = "Não encontrado";
+            $id_cliente_duplicado = null; 
+            $query_cliente_dup = null; 
+            $campo_busca = '';
+            $valor_alerta_bruto = trim($alerta['valor_duplicado']); // Valor bruto do alerta (ex: (61) 99999-9999)
+            $valor_busca = $valor_alerta_bruto; // Valor que será usado na query (pode ser normalizado)
 
-            // Lógica de busca pelo nome do cliente duplicado
-            if ($alerta['valor_duplicado'] !== 'N/A' && !empty($alerta['valor_duplicado'])) {
-                if ($alerta['tipo_alerta'] === 'Nome Duplicado') {
-                    $query_cliente_dup = $pdo->prepare("SELECT nome FROM clientes WHERE nome = :valor AND id != :id_original LIMIT 1");
-                    $query_cliente_dup->bindValue(":valor", $alerta['valor_duplicado']);
-                    $query_cliente_dup->bindValue(":id_original", $id_cliente);
-                } else if ($alerta['tipo_alerta'] === 'Telefone Duplicado' || $alerta['tipo_alerta'] === 'CPF Duplicado' || $alerta['tipo_alerta'] === 'Email Duplicado' || $alerta['tipo_alerta'] === 'Telefone de Referência Duplicado') {
+            // 1. Lógica de busca pelo nome e ID do cliente duplicado no DB
+            if (!empty($valor_alerta_bruto) && isset($id_cliente)) {
+
+                // --- 1.1 DEFINE O CAMPO DE BUSCA E NORMALIZA O VALOR DE BUSCA ---
+                switch ($alerta['tipo_alerta']) {
                     
-                    $campo_busca = '';
-                    if ($alerta['tipo_alerta'] === 'Telefone Duplicado') $campo_busca = 'telefone';
-                    else if ($alerta['tipo_alerta'] === 'CPF Duplicado') $campo_busca = 'cpf';
-                    else if ($alerta['tipo_alerta'] === 'Email Duplicado') $campo_busca = 'email';
-                    // **USAR O NOME EXATO DA COLUNA AQUI:**
-                    else if ($alerta['tipo_alerta'] === 'Telefone de Referência Duplicado') $campo_busca = 'referencia_contato'; 
-                
-                    if (!empty($campo_busca)) {
-                        $query_cliente_dup = $pdo->prepare("SELECT nome FROM clientes WHERE {$campo_busca} = :valor AND id != :id_original LIMIT 1");
-                        $query_cliente_dup->bindValue(":valor", $alerta['valor_duplicado']);
-                        $query_cliente_dup->bindValue(":id_original", $id_cliente);
-                    }
-                }
+                    case 'Nome Duplicado':
+                        $campo_busca = 'nome';
+                        break;
+                        
+                    case 'CPF Duplicado':
+                        $campo_busca = 'cpf';
+                        // Normaliza o valor do alerta para APENAS NÚMEROS
+                        $valor_busca = preg_replace('/\D/', '', $valor_alerta_bruto); 
+                        break;
 
-                if (isset($query_cliente_dup)) {
+                    case 'Telefone Cliente Duplicado':
+                        $campo_busca = 'telefone';
+                        $valor_busca = preg_replace('/\D/', '', $valor_alerta_bruto); 
+                        break;
+
+                    case 'Email Duplicado':
+                    case 'Email Duplicado (Pix)': 
+                        $campo_busca = 'email';
+                        break;
+                        
+                    case 'Chave Pix Duplicada (Email/Contato)':
+                        $campo_busca = 'pix';
+                        // PIX pode ser telefone ou CPF, então normalizamos
+                        $valor_busca = preg_replace('/\D/', '', $valor_alerta_bruto); 
+                        break;
+                        
+                    case 'Telefone Referência Duplicado':
+                        $campo_busca = 'referencia_contato';
+                        $valor_busca = preg_replace('/\D/', '', $valor_alerta_bruto); 
+                        break;
+                        
+                    case 'Nome Referência Duplicado':
+                        $campo_busca = 'referencia_nome'; 
+                        break;
+
+                    case 'Nome Indicador Duplicado':
+                        $campo_busca = 'indicacao'; // Coluna confirmada
+                        break;
+
+                    case 'Telefone de Indicação Duplicado':
+                        $campo_busca = 'indicacao_contato'; 
+                        $valor_busca = preg_replace('/\D/', '', $valor_alerta_bruto); 
+                        break;
+                }
+                
+                // --- 1.2 PREPARA E EXECUTA A QUERY ---
+                if (!empty($campo_busca)) {
+                    
+                    // Fields that require SQL normalization because the database column is formatted
+                    $fields_to_normalize = ['cpf', 'telefone', 'referencia_contato', 'indicacao_contato'];
+
+                    // Nomes (LIKE) vs. Identificadores (IGUALDADE)
+                    if ($campo_busca === 'nome' || $campo_busca === 'referencia_nome' || $campo_busca === 'indicacao') {
+                        
+                        // **CORREÇÃO FINAL DO NOME:** Remove espaços internos do valor do alerta para comparação
+                        $nome_sem_espaco = str_replace(' ', '', $valor_busca); 
+                        
+                        // Query que remove espaços da coluna do banco e a deixa em minúsculas para buscar
+                        $query_sql = "SELECT nome, id FROM clientes 
+                                      WHERE REPLACE(LOWER({$campo_busca}), ' ', '') LIKE LOWER(:valor) 
+                                      AND id != :id_original LIMIT 1";
+                        $query_cliente_dup = $pdo->prepare($query_sql);
+                        // Passa o valor do alerta sem espaços e com curingas
+                        $query_cliente_dup->bindValue(":valor", "%{$nome_sem_espaco}%"); 
+                    
+                    } else if (in_array($campo_busca, $fields_to_normalize)) {
+                        // CPF/Telefones formatados (Normaliza a COLUNA do banco)
+                        $sql_field_normalized = get_sql_normalization($campo_busca);
+                        $query_sql = "SELECT nome, id FROM clientes WHERE {$sql_field_normalized} = :valor AND id != :id_original LIMIT 1";
+                        $query_cliente_dup = $pdo->prepare($query_sql);
+                        $query_cliente_dup->bindValue(":valor", $valor_busca); // Valor do alerta (já normalizado para números)
+
+                    } else {
+                        // Email/Pix (Busca direta por igualdade)
+                        $query_sql = "SELECT nome, id FROM clientes WHERE {$campo_busca} = :valor AND id != :id_original LIMIT 1";
+                        $query_cliente_dup = $pdo->prepare($query_sql);
+                        $query_cliente_dup->bindValue(":valor", $valor_busca); 
+                    }
+                    
+                    // Binda o ID do cliente em análise (comum a todas as queries)
+                    $query_cliente_dup->bindValue(":id_original", $id_cliente);
+
+                    // Executa a busca
                     $query_cliente_dup->execute();
                     $res_dup = $query_cliente_dup->fetch(PDO::FETCH_ASSOC);
+                    
                     if ($res_dup) {
                         $nome_cliente_duplicado = $res_dup['nome'];
+                        $id_cliente_duplicado = $res_dup['id']; // ID para o link
                     }
                 }
             }
@@ -982,15 +1084,40 @@ $alertas_duplicidade = $query_alertas->fetchAll(PDO::FETCH_ASSOC);
         
         <div id="alerta-<?= htmlspecialchars($alerta['id'] ?? '') ?>" class="alerta-card-item <?= $alerta_class ?>">
             <h5 class="section-title-alt">Alerta: <?= htmlspecialchars($alerta['tipo_alerta']) ?></h5>
-            <p class="mb-2"><strong>Valor Duplicado:</strong> <span class="form-control-plaintext py-1"><?= htmlspecialchars($alerta['valor_duplicado'] ?? '') ?></span></p>
-            <p class="mb-2"><strong>Cliente Duplicado:</strong> <span class="form-control-plaintext py-1"><?= htmlspecialchars($nome_cliente_duplicado ?? '') ?></span></p>
-            <p class="mb-2"><strong>Data do Alerta:</strong> <span class="form-control-plaintext py-1"><?= $data_alerta_formatada ?></span></p>
             
-            <?php if (!$is_resolvido): // Mostra o botão APENAS se não estiver resolvido ?>
+            <p class="mb-2"><strong>Valor Duplicado:</strong> 
+                <span class="form-control-plaintext py-1">
+                    <?= htmlspecialchars($alerta['valor_duplicado'] ?? '') ?>
+                </span>
+            </p>
+            
+            <p class="mb-2"><strong>Cliente Duplicado:</strong> 
+                <?php if (!empty($nome_cliente_duplicado) && isset($id_cliente_duplicado)): ?>
+                    
+                    <a href="index.php?pagina=analise_cliente&id=<?= htmlspecialchars($id_cliente_duplicado) ?>" 
+                      target="_blank" 
+                      class="cliente-duplicado-link">
+                        
+                        <span class="form-control-plaintext py-1">
+                            <strong><?= htmlspecialchars($nome_cliente_duplicado) ?></strong> 
+                        </span>
+                    </a>
+                <?php else: ?>
+                    <span class="form-control-plaintext py-1">Não encontrado</span>
+                <?php endif; ?>
+            </p>
+            
+            <p class="mb-2"><strong>Data do Alerta:</strong> 
+                <span class="form-control-plaintext py-1">
+                    <?= $data_alerta_formatada ?>
+                </span>
+            </p>
+            
+            <?php if (!$is_resolvido): ?>
                 <button style="background-color: #8b0000; color: white" class="btn btn-sm btn-resolvido" data-id="<?= htmlspecialchars($alerta['id'] ?? '') ?>">
                     <i class="fas fa-check"></i> Ignorar
                 </button>
-            <?php else: // Mostra o status se estiver resolvido ?>
+            <?php else: ?>
                 <span class="badge bg-success text-white">IGNORADO</span>
             <?php endif; ?>
 
@@ -999,8 +1126,10 @@ $alertas_duplicidade = $query_alertas->fetchAll(PDO::FETCH_ASSOC);
     <?php endforeach; ?>
     <?php endif; ?>
     
-    <?php if (!$has_unresolved_alerts): ?>
-        <p>Nenhum alerta de duplicidade pendente para este cliente.</p>
+    <?php if (!$has_unresolved_alerts && isset($alertas_duplicidade) && count($alertas_duplicidade) > 0): ?>
+        <p>Todos os alertas de duplicidade foram resolvidos ou ignorados.</p>
+    <?php elseif (!isset($alertas_duplicidade) || count($alertas_duplicidade) == 0): ?>
+        <p>Nenhum alerta de duplicidade registrado para este cliente.</p>
     <?php endif; ?>
 </div>
 
