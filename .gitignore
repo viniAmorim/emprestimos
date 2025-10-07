@@ -21,3 +21,4 @@
 # Ignorar chaves SSL privadas e certificados
 #docker/apache/ssl_certs_app/app/public_html/painel/images/*
 /vendor/
+config_sendgrid.php

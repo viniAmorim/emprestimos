@@ -3,3 +3,5 @@ RewriteRule ^pagar/(.*)$ painel/pagamentos/index.php?id_conta=$1 [L]
 RewriteRule ^cadastro(.*)$ painel/cadastro.php [L]
 RewriteRule ^acesso(.*)$ acesso.php [L]
 RewriteRule ^login(.*)$ login.php [L]
+
+SetEnv SENDGRID_API_KEY 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
