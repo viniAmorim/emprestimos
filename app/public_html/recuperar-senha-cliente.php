@@ -3,20 +3,34 @@
 require_once("conexao.php");
 
 // ----------------------------------------------------------------------
-// IMPORTAÇÃO DA CHAVE SECRETA:
-// O arquivo config_sendgrid.php NÃO DEVE SER VERSIONADO NO GIT (.gitignore)
+// BLOCO DE DEPURACAO CRÍTICO: VERIFICA SE A CHAVE FOI CARREGADA
 // ----------------------------------------------------------------------
-require_once("config_sendgrid.php"); 
-// A variável $sendgrid_api_key está definida e disponível aqui.
+$debug_key_path = "config_sendgrid.php"; // O arquivo que esperamos encontrar
+
+// Tenta incluir o arquivo (usando @ para evitar warnings feios se o arquivo não existir)
+@require_once($debug_key_path); 
+
+// Verifica se a variável $sendgrid_api_key foi definida e se tem conteúdo
+if (empty($sendgrid_api_key)) {
+    // Se esta mensagem aparecer, o script PARA AQUI. 
+    // Isso significa que:
+    // 1. O arquivo 'config_sendgrid.php' não foi encontrado no servidor, OU
+    // 2. O arquivo existe, mas a variável $sendgrid_api_key não foi definida corretamente dentro dele.
+    die("ERRO FATAL: Chave SENDGRID_API_KEY vazia. Por favor, verifique duas coisas no servidor: 
+        1. O arquivo **'$debug_key_path'** existe na mesma pasta? 
+        2. O conteúdo do arquivo é **EXATAMENTE** `<?php \$sendgrid_api_key = 'SUA_CHAVE_AQUI'; ?>`?");
+}
+// ----------------------------------------------------------------------
+// FIM DO BLOCO DE DEPURACAO CRÍTICO
 // ----------------------------------------------------------------------
 
 
 // Defina suas variáveis de configuração aqui (ou no config.php)
-$url_sistema = 'https://localhost/'; 
+$url_sistema = 'https://app.ucredcredito.com/'; 
 $nome_sistema = 'Ucred';
 $email_sistema = 'noreply@ucredcredito.com';
 
-// A chave $sendgrid_api_key foi carregada de config_sendgrid.php.
+// A variável $sendgrid_api_key está definida aqui, caso contrário o script teria parado.
 
 $token = 'seu_token_aqui_para_wa';
 $instancia = 'sua_instancia_aqui_para_wa';
@@ -43,7 +57,7 @@ if($total_reg > 0){
     // LÓGICA DE ENVIO DO EMAIL COM cURL
     // ------------------------------------------
     
-    // O envio ocorrerá desde que $sendgrid_api_key tenha sido definida no config_sendgrid.php
+    // O envio ocorrerá desde que $sendgrid_api_key tenha sido definida
     if (!empty($sendgrid_api_key)) { 
 
         $assunto = $nome_sistema . ' - Recuperação de Senha';
@@ -113,7 +127,8 @@ if($total_reg > 0){
             error_log("Erro SendGrid cURL (HTTP: $http_code): " . ($error ?: $response));
         }
     } else {
-         error_log("Aviso: Chave SENDGRID_API_KEY não foi definida no config_sendgrid.php. Email não enviado.");
+         // Este bloco não será atingido se a depuração funcionar, mas mantemos para log.
+         error_log("Aviso: Chave SENDGRID_API_KEY não foi definida. Email não enviado.");
     }
     
     // ------------------------------------------
