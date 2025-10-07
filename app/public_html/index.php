@@ -532,9 +532,13 @@ $data_atual = date('Y-m-d');
 
     <form method="post" id="form-recuperar-modal">
       <div class="mb-4 relative">
-        <!-- <i class="fas fa-at input-icon"></i> -->
-        <input type="email" name="email" id="email-recuperar-modal" placeholder="Digite seu Email" class="form-input w-full pl-10" required />
-        <!-- <p class="text-black mt-1">Insira seu email cadastrado</p> -->
+        <input type="text" 
+          name="usuario" 
+          id="usuario-recuperar-modal" 
+          placeholder="Digite seu CPF/CNPJ cadastrado" 
+          class="form-input w-full pl-10" required 
+          onkeyup="verMascModal(event)" 
+        />   
       </div>
       
       <button type="submit" id="submit-forgot-modal" class="btn-primary w-full mt-4">
@@ -856,56 +860,80 @@ $data_atual = date('Y-m-d');
         }
     }
 
-    // Lógica de Submissão do Formulário de Recuperação (AJAX)
     $(document).ready(function() {
-        $("#form-recuperar-modal").submit(function(event) {
-            event.preventDefault(); 
-            
-            const $form = $(this);
-            const $submitBtn = $('#submit-forgot-modal');
-            const $message = $('#mensagem-recuperar-modal');
+    $("#form-recuperar-modal").submit(function(event) {
+      event.preventDefault(); 
+      
+      const $form = $(this);
+      const $submitBtn = $('#submit-forgot-modal');
+      const $message = $('#mensagem-recuperar-modal');
 
-            $submitBtn.text('ENVIANDO...');
-            $submitBtn.prop('disabled', true);
-            $message.addClass('hidden');
-            
-            // Chamada AJAX
-            $.ajax({
-                url: "recuperar-senha-cliente.php", 
-                type: 'POST',
-                data: $form.serialize(),
-                success: function(response) {
-                    // AQUI ESTÁ A CHAVE: LENDO A RESPOSTA DO PHP
-                    response = response.trim(); // Limpa espaços em branco
+      $submitBtn.text('ENVIANDO...');
+      $submitBtn.prop('disabled', true);
+      $message.removeClass('text-danger text-success').addClass('hidden');
+      
+      // Chamada AJAX
+      $.ajax({
+        url: "recuperar-senha-cliente.php", 
+        type: 'POST',
+        data: $form.serialize(), // Envia o campo 'usuario'
+        success: function(response) {
+          response = response.trim();
 
-                    if (response === "Recuperado com Sucesso") {
-                        
-                        $submitBtn.text('RESETAR SENHA');
-                        $submitBtn.prop('disabled', false);
+          $submitBtn.text('RESETAR SENHA');
+          $submitBtn.prop('disabled', false);
 
-                        // Exibe a mensagem de sucesso e limpa o campo
-                        $message.text('Link de recuperação enviado para seu Email!').removeClass('hidden text-danger').addClass('text-success');
-                        $('#email-recuperar-modal').val('');
-                        // Você pode fechar o modal aqui, se desejar: closeModal('forgot-password-modal');
-
-                    } else {
-                        // SE O PHP RETORNOU UMA MENSAGEM DE ERRO (ex: 'Esse email não está Cadastrado!')
-                        $submitBtn.text('RESETAR SENHA');
-                        $submitBtn.prop('disabled', false);
-                        // Usa a mensagem de erro que veio do PHP
-                        $message.text(response).removeClass('hidden text-success').addClass('text-danger');
-                    }
-                },
-                error: function() {
-                    // ESTE BLOCO SÓ DEVE SER ACIONADO POR ERROS DE CONEXÃO HTTP (404, 500, etc.)
-                    $submitBtn.text('RESETAR SENHA');
-                    $submitBtn.prop('disabled', false);
-                    $message.text('Falha na comunicação com o servidor. Tente novamente.').removeClass('hidden text-success').addClass('text-danger');
-                }
-            });
-        });
+          if (response === "Recuperado com Sucesso") {
+            // Limpa o campo e exibe sucesso
+            $('#usuario-recuperar-modal').val(''); 
+            $message.text('Link de recuperação enviado para o seu contato cadastrado!').removeClass('hidden').addClass('text-success');
+          } else {
+            // Mensagem de erro segura
+            $message.text('Usuário não encontrado ou erro no envio. Tente novamente.').removeClass('hidden').addClass('text-danger');
+          }
+        },
+        error: function() {
+          $submitBtn.text('RESETAR SENHA');
+          $submitBtn.prop('disabled', false);
+          $message.text('Erro de comunicação com o servidor.').removeClass('hidden').addClass('text-danger');
+        }
+      });
     });
+  });
 
+
+  // Função de máscara de CPF/CNPJ
+function verMascModal(event) {
+    // Ação de fallback para navegadores antigos, garantindo que o evento seja capturado
+    event = event || window.event;
+    
+    // Pega o elemento input
+    const input = event.target;
+    
+    // Limpa a string: remove todos os caracteres que não são dígitos
+    let value = input.value.replace(/\D/g, ''); 
+
+    // Se for CPF (até 11 dígitos)
+    if (value.length <= 11) {
+        // Aplica a máscara de CPF: 000.000.000-00
+        input.value = value
+            .replace(/(\d{3})(\d)/, '$1.$2')
+            .replace(/(\d{3})(\d)/, '$1.$2')
+            .replace(/(\d{3})(\d{1,2})$/, '$1-$2');
+    } 
+    // Se for CNPJ (mais de 11 dígitos)
+    else {
+        // Limita a 14 dígitos (tamanho máximo de CNPJ)
+        value = value.substring(0, 14);
+        
+        // Aplica a máscara de CNPJ: 00.000.000/0000-00
+        input.value = value
+            .replace(/^(\d{2})(\d)/, '$1.$2')
+            .replace(/^(\d{2})\.(\d{3})(\d)/, '$1.$2.$3')
+            .replace(/\.(\d{3})(\d)/, '.$1/$2')
+            .replace(/(\d{4})(\d)/, '$1-$2');
+    }
+}
 
 
 
