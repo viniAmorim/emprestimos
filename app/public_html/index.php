@@ -546,7 +546,7 @@ $data_atual = date('Y-m-d');
       </p>
       <div class="row">
 				<div class="col-12 text-start">
-						<p class="font-11 pt-3 text-black" align="center">Verifique seu whatsapp para redefinir a senha!</p>
+						<p class="font-11 pt-3 text-black" align="center">Verifique seu email para redefinir a senha!</p>
 				</div>
 			</div>
     </form>
@@ -884,7 +884,7 @@ $data_atual = date('Y-m-d');
                         $submitBtn.prop('disabled', false);
 
                         // Exibe a mensagem de sucesso e limpa o campo
-                        $message.text('Link de recuperação enviado para seu Email ou WhatsApp!').removeClass('hidden text-danger').addClass('text-success');
+                        $message.text('Link de recuperação enviado para seu Email!').removeClass('hidden text-danger').addClass('text-success');
                         $('#email-recuperar-modal').val('');
                         // Você pode fechar o modal aqui, se desejar: closeModal('forgot-password-modal');
 

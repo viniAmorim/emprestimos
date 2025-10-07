@@ -20,3 +20,4 @@
 /app/public_html/painel/images/comprovantes
 # Ignorar chaves SSL privadas e certificados
 #docker/apache/ssl_certs_app/app/public_html/painel/images/*
+/vendor/
