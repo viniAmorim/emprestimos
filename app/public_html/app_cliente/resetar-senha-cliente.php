@@ -56,7 +56,7 @@ exit;
  <link rel="manifest" href="_manifest.json">
  <meta id="theme-check" name="theme-color" content="#FFFFFF">
  <link rel="apple-touch-icon" sizes="180x180" href="../app/icons/icon-192x192.png">
- <link rel="stylesheet" href="../painel/css/swiper.css">
+ <link rel="stylesheet" href="painel/css/swiper.css">
  <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,900" rel="stylesheet">
  <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
  <link rel="icon" type="image/png" href="../img/icone.png" sizes="32x32">
@@ -130,17 +130,17 @@ exit;
   </div>
  </div>
 
-   <script src="../painel/scripts/bootstrap.min.js"></script>
- <script src="../painel/scripts/custom.js"></script>
- <script src="../painel/js/jquery-3.3.1.min.js"></script>
- <script src="../painel/js/jquery.validate.min.js"></script>
- <script src="../painel/js/swiper.min.js"></script>
- <script src="../painel/js/jquery.custom.js"></script>
+   <script src="painel/scripts/bootstrap.min.js"></script>
+ <script src="painel/scripts/custom.js"></script>
+ <script src="painel/js/jquery-3.3.1.min.js"></script>
+ <script src="painel/js/jquery.validate.min.js"></script>
+ <script src="painel/js/swiper.min.js"></script>
+ <script src="painel/js/jquery.custom.js"></script>
  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
 
  <script src="_service-worker.js"></script>
- <script src="../painel/js/base.js"></script>
- <script type="text/javascript" src="../painel/js/mascaras.js"></script>
+ <script src="painel/js/base.js"></script>
+ <script type="text/javascript" src="painel/js/mascaras.js"></script>
  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.11/jquery.mask.min.js"></script> 
 
  <?php require_once("alertas.php"); ?>
