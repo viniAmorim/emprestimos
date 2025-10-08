@@ -72,7 +72,7 @@ $token_usuario = bin2hex(random_bytes(32));
 $q = $pdo->prepare("UPDATE usuarios SET token=? WHERE email=?");
 $q->execute([$token_usuario, $email_destino]); 
 
-$reset_link = $url_sistema.'resetar-senha-cliente.php'.'?email='.urlencode($email_destino).'&token='.$token_usuario;
+$reset_link = $url_sistema.'resetar-senha.php'.'?email='.urlencode($email_destino).'&token='.$token_usuario;
 
 
 // ------------------------------------------
