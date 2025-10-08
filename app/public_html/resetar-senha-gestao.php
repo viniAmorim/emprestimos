@@ -139,7 +139,7 @@ $_SESSION['temp_reset_token'] = $token;
       var formData = new FormData(this);
 
       $.ajax({
-        url: "alterar-senha-gestão.php",
+        url: "alterar-senha-gestao.php",
         type: 'POST',
         data: formData,
         
