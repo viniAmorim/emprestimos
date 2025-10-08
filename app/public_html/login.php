@@ -535,9 +535,13 @@ $data_atual = date('Y-m-d');
 
     <form method="post" id="form-recuperar-modal">
       <div class="mb-4 relative">
-        <!-- <i class="fas fa-at input-icon"></i> -->
-        <input type="email" name="email" id="email-recuperar-modal" placeholder="Digite seu Email" class="form-input w-full pl-10" required />
-        <!-- <p class="text-black mt-1">Insira seu email cadastrado</p> -->
+        <input type="text" 
+          name="usuario" 
+          id="usuario-recuperar-modal" 
+          placeholder="Digite seu CPF/CNPJ cadastrado" 
+          class="form-input w-full pl-10" required 
+          onkeyup="verMascModal(event)" 
+        />   
       </div>
       
       <button type="submit" id="submit-forgot-modal" class="btn-primary w-full mt-4">
@@ -549,7 +553,7 @@ $data_atual = date('Y-m-d');
       </p>
       <div class="row">
 				<div class="col-12 text-start">
-						<p class="font-11 pt-3 text-black" align="center">Verifique seu whatsapp para redefinir a senha!</p>
+						<p class="font-11 pt-3 text-black" align="center">Verifique seu email para redefinir a senha!</p>
 				</div>
 			</div>
     </form>
@@ -843,7 +847,7 @@ $data_atual = date('Y-m-d');
                         $submitBtn.prop('disabled', false);
 
                         // Exibe a mensagem de sucesso e limpa o campo
-                        $message.text('Link de recuperação enviado para seu Email ou WhatsApp!').removeClass('hidden text-danger').addClass('text-success');
+                        $message.text('Link de recuperação enviado para seu Email!').removeClass('hidden text-danger').addClass('text-success');
                         $('#email-recuperar-modal').val('');
                         // Você pode fechar o modal aqui, se desejar: closeModal('forgot-password-modal');
 
@@ -864,6 +868,39 @@ $data_atual = date('Y-m-d');
             });
         });
     });
+
+     // Função de máscara de CPF/CNPJ
+function verMascModal(event) {
+    // Ação de fallback para navegadores antigos, garantindo que o evento seja capturado
+    event = event || window.event;
+    
+    // Pega o elemento input
+    const input = event.target;
+    
+    // Limpa a string: remove todos os caracteres que não são dígitos
+    let value = input.value.replace(/\D/g, ''); 
+
+    // Se for CPF (até 11 dígitos)
+    if (value.length <= 11) {
+        // Aplica a máscara de CPF: 000.000.000-00
+        input.value = value
+            .replace(/(\d{3})(\d)/, '$1.$2')
+            .replace(/(\d{3})(\d)/, '$1.$2')
+            .replace(/(\d{3})(\d{1,2})$/, '$1-$2');
+    } 
+    // Se for CNPJ (mais de 11 dígitos)
+    else {
+        // Limita a 14 dígitos (tamanho máximo de CNPJ)
+        value = value.substring(0, 14);
+        
+        // Aplica a máscara de CNPJ: 00.000.000/0000-00
+        input.value = value
+            .replace(/^(\d{2})(\d)/, '$1.$2')
+            .replace(/^(\d{2})\.(\d{3})(\d)/, '$1.$2.$3')
+            .replace(/\.(\d{3})(\d)/, '.$1/$2')
+            .replace(/(\d{4})(\d)/, '$1-$2');
+    }
+}
 
 
 </script>

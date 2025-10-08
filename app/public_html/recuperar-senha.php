@@ -1,111 +1,171 @@
 <?php
-// Carrega a conexão com o banco de dados
-require_once("conexao.php");
+// Arquivo: recuperar-senha-cliente.php
 
-// 1. Inclui o autoloader do Composer para carregar a biblioteca SendGrid
-// Certifique-se de que o caminho para o autoloader está correto!
-require 'vendor/autoload.php';
+// ----------------------------------------------------------------------
+// 1. INÍCIO DO BUFFER DE SAÍDA (CRÍTICO PARA AJAX)
+// ----------------------------------------------------------------------
+ob_start(); 
 
-// Importa as classes do SendGrid
-use SendGrid\Mail\Mail;
+// Carrega a conexão com o banco de dados (Assumindo que está um nível acima)
+require_once("conexao.php"); 
 
-$email = filter_var(@$_POST['email'], @FILTER_SANITIZE_STRING);
+// ----------------------------------------------------------------------
+// BLOCO DE CONFIGURAÇÃO E DEBUG DE CHAVE API (MANTIDO)
+// ----------------------------------------------------------------------
+$debug_key_path = "config_sendgrid.php"; 
+@require_once($debug_key_path); 
 
-// 2. Variável de Configuração do SendGrid (Adicione ao seu arquivo de conexão ou configuração)
-// ** ATENÇÃO: SUBSTITUA PELA SUA CHAVE DE API REAL DO SENDGRID **
-$sendgrid_api_key = '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'; 
+// Variáveis de Configuração do Sistema (Mantenha suas variáveis)
+$url_sistema = 'https://app.ucredcredito.com/'; 
+$nome_sistema = 'Ucred';
+$email_sistema = 'noreply@ucredcredito.com';
+$token = 'seu_token_aqui_para_wa'; 
+$instancia = 'sua_instancia_aqui_para_wa'; 
 
+// Verifica a chave do SendGrid antes de continuar
+if (empty($sendgrid_api_key)) {
+$resposta_final = "Erro no servidor. Chave de Email ausente.";
+ob_get_clean();
+echo $resposta_final;
+exit();
+}
 
-$query = $pdo->prepare("SELECT * from usuarios where email = :email");
-$query->bindValue(":email", "$email");
+// ----------------------------------------------------------------------
+// 2. RECEBE E PREPARA A VARIÁVEL DE BUSCA
+// ----------------------------------------------------------------------
+
+// Sanitiza a entrada
+$usuario = filter_var(trim(@$_POST['usuario']), FILTER_SANITIZE_FULL_SPECIAL_CHARS); 
+
+// Limpa o CPF/CNPJ para a busca no banco (mantém apenas dígitos)
+$usuario_limpo = preg_replace('/[^0-9]/', '', $usuario); 
+
+// ----------------------------------------------------------------------
+// 3. BUSCA NO BANCO DE DADOS - LÓGICA REFORÇADA E CORRIGIDA
+// ----------------------------------------------------------------------
+
+// Buscamos o cliente se o email, o cpf com máscara OU o cpf sem máscara corresponderem
+$query = $pdo->prepare("SELECT * from usuarios 
+ WHERE email = :usuario_completo 
+ OR cpf = :usuario_completo 
+ OR TRIM(REPLACE(REPLACE(REPLACE(cpf, '.', ''), '-', ''), '/', '')) = :cpf_limpo"); 
+
+// Binda os valores
+$query->bindValue(":usuario_completo", $usuario); // Tenta buscar E-mail OU CPF com máscara (que está no banco)
+$query->bindValue(":cpf_limpo", $usuario_limpo); // Tenta buscar pelo CPF/CNPJ SÓ com números
+
 $query->execute();
 $res = $query->fetchAll(PDO::FETCH_ASSOC);
 $total_reg = @count($res);
 
+// ----------------------------------------------------------------------
+// 4. PROCESSA A RECUPERAÇÃO E EXECUTA ENVIOS
+// ----------------------------------------------------------------------
+
 if($total_reg > 0){ 
-    $telefone = $res[0]['telefone'];
-    
-    $token_usuario = hash('sha256',time());
-    
-    $q = $pdo->prepare("UPDATE usuarios SET token=? WHERE email=?");
-    $q->execute([$token_usuario,$email]);
-    
-    // O link de recuperação permanece o mesmo
-    $reset_link = $url_sistema.'app/resetar-senha.php'.'?email='.$email.'&token='.$token_usuario;
+// Captura os dados do cliente
+$email_destino = $res[0]['email']; 
+$telefone = $res[0]['telefone'];
 
-    
-    // ------------------------------------------
-    // 3. LÓGICA DE ENVIO DO EMAIL COM SENDGRID
-    // ------------------------------------------
-    
-    // Configura o e-mail
-    $email_sg = new Mail();
-    
-    // Remetente: Usamos o email_sistema como o endereço de envio
-    $email_sg->setFrom($email_sistema, $nome_sistema);
-    
-    // Destinatário
-    $email_sg->addTo($email, $nome_sistema); 
-    
-    // Assunto (Não precisamos mais do mb_convert_encoding, o SendGrid lida com UTF-8)
-    $assunto = $nome_sistema . ' - Recuperação de Senha';
-    $email_sg->setSubject($assunto);
-    
-    // Corpo da Mensagem (Recomenda-se enviar em HTML e Texto Simples)
-    $mensagem_texto = 'Clique no Link abaixo para atualizar sua senha: ' . $reset_link;
-    $mensagem_html = "
-        <html>
-            <body>
-                <p>Olá,</p>
-                <p>Recebemos uma solicitação de recuperação de senha para sua conta.</p>
-                <p>Clique no link abaixo para criar uma nova senha:</p>
-                <p><a href=\"{$reset_link}\" style=\"display: inline-block; padding: 10px 20px; background-color: #007bff; color: #ffffff; text-decoration: none; border-radius: 5px; font-weight: bold;\">
-                    Redefinir Senha
-                </a></p>
-                <p>Se você não solicitou a redefinição, ignore este e-mail.</p>
-                <p>Atenciosamente, <br>{$nome_sistema}</p>
-            </body>
-        </html>
-    ";
-    
-    $email_sg->addContent("text/plain", $mensagem_texto);
-    $email_sg->addContent("text/html", $mensagem_html);
+// Gera e salva o token
+$token_usuario = bin2hex(random_bytes(32)); 
+$q = $pdo->prepare("UPDATE usuarios SET token=? WHERE email=?");
+$q->execute([$token_usuario, $email_destino]); 
 
-    // Tenta enviar usando o SendGrid
-    try {
-        $sendgrid = new \SendGrid($sendgrid_api_key);
-        $response = $sendgrid->send($email_sg);
-        
-        // O SendGrid retorna códigos HTTP. 200 ou 202 indica sucesso.
-        // if ($response->statusCode() >= 200 && $response->statusCode() < 300) {
-        //    // E-mail enviado com sucesso!
-        // }
-        
-    } catch (Exception $e) {
-        // Se houver erro de API, registra ou trata.
-        // file_put_contents('sendgrid_error.log', 'Erro SendGrid: ' . $e->getMessage() . "\n", FILE_APPEND);
-    }
-    
-    // ------------------------------------------
-    // FIM DA LÓGICA DE ENVIO DO EMAIL
-    // ------------------------------------------
+$reset_link = $url_sistema.'resetar-senha-gestao.php'.'?email='.urlencode($email_destino).'&token='.$token_usuario;
 
-    // disparar para o telefone do cliente a recuperação
-    if($token != "" and $instancia != ""){
-        $telefone_envio = '55'.preg_replace('/[ ()-]+/' , '' , $telefone);
-        $mensagem_wa = '*'.$nome_sistema.'*%0A%0A';
-        $mensagem_wa .= '🤩 _Link para Recuperação de Senha_ %0A%0A';
-        $mensagem_wa .= $reset_link;
-        
-        // Alterei a variável $mensagem para $mensagem_wa para evitar conflito com o SendGrid
-        $mensagem = $mensagem_wa; // Se o arquivo 'texto.php' usar a variável $mensagem
-        require('painel/apis/texto.php'); 
-        
-    }
 
-    echo 'Recuperado com Sucesso';
+// ------------------------------------------
+// LÓGICA DE ENVIO DO EMAIL COM cURL (SendGrid)
+// ------------------------------------------
+if (!empty($sendgrid_api_key)) { 
+
+$assunto = $nome_sistema . ' - Recuperação de Senha';
+
+// Corpo da Mensagem em HTML 
+$mensagem_html = "
+<html>
+<body>
+<p>Olá,</p>
+<p>Recebemos uma solicitação de recuperação de senha para sua conta.</p>
+<p>Clique no link abaixo para criar uma nova senha:</p>
+<p><a href=\"{$reset_link}\" style=\"display: inline-block; padding: 10px 20px; background-color: #007bff; color: #ffffff; text-decoration: none; border-radius: 5px; font-weight: bold;\">
+Redefinir Senha
+</a></p>
+<p>Se você não solicitou a redefinição, ignore este e-mail.</p>
+<p>Atenciosamente, <br>{$nome_sistema}</p>
+</body>
+</html>
+";
+
+// Prepara e envia o payload JSON (código cURL omitido)
+$payload = json_encode([
+'personalizations' => [
+[
+'to' => [
+['email' => $email_destino]
+],
+'subject' => $assunto
+]
+],
+'from' => [
+'email' => $email_sistema,
+'name' => $nome_sistema
+],
+'content' => [
+[
+'type' => 'text/plain',
+'value' => 'Clique no Link abaixo para atualizar sua senha: ' . $reset_link
+],
+[
+'type' => 'text/html',
+'value' => $mensagem_html
+]
+]
+]);
+
+$ch = curl_init();
+curl_setopt($ch, CURLOPT_URL, 'https://api.sendgrid.com/v3/mail/send');
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+curl_setopt($ch, CURLOPT_POST, true);
+curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
+curl_setopt($ch, CURLOPT_HTTPHEADER, [
+'Authorization: Bearer ' . $sendgrid_api_key, 
+'Content-Type: application/json'
+]);
+$response = curl_exec($ch);
+$http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+$error = curl_error($ch);
+curl_close($ch);
+
+if ($http_code < 200 || $http_code >= 300) {
+error_log("Erro SendGrid cURL (HTTP: $http_code): " . ($error ?: $response));
+}
+} 
+
+// ------------------------------------------
+// LÓGICA DE ENVIO DO WHATSAPP (MANTIDO)
+// ------------------------------------------
+// if($token != "" and $instancia != ""){
+// $telefone_envio = '55'.preg_replace('/[ ()-]+/' , '' , $telefone);
+// $mensagem_wa = '*'.$nome_sistema.'*%0A%0A';
+// $mensagem_wa .= '🤩 _Link para Recuperação de Senha_ %0A%0A';
+// $mensagem_wa .= $reset_link; 
+
+// $mensagem = $mensagem_wa; 
+// @require('painel/apis/texto.php'); 
+// }
+
+// Define a resposta de SUCESSO
+$resposta_final = 'Recuperado com Sucesso';
 }else{
-    echo 'Esse email não está Cadastrado!';
+// Define a resposta de ERRO
+$resposta_final = 'O usuário informado não foi encontrado.';
 }
 
+// ----------------------------------------------------------------------
+// 5. ENCERRAMENTO DO BUFFER E RESPOSTA AJAX
+// ----------------------------------------------------------------------
+ob_get_clean(); 
+echo $resposta_final;
 ?>
