@@ -45,9 +45,9 @@ exit;
   content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, viewport-fit=cover" />
  <title><?php echo $nome_sistema ?> - Redefinir Senha</title>
  
-  <link rel="stylesheet" type="text/css" href="../painel/styles/bootstrap.css">
- <link rel="stylesheet" type="text/css" href="../painel/fonts/bootstrap-icons.css">
- <link rel="stylesheet" type="text/css" href="../painel/styles/style.css">
+  <link rel="stylesheet" type="text/css" href="painel/styles/bootstrap.css">
+ <link rel="stylesheet" type="text/css" href="painel/fonts/bootstrap-icons.css">
+ <link rel="stylesheet" type="text/css" href="painel/styles/style.css">
  
  <link rel="preconnect" href="https://fonts.gstatic.com">
  <link
