@@ -162,17 +162,22 @@ if ($linhas == 0) {
 				</div>
 			</div>
 			<form method="post" id="form-recuperar">
-				<div class="form-custom form-label form-border form-icon mb-3 bg-transparent">
-					<i class="bi bi-at font-14"></i>
-					<input type="email" name="email" value="" id="email-recuperar" class="form-control rounded-xs"placeholder="Digite seu Email" required />
-					<label class="color-theme">Resetar Senha</label>
-				</div>
-				<button class="btn btn-full gradient-red rounded-xs text-uppercase font-700 w-100 btn-s mt-4" type="submit"
-					name="submit" id="submitforgot">RESETAR SENHA</button>
-			</form>
+        <div class="form-custom form-label form-border form-icon mb-3 bg-transparent">
+          <i class="bi bi-person-circle font-14"></i> 
+          <input type="text" name="usuario" value="" id="cpf-cnpj-recuperar" class="form-control rounded-xs" 
+            placeholder="Digite seu CPF ou CNPJ" required onkeyup="verMascModal(event)" />
+          <label class="color-theme">CPF / CNPJ</label>
+        </div>
+
+        <button class="btn btn-full gradient-red rounded-xs text-uppercase font-700 w-100 btn-s mt-4 mb-2" 
+            type="submit" name="submit" id="submitforgot">
+            ENVIAR LINK DE RECUPERAÇÃO
+        </button>
+
+      </form>
 			<div class="row">
 				<div class="col-12 text-start">
-						<p class="font-11 color-theme opacity-60 pt-3" align="center">Verifique seu whatsapp para redefinir a senha!</p>
+						<p class="font-11 color-theme opacity-60 pt-3" align="center">Verifique seu email para redefinir a senha!</p>
 				</div>
 			</div>
 		</div>
@@ -192,6 +197,7 @@ if ($linhas == 0) {
 	<script src="painel/scripts/custom.js"></script>
 	<script src="painel/js/jquery-3.3.1.min.js"></script>
 	<script src="painel/js/jquery.validate.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script>
 	<script src="painel/js/swiper.min.js"></script>
 	<script src="painel/js/jquery.custom.js"></script>
 	<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
@@ -272,5 +278,16 @@ if ($linhas == 0) {
 			processData: false,
 		});
 	});
+
+  function verMascModal(e) { 
+    var v = e.target.value.replace(/\D/g, ""); // Remove tudo que não for dígito
+    
+    // Aplica a máscara de CNPJ se tiver mais que 11 dígitos, senão aplica a de CPF
+    if (v.length > 11) {
+        $("#cpf-cnpj-recuperar").mask('00.000.000/0000-00');
+    } else {
+        $("#cpf-cnpj-recuperar").mask('000.000.000-000');
+    }
+}
 </script>
 
