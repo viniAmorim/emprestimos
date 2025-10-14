@@ -175,8 +175,8 @@ if ($pag_proxima == $num_paginas) {
 
   $dados_emprestimoF = @rawurlencode($dados_emprestimo);
 
-  $data_nascF = implode('/', array_reverse(explode('-', $data_nasc)));
-  $data_cadF = implode('/', array_reverse(explode('-', $data_cad)));
+  $data_nascF = implode('/', array_reverse(explode('-', $data_nasc ?? '')));
+  $data_cadF = implode('/', array_reverse(explode('-', $data_cad ?? '')));
 
   $tel_whatsF = '55'.preg_replace('/[ ()-]+/' , '' , $telefone);
 
