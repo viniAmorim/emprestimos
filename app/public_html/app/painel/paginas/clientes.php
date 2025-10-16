@@ -258,7 +258,7 @@ if($ext == 'pdf'){
   $tumb_comprovante_rg = $comprovante_rg;
 }
 
-$enderecoF2 = rawurlencode($endereco);
+$enderecoF2 = rawurlencode($endereco ?? '');
 
           echo <<<HTML
       <div data-splide='{"autoplay":false}' class="splide single-slider slider-no-arrows slider-no-dots" id="user-slider-{$id}">
