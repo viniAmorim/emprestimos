@@ -7,7 +7,9 @@ if (@$_SESSION['nivel'] != 'Administrador') {
   require_once("../../painel/verificar_permissoes.php");
 }
 
-
+if (!isset($configuracoes)) {
+  $configuracoes = '';
+}
 
 $query = $pdo->query("SELECT * from usuarios where id = '$id_usuario'");
 $res = $query->fetchAll(PDO::FETCH_ASSOC);

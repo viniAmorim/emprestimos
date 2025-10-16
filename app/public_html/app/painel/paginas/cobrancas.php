@@ -18,6 +18,11 @@ if($cliente > 0){
   $sql_cliente = "";
 }
 
+if (empty($status)) {
+  // Defina o status padrão da sua página, por exemplo: 'Ativas'
+  $status = 'Ativas'; 
+}
+
 
 
 

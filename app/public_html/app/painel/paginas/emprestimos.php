@@ -5,9 +5,8 @@ require_once("rodape.php");
 
 $pag = 'emprestimos';
 $itens_pag = 10;
-
 $cliente = @$_POST['cliente_busca'];
-$ativo = @$_POST['ativo']; // Adicionar esta linha para capturar o valor do filtro
+$ativo = @$_POST['ativo'];
 $status = @$_POST['status_busca'];
 
 if($cliente > 0){
@@ -16,11 +15,17 @@ if($cliente > 0){
   $sql_cliente = "";
 }
 
+$sql_status = ' and status is null';
+
+$cor_btn_ativo           = '#DDDDDD';
+$cor_texto_btn_ativo     = '#000000';
+$cor_btn_finalizado      = '#DDDDDD';
+$cor_texto_btn_finalizado= '#000000';
+$cor_btn_perdido         = '#DDDDDD';
+$cor_texto_btn_perdido   = '#000000';
 
 if($status == ""){
-  $sql_status = ' and status is null';
-  $cor_btn_ativo = '#436399';
-  $cor_texto_btn_ativo = '#FFF';
+  $status = "Ativos";
 }
 
 if($status == "Ativos"){
@@ -40,7 +45,6 @@ if($status == "Perdido"){
   $cor_btn_perdido = '#436399';
   $cor_texto_btn_perdido = '#FFF';
 }
-
 
 if (@$emprestimos == 'ocultar') {
   echo "<script>window.location='index'</script>";

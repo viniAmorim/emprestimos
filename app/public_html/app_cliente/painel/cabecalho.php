@@ -71,6 +71,9 @@ $total_contas_pagar = @count($res);
     <div class="header-bar header-fixed header-app header-bar-detached">
       <a data-bs-toggle="offcanvas" data-bs-target="#menu-main" href="#"><i class="bi bi-list color-theme"></i></a>
       <a href="index" class="header-title color-theme"><img src="../../img/icone.png" height="50px" onclick="navigateToPage(event, 'index')"></a>
+      <a href="#" data-bs-toggle="offcanvas" data-bs-target="#menu-perfil" aria-controls="menu-perfil">
+        <i class="bi bi-person-circle color-theme font-13"></i>
+      </a>
       <a href="#" data-bs-toggle="offcanvas" data-bs-target="#menu-color"><i
           class="bi bi-palette-fill font-13 color-highlight"></i></a>
     
