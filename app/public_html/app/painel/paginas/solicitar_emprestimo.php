@@ -19,6 +19,10 @@ $limite = $pagina * $itens_pag;
 
 $status = @$_POST['status_busca'];
 
+$cor_btn_ativo = '#e9ecef';          
+$cor_texto_btn_ativo = '#495057';   
+$cor_btn_finalizado = '#e9ecef';     
+$cor_texto_btn_finalizado = '#495057'; 
 
 if($status == ""){
   $sql_status = " and status = 'Pendente'";

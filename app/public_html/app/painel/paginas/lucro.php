@@ -8,6 +8,9 @@ $valor_do_lucro_total = 0;
 $pag = 'emprestimos';
 $itens_pag = 10;
 
+$status = '';
+$classe_lucro_final = '';
+
 $cliente = @$_POST['cliente_busca'];
 $ativo = @$_POST['ativo']; // Adicionar esta linha para capturar o valor do filtro
 $corretor = @$_POST['corretor'];

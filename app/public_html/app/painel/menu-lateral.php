@@ -136,24 +136,24 @@ if ($linhas > 0) {
             <i class="bi bi-chevron-right" style="margin-right: 10px"></i>
           </a>
         </span>
-        <span >
+        <!-- <span >
           <a href="cargos" class="<?php echo @$cargos ?>" onclick="navigateToPage(event, 'cargos')">
             <span class="font-12">Cargos</span></s>
             <i class="bi bi-chevron-right" style="margin-right: 10px"></i>
           </a>
-        </span>
+        </span> -->
          <span >
           <a href="feriados" class="<?php echo @$feriados ?>" onclick="navigateToPage(event, 'feriados')">
             <span class="font-12">Feriados</span></s>
             <i class="bi bi-chevron-right" style="margin-right: 10px"></i>
           </a>
         </span>
-         <span >
+         <!-- <span >
           <a href="sistemas" class="<?php echo @$sistemas ?>" onclick="navigateToPage(event, 'sistemas')">
             <span class="font-12">Sistemas</span></s>
             <i class="bi bi-chevron-right" style="margin-right: 10px"></i>
           </a>
-        </span>
+        </span> -->
               
         
 
