@@ -81,6 +81,9 @@ $logo_site = @$res[0]['logo_site'];
 $fundo_login = @$res[0]['fundo_login'];
 $modo_teste = @$res[0]['modo_teste'];
 
+$api_pagamento = $res[0]['api_pagamento'];
+$chave_api_asaas = $res[0]['chave_api_asaas'];
+
 $instancia_whatsapp = $res[0]['instancia'];
 $token_whatsapp = $res[0]['token'];
 

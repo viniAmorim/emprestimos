@@ -36,6 +36,7 @@ $entrada_sistema = $_POST['entrada_sistema'];
 $query = $pdo->query("SELECT * from config");
 $res = $query->fetchAll(PDO::FETCH_ASSOC);
 $foto_assinatura = @$res[0]['assinatura'];
+$chave_api_asaas = $_POST['chave_api_asaas'];
 
 //foto logo
 $caminho = '../img/logo.png';
@@ -158,7 +159,7 @@ if(@$_FILES['logo_site']['name'] != ""){
 }
 
 
-$query = $pdo->prepare("UPDATE $tabela SET nome = :nome, email = :email, telefone = :telefone, endereco = :endereco, juros = :juros_sistema, multa = :multa_sistema, juros_emp = :juros_emp, taxa_sistema = :taxa_sistema, instancia = :instancia, token = :token, dias_aviso = :dias_aviso, cnpj = :cnpj_sistema, marca_dagua = '$marca_dagua', dias_criar_parcelas = '$dias_criar_parcelas', pix_sistema = :pix_sistema, saldo_inicial = :saldo_inicial, verificar_pagamentos = :verificar_pagamentos, seletor_api = '$seletor_api', assinatura = '$foto_assinatura', recursos = :recursos, cobrar_automatico = :cobrar_automatico, public_key = :public_key, access_token = :access_token, entrada_sistema = :entrada_sistema, fundo_login = '$fundo_login', logo_site = '$logo_site' where id = 1");
+$query = $pdo->prepare("UPDATE $tabela SET nome = :nome, email = :email, telefone = :telefone, endereco = :endereco, juros = :juros_sistema, multa = :multa_sistema, juros_emp = :juros_emp, taxa_sistema = :taxa_sistema, instancia = :instancia, token = :token, dias_aviso = :dias_aviso, cnpj = :cnpj_sistema, marca_dagua = '$marca_dagua', dias_criar_parcelas = '$dias_criar_parcelas', pix_sistema = :pix_sistema, saldo_inicial = :saldo_inicial, verificar_pagamentos = :verificar_pagamentos, seletor_api = '$seletor_api', assinatura = '$foto_assinatura', recursos = :recursos, cobrar_automatico = :cobrar_automatico, public_key = :public_key, access_token = :access_token, entrada_sistema = :entrada_sistema, fundo_login = '$fundo_login', logo_site = '$logo_site', chave_api_asaas = :chave_api_asaas where id = 1");
 
 $query->bindValue(":nome", "$nome");
 $query->bindValue(":email", "$email");
@@ -180,6 +181,7 @@ $query->bindValue(":cobrar_automatico", "$cobrar_automatico");
 $query->bindValue(":public_key", "$public_key");
 $query->bindValue(":access_token", "$access_token");
 $query->bindValue(":entrada_sistema", "$entrada_sistema");
+$query->bindValue(":chave_api_asaas", "$chave_api_asaas");
 $query->execute();
 
 echo 'Editado com Sucesso';

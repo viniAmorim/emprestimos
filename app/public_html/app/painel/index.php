@@ -271,6 +271,23 @@ require_once("paginas/" . $pagina . ".php");
   <label>Access Token (Mercado Pago)</label>
 </div>
 
+<div class="form-floating mb-3">
+  <select class="form-select" name="api_pagamento">
+    option value="" <?php if ($api_pagamento == '') { ?> selected <?php } ?>>Nenhuma</option>
+            <option value="Mercado Pago" <?php if ($api_pagamento == 'Mercado Pago') { ?> selected <?php } ?>>Mercado Pago</option>
+            <option value="Asaas" <?php if ($api_pagamento == 'Asaas') { ?> selected <?php } ?>>Asaas</option>
+  </select>
+  <label>Marca D'água</label>
+</div>
+
+
+
+<div class="form-floating mb-3">
+  <input type="text" class="form-control" id="chave_api_asaas" name="chave_api_asaas" placeholder="" value="<?php echo @$chave_api_asaas ?>">
+  <label>Chave Token Asaas</label>
+</div>
+
+
 
 
 

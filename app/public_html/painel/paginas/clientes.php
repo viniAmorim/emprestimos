@@ -357,6 +357,21 @@ if($verificar_pagamentos != 'Não'){
                         </div>
                     </div>
 
+                    <div class="row" style="margin-top: 20px">
+                      <div class="col-6 ">
+                      <!-- Status -->
+                      <div class="form-floating mb-3 position-relative">
+                        <i class="bi bi-shield-fill-check position-absolute start-0 top-50 translate-middle-y ms-3"></i>
+                        <select class="form-select rounded-xs ps-5 pe-5" id="api_pgto" name="api_pgto">
+                        <option value="">Nenhuma</option>
+                            <option value="Mercado Pago">Mercado Pago</option>
+                            <option value="Asaas">Asaas</option>
+                        </select>
+                        <label class="color-theme ps-5">Api de Pagamento</label>
+                      </div>
+
+                    </div>
+
                     <div class="row">
                         <div class="col-md-8 form-group">
                             <label>Nome Secundário</label>

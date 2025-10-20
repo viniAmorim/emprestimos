@@ -806,9 +806,9 @@ $nome_cliente = @$res2[0]['nome'];
 
 
 
-					<div class="col-md-7">						
+            <div class="col-md-7">						
 								<label>Chave Pix Sistema</label>
-								<input type="text" class="form-control" id="pix_sistema" name="pix_sistema" placeholder="Deixar vazio se for usar Mercado Pago" value="<?php echo @$pix_sistema ?>">							
+								<input type="text" class="form-control" id="pix_sistema" name="pix_sistema" placeholder="Deixar vazio se for usar Mercado Pago ou Asaas" value="<?php echo @$pix_sistema ?>">							
 						</div>
 
 
@@ -869,6 +869,25 @@ $nome_cliente = @$res2[0]['nome'];
 								<input type="text" class="form-control" id="instancia" name="access_token" placeholder="Access Token Mercado Pago" value="<?php echo @$access_token ?>">							
 						</div>
 					</div>
+
+          <div class="row mb-3">
+						<div class="col-md-3">
+							<label>Api de Pagamento 
+							</label>
+							<select name="api_pagamento" id="api_pagamento" class="form-control">
+								<option value="" <?php if ($api_pagamento == '') { ?> selected <?php } ?>>Nenhuma</option>
+								<option value="Mercado Pago" <?php if ($api_pagamento == 'Mercado Pago') { ?> selected <?php } ?>>Mercado Pago</option>
+								<option value="Asaas" <?php if ($api_pagamento == 'Asaas') { ?> selected <?php } ?>>Asaas</option>
+								
+							</select>
+						</div>
+
+
+						<div class="col-md-9">
+							<label>Chave Token Asaas</label>
+							<input type="text" class="form-control" id="chave_api_asaas" name="chave_api_asaas" placeholder="Chave da api de integração do Asaas"
+								value="<?php echo @$chave_api_asaas ?>">
+						</div>
 
 					<div class="row">
 						<div class="col-md-4">						

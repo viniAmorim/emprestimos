@@ -9,6 +9,7 @@ include("../../conexao.php");
 $id_conta = $_GET['id_conta'];
 
 
+
 $query = $pdo->query("SELECT * FROM receber where id = '$id_conta'");
 $res = $query->fetchAll(PDO::FETCH_ASSOC);
 $total_reg = @count($res);
@@ -25,6 +26,23 @@ $ref_pix = $res[0]['ref_pix'];
 $id_ref = $res[0]['id_ref'];
 $referencia = $res[0]['referencia'];
 
+
+$query = $pdo->query("SELECT * FROM clientes where id = '$cliente'");
+$res = $query->fetchAll(PDO::FETCH_ASSOC);
+$nome_cliente =  $res[0]['nome'];
+$cpf_cliente =  $res[0]['cpf'];
+$email_cliente =  $res[0]['email'];
+$api_pgto =  $res[0]['api_pgto'];
+
+if($api_pgto == ""){
+    if($api_pagamento == "Asaas"){
+        echo '<script>window.location="'.$url_sistema.'conta/'.$id_conta.'"</script>';  
+    } 
+}else{
+   if($api_pgto == "Asaas"){
+        echo '<script>window.location="'.$url_sistema.'conta/'.$id_conta.'"</script>';  
+    }  
+}
 
 
 
@@ -80,11 +98,7 @@ if($pago == 'Sim'){
     exit();
 }
 
-$query = $pdo->query("SELECT * FROM clientes where id = '$cliente'");
-$res = $query->fetchAll(PDO::FETCH_ASSOC);
-$nome_cliente =  $res[0]['nome'];
-$cpf_cliente =  $res[0]['cpf'];
-$email_cliente =  $res[0]['email'];
+
 
 if($email_cliente == ""){
     $email_cliente = "cobranca@sistema.com";
