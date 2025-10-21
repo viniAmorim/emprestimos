@@ -70,6 +70,8 @@ $grupo = htmlspecialchars(trim($_POST['grupo'] ?? ''));
 $cliente_cadastro = $_POST['cliente_cadastro'] ?? '';
 $telefone2 = trim($_POST['telefone2'] ?? '');
 $status_cliente = htmlspecialchars(trim($_POST['status_cliente'] ?? ''));
+$api_pgto = @$_POST['api_pgto'];
+$notificar_cadastro = @$_POST['notificar_cadastro'];
 
 $senha = $_POST['senha'] ?? '';
 $conf_senha = $_POST['conf_senha'] ?? '';
@@ -402,7 +404,7 @@ if($id == ""){
         endereco_sec = :endereco_sec, grupo = :grupo, status = :status,
         comprovante_endereco = :comprovante_endereco, comprovante_rg = :comprovante_rg,
         telefone2 = :telefone2, foto = :foto, status_cliente = :status_cliente,
-        senha_crip = :senha_crip, rg = :rg, ramo = :ramo, quadra = :quadra,
+        senha_crip = :senha_crip, api_pgto = '$api_pgto', rg = :rg, ramo = :ramo, quadra = :quadra,
         lote = :lote, numero = :numero, complemento = :complemento,
         referencia_nome = :referencia_nome, referencia_contato = :referencia_contato,
         referencia_parentesco = :referencia_parentesco, modelo_veiculo = :modelo_veiculo,
@@ -439,7 +441,7 @@ if($id == ""){
         funcao_assalariado = :funcao_assalariado, empresa_assalariado = :empresa_assalariado,
         contracheque = :contracheque, valor_desejado = :valor_desejado,
         comprovante_extra_autonomo = :comprovante_extra_autonomo,
-        comprovante_extra_assalariado = :comprovante_extra_assalariado
+        comprovante_extra_assalariado = :comprovante_extra_assalariado,  api_pgto = :api_pgto
         where id = :id
     ");
 }
@@ -501,10 +503,13 @@ $query->bindValue(":status_cliente", $status_cliente);
 $query->bindValue(":senha_crip", $senha_crip);
 
 
+
+
 // Se for uma edição, binda o ID
 if ($id != "") {
     $query->bindValue(":id", $id);
 }
+
 
 // --- Executa a query com tratamento de erros ---
 try {
@@ -547,7 +552,7 @@ try {
 $tel_cliente_admin = '55'.preg_replace('/[ ()-]+/' , '' , $telefone_sistema ?? '');
 $telefone_envio_admin = $tel_cliente_admin;
 
-if(isset($cliente_cadastro) && $cliente_cadastro == 'Sim' && isset($token) && $token != "" && isset($instancia) && $instancia != ""){
+if(isset($cliente_cadastro) && $cliente_cadastro == 'Sim' && isset($token) && $token != "" && isset($instancia) && $instancia != "" and $notificar_cadastro == 'Sim' and $id == ""){
     $mensagem_admin = '*'.$nome_sistema.'* %0A';
     $mensagem_admin .= '_Novo Cliente Cadastrado_ %0A';
     $mensagem_admin .= 'Cliente: *'.$nome.'* %0A';

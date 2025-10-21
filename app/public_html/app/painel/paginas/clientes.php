@@ -172,6 +172,7 @@ if ($pag_proxima == $num_paginas) {
   $telefone2 = @$res[$i]['telefone2'];
   $foto = @$res[$i]['foto'];
   $status_cliente = @$res[$i]['status_cliente'];
+  $api_pgto = @$res[$i]['api_pgto'];
 
   $dados_emprestimoF = @rawurlencode($dados_emprestimo);
 
@@ -286,7 +287,7 @@ $enderecoF2 = rawurlencode($endereco ?? '');
                 <div class="ms-auto">
 
                  
-                  <a onclick="editar('{$id}','{$nome}','{$telefone}','{$cpf}','{$email}','{$enderecoF2}','{$data_nascF}', '{$obs}', '{$pix}', '{$indicacao}', '{$bairro}', '{$cidade}', '{$estado}', '{$cep}', '{$pessoa}', '{$nome_sec}', '{$telefone_sec}', '{$endereco_sec}', '{$grupo}', '{$tumb_comprovante_endereco}', '{$tumb_comprovante_rg}', '{$telefone2}', '{$foto}', '{$status_cliente}')" href="#" class="icon icon-xs rounded-circle shadow-l bg-twitter"><i class="fa fa-edit text-white"></i></a>                  
+                  <a onclick="editar('{$id}','{$nome}','{$telefone}','{$cpf}','{$email}','{$enderecoF2}','{$data_nascF}', '{$obs}', '{$pix}', '{$indicacao}', '{$bairro}', '{$cidade}', '{$estado}', '{$cep}', '{$pessoa}', '{$nome_sec}', '{$telefone_sec}', '{$endereco_sec}', '{$grupo}', '{$tumb_comprovante_endereco}', '{$tumb_comprovante_rg}', '{$telefone2}', '{$foto}', '{$status_cliente}', '{$api_pgto}')" href="#" class="icon icon-xs rounded-circle shadow-l bg-twitter"><i class="fa fa-edit text-white"></i></a>                  
 
                   <a onclick="arquivo('{$id}','{$nome}')" href="#" class="icon icon-xs rounded-circle shadow-l bg-cinza"><i
                       class="fa fa-file text-white"></i></a>
@@ -594,6 +595,35 @@ HTML;
   <i class="bi bi-chat-left-text-fill position-absolute start-0 top-50 translate-middle-y ms-3"></i>
   <input type="text" class="form-control rounded-xs ps-5" id="obs" name="obs" placeholder="">
   <label class="color-theme ps-5">Observações</label>
+</div>
+
+<div class="row" style="margin-top: 20px">
+  <div class="col-6 ">
+  <!-- Status -->
+  <div class="form-floating mb-3 position-relative">
+    <i class="bi bi-shield-fill-check position-absolute start-0 top-50 translate-middle-y ms-3"></i>
+    <select class="form-select rounded-xs ps-5 pe-5" id="api_pgto" name="api_pgto">
+     <option value="">Nenhuma</option>
+                  <option value="Mercado Pago">Mercado Pago</option>
+                  <option value="Asaas">Asaas</option>
+    </select>
+    <label class="color-theme ps-5">Api de Pagamento</label>
+  </div>
+
+</div>
+
+  <div class="col-6 ">
+  <!-- Status -->
+  <div class="form-floating mb-3 position-relative">
+    <i class="bi bi-shield-fill-check position-absolute start-0 top-50 translate-middle-y ms-3"></i>
+    <select class="form-select rounded-xs ps-5 pe-5" id="notificar_cadastro" name="notificar_cadastro">
+     
+                 <option value="Não">Não</option>             
+                    <option value="Sim">Sim</option>  
+    </select>
+    <label class="color-theme ps-5">Notificar Cadastro</label>
+  </div>
+
 </div>
 
 
@@ -1825,7 +1855,7 @@ HTML;
 
 
 <script>
-  function editar(id, nome, telefone, cpf, email, endereco, data_nasc, obs, pix, indicacao, bairro, cidade, estado, cep, pessoa, nome_sec, telefone_sec, endereco_sec, grupo, comprovante_endereco, comprovante_rg, telefone2, foto, status_cliente) {
+  function editar(id, nome, telefone, cpf, email, endereco, data_nasc, obs, pix, indicacao, bairro, cidade, estado, cep, pessoa, nome_sec, telefone_sec, endereco_sec, grupo, comprovante_endereco, comprovante_rg, telefone2, foto, status_cliente, api_pgto) {
     $('#mensagem').text('');
     $('#titulo_inserir').text('EDITAR REGISTRO');
 
@@ -1851,6 +1881,7 @@ HTML;
       $('#grupo').val(grupo);
       $('#telefone2').val(telefone2);
       $('#status_cliente').val(status_cliente).change();
+      $('#api_pgto').val(api_pgto).change();
 
       $('#target-comprovante-endereco').attr('src','../../painel/images/comprovantes/'+comprovante_endereco);
       $('#target-comprovante-rg').attr('src','../../painel/images/comprovantes/'+comprovante_rg);
@@ -1981,6 +2012,7 @@ HTML;
     $('#complemento').val('');
 
     $('#frequencia').val('30').change();
+    $('#api_pgto').val('').change();
 
     $('#data_emp').val('<?=$data_atual?>');
       $('#data_cob').val('<?=$data_atual?>');

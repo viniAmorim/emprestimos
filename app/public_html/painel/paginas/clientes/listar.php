@@ -107,6 +107,7 @@ if ($linhas > 0) {
         $telefone2 = @$res[$i]['telefone2'];
         $foto = @$res[$i]['foto'];
         $status_cliente = @$res[$i]['status_cliente'];
+        $api_pgto = @$res[$i]['api_pgto'];
 
         $validado = $res[$i]['validado'];
 
@@ -205,7 +206,7 @@ if ($linhas > 0) {
         <td class="esc">{$grupo}</td>
         <td class="esc"><img src="images/clientes/{$foto}" width="25px"></td>
         <td>
-        <!-- <big><a href="#" onclick="editar('{$id}','{$nome}','{$telefone}','{$cpf}','{$email}','{$enderecoF2}','{$data_nascF}', '{$pix}', '{$indicacao}', '{$bairro}', '{$cidade}', '{$estado}', '{$cep}', '{$pessoa}', '{$nome_sec}', '{$telefone_sec}', '{$endereco_sec}', '{$grupo}', '{$tumb_comprovante_endereco}', '{$tumb_comprovante_rg}', '{$telefone2}', '{$foto}', '{$status_cliente}')" title="Editar Dados"><i class="fa fa-edit text-primary"></i></a></big> -->
+        <!-- <big><a href="#" onclick="editar('{$id}','{$nome}','{$telefone}','{$cpf}','{$email}','{$enderecoF2}','{$data_nascF}', '{$pix}', '{$indicacao}', '{$bairro}', '{$cidade}', '{$estado}', '{$cep}', '{$pessoa}', '{$nome_sec}', '{$telefone_sec}', '{$endereco_sec}', '{$grupo}', '{$tumb_comprovante_endereco}', '{$tumb_comprovante_rg}', '{$telefone2}', '{$foto}', '{$status_cliente},'{$api_pgto}')" title="Editar Dados"><i class="fa fa-edit text-primary"></i></a></big> -->
 
         <li class="dropdown head-dpdn2" style="display: inline-block;">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><big><i class="fa fa-trash-o text-danger"></i></big></a>
@@ -218,7 +219,7 @@ if ($linhas > 0) {
             </ul>
         </li>
 
-        <big><a href="#" onclick="mostrar('{$id}', '{$nome}','{$telefone}','{$cpf}','{$email}','{$enderecoF2}','{$data_nascF}', '{$data_cadF}', '{$pix}', '{$indicacao}', '{$bairro}', '{$cidade}', '{$estado}', '{$cep}', '{$total_emprestimos}', '{$total_cobrancas}', '{$pessoa}', '{$total_contas}', '{$nome_sec}', '{$telefone_sec}', '{$endereco_sec}', '{$grupo}', '{$comprovante_endereco}', '{$comprovante_rg}', '{$tumb_comprovante_endereco}', '{$tumb_comprovante_rg}', '{$telefone2}', '{$foto}', '{$validado}')" title="Mostrar Dados"><i class="fa fa-info-circle text-primary"></i></a></big>
+        <big><a href="#" onclick="mostrar('{$id}', '{$nome}','{$telefone}','{$cpf}','{$email}','{$enderecoF2}','{$data_nascF}', '{$data_cadF}', '{$pix}', '{$indicacao}', '{$bairro}', '{$cidade}', '{$estado}', '{$cep}', '{$total_emprestimos}', '{$total_cobrancas}', '{$pessoa}', '{$total_contas}', '{$nome_sec}', '{$telefone_sec}', '{$endereco_sec}', '{$grupo}', '{$comprovante_endereco}', '{$comprovante_rg}', '{$tumb_comprovante_endereco}', '{$tumb_comprovante_rg}', '{$telefone2}', '{$foto}', '{$validado}' , '{$api_pgto}')" title="Mostrar Dados"><i class="fa fa-info-circle text-primary"></i></a></big>
 
         <big><a class="" href="http://api.whatsapp.com/send?1=pt_BR&phone={$tel_whatsF}" title="Whatsapp" target="_blank"><i class="fa fa-whatsapp " style="color:green"></i></a></big>
 
@@ -357,7 +358,7 @@ if ($linhas > 0) {
         });
     });
 
-    function editar(id, nome, telefone, cpf, email, endereco, data_nasc, pix, indicacao, bairro, cidade, estado, cep, pessoa, nome_sec, telefone_sec, endereco_sec, grupo, comprovante_endereco, comprovante_rg, telefone2, foto, status_cliente) {
+    function editar(id, nome, telefone, cpf, email, endereco, data_nasc, pix, indicacao, bairro, cidade, estado, cep, pessoa, nome_sec, telefone_sec, endereco_sec, grupo, comprovante_endereco, comprovante_rg, telefone2, foto, status_cliente, api_pgto) {
         $('#mensagem').text('');
         $('#titulo_inserir').text('Editar Registro');
 
@@ -383,6 +384,8 @@ if ($linhas > 0) {
         $('#telefone2').val(telefone2);
         $('#status_cliente').val(status_cliente).change();
 
+        $('#api_pgto').val(api_pgto).change();
+
         $('#target-comprovante-endereco').attr('src', 'images/comprovantes/' + comprovante_endereco);
         $('#target-comprovante-rg').attr('src', 'images/comprovantes/' + comprovante_rg);
         $('#target').attr('src', 'images/clientes/' + foto);
@@ -390,7 +393,7 @@ if ($linhas > 0) {
         $('#modalForm').modal('show');
     }
 
-    function mostrar(id, nome, telefone, cpf, email, endereco, data_nasc, data_cad, pix, indicacao, bairro, cidade, estado, cep, total_emprestimos, total_cobrancas, pessoa, total_contas, nome_sec, telefone_sec, endereco_sec, grupo, comprovante_endereco, comprovante_rg, tumb_comprovante_endereco, tumb_comprovante_rg, telefone2, foto, validado) {
+    function mostrar(id, nome, telefone, cpf, email, endereco, data_nasc, data_cad, pix, indicacao, bairro, cidade, estado, cep, total_emprestimos, total_cobrancas, pessoa, total_contas, nome_sec, telefone_sec, endereco_sec, grupo, comprovante_endereco, comprovante_rg, tumb_comprovante_endereco, tumb_comprovante_rg, telefone2, foto, validado,api_pgto ) {
 
         if (comprovante_endereco.trim() == "" || comprovante_endereco.trim() == "sem-foto.png") {
             $('#div_link_comprovante_endereco').hide();
@@ -464,6 +467,8 @@ if ($linhas > 0) {
 
         $('#cliente_baixar').val('');
         $('#status_cliente').val('').change();
+
+        $('#api_pgto_dados').text(api_pgto);
 
         $('#id_cliente_mostrar').val(id);
 
@@ -548,6 +553,8 @@ if ($linhas > 0) {
         $('#pix').val('');
         $('#indicacao').val('');
         $('#mensagem_whats').val('');
+
+        $('#api_pgto').val('').change();
 
         $('#bairro').val('');
         $('#cidade').val('');

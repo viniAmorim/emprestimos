@@ -495,6 +495,10 @@ if($verificar_pagamentos != 'Não'){
 						<span><b>Endereço: </b></span><span id="endereco_dados"></span>
 					</div>
 
+          <div class="col-md-6" style="margin-bottom: 5px">
+						<span><b>Api Pgto: </b></span><span id="api_pgto_dados"></span>
+					</div>
+
 					<div class="col-md-6" style="margin-bottom: 5px">
 						<span><b>Bairro: </b></span><span id="bairro_dados"></span>
 					</div>
