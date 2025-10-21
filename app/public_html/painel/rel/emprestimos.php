@@ -1,27 +1,20 @@
 <?php 
-include('../../conexao.php');
-
 include('data_formatada.php');
 
-
-$cliente = isset($_GET['cliente']) ? $_GET['cliente'] : '';
-$status = isset($_GET['status']) ? $_GET['status'] : '';
-
-
 if($status == ""){
-	$sql_status = ' status is null';
+	$sql_status = ' status is null ';
 }
 
 if($status == "Ativos"){
-	$sql_status = ' status is null';
+	$sql_status = ' status is null ';
 }
 
 if($status == "Finalizado"){
-	$sql_status = " status = 'Finalizado'";
+	$sql_status = " status = 'Finalizado' ";
 }
 
 if($status == "Perdido"){
-	$sql_status = " status = 'Perdido'";
+	$sql_status = " status = 'Perdido' ";
 }
 
 $nome_cliente = '';
@@ -30,6 +23,25 @@ if($cliente != ""){
 	$res2 = $query2->fetchAll(PDO::FETCH_ASSOC);
 	$nome_cliente = 'Cliente: '.@$res2[0]['nome'];
 }
+
+
+$dataInicialF = implode('/', array_reverse(@explode('-', $dataInicial)));
+$dataFinalF = implode('/', array_reverse(@explode('-', $dataFinal)));	
+
+
+$datas = "";
+$sql_data = "";
+if($dataInicial != ""){
+	$sql_data = " and data >= '$dataInicial' and data <= '$dataFinal' ";
+	if($dataInicial == $dataFinal){
+	$datas = $dataInicialF;
+		}else{
+			$datas = $dataInicialF.' à '.$dataFinalF;
+		}
+}
+
+
+
 
 
 $capital_emprestadoF = 0;
@@ -69,32 +81,19 @@ body {font-family: 'Tw Cen MT', sans-serif;}
 
 </head>
 <body>
-
-
-<?php
-if ($marca_dagua == 'Sim') {
-    $img_path = '../../img/logo.jpg'; 
-    $img_data = base64_encode(file_get_contents($img_path));
-    $src = 'data:image/jpeg;base64,' . $img_data;
-?>
-    <img class="marca" src="<?= $src ?>">
+<?php 
+if($marca_dagua == 'Sim'){ ?>
+<img class="marca" src="<?php echo $url_sistema ?>img/logo.jpg">	
 <?php } ?>
 
 
 <div id="header" >
 
-<?php
-$img_path = '../../img/logo.jpg'; 
-$img_data = base64_encode(file_get_contents($img_path));
-$src_logo = 'data:image/jpeg;base64,' . $img_data;
-?>
-
-
 	<div style="border-style: solid; font-size: 10px; height: 50px;">
 		<table style="width: 100%; border: 0px solid #ccc;">
 			<tr>
 				<td style="border: 1px; solid #000; width: 20%; text-align: left;">
-					<img style="margin-top: 5px; margin-left: 7px;" id="imag" src="<?= $src_logo ?>" width="160px">
+					<img style="margin-top: 5px; margin-left: 7px;" id="imag" src="<?php echo $url_sistema ?>img/logo.jpg" width="160px">
 				</td>
 				<td style="width: 20%; text-align: left; font-size: 13px;">
 				
@@ -103,8 +102,8 @@ $src_logo = 'data:image/jpeg;base64,' . $img_data;
 				
 				</td>
 				<td style="width: 55%; text-align: right; font-size: 9px;padding-right: 10px;">
-						<b><big>RELATÓRIO DE EMPRÉSTIMOS <?php echo mb_strtoupper($status ?? '') ?> </big></b><br>
-						<?php echo mb_strtoupper($nome_cliente) ?>
+						<b><big>RELATÓRIO DE EMPRÉSTIMOS <?php echo mb_strtoupper($status) ?> </big></b><br>
+						<?php echo $datas ?> <?php echo mb_strtoupper($nome_cliente) ?>
 						<br>
 						 <?php echo mb_strtoupper($data_hoje) ?>
 				</td>
@@ -154,9 +153,9 @@ $capital_emprestado = 0;
 $ativos = 0;
 $inativos = 0;
 if($cliente == ""){
-	$query = $pdo->query("SELECT * from emprestimos where $sql_status order by id desc");
+	$query = $pdo->query("SELECT * from emprestimos where $sql_status $sql_data order by id desc");
 }else{
-	$query = $pdo->query("SELECT * from emprestimos where $sql_status and cliente = '$cliente'  order by id desc");
+	$query = $pdo->query("SELECT * from emprestimos where $sql_status and cliente = '$cliente' $sql_data order by id desc");
 }
 $res = $query->fetchAll(PDO::FETCH_ASSOC);
 $linhas = @count($res);
