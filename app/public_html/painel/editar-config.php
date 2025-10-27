@@ -32,11 +32,14 @@ $cobrar_automatico = $_POST['cobrar_automatico'];
 $public_key = $_POST['public_key'];
 $access_token = $_POST['access_token'];
 $entrada_sistema = $_POST['entrada_sistema'];
+$api_pagamento = $_POST['api_pagamento'];
+$chave_api_asaas = $_POST['chave_api_asaas'];
+$juros_amortizacao = $_POST['juros_amortizacao'];
+
 
 $query = $pdo->query("SELECT * from config");
 $res = $query->fetchAll(PDO::FETCH_ASSOC);
 $foto_assinatura = @$res[0]['assinatura'];
-$chave_api_asaas = $_POST['chave_api_asaas'];
 
 //foto logo
 $caminho = '../img/logo.png';
@@ -70,20 +73,52 @@ if(@$_FILES['foto-logo-rel']['name'] != ""){
 }
 
 
-//foto icone
-$caminho = '../img/icone.png';
+// foto icone
+$caminho_original = '../img/icone.png';
+$caminho_192 = '../app/images/favicon_192.png';
+$caminho_512 = '../app/images/favicon_512.png';
+
 $imagem_temp = @$_FILES['foto-icone']['tmp_name']; 
 
-if(@$_FILES['foto-icone']['name'] != ""){
-	$ext = pathinfo(@$_FILES['foto-icone']['name'], PATHINFO_EXTENSION);   
-	if($ext == 'png' || $ext == 'PNG'){ 	
-			
-		move_uploaded_file($imagem_temp, $caminho);
-	}else{
-		echo 'Extensão de Imagem não permitida!';
-		exit();
-	}
+if (@$_FILES['foto-icone']['name'] != "") {
+    $ext = pathinfo(@$_FILES['foto-icone']['name'], PATHINFO_EXTENSION);
+    
+    if ($ext == 'png' || $ext == 'PNG') {
+        // Move o original
+        move_uploaded_file($imagem_temp, $caminho_original);
+
+        // Cria as duas versões redimensionadas
+        $img = @imagecreatefrompng($caminho_original);
+
+        // Função para redimensionar e salvar imagem
+        function redimensionar_png($origem, $largura, $altura, $destino) {
+            $largura_original = imagesx($origem);
+            $altura_original = imagesy($origem);
+
+            $nova = imagecreatetruecolor($largura, $altura);
+
+            // Preserva transparência
+            imagealphablending($nova, false);
+            imagesavealpha($nova, true);
+            $transparente = imagecolorallocatealpha($nova, 0, 0, 0, 127);
+            imagefilledrectangle($nova, 0, 0, $largura, $altura, $transparente);
+
+            imagecopyresampled($nova, $origem, 0, 0, 0, 0, $largura, $altura, $largura_original, $altura_original);
+            imagepng($nova, $destino);
+            imagedestroy($nova);
+        }
+
+        redimensionar_png($img, 192, 192, $caminho_192);
+        redimensionar_png($img, 512, 512, $caminho_512);
+
+        imagedestroy($img);
+
+    } else {
+        echo 'Extensão de Imagem não permitida!';
+        exit();
+    }
 }
+
 
 
 //foto assinatura
@@ -159,7 +194,7 @@ if(@$_FILES['logo_site']['name'] != ""){
 }
 
 
-$query = $pdo->prepare("UPDATE $tabela SET nome = :nome, email = :email, telefone = :telefone, endereco = :endereco, juros = :juros_sistema, multa = :multa_sistema, juros_emp = :juros_emp, taxa_sistema = :taxa_sistema, instancia = :instancia, token = :token, dias_aviso = :dias_aviso, cnpj = :cnpj_sistema, marca_dagua = '$marca_dagua', dias_criar_parcelas = '$dias_criar_parcelas', pix_sistema = :pix_sistema, saldo_inicial = :saldo_inicial, verificar_pagamentos = :verificar_pagamentos, seletor_api = '$seletor_api', assinatura = '$foto_assinatura', recursos = :recursos, cobrar_automatico = :cobrar_automatico, public_key = :public_key, access_token = :access_token, entrada_sistema = :entrada_sistema, fundo_login = '$fundo_login', logo_site = '$logo_site', chave_api_asaas = :chave_api_asaas where id = 1");
+$query = $pdo->prepare("UPDATE $tabela SET nome = :nome, email = :email, telefone = :telefone, endereco = :endereco, juros = :juros_sistema, multa = :multa_sistema, juros_emp = :juros_emp, taxa_sistema = :taxa_sistema, instancia = :instancia, token = :token, dias_aviso = :dias_aviso, cnpj = :cnpj_sistema, marca_dagua = '$marca_dagua', dias_criar_parcelas = '$dias_criar_parcelas', pix_sistema = :pix_sistema, saldo_inicial = :saldo_inicial, verificar_pagamentos = :verificar_pagamentos, seletor_api = '$seletor_api', assinatura = '$foto_assinatura', recursos = :recursos, cobrar_automatico = :cobrar_automatico, public_key = :public_key, access_token = :access_token, entrada_sistema = :entrada_sistema, fundo_login = '$fundo_login', logo_site = '$logo_site', api_pagamento = :api_pagamento, chave_api_asaas = :chave_api_asaas, juros_amortizacao = :juros_amortizacao where id = 1");
 
 $query->bindValue(":nome", "$nome");
 $query->bindValue(":email", "$email");
@@ -181,7 +216,9 @@ $query->bindValue(":cobrar_automatico", "$cobrar_automatico");
 $query->bindValue(":public_key", "$public_key");
 $query->bindValue(":access_token", "$access_token");
 $query->bindValue(":entrada_sistema", "$entrada_sistema");
+$query->bindValue(":api_pagamento", "$api_pagamento");
 $query->bindValue(":chave_api_asaas", "$chave_api_asaas");
+$query->bindValue(":juros_amortizacao", "$juros_amortizacao");
 $query->execute();
 
 echo 'Editado com Sucesso';

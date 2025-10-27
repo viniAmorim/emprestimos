@@ -548,10 +548,15 @@ HTML;
         </div>
 
           <div class="row" align="right" style="font-size: 14px">
-          <div class="col-md-12"> 
+            <div class="col-md-12"> 
+              <span style="margin-right: 15px">
+                <input type="checkbox" class="form-checkbox" id="residuo_parcela" name="residuo_parcela" value="Sim" style="display:inline-block;">
+                <label for="residuo_final" style="display:inline-block;"><small>Resíduo mesma Parcela</small></label>
+              </span>
+              <br>
               <span style="margin-right: 15px">
                 <input type="checkbox" class="form-checkbox" id="residuo_final" name="residuo_final" value="Sim" style="display:inline-block;">
-                <label for="residuo_final" style="display:inline-block;"><small>Resíduo Final Empréstimo</small></label>
+                <label for="residuo_final" style="display:inline-block;"><small>Resíduo Final</small></label>
               </span>
               <br>
               <span>  

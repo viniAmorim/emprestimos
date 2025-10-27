@@ -145,7 +145,9 @@ echo <<<HTML
 
 					<big><a href="#" onclick="mostrarParcelasEmp('{$id_emp}')" title="Mostrar Parcelas"><i class="fa fa-money verde"></i></a></big>
 
-					<big><a class="{$mostrar_baixa} {$icone_somente_juros}" href="#" onclick="amortizar('{$id_emp}', '{$cliente}')" title="Amortizar Valor"><i class="fa fa-usd verde "></i></a></big>
+					<big><a class="{$mostrar_baixa} {$icone_somente_juros}" href="#" onclick="amortizar('{$id_emp}', '{$cliente}')" title="Amortizar Valor"><i class="fa fa-usd text-danger "></i></a></big>
+
+					<big><a class="{$mostrar_baixa} {$icone_somente_juros}" href="#" onclick="lancarValor('{$id_emp}', '{$cliente}')" title="Lançar Valor"><i class="fa fa-usd verde "></i></a></big>
 
 					<big><a class="{$mostrar_baixa}" href="#" onclick="baixarEmprestimo('{$id_emp}', '{$total_a_pagarF}', '{$cliente}')" title="Baixar Empréstimo"><i class="fa fa-check verde "></i></a></big>
 				</td>  
@@ -221,6 +223,13 @@ function amortizar(id_emp, cliente){
 	$('#id_amortizar').val(id_emp);
 	$('#id_amortizar_cliente').val(cliente);
     $('#modalAmortizar').modal('show');	   
+    
+}
+
+function lancarValor(id_emp, cliente){	
+	$('#id_lancar').val(id_emp);
+	$('#id_lancar_cliente').val(cliente);
+    $('#modalLancar').modal('show');	   
     
 }
 

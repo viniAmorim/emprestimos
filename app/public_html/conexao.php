@@ -87,6 +87,10 @@ $chave_api_asaas = $res[0]['chave_api_asaas'];
 $instancia_whatsapp = $res[0]['instancia'];
 $token_whatsapp = $res[0]['token'];
 
+$multa_atraso = $res[0]['juros'];
+$juros_atraso = $res[0]['multa'];
+$juros_amortizacao = $res[0]['juros_amortizacao'];
+
 if($assinatura == ""){
 	$assinatura = "sem-foto.png";
 }

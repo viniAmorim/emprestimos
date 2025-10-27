@@ -889,6 +889,16 @@ $nome_cliente = @$res2[0]['nome'];
 								value="<?php echo @$chave_api_asaas ?>">
 						</div>
 
+            <div class="row">
+						<div class="col-md-5">					
+								<label>Calcular Júros Conforme Capital Amortizado</label>
+								<select class="form-control" name="juros_amortizacao">
+									<option value="Sim" <?php if(@$juros_amortizacao == 'Sim'){?> selected <?php } ?> >Sim</option>
+									<option value="Não" <?php if(@$juros_amortizacao == 'Não'){?> selected <?php } ?> >Não</option>
+								</select>							
+						</div>
+					</div>
+
 					<div class="row">
 						<div class="col-md-4">						
 								<div class="form-group"> 

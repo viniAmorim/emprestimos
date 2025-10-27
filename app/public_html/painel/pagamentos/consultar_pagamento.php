@@ -18,7 +18,7 @@ $curl = curl_init();
     $resultado = json_decode($response);
 curl_close($curl);
 //echo $resultado->status;
-$status_api = $resultado->status;
+$status_api = @$resultado->status;
 $total_pago = @$resultado->transaction_amount;
 $metodo_pagamento = @$resultado->payment_method_id; // Ex: "pix", "visa", "master"
 $tipo_pagamento = @$resultado->payment_type_id; // Ex: "credit_card", "debit_card", "ticket (boleto)", "bank_transfer (pix)"
@@ -45,6 +45,19 @@ $data_venc = @$res2[0]['data_venc'];
 $dias_frequencia = @$res2[0]['frequencia'];
 $descricao = @$res2[0]['descricao'];
 $pago = @$res2[0]['pago'];
+
+
+if($referencia == "Empréstimo" and $juros_amortizacao != 'Não'){
+        $query2 = $pdo->query("SELECT * from emprestimos where id = '$id_ref'");
+        $res2 = $query2->fetchAll(PDO::FETCH_ASSOC);
+        $valor_parcela = @$res2[0]['valor_parcela'];
+        $tipo_juros = @$res2[0]['tipo_juros'];
+        $valor_emp = @$res2[0]['valor'];
+        $juros_do_emp = @$res2[0]['juros_emp'];
+        if($tipo_juros == "Somente Júros"){
+            $valor = $valor_emp * $juros_do_emp / 100;
+        }
+    }
 
 //CALCULAR OS JUROS PARA A CONTA CASO EXISTA
 $data_atual = date('Y-m-d');

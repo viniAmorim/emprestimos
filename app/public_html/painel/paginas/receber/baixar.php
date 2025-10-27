@@ -29,6 +29,20 @@ $forma_pgto = @$res2[0]['forma_pgto'];
 $valor_final = @$res2[0]['valor'];
 $referencia = @$res2[0]['referencia'];
 
+// se quiser que no emprestimos somente juros ele pegue a proxima parcela com base no valor atual do emprestimo, no caso de ele ter sido amortizado
+
+if($referencia == "Empréstimo" and $juros_amortizacao != 'Não'){
+		$query2 = $pdo->query("SELECT * from emprestimos where id = '$id_ref'");
+		$res2 = $query2->fetchAll(PDO::FETCH_ASSOC);
+		$valor_parcela = @$res2[0]['valor_parcela'];
+		$tipo_juros = @$res2[0]['tipo_juros'];
+		$valor_emp = @$res2[0]['valor'];
+		$juros_do_emp = @$res2[0]['juros_emp'];
+		if($tipo_juros == "Somente Júros"){
+			$valor = $valor_emp * $juros_do_emp / 100;
+		}
+	}
+
 
 $pdo->query("UPDATE $tabela SET data_pgto = '$data_baixa', pago = 'Sim', forma_pgto = '$forma_pgto', valor = '$valor_final', usuario_pgto = '$id_usuario', hora = curTime() WHERE id = '$id' ");
 

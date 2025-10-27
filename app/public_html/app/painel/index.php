@@ -287,6 +287,13 @@ require_once("paginas/" . $pagina . ".php");
   <label>Chave Token Asaas</label>
 </div>
 
+<div class="form-floating mb-3">
+  <select class="form-select" name="juros_amortizacao">
+    <option value="Sim" <?php if(@$juros_amortizacao == 'Sim'){?> selected <?php } ?> >Sim</option>
+    <option value="Não" <?php if(@$juros_amortizacao == 'Não'){?> selected <?php } ?> >Não</option>
+  </select>
+  <label>Calcular Júros Conforme Capital Amortizado</label>
+</div>
 
 
 

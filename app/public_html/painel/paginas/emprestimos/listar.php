@@ -5,7 +5,6 @@ $data_atual = date('Y-m-d');
 
 $cliente = @$_POST['p1'];
 $status = @$_POST['p2'];
-$filtro_data = @$_POST['p3'] ?? 'hoje';
 
 if($status == ""){
 	$sql_status = ' status is null';
@@ -43,25 +42,12 @@ if($mes_atual == '04' || $mes_atual == '06' || $mes_atual == '09' || $mes_atual 
 	$data_final_mes = $ano_atual.'-'.$mes_atual.'-31';
 }
 
-$data_filtro_sql = ''; 
-
-if ($filtro_data == 'hoje') {
-    $data_filtro_sql = "AND data = curDate()";
-} elseif ($filtro_data == 'mes') {
-    $data_filtro_sql = "AND MONTH(data) = MONTH(curDate()) AND YEAR(data) = YEAR(curDate())";
-} elseif ($filtro_data == 'ano') {
-    $data_filtro_sql = "AND YEAR(data) = YEAR(curDate())";
-} elseif ($filtro_data == 'todos') {
-    $data_filtro_sql = ""; 
-}
 
 if($cliente == ""){
-	$query = $pdo->query("SELECT * from $tabela where $sql_status $data_filtro_sql order by id desc");
+	$query = $pdo->query("SELECT * from $tabela where $sql_status order by id desc");
 }else{
-	$query = $pdo->query("SELECT * from $tabela where $sql_status and cliente = '$cliente' $data_filtro_sql order by id desc");
+	$query = $pdo->query("SELECT * from $tabela where  $sql_status and cliente = '$cliente' order by id desc");
 }
-
-
 
 $res = $query->fetchAll(PDO::FETCH_ASSOC);
 $linhas = @count($res);
@@ -149,6 +135,7 @@ if($total_atras > 0){
 
 
 $total_juros = 0;
+$total_das_pcl = 0;
 //verificar parcelas pagas
 $query2 = $pdo->query("SELECT * from receber where referencia = 'Empréstimo' and id_ref = '$id' and pago = 'Sim'");
 $res2 = $query2->fetchAll(PDO::FETCH_ASSOC);
@@ -161,8 +148,15 @@ if($parcelas_pagas > 0){
 		$parcela_sem_juros1 = @$res2[$i2]['parcela_sem_juros'];
 		$projecao1 = ($valor_p1 - $parcela_sem_juros1);
 		$total_juros += $projecao1;
+
+		$total_das_pcl += $valor_p1;
 	}
 }
+
+if($status == 'Finalizado'){
+	$total_juros = $total_das_pcl - $valor;
+}
+
 $total_jurosF = number_format($total_juros, 2, ',', '.');
 
 $valor_parc = 0;
@@ -199,8 +193,10 @@ for($i2=0; $i2 < @count($res2); $i2++){
 
 if($tipo_juros == 'Somente Júros'){
 	$total_a_pagar = $valor + $valor_parc;
+	$icone_somente_juros = '';
 }else{
 	$total_a_pagar = $valor_parc;
+	$icone_somente_juros = 'ocultar';
 }
 
 $total_a_pagarF = number_format($total_a_pagar, 2, ',', '.');
@@ -215,10 +211,9 @@ $projecao = ($valor_p - $parcela_sem_juros) * $parcelas;
 $projecaoF = number_format($projecao, 2, ',', '.');
 $texto_projecao = '<small><span style="color:blue"> (R$ '.$projecaoF.')</span></small>';
 
-if($tipo_juros == 'Somente Júros'){
+if($tipo_juros == 'Somente Júros' or $status == 'Finalizado'){
 	$texto_projecao = '';
 }
-
 
 
 
@@ -281,6 +276,10 @@ echo <<<HTML
 <big><a href="rel/contrato_class.php?id={$id}" target="_blank" title="Gerar Contrato"><i class="fa fa-file-pdf-o text-primary"></i></a></big>
 
 <big><a href="#" onclick="mostrarParcelas('{$id}')" title="Mostrar Parcelas"><i class="fa fa-money verde"></i></a></big>
+
+<big><a class="{$mostrar_baixa} {$icone_somente_juros}" href="#" onclick="amortizar('{$id}', '{$cliente}')" title="Amortizar Valor"><i class="fa fa-usd text-danger "></i></a></big>
+
+<big><a class="{$mostrar_baixa} {$icone_somente_juros}" href="#" onclick="lancarValor('{$id}', '{$cliente}')" title="Lançar Valor"><i class="fa fa-usd verde "></i></a></big>
 
 	<big><a class="{$mostrar_baixa}" href="#" onclick="baixarEmprestimo('{$id}', '{$total_a_pagarF}', '{$cliente}')" title="Baixar Empréstimo"><i class="fa fa-check verde "></i></a></big>
 
@@ -411,6 +410,21 @@ HTML;
     $('#modalBaixarEmprestimo').modal('show');
 }
 
+
+function amortizar(id_emp, cliente){	
+	$('#id_amortizar').val(id_emp);
+	$('#id_amortizar_cliente').val(cliente);
+    $('#modalAmortizar').modal('show');	   
+    
+}
+
+
+function lancarValor(id_emp, cliente){	
+	$('#id_lancar').val(id_emp);
+	$('#id_lancar_cliente').val(cliente);
+    $('#modalLancar').modal('show');	   
+    
+}
 
 </script>
 

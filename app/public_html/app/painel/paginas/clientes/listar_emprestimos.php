@@ -153,6 +153,12 @@ echo <<<HTML
 				<i class="fa fa-usd" style="font-size:14px;"></i>
 			</a>
 
+
+			<!-- Lançar valor -->
+			<a href="#" onclick="lancarValor('{$id_emp}', '{$cliente}')" class="d-inline-flex justify-content-center align-items-center bg-info  rounded-circle {$mostrar_baixa} {$icone_somente_juros}" style="width:28px; height:28px;" title="Lançar Valor">
+				<i class="fa fa-plus" style="font-size:14px;"></i>
+			</a>
+
 			<!-- Baixar Empréstimo -->
 			<a href="#" onclick="baixarEmprestimo('{$id_emp}', '{$total_a_pagarF}', '{$cliente}')" class="d-inline-flex justify-content-center align-items-center bg-success text-white rounded-circle {$mostrar_baixa}" style="width:28px; height:28px;" title="Baixar Empréstimo">
 				<i class="fa fa-check" style="font-size:14px;"></i>
@@ -239,6 +245,15 @@ function amortizar(id_emp, cliente){
 	$('#id_amortizar').val(id_emp);
 	$('#id_amortizar_cliente').val(cliente);    
     botao.click(); 
+    
+}
+
+
+function lancarValor(id_emp, cliente){	
+	const botao = document.getElementById('modalLancar');  
+	$('#id_lancar').val(id_emp);
+	$('#id_lancar_cliente').val(cliente);    
+    botao.click(); 	   
     
 }
 

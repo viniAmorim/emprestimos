@@ -1069,10 +1069,15 @@ if($verificar_pagamentos != 'Não'){
 					</div>
 
 					<div class="row" align="right">
-					<div class="col-md-12">	
+					  <div class="col-md-12">	
+
+              <span style="margin-right: 15px">
+                <input type="checkbox" class="form-checkbox" id="residuo_parcela" name="residuo_parcela" value="Sim" style="display:inline-block;">
+                <label for="residuo_final" style="display:inline-block;"><small>Resíduo mesma Parcela</small></label>
+              </span>
 						  <span style="margin-right: 15px">
 						    <input type="checkbox" class="form-checkbox" id="residuo_final" name="residuo_final" value="Sim" style="display:inline-block;">
-						    <label for="residuo_final" style="display:inline-block;"><small>Resíduo Final Empréstimo</small></label>
+						    <label for="residuo_final" style="display:inline-block;"><small>Resíduo Final</small></label>
 						  </span>
 
 						  <span>	
@@ -1323,6 +1328,80 @@ if($verificar_pagamentos != 'Não'){
 			</div>
 			<div class="modal-footer">       
 				<button type="submit" class="btn btn-primary">Salvar</button>
+			</div>
+			</form>
+		</div>
+	</div>
+</div>
+
+<!-- Modal Lançar Valor -->
+<div class="modal fade" id="modalLancar" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h4 class="modal-title" id="exampleModalLabel"><span id="">Lançar Valor</span></h4>
+				<button id="btn-fechar-lancar" type="button" class="close" data-dismiss="modal" aria-label="Close" style="margin-top: -25px">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<form id="form_lancar">
+			<div class="modal-body">							
+
+					<div class="row">
+						<div class="col-md-6">							
+								<label>Valor</label>
+								<input type="text" class="form-control" id="valor_lancar" name="valor_lancar" placeholder="Valor">							
+						</div>	
+
+						<div class="col-md-6">							
+								<label>Data</label>
+								<input type="date" class="form-control" id="data_lancar" name="data_lancar" placeholder="Data Rececimento" value="<?php echo $data_atual ?>">							
+						</div>	
+						
+					</div>
+
+
+					<div class="row">
+						<div class="col-md-12">							
+								<label>Forma Pgto</label>
+								<select name="forma_pgto_lancar" id="forma_pgto_lancar" class="form-control"  >									
+									<?php 
+										$query = $pdo->query("SELECT * from formas_pgto order by id asc");
+						$res = $query->fetchAll(PDO::FETCH_ASSOC);
+						$linhas = @count($res);
+						for($i=0; $i<$linhas; $i++){
+							echo '<option value="'.$res[$i]['nome'].'">'.$res[$i]['nome'].'</option>';		
+						}
+
+									 ?>
+								</select>
+															
+						</div>
+					</div>
+
+
+					<div class="row">
+						<div class="col-md-12">							
+								<label>OBS</label>
+								<input type="text" class="form-control" id="obs_lancar" name="obs_lancar" placeholder="Observações">							
+						</div>	
+
+											
+					</div>
+
+				
+								
+
+
+					<input type="hidden" class="form-control" id="id_lancar" name="id">	
+					<input type="hidden" class="form-control" id="id_lancar_cliente" name="id_cliente">	
+									
+
+				<br>
+				<small><div id="mensagem_lancar" align="center"></div></small>
+			</div>
+			<div class="modal-footer">       
+				<button id="btn_lancar" type="submit" class="btn btn-primary">Criar</button>
 			</div>
 			</form>
 		</div>
@@ -2348,3 +2427,52 @@ function exportarClientes() {
   window.open('http://localhost/painel/paginas/clientes/exportar_excel.php', '_blank');
 }
 </script>
+
+
+<script type="text/javascript">
+	
+
+$("#form_lancar").submit(function () {
+
+	var id_cliente = $('#id_lancar_cliente').val();
+	
+
+	$('#mensagem_lancar').text('Carregando');
+	$('#btn_lancar').hide();
+
+    event.preventDefault();
+    var formData = new FormData(this);
+
+    $.ajax({
+        url: 'paginas/' + pag + "/lancar_valor.php",
+        type: 'POST',
+        data: formData,
+
+        success: function (mensagem) {
+            $('#mensagem_lancar').text('');
+            $('#mensagem_lancar').removeClass()
+            if (mensagem.trim() == "Salvo com Sucesso") {
+            	
+                $('#btn-fechar-lancar').click();
+                limparCampos();
+                listarEmprestimos(id_cliente);      
+
+            } else {
+
+                $('#mensagem_lancar').addClass('text-danger')
+                $('#mensagem_lancar').text(mensagem)
+            }
+
+            $('#btn_lancar').show();
+
+        },
+
+        cache: false,
+        contentType: false,
+        processData: false,
+
+    });
+
+});
+</script>
+

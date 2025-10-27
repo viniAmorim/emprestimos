@@ -11,6 +11,7 @@ $forma_pgto = $_POST['forma_pgto'];
 $valor_final = $_POST['valor_final'];
 $residuo = @$_POST['residuo'];
 $residuo_final = @$_POST['residuo_final'];
+$residuo_parcela = @$_POST['residuo_parcela'];
 
 $valor_baixar = $_POST['valor_baixar'];
 
@@ -35,7 +36,40 @@ $dias_frequencia = @$res2[0]['frequencia'];
 $descricao = @$res2[0]['descricao'];
 $parcela_sem_juros = @$res2[0]['parcela_sem_juros'];
 
+//verificar se a parcela está sendo paga sem redisuo e se ela possui frequencia, pois se possuir vai ser necessario puxar os valores de residuos existentes para criar a proxima
+$valor_pc = 0;
+if($residuo_final != "Sim" and $residuo != "Sim" and $residuo_parcela != "Sim" and $dias_frequencia > 0){
+	$query2 = $pdo->query("SELECT * from receber where referencia = '$referencia' and id_ref = '$id_ref' and parcela = '$parcela'");
+		$res2 = $query2->fetchAll(PDO::FETCH_ASSOC);
+		for($i2=0; $i2<@count($res2); $i2++){
+			$valor_pc += @$res2[$i2]['valor'];
+		}
+		$valor = $valor_pc;
+}
+
+if($residuo_final == "Sim" or $residuo == "Sim" or $residuo_parcela == "Sim"){
+	$valor_baixar = @$valor_baixar + @$multa_baixar + @$juros_baixar;
+	//atualizar data do vencimento para data atual para não cobrar novamente os juros dos dias que já foram adicionados
+	$pdo->query("UPDATE receber SET data_venc = curDate() where id = '$id'");
+}
+
+
 $parcela_seguinte = $parcela + 1;
+
+// se quiser que no emprestimos somente juros ele pegue a proxima parcela com base no valor atual do emprestimo, no caso de ele ter sido amortizado
+
+if($referencia == "Empréstimo" and $juros_amortizacao != 'Não'){
+		$query2 = $pdo->query("SELECT * from emprestimos where id = '$id_ref'");
+		$res2 = $query2->fetchAll(PDO::FETCH_ASSOC);
+		$valor_parcela = @$res2[0]['valor_parcela'];
+		$tipo_juros = @$res2[0]['tipo_juros'];
+		$valor_emp = @$res2[0]['valor'];
+		$juros_do_emp = @$res2[0]['juros_emp'];
+		if($tipo_juros == "Somente Júros"){
+			$valor = $valor_emp * $juros_do_emp / 100;
+		}
+	}
+
 
 $valor_residuo = 0;
 if($residuo == "Sim"){
@@ -46,6 +80,12 @@ if($residuo == "Sim"){
 		$query2 = $pdo->query("SELECT * from emprestimos where id = '$id_ref'");
 		$res2 = $query2->fetchAll(PDO::FETCH_ASSOC);
 		$valor_parcela = @$res2[0]['valor_parcela'];
+		$tipo_juros = @$res2[0]['tipo_juros'];
+		$valor_emp = @$res2[0]['valor'];
+		$juros_do_emp = @$res2[0]['juros_emp'];
+		if($tipo_juros == "Somente Júros"){
+			$valor = $valor_emp * $juros_do_emp / 100;
+		}
 	}else{
 		$query2 = $pdo->query("SELECT * from cobrancas where id = '$id_ref'");
 		$res2 = $query2->fetchAll(PDO::FETCH_ASSOC);
@@ -58,6 +98,7 @@ if($residuo == "Sim"){
 }
 
 if($residuo_final == "Sim"){
+
 	$valor_residuo = $valor_baixar - $valor_final;
 	if($valor_residuo > 0){
 
@@ -91,6 +132,27 @@ if($residuo_final == "Sim"){
 
 
 		$pdo->query("UPDATE emprestimos set parcelas = '$nova_parcela' where id = '$id_ref'");
+	}
+}
+
+
+if($residuo_parcela == "Sim"){	
+	if($referencia == "Empréstimo"){
+		$ref_residuo = 'Empréstimo';
+	}else{
+		$ref_residuo = 'Cobrança';
+	}
+	$descricao = '(Resíduo) '.$descricao;
+	$valor_residuo = $valor_baixar - $valor_final;
+	if($valor_residuo > 0){
+		//alterar o valor da parcela
+		$pdo->query("UPDATE receber SET valor = '$valor_residuo' where id = '$id'");
+
+		//criar um parcela paga com o valor pago
+		$pdo->query("INSERT INTO receber SET cliente = '$cliente', referencia = '$ref_residuo', id_ref = '$id_ref', valor = '$valor_final', parcela = '$parcela', usuario_lanc = '$id_usuario', data = curDate(), data_venc = curDate(), data_pgto = curDate(), usuario_pgto = '$id_usuario', pago = 'Sim', descricao = '$descricao', frequencia = '0', recorrencia = '' ");
+		$id = $pdo->lastInsertId();
+		echo 'Salvo com Sucesso*'.$id;
+		exit();
 	}
 }
 
