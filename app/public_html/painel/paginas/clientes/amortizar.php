@@ -11,6 +11,10 @@ $obs_amortizar = $_POST['obs_amortizar'];
 $valor = $_POST['valor_amortizar'];
 $data_pgto = $_POST['data_amortizar'];
 $id_cliente = $_POST['id_cliente'];
+$forma_pgto = $_POST['forma_pgto_amortizar'];
+
+$valor = str_replace('.', '', $valor);
+$valor = str_replace(',', '.', $valor);
 
 $query2 = $pdo->query("SELECT * from emprestimos where id = '$id'");
 $res2 = $query2->fetchAll(PDO::FETCH_ASSOC);
@@ -21,7 +25,7 @@ $valor_emp = $valor_emp - $valor;
 
 $pdo->query("UPDATE emprestimos SET valor = '$valor_emp' where id = '$id'");
 
-$pdo->query("INSERT INTO receber SET cliente = '$cliente', referencia = 'Conta', id_ref = '$id', valor = '$valor',  usuario_lanc = '$id_usuario', data = curDate(), data_venc = curDate(), data_pgto = '$data_pgto', pago = 'Sim', descricao = 'Amortização Empréstimo', frequencia = '0', recorrencia = '', obs = '$obs_amortizar' ");
+$pdo->query("INSERT INTO receber SET cliente = '$cliente', referencia = 'Amortização', id_ref = '$id', valor = '$valor',  usuario_lanc = '$id_usuario', data = curDate(), data_venc = curDate(), data_pgto = '$data_pgto', pago = 'Sim', descricao = 'Amortização Empréstimo', frequencia = '0', recorrencia = '', obs = '$obs_amortizar', usuario_pgto = '$id_usuario', forma_pgto = '$forma_pgto' ");
 
 echo 'Salvo com Sucesso';
 ?>

@@ -1267,6 +1267,24 @@ if($verificar_pagamentos != 'Não'){
 						
 					</div>
 
+          <div class="row">
+						<div class="col-md-12">							
+								<label>Forma Pgto</label>
+								<select name="forma_pgto_amortizar" id="forma_pgto_amortizar" class="form-control"  >									
+									<?php 
+										$query = $pdo->query("SELECT * from formas_pgto order by id asc");
+						$res = $query->fetchAll(PDO::FETCH_ASSOC);
+						$linhas = @count($res);
+						for($i=0; $i<$linhas; $i++){
+							echo '<option value="'.$res[$i]['nome'].'">'.$res[$i]['nome'].'</option>';		
+						}
+
+									 ?>
+								</select>
+															
+						</div>
+					</div>
+
 
 					<div class="row">
 						<div class="col-md-12">							

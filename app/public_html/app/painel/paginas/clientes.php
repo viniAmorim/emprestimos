@@ -151,7 +151,7 @@ if ($pag_proxima == $num_paginas) {
   $endereco = $res[$i]['endereco'];
   $data_nasc = $res[$i]['data_nasc'];
   $data_cad = $res[$i]['data_cad'];
-  $obs = $res[$i]['obs'] ?? '';
+  $obs = $res[$i]['obs'];
   $pix = $res[$i]['pix'];
   $indicacao = $res[$i]['indicacao'];
   $bairro = $res[$i]['bairro'];
@@ -176,8 +176,8 @@ if ($pag_proxima == $num_paginas) {
 
   $dados_emprestimoF = @rawurlencode($dados_emprestimo);
 
-  $data_nascF = implode('/', array_reverse(explode('-', $data_nasc ?? '')));
-  $data_cadF = implode('/', array_reverse(explode('-', $data_cad ?? '')));
+  $data_nascF = implode('/', array_reverse(explode('-', $data_nasc)));
+  $data_cadF = implode('/', array_reverse(explode('-', $data_cad)));
 
   $tel_whatsF = '55'.preg_replace('/[ ()-]+/' , '' , $telefone);
 
@@ -259,7 +259,7 @@ if($ext == 'pdf'){
   $tumb_comprovante_rg = $comprovante_rg;
 }
 
-$enderecoF2 = rawurlencode($endereco ?? '');
+$enderecoF2 = rawurlencode($endereco);
 
           echo <<<HTML
       <div data-splide='{"autoplay":false}' class="splide single-slider slider-no-arrows slider-no-dots" id="user-slider-{$id}">
@@ -543,6 +543,9 @@ HTML;
   <label class="color-theme ps-5">Chave Pix / Conta Bancária</label>
 </div>
 
+
+
+
 <!-- Indicação -->
 <div class="form-floating mb-3 position-relative">
   <i class="bi bi-person-plus-fill position-absolute start-0 top-50 translate-middle-y ms-3"></i>
@@ -597,6 +600,8 @@ HTML;
   <label class="color-theme ps-5">Observações</label>
 </div>
 
+
+  
 <div class="row" style="margin-top: 20px">
   <div class="col-6 ">
   <!-- Status -->
@@ -625,6 +630,10 @@ HTML;
   </div>
 
 </div>
+
+</div>
+
+
 
 
 <div class="row" style="margin-top: 20px">
@@ -818,7 +827,7 @@ HTML;
     </div>
   </div>
 </div>
-
+<
 
 
 
@@ -972,7 +981,7 @@ HTML;
 
     <!-- Botão de Enviar -->
     <div class="col-12 mt-3">
-      <button id="btn_emprestimo" type="submit" class="btn btn-primary w-100 rounded-pill">
+      <button id="btn_emprestimo_salvar" type="submit" class="btn btn-primary w-100 rounded-pill">
         <i class="bi bi-save me-2"></i>Salvar Empréstimo
       </button>
     </div>
@@ -1234,15 +1243,15 @@ HTML;
         </div>
 
           <div class="row" align="right" style="font-size: 14px">
-            <div class="col-md-12"> 
-
-              <span style="margin-right: 15px">
+          <div class="col-md-12"> 
+             <span style="margin-right: 15px">
                 <input type="checkbox" class="form-checkbox" id="residuo_parcela" name="residuo_parcela" value="Sim" style="display:inline-block;">
                 <label for="residuo_final" style="display:inline-block;"><small>Resíduo mesma Parcela</small></label>
               </span>
+              <br>
               <span style="margin-right: 15px">
                 <input type="checkbox" class="form-checkbox" id="residuo_final" name="residuo_final" value="Sim" style="display:inline-block;">
-                <label for="residuo_final" style="display:inline-block;"><small>Resíduo Final</small></label>
+                <label for="residuo_final" style="display:inline-block;"><small>Resíduo Final Empréstimo</small></label>
               </span>
               <br>
               <span>  
@@ -1661,6 +1670,29 @@ HTML;
       </div>
     </div>
 
+
+
+           <div class="col-12">
+          <div class="form-custom form-label  mb-3">
+            <select name="forma_pgto_amortizar" id="forma_pgto_amortizar" required onchange="calcular()"
+              class="form-select rounded-xs" aria-label="Floating label select example">
+              <?php
+              $query = $pdo->query("SELECT * from formas_pgto order by id desc");
+              $res = $query->fetchAll(PDO::FETCH_ASSOC);
+              $linhas = @count($res);
+              if ($linhas > 0) {
+                for ($i = 0; $i < $linhas; $i++) {
+                  echo '<option value="' . $res[$i]['nome'] . '">' . $res[$i]['nome'] . '</option>';
+                }
+              } else {
+                echo '<option value="0">Cadastre uma Forma de Pagamento</option>';
+              }
+              ?>
+            </select>
+            <label class="olor-theme form-label-always-active font-10 opacity-50">Forma PGTO</label>
+          </div>
+        </div>
+
     <div class="col-12">
       <div class="form-floating position-relative">
         <i class="bi bi-exclamation-triangle-fill position-absolute start-0 top-50 translate-middle-y ms-3"></i>
@@ -1688,6 +1720,11 @@ HTML;
 
   </div>
 </div>
+
+
+
+
+
 
 
 
@@ -1779,7 +1816,6 @@ HTML;
 
   </div>
 </div>
-
 
 
 

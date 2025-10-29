@@ -5,8 +5,9 @@ require_once("rodape.php");
 
 $pag = 'emprestimos';
 $itens_pag = 10;
+
 $cliente = @$_POST['cliente_busca'];
-$ativo = @$_POST['ativo'];
+$ativo = @$_POST['ativo']; // Adicionar esta linha para capturar o valor do filtro
 $status = @$_POST['status_busca'];
 
 if($cliente > 0){
@@ -15,17 +16,11 @@ if($cliente > 0){
   $sql_cliente = "";
 }
 
-$sql_status = ' and status is null';
-
-$cor_btn_ativo           = '#DDDDDD';
-$cor_texto_btn_ativo     = '#000000';
-$cor_btn_finalizado      = '#DDDDDD';
-$cor_texto_btn_finalizado= '#000000';
-$cor_btn_perdido         = '#DDDDDD';
-$cor_texto_btn_perdido   = '#000000';
 
 if($status == ""){
-  $status = "Ativos";
+  $sql_status = ' and status is null';
+  $cor_btn_ativo = '#436399';
+  $cor_texto_btn_ativo = '#FFF';
 }
 
 if($status == "Ativos"){
@@ -45,6 +40,7 @@ if($status == "Perdido"){
   $cor_btn_perdido = '#436399';
   $cor_texto_btn_perdido = '#FFF';
 }
+
 
 if (@$emprestimos == 'ocultar') {
   echo "<script>window.location='index'</script>";
@@ -548,15 +544,15 @@ HTML;
         </div>
 
           <div class="row" align="right" style="font-size: 14px">
-            <div class="col-md-12"> 
-              <span style="margin-right: 15px">
+          <div class="col-md-12"> 
+            <span style="margin-right: 15px">
                 <input type="checkbox" class="form-checkbox" id="residuo_parcela" name="residuo_parcela" value="Sim" style="display:inline-block;">
                 <label for="residuo_final" style="display:inline-block;"><small>Resíduo mesma Parcela</small></label>
               </span>
               <br>
               <span style="margin-right: 15px">
                 <input type="checkbox" class="form-checkbox" id="residuo_final" name="residuo_final" value="Sim" style="display:inline-block;">
-                <label for="residuo_final" style="display:inline-block;"><small>Resíduo Final</small></label>
+                <label for="residuo_final" style="display:inline-block;"><small>Resíduo Final Empréstimo</small></label>
               </span>
               <br>
               <span>  
@@ -866,6 +862,28 @@ HTML;
         <label class="color-theme ps-5">Data</label>
       </div>
     </div>
+
+
+      <div class="col-12">
+          <div class="form-custom form-label  mb-3">
+            <select name="forma_pgto_amortizar" id="forma_pgto_amortizar" required onchange="calcular()"
+              class="form-select rounded-xs" aria-label="Floating label select example">
+              <?php
+              $query = $pdo->query("SELECT * from formas_pgto order by id desc");
+              $res = $query->fetchAll(PDO::FETCH_ASSOC);
+              $linhas = @count($res);
+              if ($linhas > 0) {
+                for ($i = 0; $i < $linhas; $i++) {
+                  echo '<option value="' . $res[$i]['nome'] . '">' . $res[$i]['nome'] . '</option>';
+                }
+              } else {
+                echo '<option value="0">Cadastre uma Forma de Pagamento</option>';
+              }
+              ?>
+            </select>
+            <label class="olor-theme form-label-always-active font-10 opacity-50">Forma PGTO</label>
+          </div>
+        </div>
 
     <div class="col-12">
       <div class="form-floating position-relative">

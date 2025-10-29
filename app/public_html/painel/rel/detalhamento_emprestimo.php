@@ -1,15 +1,5 @@
 <?php 
-
-include('../../conexao.php');
 require_once("data_formatada.php");
-
-$token_rel = @$_GET['token'];
-if($token_rel != 'A5030'){
-echo '<script>window.location="../../"</script>';
-exit();
-}
-
-$id = $_GET['id'];
 
 $data_atual = date('Y-m-d');
 
@@ -100,6 +90,7 @@ $res2 = $query2->fetchAll(PDO::FETCH_ASSOC);
 $total_de_parcelas = @count($res2);
 
 $total_juros = 0;
+$total_das_pcl = 0;
 //verificar parcelas pagas
 $query2 = $pdo->query("SELECT * from receber where referencia = 'Empréstimo' and id_ref = '$id' and pago = 'Sim'");
 $res2 = $query2->fetchAll(PDO::FETCH_ASSOC);
@@ -112,8 +103,15 @@ if($parcelas_pagas > 0){
 		$parcela_sem_juros1 = @$res2[$i2]['parcela_sem_juros'];
 		$projecao1 = ($valor_p1 - $parcela_sem_juros1);
 		$total_juros += $projecao1;
+
+		$total_das_pcl += $valor_p1;
 	}
 }
+
+if($status == 'Finalizado'){
+	$total_juros = $total_das_pcl - $valor;
+}
+
 $total_jurosF = @number_format($total_juros, 2, ',', '.');
 
 
@@ -137,7 +135,7 @@ $projecao = ($valor_p - $parcela_sem_juros) * $parcelas;
 $projecaoF = @number_format($projecao, 2, ',', '.');
 $texto_projecao = 'R$ '.$projecaoF.' /';
 
-if($tipo_juros == 'Somente Júros'){
+if($tipo_juros == 'Somente Júros' or $status == 'Finalizado'){
 	$texto_projecao = 'Júros Pagos :';
 }
 ?>
@@ -194,21 +192,16 @@ body {font-family: 'Tw Cen MT', sans-serif;}
 
 <body>
 
-<?php
-if ($marca_dagua == 'Sim') {
-    $img_path = '../../img/logo.jpg'; 
-    $img_data = base64_encode(file_get_contents($img_path));
-    $src = 'data:image/jpeg;base64,' . $img_data;
-?>
-    <img class="marca" src="<?= $src ?>">
+<?php 
+
+if($marca_dagua == 'Sim'){ ?>
+
+<img class="marca" src="<?php echo $url_sistema ?>img/logo.jpg">	
+
 <?php } ?>
 
 
-<?php
-  $img_path = '../../img/logo.jpg'; 
-  $img_data = base64_encode(file_get_contents($img_path));
-  $src_logo = 'data:image/jpeg;base64,' . $img_data;
-?>
+
 
 
 <div id="header" >
@@ -223,7 +216,7 @@ if ($marca_dagua == 'Sim') {
 
 				<td style="border: 1px; solid #000; width: 40%; text-align: left;">
 
-					<img style="margin-top: 7px; margin-left: 7px;" id="imag" src="<?= $src_logo ?>" width="175px">
+					<img style="margin-top: 7px; margin-left: 7px;" id="imag" src="<?php echo $url_sistema ?>img/logo.jpg" width="175px">
 
 				</td>
 
@@ -363,6 +356,156 @@ if ($marca_dagua == 'Sim') {
 
 
 
+<?php 
+$query = $pdo->query("SELECT * from receber where referencia = 'Amortização' and id_ref = '$id' order by id asc");
+$res = $query->fetchAll(PDO::FETCH_ASSOC);
+$linhas = @count($res);
+if($linhas > 0){
+ ?>
+
+<div style="border-bottom: 1px solid #000; margin-top: 30px">
+
+				<div style="font-size: 11px; margin-bottom: 7px"><b>AMORTIZAÇÕES NO EMPRÉSTIMO </b> 
+					
+				</div>
+
+			</div>	
+
+			<table id="cabecalhotabela" style="border-bottom-style: solid; font-size: 11px; margin-bottom:10px; width: 100%; table-layout: fixed;">
+			<thead>
+				
+				<tr id="cabeca" style="margin-left: 0px; background-color:#CCC">					
+					<td style="width:15%">VALOR</td>					
+					<td style="width:15%">DATA</td>					
+					<td style="width:30%">FORMA PGTO</td>						
+					<td style="width:40%">RECEBIDO POR</td>	
+				</tr>
+			</thead>
+		</table>
+
+
+
+		<table style="width: 100%; table-layout: fixed; font-size:10px; text-transform: uppercase;">
+			<thead>
+				<tbody>
+					<?php
+
+
+for($i=0; $i<$linhas; $i++){
+	$id_par = $res[$i]['id'];
+$valor = $res[$i]['valor'];
+$parcela = $res[$i]['parcela'];
+$data_venc = $res[$i]['data_venc'];
+$usuario_baixa = $res[$i]['usuario_pgto'];
+$forma_pgto = $res[$i]['forma_pgto'];
+
+
+$data_vencF = implode('/', array_reverse(@explode('-', $data_venc)));
+$valorF = @number_format($valor, 2, ',', '.');
+
+$query2 = $pdo->query("SELECT * from usuarios where id = '$usuario_baixa'");
+$res2 = $query2->fetchAll(PDO::FETCH_ASSOC);
+$nome_usuario_baixa = @$res2[0]['nome'];	
+
+  	 ?>
+
+  	 
+      <tr>
+<td style="width:15%"><?php echo $valorF ?></td>
+<td style="width:15%; "><?php echo $data_vencF ?></td>
+<td style="width:30%"><?php echo $forma_pgto ?></td>
+<td style="width:40%"><?php echo $nome_usuario_baixa ?></td>
+
+
+    </tr>
+
+<?php }  ?>
+				</tbody>
+	
+			</thead>
+		</table>
+	
+<?php } ?>
+
+
+
+
+
+
+
+
+<?php 
+$query = $pdo->query("SELECT * FROM pagar WHERE referencia = 'Empréstimo' AND id_ref = '$id' ORDER BY id ASC LIMIT 1000 OFFSET 1");
+
+$res = $query->fetchAll(PDO::FETCH_ASSOC);
+$linhas = @count($res);
+if($linhas > 0){
+ ?>
+
+<div style="border-bottom: 1px solid #000; margin-top: 30px">
+
+				<div style="font-size: 11px; margin-bottom: 7px"><b>LANÇAMENTO DE NOVOS VALORES EMPRESTADOS </b> 
+					
+				</div>
+
+			</div>	
+
+			<table id="cabecalhotabela" style="border-bottom-style: solid; font-size: 11px; margin-bottom:10px; width: 100%; table-layout: fixed;">
+			<thead>
+				
+				<tr id="cabeca" style="margin-left: 0px; background-color:#CCC">					
+					<td style="width:15%">VALOR</td>					
+					<td style="width:15%">DATA</td>					
+					<td style="width:30%">FORMA PGTO SAÍDA</td>						
+					<td style="width:40%">PAGO POR</td>	
+				</tr>
+			</thead>
+		</table>
+
+
+
+		<table style="width: 100%; table-layout: fixed; font-size:10px; text-transform: uppercase;">
+			<thead>
+				<tbody>
+					<?php
+
+
+for($i=0; $i<$linhas; $i++){
+	$id_par = $res[$i]['id'];
+$valor = $res[$i]['valor'];
+$data_venc = $res[$i]['data_venc'];
+$usuario_baixa = $res[$i]['usuario_pgto'];
+$forma_pgto = $res[$i]['forma_pgto'];
+
+
+$data_vencF = implode('/', array_reverse(@explode('-', $data_venc)));
+$valorF = @number_format($valor, 2, ',', '.');
+
+$query2 = $pdo->query("SELECT * from usuarios where id = '$usuario_baixa'");
+$res2 = $query2->fetchAll(PDO::FETCH_ASSOC);
+$nome_usuario_baixa = @$res2[0]['nome'];	
+
+  	 ?>
+
+  	 
+      <tr>
+<td style="width:15%"><?php echo $valorF ?></td>
+<td style="width:15%; "><?php echo $data_vencF ?></td>
+<td style="width:30%"><?php echo $forma_pgto ?></td>
+<td style="width:40%"><?php echo $nome_usuario_baixa ?></td>
+
+
+    </tr>
+
+<?php }  ?>
+				</tbody>
+	
+			</thead>
+		</table>
+	
+<?php } ?>
+
+
 
 <div style="border-bottom: 1px solid #000; margin-top: 30px">
 
@@ -489,14 +632,14 @@ if($pago == 'Sim'){
 }else{
 	$classe_pago = 'vermelho.jpg';
 	$pendentes += 1;
-	$total_pendentes += $valor;
+	$total_pendentes += $valor_final;
 }
 
 
 $classe_venc = '';
 if(strtotime($data_venc) < strtotime($data_atual) and $pago != 'Sim'){
 	$classe_venc = 'red';
-	$total_vencidas_valor += $valor;
+	$total_vencidas_valor += $valor_final;
 }
 $total_vencidas_valorF = @@number_format($total_vencidas_valor, 2, ',', '.');
 $total_pagasF = @@number_format($total_pagas, 2, ',', '.');
@@ -508,19 +651,11 @@ $nome_usuario_baixa = @$res2[0]['nome'];
 
   	 ?>
 
-<?php
-$caminho_imagem = "../../painel/images/" . $classe_pago;
-
-$src_classe_pago = file_exists($caminho_imagem)
-    ? 'data:image/png;base64,' . base64_encode(file_get_contents($caminho_imagem))
-    : ''; 
-?>
-
-
+  	 
       <tr>
 <td style="width:15%">
-<img style="margin-top: 0px"  src="<?= $src_classe_pago ?>" width="8px">
-	<?php echo $valorF ?></td>
+<img style="margin-top: 0px" src="<?php echo $url_sistema ?>painel/images/<?php echo $classe_pago ?>" width="8px">
+	<?php echo $valor_finalF ?></td>
 <td style="width:15%; color:<?php echo $classe_venc ?>"><?php echo $data_vencF ?></td>
 <td style="width:15%; "><?php echo $data_pgtoF ?></td>
 <td style="width:25%"><?php echo $forma_pgto ?></td>
