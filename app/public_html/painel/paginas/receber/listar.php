@@ -1,4 +1,7 @@
 <?php 
+@session_start();
+$visualizar_usuario = @$_SESSION['visualizar'];
+$id_usuario = @$_SESSION['id'];
 $tabela = 'receber';
 require_once("../../../conexao.php");
 $data_atual = date('Y-m-d');
@@ -20,12 +23,18 @@ if($dataFinal == ""){
 	$dataFinal = $data_atual;
 }
 
+if($visualizar_usuario == 'Não'){
+	$sql_visualizar = " and usuario_lanc = '$id_usuario' ";
+}else{
+	$sql_visualizar = " ";
+}
+
 
 $valor_pendentes = 0;
 $valor_pago = 0;
 $valor_pendentesF = 0;
 $valor_pagoF = 0;
-$query = $pdo->query("SELECT * from $tabela where $data_buscar >= '$dataInicial' and $data_buscar <= '$dataFinal' and pago LIKE '$status' order by id desc");
+$query = $pdo->query("SELECT * from $tabela where $data_buscar >= '$dataInicial' and $data_buscar <= '$dataFinal' and pago LIKE '$status' $sql_visualizar order by id desc");
 $res = $query->fetchAll(PDO::FETCH_ASSOC);
 $linhas = @count($res);
 if($linhas > 0){
@@ -61,8 +70,10 @@ for($i=0; $i<$linhas; $i++){
 	$obs = $res[$i]['obs'];
 	$cliente = $res[$i]['cliente'];
 	$forma_pgto = $res[$i]['forma_pgto'];
+	$parcela = $res[$i]['parcela'];
+	$id_par = $res[$i]['id'];
 
-
+$valor_final = $valor;
 $query2 = $pdo->query("SELECT * from usuarios where id = '$usuario_lanc'");
 $res2 = $query2->fetchAll(PDO::FETCH_ASSOC);
 $nome_usuario_lanc = @$res2[0]['nome'];
@@ -70,6 +81,7 @@ $nome_usuario_lanc = @$res2[0]['nome'];
 $query2 = $pdo->query("SELECT * from clientes where id = '$cliente'");
 $res2 = $query2->fetchAll(PDO::FETCH_ASSOC);
 $nome_cliente = @$res2[0]['nome'];
+$telefone = @$res2[0]['telefone'];
 
 $query2 = $pdo->query("SELECT * from usuarios where id = '$usuario_baixa'");
 $res2 = $query2->fetchAll(PDO::FETCH_ASSOC);
@@ -93,6 +105,31 @@ $nome_usuario_baixa = @$res2[0]['nome'];
 
 	$valor_pagoF = @number_format($valor_pago, 2, ',', '.');
 	$valor_pendentesF = @number_format($valor_pendentes, 2, ',', '.');
+
+
+
+	$valor_multa = 0;
+$valor_juros = 0;
+$dias_vencido = 0;
+$classe_venc = '';
+if(@strtotime($data_venc) < @strtotime($data_atual) and $pago != 'Sim'){
+$classe_venc = 'text-danger';
+$valor_multa = @$multa;
+
+//calcular quanto dias está atrasado
+
+$data_inicio = new DateTime($data_venc);
+$data_fim = new DateTime($data_atual);
+$dateInterval = $data_inicio->diff($data_fim);
+$dias_vencido = $dateInterval->days;
+
+$valor_juros = $dias_vencido * (@$juros * $valor / 100);
+
+$valor_final = $valor_juros + $valor_multa + $valor;
+
+}
+
+$valor_finalF = @number_format($valor_final, 2, ',', '.');
 
 echo <<<HTML
 <tr style="">
@@ -156,6 +193,10 @@ echo <<<HTML
 		</li>										
 		</ul>
 </li>
+
+
+
+<big><a class="{$classe_baixar}" href="#" onclick="cobrar('{$id}', '{$parcela}', '{$valor_final}', '{$data_venc}', '{$telefone}', '{$valor_multa}', '{$valor_juros}', '{$id_par}', '{$dias_vencido}')" title="Gerar Cobrança"><i class="fa fa-whatsapp verde"></i></a></big>
 
 
 </td>
@@ -269,4 +310,47 @@ HTML;
 
 	
 	
+	function cobrar(id_emp, parcela, valor, data, telefone, multa, juros, id_par, dias_vencido){
+
+	var instancia = "<?=$instancia?>";
+	var token = "<?=$token?>";
+
+	var id_empr = $('#id_emprestimo').val();
+	var id_cob = $('#id_cobranca').val();
+	
+	if(multa == ""){
+		multa = 0;
+	}
+
+	if(juros == ""){
+		juros = 0;
+	}
+
+
+	if(instancia.trim() == "" || token.trim() == ""){
+		alert('Insira um Token e Instancia Whatsapp nas configurações');
+		return;
+	}
+	$.ajax({
+	        url: 'paginas/clientes/gerar_cobranca.php',
+	        method: 'POST',
+	        data: {parcela, valor, data, telefone, multa, juros, id_par, dias_vencido},
+	        dataType: "html",
+
+	        success:function(result){	
+	        //alert(result) 
+	        	alert('Cobrança Efetuada!');
+	           	
+	           	 if(id_empr != ""){
+                	 mostrarParcelasEmp(id_empr)
+                }
+
+                if(id_cob != ""){
+                	 mostrarParcelas(id_cob);
+                }
+	        }
+	    });
+}
+
+
 </script>
