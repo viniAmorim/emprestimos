@@ -24,6 +24,9 @@ if($verificar_pagamentos != 'Não'){
 <!DOCTYPE html>
 <html>
   <head>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-x3j6s5Fp6zG1y6eT3d3xW8V5g8K9wK7/j7T0fP1j/E6L3/eI0/2y9z1/N8aH3i7N4yO5Q=" crossorigin="anonymous">
+
     <style>
       .ocultar {
     display: none !important;
@@ -768,15 +771,20 @@ if($verificar_pagamentos != 'Não'){
 				
 					<div class="row">
 
-						<div class="col-md-4">							
+						<div class="col-md-3">							
 								<label>Júros % Dia</label>
 								<input type="text" class="form-control" id="juros" name="juros" placeholder="Júros se Houver" value="<?php echo $juros_sistema ?>" onkeyup="mascara_valor('juros')">							
 						</div>
 
 
-						<div class="col-md-4">							
+						<div class="col-md-3">							
 								<label>Multa R$</label>
 								<input type="text" class="form-control" id="multa" name="multa" placeholder="Multa se Houver" value="<?php echo $multa_sistema ?>" onkeyup="mascara_valor('multa')">							
+						</div>
+
+            <div class="col-md-6">							
+								<label>Descrição</label>
+								<input type="text" class="form-control" id="descricao_cobranca" name="descricao_cobranca" placeholder="Ex: Aluguel, IPTV, etc" value="" required="">							
 						</div>
 
 
@@ -1475,6 +1483,13 @@ if($verificar_pagamentos != 'Não'){
     <button id="btn_form" type="submit"></button>
 </form>
 
+<script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawR5R2tGv6FvE7aA9qI5T7F/2y9v8C8N/P8=" crossorigin="anonymous"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RMR1Y1R6K4/p7TsaWc5u4wM8j/E6L3/eI0/2y9z1/N8aH3i7N4yO5Q=" crossorigin="anonymous"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.min.js" integrity="sha384-Bz6Q9w1/k1D/B8mF6rFvM3n2y9z1/N8aH3i7N4yO5Q=" crossorigin="anonymous"></script>
+
+    <script type="text/javascript" src="js/ajax.js"></script>
   </body>
 </html>
 

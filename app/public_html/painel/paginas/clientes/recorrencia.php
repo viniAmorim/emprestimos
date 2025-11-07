@@ -16,6 +16,7 @@ $id = $_POST['id'];
 $dias_frequencia = $_POST['frequencia'];
 $data = $_POST['data'];
 $enviar_whatsapp = $_POST['enviar_whatsapp'];
+$descricao_cobranca = @$_POST['descricao_cobranca'];
 
 $juros = $_POST['juros'];
 $multa = $_POST['multa'];
@@ -54,13 +55,19 @@ $nome_cliente = $res[0]['nome'];
 $tel_cliente = $res[0]['telefone'];
 $tel_cliente = '55'.preg_replace('/[ ()-]+/' , '' , $tel_cliente);
 $telefone_envio = $tel_cliente;
+$bloquear_disparos = $res[0]['bloquear_disparos'];
 
 
 $valor_total_juros = 0;
 $valor_parcelas_soma = 0;
 //lançar as contas a receber (parcelas do pagamento)
 for($i=1; $i <= $parcelas; $i++){
-$descricao = $nome_cliente.' ('.$i.')';
+if($parcelas > 1){
+	$descricao = $descricao_cobranca.' ('.$i.')';
+}else{
+	$descricao = $descricao_cobranca;
+}
+
 
 
 	$dias_parcela = $i - 1;
@@ -131,7 +138,7 @@ $ult_id_conta = $pdo->lastInsertId();
 echo 'Salvo com Sucesso';
 
 
-if($token != "" and $instancia != "" and $enviar_whatsapp == 'Sim'){
+if($token != "" and $instancia != "" and $enviar_whatsapp == 'Sim' and $bloquear_disparos != "Sim"){
 //enviar mensagem para o cliente
 
 $data_vencF = date('d', strtotime($data_venc));

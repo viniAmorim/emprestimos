@@ -1,6 +1,7 @@
 <?php 
-//require_once("../conexao.php");
 @session_start();
+//require_once("../conexao.php");
+
 $id_usuario = $_SESSION['id'];
 
 $home = 'ocultar';
@@ -34,7 +35,8 @@ $relatorios_lucros = 'ocultar';
 $relatorios_caixa = 'ocultar';
 $editar_contas = 'ocultar';
 $relatorios_ina = 'ocultar';
-
+$clientes_debitos = 'ocultar';
+$comissoes = 'ocultar';
 
 $query = $pdo->query("SELECT * FROM usuarios_permissoes where usuario = '$id_usuario'");
 $res = $query->fetchAll(PDO::FETCH_ASSOC);
@@ -157,6 +159,17 @@ if($total_reg > 0){
 			$relatorios_ina = '';
 		}
 
+		if($chave == 'clientes_debitos'){
+			$clientes_debitos = '';
+		}
+
+
+		if($chave == 'comissoes'){
+			$comissoes = '';
+		}
+
+
+
 
 
 
@@ -211,7 +224,7 @@ if($grupo_acessos == 'ocultar' and $acessos == 'ocultar' and $formas_pgto == 'oc
 }
 
 
-if($pagar == 'ocultar' and $receber == 'ocultar' and $receber_vencidas == 'ocultar' and $relatorios_financeiro == 'ocultar' and $relatorios_lucros == 'ocultar' and $relatorios_debitos == 'ocultar' and $relatorios_caixa == 'ocultar' and $relatorios_ina == 'ocultar'){
+if($pagar == 'ocultar' and $receber == 'ocultar' and $receber_vencidas == 'ocultar' and $relatorios_financeiro == 'ocultar' and $relatorios_lucros == 'ocultar' and $relatorios_debitos == 'ocultar' and $relatorios_caixa == 'ocultar' and $relatorios_ina == 'ocultar' and $clientes_debitos == 'ocultar' and $comissoes == 'ocultar'){
 	$menu_financeiro = 'ocultar';
 }else{
 	$menu_financeiro = '';

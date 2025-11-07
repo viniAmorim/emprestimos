@@ -662,15 +662,19 @@ if ($linhas > 0) {
     }
 
     function emprestimo(id, nome) {
+        console.log('BOTÃO EMPRÉSTIMO');
+        console.log('CHAMANDO FUNÇÃO EMPRÉSTIMO para ID:', id, 'NOME:', nome);
         $('#titulo_emp').text('Empréstimo: ' + nome);
         $('#id_emp').val(id);
         $('#mensagem_emp').text('');
         $('#frequencia').val('30').change();
 
-        mascara_valor('juros')
-        mascara_valor('multa')
+        mascara_valor('juros');
+        mascara_valor('multa');
 
-        $('#modalEmprestimo').modal('show');
+        $('#modalEmprestimo').appendTo('body').modal('show');
+
+        //$('#modalEmprestimo').modal('show');
     }
 
     function cobranca(id, nome) {
@@ -678,6 +682,7 @@ if ($linhas > 0) {
         $('#id_cob').val(id);
         $('#mensagem_cob').text('');
         $('#frequencia_cob').val('30').change();
+        $('#descricao_cobranca').val('');
 
         $('#modalCobranca').modal('show');
     }

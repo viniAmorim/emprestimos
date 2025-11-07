@@ -966,6 +966,15 @@ HTML;
       </div>
     </div>
 
+    <!-- desc -->
+    <div class="col-12">
+      <div class="form-floating position-relative">
+        <i class="bi bi-chat-left-text-fill position-absolute start-0 top-50 translate-middle-y ms-3"></i>
+        <input type="text" class="form-control rounded-xs ps-5"  name="descricao_cobranca" id= "descricao_cobranca" placeholder="Ex: Aluguel, IPTV, etc">
+        <label class="color-theme ps-5">Descrição</label>
+      </div>
+    </div>
+
     <!-- Observações -->
     <div class="col-12">
       <div class="form-floating position-relative">
@@ -2560,7 +2569,8 @@ function atualizarCorStatus_busca() {
   const botao = document.getElementById('btn_cobranca');       
       $('#titulo_cob').text('Cobrança: '+nome);     
       $('#id_cob').val(id); 
-      $('#nome_cob').val(nome);        
+      $('#nome_cob').val(nome);    
+      $('#descricao_cobranca').val('');    
       $('#frequencia_cob').val('30').change();
       
        botao.click();

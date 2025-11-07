@@ -1,5 +1,6 @@
 RewriteEngine On
 
+RewriteRule ^clientes_debitos(.*)$ index.php?pagina=clientes_debitos [L]
 RewriteRule ^clientes(.*)$ index.php?pagina=clientes [L]
 RewriteRule ^emprestimos(.*)$ index.php?pagina=emprestimos [L]
 RewriteRule ^produtos(.*)$ index.php?pagina=produtos [L]
