@@ -873,6 +873,13 @@ if($verificar_pagamentos != 'Não'){
 
 					</div>	
 
+          <div class="row">
+            <div class="col-md-12">       
+              <label>Observações</label>
+              <textarea class="form-control" id="obs" name="obs" placeholder="Observações sobre o Empréstimo"></textarea>
+            </div>
+          </div>
+
 
 					<input type="hidden" class="form-control" id="id_emp" name="id">					
 

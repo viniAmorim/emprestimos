@@ -484,7 +484,9 @@ if ($linhas > 0) {
 
         $('#target_mostrar_foto').attr('src', 'images/clientes/' + foto);
 
-        $('#modalDados').modal('show');
+        //$('#modalDados').modal('show');
+        $('#modalDados').appendTo('body').modal('show');
+        
 
     }
 
@@ -539,7 +541,8 @@ if ($linhas > 0) {
     });
 
     // Exibe o modal
-    $('#modalAlertas').modal('show');
+    //$('#modalAlertas').modal('show');
+    $('#modalAlertas').appendTo('body').modal('show');
 }
 
     function limparCampos() {
@@ -658,7 +661,10 @@ if ($linhas > 0) {
         $('#mensagem_arquivo').text('');
 
         listarArquivos();
-        $('#modalArquivos').modal('show');
+        //$('#modalArquivos').modal('show');
+
+        $('#modalArquivos').appendTo('body').modal('show');
+        
     }
 
     function emprestimo(id, nome) {
@@ -684,6 +690,7 @@ if ($linhas > 0) {
         $('#frequencia_cob').val('30').change();
         $('#descricao_cobranca').val('');
 
-        $('#modalCobranca').modal('show');
+        //$('#modalCobranca').modal('show');
+        $('#modalCobranca').appendTo('body').modal('show');
     }
 </script>
