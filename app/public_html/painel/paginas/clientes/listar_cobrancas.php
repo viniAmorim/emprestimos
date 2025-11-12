@@ -1,14 +1,22 @@
 <?php 
+@session_start();
+$visualizar_usuario = @$_SESSION['visualizar'];
+$id_usuario = @$_SESSION['id'];
 require_once("../../../conexao.php");
 $pagina = 'cobrancas';
 $id = $_POST['id'];
 
+if($visualizar_usuario == 'Não'){
+	$sql_visualizar = " and usuario = '$id_usuario' ";
+}else{
+	$sql_visualizar = " ";
+}
 
 
 echo <<<HTML
 <small>
 HTML;
-$query = $pdo->query("SELECT * FROM $pagina where cliente = '$id'  order by id desc");
+$query = $pdo->query("SELECT * FROM $pagina where cliente = '$id' $sql_visualizar order by id desc");
 $res = $query->fetchAll(PDO::FETCH_ASSOC);
 $total_reg = @count($res);
 if($total_reg > 0){
@@ -34,7 +42,7 @@ $data_venc = $res[$i]['data_venc'];
 $data = $res[$i]['data'];
 
 $data_vencF = date('d', strtotime($data_venc));
-$dataF = implode('/', array_reverse(explode('-', $data ?? '')));
+$dataF = implode('/', array_reverse(explode('-', $data)));
 $valorF = number_format($valor, 2, ',', '.');
 
 $classe_deb = '';
@@ -66,7 +74,7 @@ if($parcelas > 1){
 $query2 = $pdo->query("SELECT * FROM receber where referencia = 'Cobrança' and id_ref = '$id_emp' and pago != 'Sim' order by id asc limit 1");
 $res2 = $query2->fetchAll(PDO::FETCH_ASSOC);
 $data_ultimo_venc = @$res2[0]['data_venc'];
-$data_ultimo_vencF = implode('/', array_reverse(explode('-', $data_ultimo_venc ?? '')));
+$data_ultimo_vencF = implode('/', array_reverse(explode('-', $data_ultimo_venc)));
 
 
 echo <<<HTML

@@ -1,4 +1,8 @@
 <?php 
+@session_start();
+$visualizar_usuario = @$_SESSION['visualizar'];
+$id_usuario = @$_SESSION['id'];
+
 $tabela = 'emprestimos';
 require_once("../../../conexao.php");
 $data_atual = date('Y-m-d');
@@ -42,11 +46,17 @@ if($mes_atual == '04' || $mes_atual == '06' || $mes_atual == '09' || $mes_atual 
 	$data_final_mes = $ano_atual.'-'.$mes_atual.'-31';
 }
 
+if($visualizar_usuario == 'Não'){
+  $sql_visualizar = " and usuario = '$id_usuario' ";
+}else{
+  $sql_visualizar = " ";
+}
+
 
 if($cliente == ""){
-	$query = $pdo->query("SELECT * from $tabela where $sql_status order by id desc");
+	$query = $pdo->query("SELECT * from $tabela where $sql_status $sql_visualizar order by id desc");
 }else{
-	$query = $pdo->query("SELECT * from $tabela where  $sql_status and cliente = '$cliente' order by id desc");
+	$query = $pdo->query("SELECT * from $tabela where  $sql_status and cliente = '$cliente' $sql_visualizar order by id desc");
 }
 
 $res = $query->fetchAll(PDO::FETCH_ASSOC);

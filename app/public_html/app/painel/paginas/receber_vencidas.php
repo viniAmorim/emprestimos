@@ -1,4 +1,7 @@
 <?php
+@session_start();
+$visualizar_usuario = @$_SESSION['visualizar'];
+$id_usuario = @$_SESSION['id'];
 require_once("cabecalho.php");
 require_once("rodape.php");
 
@@ -10,6 +13,12 @@ $itens_pag = 10;
 if (@$receber == 'ocultar') {
   echo "<script>window.location='index'</script>";
   exit();
+}
+
+if($visualizar_usuario == 'Não'){
+  $sql_visualizar = " and usuario_lanc = '$id_usuario' ";
+}else{
+  $sql_visualizar = " ";
 }
 
 // pegar a pagina atual
@@ -61,9 +70,9 @@ $total_pendentesF = 0;
 
 //totalizar páginas
 if ($pago == 'Vencidas') {
-  $query2 = $pdo->query("SELECT * from $pag where data_venc < curDate() and pago != 'Sim' order by id desc");
+  $query2 = $pdo->query("SELECT * from $pag where data_venc < curDate() and pago != 'Sim' $sql_visualizar order by id desc");
 } else {
-  $query2 = $pdo->query("SELECT * from $pag where data_venc >= '$dataInicial' and data_venc <= '$dataFinal' and pago LIKE '%$pago%' order by id desc");
+  $query2 = $pdo->query("SELECT * from $pag where data_venc >= '$dataInicial' and data_venc <= '$dataFinal' and pago LIKE '%$pago%' $sql_visualizar order by id desc");
 }
 
 
@@ -90,7 +99,7 @@ if ($pag_proxima == $num_paginas) {
     <div class="content">
       <?php
      
-      $query = $pdo->query("SELECT * from $pag where data_venc < curDate() and pago != 'Sim' order by id desc LIMIT $limite, $itens_pag");
+      $query = $pdo->query("SELECT * from $pag where data_venc < curDate() and pago != 'Sim' $sql_visualizar order by id desc LIMIT $limite, $itens_pag");
       
       $valor_pago = 0;
       $valor_pendentes = 0;

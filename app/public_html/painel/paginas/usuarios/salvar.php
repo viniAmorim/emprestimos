@@ -15,6 +15,17 @@ $endereco = $_POST['endereco'];
 $senha = '123';
 $senha_crip = password_hash($senha, PASSWORD_DEFAULT);
 $id = $_POST['id'];
+$visualizar = $_POST['visualizar'];
+$comissao = $_POST['comissao'];
+$pagamento = $_POST['pagamento'];
+
+$comissao = str_replace('.', ',', $comissao);
+$comissao = str_replace('%', '', $comissao);
+
+if($comissao == ""){
+	$comissao = 0;
+}
+
 
 //validacao email
 $query = $pdo->query("SELECT * from $tabela where email = '$email'");
@@ -35,15 +46,18 @@ if(@count($res) > 0 and $id != $id_reg){
 }
 
 if($id == ""){
-$query = $pdo->prepare("INSERT INTO $tabela SET nome = :nome, email = :email, senha = '', senha_crip = '$senha_crip', nivel = '$nivel', ativo = 'Sim', foto = 'sem-foto.jpg', telefone = :telefone, data = curDate(), endereco = :endereco ");
+$query = $pdo->prepare("INSERT INTO $tabela SET nome = :nome, email = :email, senha = '', senha_crip = '$senha_crip', nivel = '$nivel', ativo = 'Sim', foto = 'sem-foto.jpg', telefone = :telefone, data = curDate(), endereco = :endereco, visualizar = :visualizar, comissao = :comissao, pagamento = :pagamento ");
 	
 }else{
-$query = $pdo->prepare("UPDATE $tabela SET nome = :nome, email = :email, nivel = '$nivel', telefone = :telefone, endereco = :endereco where id = '$id'");
+$query = $pdo->prepare("UPDATE $tabela SET nome = :nome, email = :email, nivel = '$nivel', telefone = :telefone, endereco = :endereco, visualizar = :visualizar, comissao = :comissao, pagamento = :pagamento where id = '$id'");
 }
 $query->bindValue(":nome", "$nome");
 $query->bindValue(":email", "$email");
 $query->bindValue(":telefone", "$telefone");
 $query->bindValue(":endereco", "$endereco");
+$query->bindValue(":visualizar", "$visualizar");
+$query->bindValue(":comissao", "$comissao");
+$query->bindValue(":pagamento", "$pagamento");
 $query->execute();
 
 echo 'Salvo com Sucesso';

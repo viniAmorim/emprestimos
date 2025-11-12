@@ -1,4 +1,7 @@
 <?php
+@session_start();
+$visualizar_usuario = @$_SESSION['visualizar'];
+$id_usuario = @$_SESSION['id'];
 require_once("cabecalho.php");
 require_once("rodape.php");
 
@@ -42,9 +45,15 @@ if($status_busca != ""){
   $sql_status = " ";
 }
 
+if($visualizar_usuario == 'Não'){
+  $sql_visualizar = " and usuario = '$id_usuario' ";
+}else{
+  $sql_visualizar = " ";
+}
+
 
 //totalizar páginas
-$query2 = $pdo->query("SELECT * from $pag  where (nome like '%$buscar%' or telefone like '%$buscar%' or email like '%$buscar%' or cpf like '%$buscar%') $sql_status order by id desc");
+$query2 = $pdo->query("SELECT * from $pag  where (nome like '%$buscar%' or telefone like '%$buscar%' or email like '%$buscar%' or cpf like '%$buscar%') $sql_status $sql_visualizar order by id desc");
 $res2 = $query2->fetchAll(PDO::FETCH_ASSOC);
 $linhas2 = @count($res2);
 
@@ -128,7 +137,7 @@ if ($pag_proxima == $num_paginas) {
     <div class="content">
       <?php
       $query = $pdo->query("SELECT DISTINCT c.* from $pag c 
-    WHERE (c.nome LIKE '%$buscar%' OR c.telefone LIKE '%$buscar%' OR c.email LIKE '%$buscar%' OR c.cpf LIKE '%$buscar%') $sql_status " .
+    WHERE (c.nome LIKE '%$buscar%' OR c.telefone LIKE '%$buscar%' OR c.email LIKE '%$buscar%' OR c.cpf LIKE '%$buscar%') $sql_status $sql_visualizar" .
         ($ativo === 'Não' ? " AND c.ativo = 'Não'" :
           ($ativo === 'Sim' ? " AND c.ativo = 'Sim'" :
             ($ativo === '' ? " AND c.ativo = ''" :

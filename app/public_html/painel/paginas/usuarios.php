@@ -64,17 +64,25 @@ if(@$usuarios == 'ocultar'){
 
 					<div class="row">
 
-						<div class="col-md-6">							
+						<div class="col-md-4">							
 								<label>Telefone</label>
 								<input type="text" class="form-control" id="telefone" name="telefone" placeholder="Seu Telefone" required>							
 						</div>
 						
 
-						<div class="col-md-6">							
+						<div class="col-md-4">							
 								<label>Nível</label>
 								<select class="form-control" name="nivel" id="nivel">
-								  <option>Administrador</option>
-								  <option>Comum</option>
+								  <option value="Administrador">Administrador</option>
+								  <option value="Comum">Comum</option>
+								</select>							
+						</div>
+
+						<div class="col-md-4">							
+								<label>Visualizar Tudo</label>
+								<select class="form-control" name="visualizar" id="visualizar">
+								  <option value="Sim">Sim</option>
+								  <option value="Não">Não</option>
 								</select>							
 						</div>
 
@@ -84,9 +92,22 @@ if(@$usuarios == 'ocultar'){
 
 					<div class="row">
 
-						<div class="col-md-12">							
+						<div class="col-md-3">							
+								<label>Comissão %</label>
+								<input type="text" class="form-control" id="comissao" name="comissao" placeholder="Comissão se Houver" required>							
+						</div>
+
+						<div class="col-md-9">							
 								<label>Endereço</label>
 								<input type="text" class="form-control" id="endereco" name="endereco" placeholder="Seu Endereço" >							
+						</div>
+					</div>
+
+
+					<div class="row">
+						<div class="col-md-12">							
+								<label>Dados para Pagamento (Chave Pix)</label>
+								<input type="text" class="form-control" id="pagamento" name="pagamento" placeholder="Chave Pix ou Conta" >							
 						</div>
 					</div>
 
@@ -155,6 +176,10 @@ if(@$usuarios == 'ocultar'){
 
 					<div class="col-md-12" style="margin-bottom: 5px">
 						<span><b>Endereço: </b></span><span id="endereco_dados"></span>
+					</div>
+
+					<div class="col-md-12" style="margin-bottom: 5px">
+						<span><b>Dados para pagamento: </b></span><span id="pagamento_dados"></span>
 					</div>
 
 					<div class="col-md-12" style="margin-bottom: 5px">

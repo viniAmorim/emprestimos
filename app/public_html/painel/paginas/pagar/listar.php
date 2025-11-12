@@ -1,4 +1,7 @@
 <?php 
+@session_start();
+$visualizar_usuario = @$_SESSION['visualizar'];
+$id_usuario = @$_SESSION['id'];
 $tabela = 'pagar';
 require_once("../../../conexao.php");
 $data_atual = date('Y-m-d');
@@ -15,12 +18,17 @@ if($dataFinal == ""){
 	$dataFinal = $data_atual;
 }
 
+if($visualizar_usuario == 'Não'){
+	$sql_visualizar = " and usuario_lanc = '$id_usuario' ";
+}else{
+	$sql_visualizar = " ";
+}
 
 $valor_pendentes = 0;
 $valor_pago = 0;
 $valor_pendentesF = 0;
 $valor_pagoF = 0;
-$query = $pdo->query("SELECT * from $tabela where data >= '$dataInicial' and data <= '$dataFinal' and pago LIKE '$status' order by id desc");
+$query = $pdo->query("SELECT * from $tabela where data >= '$dataInicial' and data <= '$dataFinal' and pago LIKE '$status' $sql_visualizar order by id desc");
 $res = $query->fetchAll(PDO::FETCH_ASSOC);
 $linhas = @count($res);
 if($linhas > 0){

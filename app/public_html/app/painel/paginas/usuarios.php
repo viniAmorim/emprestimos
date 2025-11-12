@@ -103,6 +103,9 @@ if ($nivel == 'administrador') {
           $endereco = $res[$i]['endereco'];
           $ativo = $res[$i]['ativo'];
           $data = $res[$i]['data'];
+          $visualizar = $res[$i]['visualizar'];
+          $comissao = $res[$i]['comissao'];
+          $pagamento = $res[$i]['pagamento'];
                   
 
           $dataF = implode('/', array_reverse(@explode('-', $data)));
@@ -143,7 +146,7 @@ if ($nivel == 'administrador') {
 
               <div ><img src="../../painel/images/perfil/{$foto}" class="me-3 rounded-circle shadow-l" width="40" style="opacity: {$foto_ativo}"></div>
     
-                <div onclick="mostrar('{$nome}','{$email}','{$telefone}','{$endereco}','{$ativo}','{$dataF}', '{$senha}', '{$nivel}', '{$foto}')">
+                <div onclick="mostrar('{$nome}','{$email}','{$telefone}','{$endereco}','{$ativo}','{$dataF}', '{$senha}', '{$nivel}', '{$foto}', '{$pagamento}')">
                   <h5 style="color:{$classe_ativo}" class="mt-1 mb-0">{$nome}</h5>
                   <p class="font-10 mt-n2 color-blue-dark mb-0">{$telefone}</p>
                   <p class="font-10 mt-0 badge text-uppercase gradient-green  shadow-bg shadow-bg-s">{$nivel}</p>
@@ -154,10 +157,10 @@ if ($nivel == 'administrador') {
             <div class="splide__slide mx-3">
               <div class="d-flex">
 
-              <div style="color:{$classe_ativo}" onclick="mostrar('{$nome}','{$email}','{$telefone}','{$endereco}','{$ativo}','{$dataF}', '{$senha}', '{$nivel}', '{$foto}')">
+              <div style="color:{$classe_ativo}" onclick="mostrar('{$nome}','{$email}','{$telefone}','{$endereco}','{$ativo}','{$dataF}', '{$senha}', '{$nivel}', '{$foto}', '{$pagamento}')">
                     </div>
                 <div class="ms-auto">
-                  <a onclick="editar('{$id}','{$nome}','{$email}','{$telefone}','{$endereco}','{$nivel}','{$foto}')" href="#" class="icon icon-xs rounded-circle shadow-l bg-twitter"><i class="fa fa-edit text-white"></i></a>
+                  <a onclick="editar('{$id}','{$nome}','{$email}','{$telefone}','{$endereco}','{$nivel}','{$foto}','{$visualizar}','{$comissao}', '{$pagamento}')" href="#" class="icon icon-xs rounded-circle shadow-l bg-twitter"><i class="fa fa-edit text-white"></i></a>
                   <a onclick="ativar('{$id}', '{$acao}')" href="#" class="icon icon-xs rounded-circle shadow-l bg-phone"><big><i class="{$icone} text-white"></i></big></a>
                   
                   <a onclick="permissoes('{$id}', '{$nome}')" href="#" class="icon icon-xs rounded-circle shadow-l bg-amarelo"><big><i class="bi bi-lock text-white"></i></big></a>
@@ -296,9 +299,22 @@ HTML;
       </div>
 
 
+      <div class="form-floating mb-3 position-relative">
+            <i class="bi bi-check-circle position-absolute start-0 top-50 translate-middle-y ms-3"></i>
+            <select name="visualizar" id="visualizar" class="form-select rounded-xs ps-5 pe-5" aria-label="Selecione">
+               <option value="Sim">Sim</option>
+                  <option value="Não">Não</option>
+        </select>
+        <label class="color-theme ps-5">Visualizar Tudo</label>
+      </div>
 
 
-
+       <div class="form-floating mb-3 position-relative">
+        <i class="bi bi-coin position-absolute start-0 top-50 translate-middle-y ms-3"></i>
+        <input type="text" class="form-control rounded-xs ps-5" id="comissao" name="comissao" placeholder="Se houver" >
+        <label for="nome" class="color-theme ps-5">Comissão %</label>
+       
+      </div>
 
 
       <div class="row">
@@ -307,6 +323,20 @@ HTML;
             <i class="bi bi-geo-alt position-absolute start-0 top-50 translate-middle-y ms-3"></i>
             <input type="text" class="form-control rounded-xs ps-5" id="endereco" name="endereco" placeholder="Rua A numero x Bairro X">
             <label class="color-theme ps-5">Endereço</label>
+          </div>
+        </div>
+       
+       
+      </div>
+
+
+
+      <div class="row">
+        <div class="col-12">
+          <div class="form-floating mb-3 position-relative">
+            <i class="bi bi-geo-alt position-absolute start-0 top-50 translate-middle-y ms-3"></i>
+            <input type="text" class="form-control rounded-xs ps-5" id="pagamento" name="pagamento" placeholder="Pix ou Conta bancária">
+            <label class="color-theme ps-5">Dados para Pagamento (Chave Pix)</label>
           </div>
         </div>
        
@@ -367,6 +397,11 @@ HTML;
               <tr class="border-fade-blue">
                 <td style="font-size: 11px;" class="color-highlight">Endereço:</td>
                 <td style="font-size: 11px;" id="endereco_dados"></td>
+              </tr>
+
+               <tr class="border-fade-blue">
+                <td style="font-size: 11px;" class="color-highlight">Dados Pagamento:</td>
+                <td style="font-size: 11px;" id="pagamento_dados"></td>
               </tr>
              
             </tbody>
@@ -489,7 +524,7 @@ HTML;
 
 
 <script>
-  function editar(id, nome, email, telefone, endereco, nivel, foto) {
+  function editar(id, nome, email, telefone, endereco, nivel, foto, visualizar, comissao, pagamento) {
     $('#mensagem').text('');
     $('#titulo_inserir').text('EDITAR REGISTRO');
 
@@ -500,6 +535,9 @@ HTML;
     $('#telefone').val(telefone);
     $('#endereco').val(endereco);
     $('#nivel').val(nivel).change();
+    $('#visualizar').val(visualizar).change();
+    $('#comissao').val(comissao);
+    $('#pagamento').val(pagamento);
    
     $('#target').attr("src", "../../painel/images/perfil/" + foto);
     $('#btn_novo_editar').click();
@@ -511,7 +549,7 @@ HTML;
 
 
 <script type="text/javascript">
-  function mostrar(nome, email, telefone, endereco, ativo, data, senha, nivel, foto) {
+  function mostrar(nome, email, telefone, endereco, ativo, data, senha, nivel, foto, pagamento) {
     const botao = document.getElementById('btn_mostrar');
   
 
@@ -521,6 +559,7 @@ HTML;
     $('#ativo_dados').text(ativo);
     $('#data_dados').text(data);
     $('#endereco_dados').text(endereco);
+    $('#pagamento_dados').text(pagamento);
    
     $('#nivel_dados').text(nivel);
     $('#foto_dados').attr("src", "../../painel/images/perfil/" + foto);
@@ -535,7 +574,9 @@ HTML;
     $('#telefone').val('');
     $('#endereco').val('');   
     $('#nivel').val('').change();
-   
+    $('#visualizar').val('Sim').change();
+    $('#comissao').val('');
+     $('#pagamento').val('');
   }
 
 

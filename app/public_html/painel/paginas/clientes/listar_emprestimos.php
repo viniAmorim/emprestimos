@@ -1,14 +1,24 @@
 <?php 
+@session_start();
+$visualizar_usuario = @$_SESSION['visualizar'];
+$id_usuario = @$_SESSION['id'];
 require_once("../../../conexao.php");
 $pagina = 'emprestimos';
 $id = $_POST['id'];
 
 $data_atual = date('Y-m-d');
 
+if($visualizar_usuario == 'Não'){
+	$sql_visualizar = " and usuario = '$id_usuario' ";
+}else{
+	$sql_visualizar = " ";
+}
+
+
 echo <<<HTML
 <small>
 HTML;
-$query = $pdo->query("SELECT * FROM $pagina where cliente = '$id'  order by id desc");
+$query = $pdo->query("SELECT * FROM $pagina where cliente = '$id' $sql_visualizar order by id desc");
 $res = $query->fetchAll(PDO::FETCH_ASSOC);
 $total_reg = @count($res);
 if($total_reg > 0){

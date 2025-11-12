@@ -1,4 +1,7 @@
 <?php 
+@session_start();
+$visualizar_usuario = @$_SESSION['visualizar'];
+$id_usuario = @$_SESSION['id'];
 require_once("../../conexao.php");
 
 $filtro_data = $_POST['filtro_data'];
@@ -8,7 +11,9 @@ $filtro_tipo = urlencode($_POST['filtro_tipo']);
 $filtro_lancamento = urlencode($_POST['filtro_lancamento']);
 $filtro_pendentes = $_POST['filtro_pendentes'];
 
-$html = file_get_contents($url_sistema."painel/rel/financeiro.php?filtro_data=$filtro_data&dataInicial=$dataInicial&dataFinal=$dataFinal&filtro_tipo=$filtro_tipo&filtro_lancamento=$filtro_lancamento&filtro_pendentes=$filtro_pendentes");
+ob_start();
+include("financeiro.php");
+$html = ob_get_clean();
 
 //CARREGAR DOMPDF
 require_once '../dompdf/autoload.inc.php';

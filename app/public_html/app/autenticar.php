@@ -19,6 +19,7 @@ if($id_usu != ""){
 	$_SESSION['id'] = $res[0]['id'];
 	$_SESSION['nivel'] = $res[0]['nivel'];
 	$_SESSION['aut_token_portalapp'] = 'portalapp2024';
+  $_SESSION['visualizar'] = $res[0]['visualizar'];
 
 	if($pagina == ""){
 		echo '<script>window.location="painel"</script>';  
@@ -61,6 +62,7 @@ if($linhas > 0){
 	$_SESSION['id'] = $res[0]['id'];
 	$_SESSION['nivel'] = $res[0]['nivel'];
 	$_SESSION['aut_token_portalapp'] = 'portalapp2024';
+  $_SESSION['visualizar'] = $res[0]['visualizar'];
 	$id = $res[0]['id'];
 
 	if($salvar == 'Sim'){

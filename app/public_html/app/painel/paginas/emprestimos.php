@@ -1,6 +1,16 @@
 <?php
+@session_start();
+$visualizar_usuario = @$_SESSION['visualizar'];
+$id_usuario = @$_SESSION['id'];
 require_once("cabecalho.php");
 require_once("rodape.php");
+
+if($visualizar_usuario == 'Não'){
+  $sql_visualizar = " and usuario = '$id_usuario' ";
+}else{
+  $sql_visualizar = " ";
+}
+
 
 
 $pag = 'emprestimos';
@@ -68,7 +78,7 @@ $pag_proxima = $pagina + 1;
 
 
 //totalizar páginas
-$query2 = $pdo->query("SELECT * from $pag where id > 0 $sql_status $sql_cliente order by id desc");
+$query2 = $pdo->query("SELECT * from $pag where id > 0 $sql_status $sql_cliente $sql_visualizar order by id desc");
 $res2 = $query2->fetchAll(PDO::FETCH_ASSOC);
 $linhas2 = @count($res2);
 
@@ -170,7 +180,7 @@ if ($pag_proxima == $num_paginas) {
   <div class="card card-style">
     <div class="content">
       <?php
-      $query = $pdo->query("SELECT * from $pag where id > 0 $sql_status $sql_cliente  ORDER BY id desc LIMIT $limite, $itens_pag");
+      $query = $pdo->query("SELECT * from $pag where id > 0 $sql_status $sql_cliente $sql_visualizar ORDER BY id desc LIMIT $limite, $itens_pag");
       $res = $query->fetchAll(PDO::FETCH_ASSOC);
       $linhas = @count($res);
       if ($linhas > 0) {

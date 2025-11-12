@@ -1,4 +1,8 @@
 <?php
+@session_start();
+$visualizar_usuario = @$_SESSION['visualizar'];
+$id_usuario = @$_SESSION['id'];
+
 $tabela = 'clientes';
 require_once("../../../conexao.php"); 
 
@@ -416,7 +420,7 @@ if($id == ""){
         funcao_assalariado = :funcao_assalariado, empresa_assalariado = :empresa_assalariado,
         contracheque = :contracheque, valor_desejado = :valor_desejado,
         comprovante_extra_autonomo = :comprovante_extra_autonomo,
-        comprovante_extra_assalariado = :comprovante_extra_assalariado
+        comprovante_extra_assalariado = :comprovante_extra_assalariado, usuario = '$id_usuario'
     ");
 }else{
     // Query de UPDATE para um registro existente

@@ -1,12 +1,12 @@
 <?php 
-include('../../conexao.php');
-
 include('data_formatada.php');
 
+if($visualizar_usuario == 'Não'){
+	$sql_visualizar = " and usuario = '$id_usuario' ";
+}else{
+	$sql_visualizar = " ";
+}
 
-$dataFinal = $_GET['dataFinal'];
-$dataInicial = $_GET['dataInicial'];
-$cliente = $_GET['cliente'];
 
 $nome_cliente = '';
 if($cliente != ""){
@@ -60,28 +60,19 @@ body {font-family: 'Tw Cen MT', sans-serif;}
 
 </head>
 <body>
-<?php
-if ($marca_dagua == 'Sim') {
-    $img_path = '../../img/logo.jpg'; 
-    $img_data = base64_encode(file_get_contents($img_path));
-    $src = 'data:image/jpeg;base64,' . $img_data;
-?>
-    <img class="marca" src="<?= $src ?>">
+<?php 
+if($marca_dagua == 'Sim'){ ?>
+<img class="marca" src="<?php echo $url_sistema ?>img/logo.jpg">	
 <?php } ?>
 
 
 <div id="header" >
-<?php
-$img_path = '../../img/logo.jpg'; 
-$img_data = base64_encode(file_get_contents($img_path));
-$src_logo = 'data:image/jpeg;base64,' . $img_data;
-?>
 
 	<div style="border-style: solid; font-size: 10px; height: 50px;">
 		<table style="width: 100%; border: 0px solid #ccc;">
 			<tr>
 				<td style="border: 1px; solid #000; width: 20%; text-align: left;">
-					<img style="margin-top: 5px; margin-left: 7px;" id="imag" src="<?= $src_logo ?>" width="160px">
+					<img style="margin-top: 5px; margin-left: 7px;" id="imag" src="<?php echo $url_sistema ?>img/logo.jpg" width="160px">
 				</td>
 				<td style="width: 10%; text-align: left; font-size: 13px;">
 				
@@ -136,9 +127,9 @@ $src_logo = 'data:image/jpeg;base64,' . $img_data;
 $ativos = 0;
 $inativos = 0;
 if($cliente == ""){
-	$query = $pdo->query("SELECT * from cobrancas where data >= '$dataInicial' and data <= '$dataFinal' order by id desc");
+	$query = $pdo->query("SELECT * from cobrancas where data >= '$dataInicial' and data <= '$dataFinal' $sql_visualizar order by id desc");
 }else{
-	$query = $pdo->query("SELECT * from cobrancas where data >= '$dataInicial' and data <= '$dataFinal' and cliente = '$cliente' order by id desc");
+	$query = $pdo->query("SELECT * from cobrancas where data >= '$dataInicial' and data <= '$dataFinal' and cliente = '$cliente' $sql_visualizar order by id desc");
 }
 
 $res = $query->fetchAll(PDO::FETCH_ASSOC);

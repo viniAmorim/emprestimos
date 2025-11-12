@@ -1,6 +1,16 @@
 <?php
+@session_start();
+$visualizar_usuario = @$_SESSION['visualizar'];
+$id_usuario = @$_SESSION['id'];
 require_once("cabecalho.php");
 require_once("rodape.php");
+
+if($visualizar_usuario == 'Não'){
+  $sql_visualizar = " and usuario = '$id_usuario' ";
+}else{
+  $sql_visualizar = " ";
+}
+
 
 $pag = 'cobrancas';
 $itens_pag = 10;
@@ -16,11 +26,6 @@ if($cliente > 0){
   $sql_cliente = " and cliente = '$cliente' ";
 }else{
   $sql_cliente = "";
-}
-
-if (empty($status)) {
-  // Defina o status padrão da sua página, por exemplo: 'Ativas'
-  $status = 'Ativas'; 
 }
 
 
@@ -47,7 +52,7 @@ $pag_proxima = $pagina + 1;
 
 
 //totalizar páginas
-$query2 = $pdo->query("SELECT * from $pag where id > 0  $sql_cliente order by id desc");
+$query2 = $pdo->query("SELECT * from $pag where id > 0  $sql_cliente $sql_visualizar order by id desc");
 $res2 = $query2->fetchAll(PDO::FETCH_ASSOC);
 $linhas2 = @count($res2);
 
@@ -119,7 +124,7 @@ if ($pag_proxima == $num_paginas) {
   <div class="card card-style">
     <div class="content">
       <?php
-      $query = $pdo->query("SELECT * from $pag where id > 0  $sql_cliente  ORDER BY id desc LIMIT $limite, $itens_pag");
+      $query = $pdo->query("SELECT * from $pag where id > 0  $sql_cliente $sql_visualizar ORDER BY id desc LIMIT $limite, $itens_pag");
       $res = $query->fetchAll(PDO::FETCH_ASSOC);
       $linhas = @count($res);
       if ($linhas > 0) {
@@ -402,8 +407,8 @@ HTML;
           <div class="row" align="right" style="font-size: 14px">
           <div class="col-md-12"> 
               <span style="margin-right: 15px">
-                <input type="checkbox" class="form-checkbox" id="residuo_final" name="residuo_final" value="Sim" style="display:inline-block;">
-                <label for="residuo_final" style="display:inline-block;"><small>Resíduo Final Empréstimo</small></label>
+                <input type="checkbox" class="form-checkbox" id="residuo_parcela" name="residuo_parcela" value="Sim" style="display:inline-block;">
+                <label for="residuo_final" style="display:inline-block;"><small>Resíduo mesma Parcela</small></label>
               </span>
               <br>
               <span>  

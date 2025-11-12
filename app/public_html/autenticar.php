@@ -31,6 +31,7 @@ if($linhas > 0){
 	$_SESSION['id'] = $res[0]['id'];
 	$_SESSION['nivel'] = $res[0]['nivel'];
 	$_SESSION['token_ATEFDFSFSFAF'] = 'FDSFFDASFDSGFE';
+  $_SESSION['visualizar'] = $res[0]['visualizar'];
 
 	echo '<script>window.location="painel"</script>';
 }else{

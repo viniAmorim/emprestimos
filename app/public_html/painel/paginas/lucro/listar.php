@@ -1,8 +1,7 @@
 <?php 
-
 @session_start();
-
-$id_usu = @$_SESSION['id'];  
+$visualizar_usuario = @$_SESSION['visualizar'];
+$id_usuario = @$_SESSION['id']; 
 $nivel_usu = @$_SESSION['nivel']; 
 
 
@@ -61,11 +60,17 @@ if($cliente1 == ""){
 }
 
 
+if($visualizar_usuario == 'Não'){
+	$sql_visualizar = " and usuario = '$id_usuario' ";
+}else{
+	$sql_visualizar = " ";
+}
+
 
 $valor_emprestado = 0;
 @$valor_do_lucro_total = 0;  
 
-$query = $pdo->query("SELECT * from emprestimos where data >= '$dataInicial' and data <= '$dataFinal' $sql_corretor $sql_cliente  order by id desc");
+$query = $pdo->query("SELECT * from emprestimos where data >= '$dataInicial' and data <= '$dataFinal' $sql_corretor $sql_cliente $sql_visualizar order by id desc");
 $res = $query->fetchAll(PDO::FETCH_ASSOC);
 $linhas = @count($res);	
 

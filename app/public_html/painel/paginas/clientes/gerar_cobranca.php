@@ -16,12 +16,13 @@ $query2 = $pdo->query("SELECT * FROM receber where id = '$id_conta'");
 $res2 = $query2->fetchAll(PDO::FETCH_ASSOC);
 $referencia = $res2[0]['referencia'];
 $id_ref = $res2[0]['id_ref'];
+$descricao = $res2[0]['descricao'];
 
 $tot_parcelas = '';
 
 if($referencia == 'Empréstimo'){
 		//pegar o total de parcelas do empréstimo
-		$query2 = $pdo->query("SELECT * FROM receber where referencia = 'Empréstimo' and id_ref = '$id_ref'");
+		$query2 = $pdo->query("SELECT * FROM receber WHERE referencia = 'Empréstimo' AND id_ref = '$id_ref' GROUP BY parcela");
 		$res2 = $query2->fetchAll(PDO::FETCH_ASSOC);
 		$total_parcelas = @count($res2);
 
@@ -57,6 +58,10 @@ $mensagem .= @mb_strtoupper($nome_sistema).' %0A%0A';
 
 if(strtotime($data) < strtotime($data_atual)){	
 	$mensagem .= '❌ *PARCELA VENCIDA* ❌ %0A';
+}
+
+if($referencia == 'Cobrança'){
+	$mensagem .= 'Descrição: *'.$descricao.'* %0A';
 }
 
 if($parcela > 0){

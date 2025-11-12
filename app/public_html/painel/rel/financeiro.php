@@ -1,14 +1,5 @@
 <?php 
-include('../../conexao.php');
-
 include('data_formatada.php');
-
-$filtro_data = $_GET['filtro_data'];
-$dataInicial = $_GET['dataInicial'];
-$dataFinal = $_GET['dataFinal'];
-$filtro_tipo = $_GET['filtro_tipo'];
-$filtro_lancamento = $_GET['filtro_lancamento'];
-$filtro_pendentes = $_GET['filtro_pendentes'];
 
 $dataInicialF = implode('/', array_reverse(@explode('-', $dataInicial)));
 $dataFinalF = implode('/', array_reverse(@explode('-', $dataFinal)));	
@@ -78,6 +69,12 @@ if($dataInicial == $dataFinal){
 
 $texto_filtro = $filtro_dataF.' : '.$datas.' '.$filtro_pendentesF;
 
+
+if($visualizar_usuario == 'Não'){
+	$sql_visualizar = " and usuario_lanc = '$id_usuario' ";
+}else{
+	$sql_visualizar = " ";
+}
 
 
 ?>
@@ -182,7 +179,7 @@ $total_pagasF = 0;
 $pendentes = 0;
 $pagas = 0;
 
-$query = $pdo->query("SELECT * from $filtro_tipo where $filtro_data >= '$dataInicial' and $filtro_data <= '$dataFinal' and pago LIKE '%$filtro_pendentes%' and referencia LIKE '%$filtro_lancamento%' order by $filtro_data asc");
+$query = $pdo->query("SELECT * from $filtro_tipo where $filtro_data >= '$dataInicial' and $filtro_data <= '$dataFinal' and pago LIKE '%$filtro_pendentes%' and referencia LIKE '%$filtro_lancamento%' $sql_visualizar order by $filtro_data asc");
 $res = $query->fetchAll(PDO::FETCH_ASSOC);
 $linhas = @count($res);
 if($linhas > 0){

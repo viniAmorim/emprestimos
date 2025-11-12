@@ -1,6 +1,21 @@
 <?php
+@session_start();
+$visualizar_usuario = @$_SESSION['visualizar'];
+$id_usuario = @$_SESSION['id'];
 require_once("cabecalho.php");
 require_once("rodape.php");
+
+if($visualizar_usuario == 'Não'){
+  $sql_visualizar = " and usuario_lanc = '$id_usuario' ";
+}else{
+  $sql_visualizar = " ";
+}
+
+if($visualizar_usuario == 'Não'){
+  $sql_visualizar_usuario = " and usuario = '$id_usuario' ";
+}else{
+  $sql_visualizar_usuario = " ";
+}
 
 $data_atual = date('Y-m-d');
 
@@ -69,9 +84,9 @@ $valor_pagoF = 0;
 
 //totalizar páginas
 if ($pago == 'Vencidas') {
-  $query2 = $pdo->query("SELECT * from $pag where data_venc < curDate() and pago != 'Sim' order by id desc");
+  $query2 = $pdo->query("SELECT * from $pag where data_venc < curDate() and pago != 'Sim' $sql_visualizar order by id desc");
 } else {
-  $query2 = $pdo->query("SELECT * from $pag where data_venc >= '$dataInicial' and data_venc <= '$dataFinal' and pago LIKE '%$pago%' order by id desc");
+  $query2 = $pdo->query("SELECT * from $pag where data_venc >= '$dataInicial' and data_venc <= '$dataFinal' and pago LIKE '%$pago%' $sql_visualizar order by id desc");
 }
 
 
@@ -154,9 +169,9 @@ if ($pag_proxima == $num_paginas) {
     <div class="content">
       <?php
       if ($pago == 'Vencidas') {
-        $query = $pdo->query("SELECT * from $pag where data_venc < curDate() and pago != 'Sim' order by id desc");
+        $query = $pdo->query("SELECT * from $pag where data_venc < curDate() and pago != 'Sim' $sql_visualizar order by id desc");
       } else {
-        $query = $pdo->query("SELECT * from $pag where data_venc >= '$dataInicial' and data_venc <= '$dataFinal' and pago LIKE '%$pago%' order by id desc ");
+        $query = $pdo->query("SELECT * from $pag where data_venc >= '$dataInicial' and data_venc <= '$dataFinal' and pago LIKE '%$pago%' $sql_visualizar order by id desc ");
       }
       $valor_pago = 0;
       $valor_pendentes = 0;
@@ -297,7 +312,7 @@ $valor_finalF = @number_format($valor_final, 2, ',', '.');
            
           </div>
           <div class="ms-auto">
-            <a onclick="editar('{$id}','{$descricao}','{$valor}','{$data_venc}','{$obs}','{$cliente}')" href="#" class="{$ocultar} icon icon-xs rounded-circle shadow-l bg-twitter"><i class="fa fa-edit text-white"></i></a>
+            <a onclick="editar('{$id}','{$descricao}','{$valorF}','{$data_venc}','{$obs}','{$cliente}')" href="#" class="{$ocultar} icon icon-xs rounded-circle shadow-l bg-twitter"><i class="fa fa-edit text-white"></i></a>
            
             <a onclick="baixarConta('{$id}')" href="#" class="{$ocultar} icon icon-xs rounded-circle shadow-l bg-green"><i class="bi bi-check-square-fill text-white"></i></a>
 
@@ -394,7 +409,7 @@ HTML;
       <select class="sel2 rounded-xs ps-5 pe-5" name="cliente" id="cliente" style="width:100%;">
         <option value="" data-cor="">Selecionar Cliente</option>
         <?php 
-          $query = $pdo->query("SELECT * from clientes order by id asc");
+          $query = $pdo->query("SELECT * from clientes where id > 0 $sql_visualizar_usuario order by id asc");
           $res = $query->fetchAll(PDO::FETCH_ASSOC);
           $linhas = @count($res);
           if($linhas > 0){

@@ -1,4 +1,8 @@
 <?php
+@session_start();
+$visualizar_usuario = @$_SESSION['visualizar'];
+$id_usuario = @$_SESSION['id'];
+
 $tabela = 'clientes';
 require_once("../../../conexao.php");
 
@@ -12,6 +16,13 @@ $alerta_busca = @$_POST['p3'];
 $tabela_com_alias = 'clientes c';
 $join = "";
 $filtros = [];
+
+if($visualizar_usuario == 'Não'){
+    // Esta condição deve ser tratada como um filtro, mas garantindo que o " and " seja o único
+    $sql_visualizar = " and c.usuario = '$id_usuario' ";
+}else{
+    $sql_visualizar = " ";
+}
 
 // Lógica de filtro padrão para a primeira carga da página
 if ($estagio_cliente == "") {
@@ -28,31 +39,58 @@ if ($status != "") {
 }
 
 if ($alerta_busca == "ComAlerta") {
-  // Clientes que possuem ALERTA (PENDENTE OU IGNORADO)
-  // Usamos um WHERE com subconsulta para evitar duplicação de linhas e manter a performance
-  $filtros[] = "c.id IN (SELECT id_cliente_cadastrado FROM alertas_duplicidade)";
-  
+    // Clientes que possuem ALERTA (PENDENTE OU IGNORADO)
+    // Usamos um WHERE com subconsulta para evitar duplicação de linhas e manter a performance
+    $filtros[] = "c.id IN (SELECT id_cliente_cadastrado FROM alertas_duplicidade)";
+    
 } else if ($alerta_busca == "Pendentes") {
-  // Clientes que possuem pelo menos um ALERTA PENDENTE (resolvido = 0)
-  $filtros[] = "c.id IN (SELECT id_cliente_cadastrado FROM alertas_duplicidade WHERE resolvido = 0)";
-  
+    // Clientes que possuem pelo menos um ALERTA PENDENTE (resolvido = 0)
+    $filtros[] = "c.id IN (SELECT id_cliente_cadastrado FROM alertas_duplicidade WHERE resolvido = 0)";
+    
 } else if ($alerta_busca == "ApenasIgnorados") {
-  // Clientes que possuem alertas, mas TODOS estão RESOLVIDOS (resolvido = 1)
-  // É a intersecção: clientes que estão na tabela de alertas, MAS não estão na lista de clientes com alertas PENDENTES.
-  $filtros[] = "c.id IN (SELECT id_cliente_cadastrado FROM alertas_duplicidade)";
-  $filtros[] = "c.id NOT IN (SELECT id_cliente_cadastrado FROM alertas_duplicidade WHERE resolvido = 0)";
-  
+    // Clientes que possuem alertas, mas TODOS estão RESOLVIDOS (resolvido = 1)
+    // É a intersecção: clientes que estão na tabela de alertas, MAS não estão na lista de clientes com alertas PENDENTES.
+    $filtros[] = "c.id IN (SELECT id_cliente_cadastrado FROM alertas_duplicidade)";
+    $filtros[] = "c.id NOT IN (SELECT id_cliente_cadastrado FROM alertas_duplicidade WHERE resolvido = 0)";
+    
 } else if ($alerta_busca == "SemAlerta") {
-  // Clientes que NÃO possuem alertas
-  $filtros[] = "c.id NOT IN (SELECT id_cliente_cadastrado FROM alertas_duplicidade)";
+    // Clientes que NÃO possuem alertas
+    $filtros[] = "c.id NOT IN (SELECT id_cliente_cadastrado FROM alertas_duplicidade)";
 }
 
-$sql_where = "";
+// ----------------------------------------------------
+// NOVO BLOCO DE MONTAGEM DA QUERY CORRIGIDO
+// ----------------------------------------------------
+
+// 1. Constrói a string de filtros (sem o "WHERE" inicial)
+$sql_filtros = "";
 if (count($filtros) > 0) {
-    $sql_where = "WHERE " . implode(" AND ", $filtros);
+    $sql_filtros = implode(" AND ", $filtros);
 }
 
-$query = $pdo->query("SELECT c.* FROM $tabela_com_alias $sql_where ORDER BY c.id DESC");
+// Inicializa o array de condições que será usado no WHERE
+$condicoes_finais = [];
+
+// Adiciona a condição base (id > 0)
+$condicoes_finais[] = "c.id > 0";
+
+// Adiciona os filtros de busca/padrão, se existirem
+if (!empty($sql_filtros)) {
+    $condicoes_finais[] = $sql_filtros;
+}
+
+// Adiciona o filtro de visualização do usuário, se aplicável
+if (!empty(trim($sql_visualizar))) {
+    // Como $sql_visualizar inicia com " and ", removemos os primeiros 4 caracteres
+    // para tratar a condição de forma limpa.
+    $condicoes_finais[] = substr(trim($sql_visualizar), 4);
+}
+
+// Monta a cláusula WHERE final, unindo todas as condições com " AND "
+$sql_where_final = "WHERE " . implode(" AND ", $condicoes_finais);
+
+
+$query = $pdo->query("SELECT c.* FROM $tabela_com_alias $sql_where_final ORDER BY c.id DESC");
 $res = $query->fetchAll(PDO::FETCH_ASSOC);
 $linhas = @count($res);
 

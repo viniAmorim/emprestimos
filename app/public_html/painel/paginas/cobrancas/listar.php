@@ -1,7 +1,17 @@
 <?php 
+@session_start();
+$visualizar_usuario = @$_SESSION['visualizar'];
+$id_usuario = @$_SESSION['id'];
 $tabela = 'cobrancas';
 require_once("../../../conexao.php");
 $data_atual = date('Y-m-d');
+
+if($visualizar_usuario == 'Não'){
+	$sql_visualizar = " and usuario = '$id_usuario' ";
+}else{
+	$sql_visualizar = " ";
+}
+
 
 $dataInicial = @$_POST['p1'];
 $dataFinal = @$_POST['p2'];
@@ -37,9 +47,9 @@ if($dataFinal == ""){
 }
 
 if($cliente == ""){
-	$query = $pdo->query("SELECT * from $tabela where data >= '$dataInicial' and data <= '$dataFinal' order by id desc");
+	$query = $pdo->query("SELECT * from $tabela where data >= '$dataInicial' and data <= '$dataFinal' $sql_visualizar order by id desc");
 }else{
-	$query = $pdo->query("SELECT * from $tabela where data >= '$dataInicial' and data <= '$dataFinal' and cliente = '$cliente' order by id desc");
+	$query = $pdo->query("SELECT * from $tabela where data >= '$dataInicial' and data <= '$dataFinal' and cliente = '$cliente' $sql_visualizar order by id desc");
 }
 
 $res = $query->fetchAll(PDO::FETCH_ASSOC);

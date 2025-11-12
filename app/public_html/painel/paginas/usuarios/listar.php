@@ -34,6 +34,9 @@ for($i=0; $i<$linhas; $i++){
 	$endereco = $res[$i]['endereco'];
 	$ativo = $res[$i]['ativo'];
 	$data = $res[$i]['data'];
+	$visualizar = $res[$i]['visualizar'];
+	$comissao = $res[$i]['comissao'] ?? '';;
+	$pagamento = $res[$i]['pagamento'] ?? '';;
 
 	$dataF = implode('/', array_reverse(explode('-', $data)));
 
@@ -67,7 +70,7 @@ echo <<<HTML
 <td class="esc">{$nivel}</td>
 <td class="esc"><img src="images/perfil/{$foto}" width="25px"></td>
 <td>
-	<big><a href="#" onclick="editar('{$id}','{$nome}','{$email}','{$telefone}','{$endereco}','{$nivel}')" title="Editar Dados"><i class="fa fa-edit text-primary"></i></a></big>
+	<big><a href="#" onclick="editar('{$id}','{$nome}','{$email}','{$telefone}','{$endereco}','{$nivel}','{$visualizar}','{$comissao}','{$pagamento}')" title="Editar Dados"><i class="fa fa-edit text-primary"></i></a></big>
 
 	<li class="dropdown head-dpdn2" style="display: inline-block;">
 		<a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><big><i class="fa fa-trash-o text-danger"></i></big></a>
@@ -81,7 +84,7 @@ echo <<<HTML
 		</ul>
 </li>
 
-<big><a href="#" onclick="mostrar('{$nome}','{$email}','{$telefone}','{$endereco}','{$ativo}','{$dataF}', '{$senha}', '{$nivel}', '{$foto}')" title="Mostrar Dados"><i class="fa fa-info-circle text-primary"></i></a></big>
+<big><a href="#" onclick="mostrar('{$nome}','{$email}','{$telefone}','{$endereco}','{$ativo}','{$dataF}', '{$senha}', '{$nivel}', '{$foto}','{$pagamento}')" title="Mostrar Dados"><i class="fa fa-info-circle text-primary"></i></a></big>
 
 
 <big><a href="#" onclick="ativar('{$id}', '{$acao}')" title="{$titulo_link}"><i class="fa {$icone} text-success"></i></a></big>
@@ -135,7 +138,7 @@ HTML;
 </script>
 
 <script type="text/javascript">
-	function editar(id, nome, email, telefone, endereco, nivel){
+	function editar(id, nome, email, telefone, endereco, nivel, visualizar, comissao, pagamento){
 		$('#mensagem').text('');
     	$('#titulo_inserir').text('Editar Registro');
 
@@ -145,12 +148,15 @@ HTML;
     	$('#telefone').val(telefone);
     	$('#endereco').val(endereco);
     	$('#nivel').val(nivel).change();
+    	$('#visualizar').val(visualizar).change();
+    	$('#comissao').val(comissao);
+    	$('#pagamento').val(pagamento);
 
     	$('#modalForm').modal('show');
 	}
 
 
-	function mostrar(nome, email, telefone, endereco, ativo, data, senha, nivel, foto){
+	function mostrar(nome, email, telefone, endereco, ativo, data, senha, nivel, foto, pagamento){
 		    	
     	$('#titulo_dados').text(nome);
     	$('#email_dados').text(email);
@@ -161,6 +167,7 @@ HTML;
     	$('#senha_dados').text(senha);
     	$('#nivel_dados').text(nivel);
     	$('#foto_dados').attr("src", "images/perfil/" + foto);
+    	$('#pagamento_dados').text(pagamento);
     	
 
     	$('#modalDados').modal('show');
@@ -172,6 +179,9 @@ HTML;
     	$('#email').val('');
     	$('#telefone').val('');
     	$('#endereco').val('');
+    	$('#visualizar').val('Sim');
+    	$('#comissao').val('');
+    	$('#pagamento').val('');
 
     	$('#ids').val('');
     	$('#btn-deletar').hide();	

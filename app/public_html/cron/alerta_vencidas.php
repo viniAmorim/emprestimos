@@ -15,10 +15,23 @@ for ($i = 0; $i < $contas_pagar_vencidas; $i++) {
 	$parcela = $res[$i]['parcela'];
 	$cobrar_sempre = $res[$i]['cobrar_sempre'];
 
+	$tot_parcelas = '';
 	if($referencia == 'Cobrança'){		
 		$sql_consulta = 'cobrancas';
 	}else{		
 		$sql_consulta = 'emprestimos';
+
+		//pegar o total de parcelas do empréstimo
+		$query2 = $pdo->query("SELECT * FROM receber WHERE referencia = 'Empréstimo' AND id_ref = '$id_ref' GROUP BY parcela");
+		$res2 = $query2->fetchAll(PDO::FETCH_ASSOC);
+		$total_parcelas = @count($res2);
+
+		$query2 = $pdo->query("SELECT * FROM emprestimos where id = '$id_ref'");
+		$res2 = $query2->fetchAll(PDO::FETCH_ASSOC);
+		$tipo_juros = $res2[0]['tipo_juros'];
+		if($tipo_juros != 'Somente Júros'){
+			$tot_parcelas = ' / '.$total_parcelas;
+		}
 	}
 
 	$query2 = $pdo->query("SELECT * FROM $sql_consulta where id = '$id_ref'");
@@ -62,9 +75,11 @@ for ($i = 0; $i < $contas_pagar_vencidas; $i++) {
 	if (@count($res2) > 0) {
 		$nome_cliente = $res2[0]['nome'];
 		$telefone_cliente = $res2[0]['telefone'];
+		$bloquear_disparos = $res2[0]['bloquear_disparos'];
 	} else {
 		$nome_cliente = 'Sem Registro';
 		$telefone_cliente = "";
+		$bloquear_disparos = "";
 	}
 
 
@@ -74,16 +89,24 @@ for ($i = 0; $i < $contas_pagar_vencidas; $i++) {
 
 
 	$telefone_envio = '55' . preg_replace('/[ ()-]+/', '', $telefone_cliente);
-	$mensagem = '💰 *' . $nome_sistema . '*%0A';
-	$mensagem .= '_Sua conta Venceu_ %0A';
+	$mensagem = '❗ATENÇÃO❗%0A ⚠️ *CONSTA EM ATRASO* ⚠️ %0A';
+	$mensagem .= @mb_strtoupper($nome_sistema).' %0A%0A';
+	$mensagem .= '❌ *PARCELA VENCIDA* ❌ %0A';
+
+	if($referencia == 'Cobrança'){
+		$mensagem .= 'Descrição: *'.$descricao.'* %0A';
+	}
 
 	$mensagem .= '*Cliente:* '.$nome_cliente.' %0A';
-	$mensagem .= '*Capital Emprestado:* R$ '.$capital_emprestado.' %0A';
-	$mensagem .= '*Data Empréstimo:* '.$data_emprestimo.' %0A';
-	
 
-	if($parcela > 0){
-		$mensagem .= 'Parcela: *'.$parcela.'* %0A';
+	if($referencia == 'Empréstimo'){	
+		$mensagem .= '*Capital Emprestado:* R$ '.$capital_emprestado.' %0A';
+		$mensagem .= '*Data Empréstimo:* '.$data_emprestimo.' %0A';
+		
+
+		if($parcela > 0){
+			$mensagem .= 'Parcela: *'.$parcela.''.$tot_parcelas.'* %0A';
+		}
 	}
 	
 	
@@ -103,13 +126,16 @@ for ($i = 0; $i < $contas_pagar_vencidas; $i++) {
 	$mensagem .= '*Chave Pix:* %0A';
 	$mensagem .= $pix_sistema;	
 	}else{
+		$mensagem .= '⬇️ CLIQUE PARA PAGAR ⬇️ %0A%0A';
 		$mensagem .= '*Link Pagamento:* %0A';
 		$mensagem .= $link_pgto;
 	}	
 
 	if($cobrar_automatico == 'Sim' or $cobrar_sempre == 'Sim'){
 
-		require('texto.php');
+		if($bloquear_disparos != "Sim"){
+			require('texto.php');
+		}
 
 		if(@$status_mensagem == "Mensagem enviada com sucesso." and $seletor_api == 'menuia'){
 			$pdo->query("UPDATE receber SET data_alerta = curDate(), cobrar_sempre = 'Não', hora_alerta = '$hora_random' where id = '$id'");

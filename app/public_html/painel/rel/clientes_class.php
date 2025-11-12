@@ -2,15 +2,13 @@
 @session_start();
 $visualizar_usuario = @$_SESSION['visualizar'];
 $id_usuario = @$_SESSION['id'];
+
 require_once("../../conexao.php");
 
-$cliente = $_POST['cliente'];
-$status = $_POST['status'];
-$dataInicial = $_POST['dataInicial'];
-$dataFinal = $_POST['dataFinal'];
+$status_cliente_rel = $_POST['status_cliente_rel'];
 
 ob_start();
-include("emprestimos.php");
+include("clientes.php");
 $html = ob_get_clean();
 
 
@@ -40,10 +38,8 @@ $pdf->render();
 
 
 $pdf->stream(
-	'emprestimos.pdf',
+	'clientes.pdf',
 	array("Attachment" => false)
 );
-
-
 
  ?>

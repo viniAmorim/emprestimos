@@ -1,4 +1,7 @@
 <?php
+@session_start();
+$visualizar_usuario = @$_SESSION['visualizar'];
+$id_usuario = @$_SESSION['id'];
 require_once '../../funcoes/SimpleXLSX.php';
 require_once("../../../conexao.php");
 
@@ -17,8 +20,8 @@ try {
                 unset($rows[0]);
 
                 $sql = "INSERT INTO clientes 
-                    (nome, telefone, cpf, email, endereco, data_nasc, data_cad, obs, bairro, cidade, estado, cep, telefone_sec, senha_crip, foto)
-                    VALUES (:nome, :telefone, :cpf, :email, :endereco, :data_nasc, :data_cad, :obs, :bairro, :cidade, :estado, :cep, :telefone_sec, :senha_crip, :foto)";
+                    (nome, telefone, cpf, email, endereco, data_nasc, data_cad, obs, bairro, cidade, estado, cep, telefone_sec, senha_crip, foto, usuario)
+                    VALUES (:nome, :telefone, :cpf, :email, :endereco, :data_nasc, :data_cad, :obs, :bairro, :cidade, :estado, :cep, :telefone_sec, :senha_crip, :foto, :usuario)";
 
                 $stmt = $pdo->prepare($sql);
 
@@ -42,6 +45,7 @@ try {
                         ':telefone_sec' => $row[12] ?? null,
                         ':senha_crip'   => $senha_crip,
                         ':foto'   => 'sem-foto.jpg',
+                        ':usuario'   => $id_usuario,
                     ]);
                 }
 

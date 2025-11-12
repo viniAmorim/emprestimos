@@ -1,5 +1,6 @@
 <?php 
 @session_start();
+$visualizar_usuario = @$_SESSION['visualizar'];
 $id_usuario = @$_SESSION['id'];
 require_once("../../../conexao.php");
 $editar_contas = '';
@@ -18,10 +19,17 @@ $query = $pdo->query("SELECT * FROM clientes where id = '$cliente'");
 $res = $query->fetchAll(PDO::FETCH_ASSOC);
 $telefone = $res[0]['telefone'];
 
+if($visualizar_usuario == 'Não'){
+	$sql_visualizar = " and usuario = '$id_usuario' ";
+}else{
+	$sql_visualizar = " ";
+}
+
+
 echo <<<HTML
 <small>
 HTML;
-$query = $pdo->query("SELECT * FROM $pagina where referencia = 'Conta' and cliente = '$cliente'  order by id asc");
+$query = $pdo->query("SELECT * FROM $pagina where referencia = 'Conta' and cliente = '$cliente' $sql_visualizar order by id asc");
 $res = $query->fetchAll(PDO::FETCH_ASSOC);
 $total_reg = @count($res);
 if($total_reg > 0){
