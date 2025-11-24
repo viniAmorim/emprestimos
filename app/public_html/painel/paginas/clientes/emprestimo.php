@@ -46,6 +46,10 @@ $query = $pdo->query("SELECT * from usuarios where id = '$id_usuario'");
 $res = $query->fetchAll(PDO::FETCH_ASSOC);
 $comissao_usuario = $res[0]['comissao'];
 
+if (empty($comissao_usuario)) {
+  $comissao_usuario = 0.00; 
+}
+
 $valor_parcela = $valor / $parcelas;
 
 
@@ -69,7 +73,7 @@ $nome_cliente = $res[0]['nome'];
 $tel_cliente = $res[0]['telefone'];
 $tel_cliente = '55'.preg_replace('/[ ()-]+/' , '' , $tel_cliente);
 $telefone_envio = $tel_cliente;
-$bloquear_disparos = $res[0]['bloquear_disparos'];
+$bloquear_disparos = $_POST['bloquear_disparos'] ?? '';
 
 
 
