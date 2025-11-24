@@ -1,8 +1,9 @@
 <?php 
+@session_start();
 $tabela = 'receber';
 require_once("../../../conexao.php");
 $data_atual = date('Y-m-d');
-@session_start();
+
 $id_usuario = @$_SESSION['id'];
 
 $id = $_POST['id'];
@@ -36,6 +37,33 @@ $dias_frequencia = @$res2[0]['frequencia'];
 $descricao = @$res2[0]['descricao'];
 $parcela_sem_juros = @$res2[0]['parcela_sem_juros'];
 
+
+//totalizar comissão ao baixar
+$total_comissao = 0;
+$total_valor_comissao = 0;
+if($referencia == "Empréstimo"){
+	$query2 = $pdo->query("SELECT * from emprestimos where id = '$id_ref'");
+	$res2 = $query2->fetchAll(PDO::FETCH_ASSOC);
+	$total_comissao = @$res2[0]['comissao'];
+	$usuario_emprestimo = @$res2[0]['usuario'];
+
+	$query2 = $pdo->query("SELECT * from usuarios where id = '$usuario_emprestimo'");
+	$res2 = $query2->fetchAll(PDO::FETCH_ASSOC);
+	$nome_usuario = @$res2[0]['nome'];
+
+	if($total_comissao > 0){
+		$total_lucro = $valor - $parcela_sem_juros;
+		$total_valor_comissao = $total_lucro * $total_comissao / 100;
+
+		$descricao_comissao = 'Comissão: '.$nome_usuario;
+
+		//lançar o valor da comissão na tabela de contas a pagar
+		$pdo->query("INSERT INTO pagar SET descricao = '$descricao_comissao', valor = '$total_valor_comissao', data = curDate(), data_venc = curDate(), usuario_lanc = '$id_usuario', referencia = 'Comissão', pago = 'Não', funcionario = '$usuario_emprestimo' ");
+	}
+	
+}
+
+
 //verificar se a parcela está sendo paga sem redisuo e se ela possui frequencia, pois se possuir vai ser necessario puxar os valores de residuos existentes para criar a proxima
 $valor_pc = 0;
 if($residuo_final != "Sim" and $residuo != "Sim" and $residuo_parcela != "Sim" and $dias_frequencia > 0){
@@ -55,6 +83,8 @@ if($residuo_final == "Sim" or $residuo == "Sim" or $residuo_parcela == "Sim"){
 
 
 $parcela_seguinte = $parcela + 1;
+
+
 
 // se quiser que no emprestimos somente juros ele pegue a proxima parcela com base no valor atual do emprestimo, no caso de ele ter sido amortizado
 

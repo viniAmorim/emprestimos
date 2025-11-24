@@ -18,7 +18,7 @@ $juros = str_replace('.', '', $juros);
 $juros = str_replace(',', '.', $juros);
 $juros_emp = $_POST['juros_emp'];
 $juros_emp = str_replace(',', '.', $juros_emp);
-$obs = $_POST['obs'] ?? '';
+$obs = $_POST['obs'];
 $data_venc = $_POST['data_venc'];
 $id = $_POST['id'];
 $dias_frequencia = $_POST['frequencia'];
@@ -42,12 +42,14 @@ $res = $query->fetchAll(PDO::FETCH_ASSOC);
 $frequencia = $res[0]['frequencia'];
 
 
-
+$query = $pdo->query("SELECT * from usuarios where id = '$id_usuario'");
+$res = $query->fetchAll(PDO::FETCH_ASSOC);
+$comissao_usuario = $res[0]['comissao'];
 
 $valor_parcela = $valor / $parcelas;
 
 
-$query = $pdo->prepare("INSERT INTO $tabela SET cliente = '$id', valor = :valor, parcelas = :parcelas, juros = :juros, multa = :multa, data = '$data', usuario = '$id_usuario', obs = :obs, juros_emp = :juros_emp, data_venc = :data_venc, frequencia = '$frequencia', tipo_juros = '$tipo_juros' ");
+$query = $pdo->prepare("INSERT INTO $tabela SET cliente = '$id', valor = :valor, parcelas = :parcelas, juros = :juros, multa = :multa, data = '$data', usuario = '$id_usuario', obs = :obs, juros_emp = :juros_emp, data_venc = :data_venc, frequencia = '$frequencia', tipo_juros = '$tipo_juros', comissao = '$comissao_usuario' ");
 
 $query->bindValue(":valor", "$valor");
 $query->bindValue(":parcelas", "$parcelas");
@@ -67,7 +69,7 @@ $nome_cliente = $res[0]['nome'];
 $tel_cliente = $res[0]['telefone'];
 $tel_cliente = '55'.preg_replace('/[ ()-]+/' , '' , $tel_cliente);
 $telefone_envio = $tel_cliente;
-
+$bloquear_disparos = $res[0]['bloquear_disparos'];
 
 
 
@@ -193,7 +195,7 @@ $ult_id_conta = $pdo->lastInsertId();
 echo 'Salvo com Sucesso';
 
 
-if($token != "" and $instancia != "" and $enviar_whatsapp == 'Sim'){
+if($token != "" and $instancia != "" and $enviar_whatsapp == 'Sim' and $bloquear_disparos != "Sim"){
 //enviar mensagem para o cliente
 
 	$data_vencF = date('d', strtotime($data_venc));

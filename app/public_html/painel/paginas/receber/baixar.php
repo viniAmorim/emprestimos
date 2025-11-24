@@ -28,6 +28,30 @@ $descricao = @$res2[0]['descricao'];
 $forma_pgto = @$res2[0]['forma_pgto'];
 $valor_final = @$res2[0]['valor'];
 $referencia = @$res2[0]['referencia'];
+$parcela_sem_juros = @$res2[0]['parcela_sem_juros'];
+
+
+if($referencia == "Empréstimo"){
+	$query2 = $pdo->query("SELECT * from emprestimos where id = '$id_ref'");
+	$res2 = $query2->fetchAll(PDO::FETCH_ASSOC);
+	$total_comissao = @$res2[0]['comissao'];
+	$usuario_emprestimo = @$res2[0]['usuario'];
+
+	$query2 = $pdo->query("SELECT * from usuarios where id = '$usuario_emprestimo'");
+	$res2 = $query2->fetchAll(PDO::FETCH_ASSOC);
+	$nome_usuario = @$res2[0]['nome'];
+
+	if($total_comissao > 0){
+		$total_lucro = $valor - $parcela_sem_juros;
+		$total_valor_comissao = $total_lucro * $total_comissao / 100;
+
+		$descricao_comissao = 'Comissão: '.$nome_usuario;
+
+		//lançar o valor da comissão na tabela de contas a pagar
+		$pdo->query("INSERT INTO pagar SET descricao = '$descricao_comissao', valor = '$total_valor_comissao', data = curDate(), data_venc = curDate(), usuario_lanc = '$id_usuario', referencia = 'Comissão', pago = 'Não', funcionario = '$usuario_emprestimo' ");
+	}
+	
+}
 
 // se quiser que no emprestimos somente juros ele pegue a proxima parcela com base no valor atual do emprestimo, no caso de ele ter sido amortizado
 

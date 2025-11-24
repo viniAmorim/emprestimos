@@ -1,0 +1,66 @@
+[24-Oct-2023 19:16:38 America/Sao_Paulo] PHP Warning:  Undefined variable $total_a_pagarF in /home/sistehugo/auroclin.sistemashugo.com.br/painel/paginas/comissoes/listar.php on line 226
+[24-Oct-2023 19:16:40 America/Sao_Paulo] PHP Warning:  Undefined variable $total_a_pagarF in /home/sistehugo/auroclin.sistemashugo.com.br/painel/paginas/comissoes/listar.php on line 226
+[24-Oct-2023 19:16:44 America/Sao_Paulo] PHP Fatal error:  Uncaught PDOException: SQLSTATE[HY000]: General error: 1525 Incorrect DATE value: '' in /home/sistehugo/auroclin.sistemashugo.com.br/painel/paginas/comissoes/baixar-todas.php:11
+Stack trace:
+#0 /home/sistehugo/auroclin.sistemashugo.com.br/painel/paginas/comissoes/baixar-todas.php(11): PDO->query('UPDATE pagar SE...')
+#1 {main}
+  thrown in /home/sistehugo/auroclin.sistemashugo.com.br/painel/paginas/comissoes/baixar-todas.php on line 11
+[24-Oct-2023 19:23:00 America/Sao_Paulo] PHP Warning:  Undefined variable $total_a_pagarF in /home/sistehugo/auroclin.sistemashugo.com.br/painel/paginas/comissoes/listar.php on line 226
+[24-Oct-2023 19:26:05 America/Sao_Paulo] PHP Fatal error:  Uncaught PDOException: SQLSTATE[HY000]: General error: 1525 Incorrect DATE value: '' in /home/sistehugo/auroclin.sistemashugo.com.br/painel/paginas/comissoes/baixar-todas.php:11
+Stack trace:
+#0 /home/sistehugo/auroclin.sistemashugo.com.br/painel/paginas/comissoes/baixar-todas.php(11): PDO->query('UPDATE pagar SE...')
+#1 {main}
+  thrown in /home/sistehugo/auroclin.sistemashugo.com.br/painel/paginas/comissoes/baixar-todas.php on line 11
+[24-Oct-2023 19:28:22 America/Sao_Paulo] PHP Warning:  Undefined variable $total_a_pagarF in /home/sistehugo/auroclin.sistemashugo.com.br/painel/paginas/comissoes/listar.php on line 226
+[24-Oct-2023 19:28:24 America/Sao_Paulo] PHP Warning:  Undefined variable $total_a_pagarF in /home/sistehugo/auroclin.sistemashugo.com.br/painel/paginas/comissoes/listar.php on line 226
+[24-Oct-2023 19:28:26 America/Sao_Paulo] PHP Parse error:  syntax error, unexpected variable "$funcionario" in /home/sistehugo/auroclin.sistemashugo.com.br/painel/paginas/comissoes/baixar-todas.php on line 15
+[24-Oct-2023 19:30:11 America/Sao_Paulo] PHP Warning:  Undefined variable $total_a_pagarF in /home/sistehugo/auroclin.sistemashugo.com.br/painel/paginas/comissoes/listar.php on line 226
+[24-Oct-2023 19:30:12 America/Sao_Paulo] PHP Warning:  Undefined variable $total_a_pagarF in /home/sistehugo/auroclin.sistemashugo.com.br/painel/paginas/comissoes/listar.php on line 226
+[24-Oct-2023 19:30:14 America/Sao_Paulo] PHP Parse error:  syntax error, unexpected variable "$funcionario" in /home/sistehugo/auroclin.sistemashugo.com.br/painel/paginas/comissoes/baixar-todas.php on line 15
+[24-Oct-2023 19:30:41 America/Sao_Paulo] PHP Warning:  Undefined variable $total_a_pagarF in /home/sistehugo/auroclin.sistemashugo.com.br/painel/paginas/comissoes/listar.php on line 226
+[24-Oct-2023 19:30:43 America/Sao_Paulo] PHP Warning:  Undefined variable $total_a_pagarF in /home/sistehugo/auroclin.sistemashugo.com.br/painel/paginas/comissoes/listar.php on line 226
+[24-Oct-2023 19:30:46 America/Sao_Paulo] PHP Warning:  Undefined variable $total_a_pagarF in /home/sistehugo/auroclin.sistemashugo.com.br/painel/paginas/comissoes/listar.php on line 226
+[24-Oct-2023 19:30:48 America/Sao_Paulo] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'and referencia = 'Comiss???o'' at line 1 in /home/sistehugo/auroclin.sistemashugo.com.br/painel/paginas/comissoes/baixar-todas.php:18
+Stack trace:
+#0 /home/sistehugo/auroclin.sistemashugo.com.br/painel/paginas/comissoes/baixar-todas.php(18): PDO->query('UPDATE pagar SE...')
+#1 {main}
+  thrown in /home/sistehugo/auroclin.sistemashugo.com.br/painel/paginas/comissoes/baixar-todas.php on line 18
+[24-Oct-2023 19:33:07 America/Sao_Paulo] PHP Warning:  Undefined variable $total_a_pagarF in /home/sistehugo/auroclin.sistemashugo.com.br/painel/paginas/comissoes/listar.php on line 226
+[24-Oct-2023 19:33:09 America/Sao_Paulo] PHP Warning:  Undefined variable $total_a_pagarF in /home/sistehugo/auroclin.sistemashugo.com.br/painel/paginas/comissoes/listar.php on line 226
+[24-Oct-2023 19:33:11 America/Sao_Paulo] PHP Warning:  Undefined variable $total_a_pagarF in /home/sistehugo/auroclin.sistemashugo.com.br/painel/paginas/comissoes/listar.php on line 226
+[24-Oct-2023 19:33:12 America/Sao_Paulo] PHP Fatal error:  Uncaught PDOException: SQLSTATE[HY000]: General error: 1525 Incorrect DATE value: '' in /home/sistehugo/auroclin.sistemashugo.com.br/painel/paginas/comissoes/baixar-todas.php:18
+Stack trace:
+#0 /home/sistehugo/auroclin.sistemashugo.com.br/painel/paginas/comissoes/baixar-todas.php(18): PDO->query('UPDATE pagar SE...')
+#1 {main}
+  thrown in /home/sistehugo/auroclin.sistemashugo.com.br/painel/paginas/comissoes/baixar-todas.php on line 18
+[24-Oct-2023 19:39:27 America/Sao_Paulo] PHP Warning:  Undefined variable $total_a_pagarF in /home/sistehugo/auroclin.sistemashugo.com.br/painel/paginas/comissoes/listar.php on line 226
+[24-Oct-2023 19:39:28 America/Sao_Paulo] PHP Warning:  Undefined variable $total_a_pagarF in /home/sistehugo/auroclin.sistemashugo.com.br/painel/paginas/comissoes/listar.php on line 226
+[24-Oct-2023 19:39:30 America/Sao_Paulo] PHP Warning:  Undefined variable $total_a_pagarF in /home/sistehugo/auroclin.sistemashugo.com.br/painel/paginas/comissoes/listar.php on line 226
+[24-Oct-2023 19:39:32 America/Sao_Paulo] PHP Fatal error:  Uncaught PDOException: SQLSTATE[HY000]: General error: 1525 Incorrect DATE value: '' in /home/sistehugo/auroclin.sistemashugo.com.br/painel/paginas/comissoes/baixar-todas.php:18
+Stack trace:
+#0 /home/sistehugo/auroclin.sistemashugo.com.br/painel/paginas/comissoes/baixar-todas.php(18): PDO->query('UPDATE pagar SE...')
+#1 {main}
+  thrown in /home/sistehugo/auroclin.sistemashugo.com.br/painel/paginas/comissoes/baixar-todas.php on line 18
+[24-Oct-2023 19:41:18 America/Sao_Paulo] PHP Warning:  Undefined variable $total_a_pagarF in /home/sistehugo/auroclin.sistemashugo.com.br/painel/paginas/comissoes/listar.php on line 226
+[24-Oct-2023 19:41:21 America/Sao_Paulo] PHP Warning:  Undefined variable $total_a_pagarF in /home/sistehugo/auroclin.sistemashugo.com.br/painel/paginas/comissoes/listar.php on line 226
+[24-Oct-2023 19:41:23 America/Sao_Paulo] PHP Fatal error:  Uncaught PDOException: SQLSTATE[HY000]: General error: 1525 Incorrect DATE value: '' in /home/sistehugo/auroclin.sistemashugo.com.br/painel/paginas/comissoes/baixar-todas.php:18
+Stack trace:
+#0 /home/sistehugo/auroclin.sistemashugo.com.br/painel/paginas/comissoes/baixar-todas.php(18): PDO->query('UPDATE pagar SE...')
+#1 {main}
+  thrown in /home/sistehugo/auroclin.sistemashugo.com.br/painel/paginas/comissoes/baixar-todas.php on line 18
+[24-Oct-2023 19:44:42 America/Sao_Paulo] PHP Warning:  Undefined variable $total_a_pagarF in /home/sistehugo/auroclin.sistemashugo.com.br/painel/paginas/comissoes/listar.php on line 226
+[24-Oct-2023 19:44:45 America/Sao_Paulo] PHP Warning:  Undefined variable $total_a_pagarF in /home/sistehugo/auroclin.sistemashugo.com.br/painel/paginas/comissoes/listar.php on line 226
+[24-Oct-2023 19:44:47 America/Sao_Paulo] PHP Warning:  Undefined variable $total_a_pagarF in /home/sistehugo/auroclin.sistemashugo.com.br/painel/paginas/comissoes/listar.php on line 226
+[24-Oct-2023 19:44:49 America/Sao_Paulo] PHP Warning:  Undefined variable $total_a_pagarF in /home/sistehugo/auroclin.sistemashugo.com.br/painel/paginas/comissoes/listar.php on line 226
+[24-Oct-2023 19:44:55 America/Sao_Paulo] PHP Warning:  Undefined variable $total_a_pagarF in /home/sistehugo/auroclin.sistemashugo.com.br/painel/paginas/comissoes/listar.php on line 226
+[24-Oct-2023 19:45:16 America/Sao_Paulo] PHP Warning:  Undefined variable $total_a_pagarF in /home/sistehugo/auroclin.sistemashugo.com.br/painel/paginas/comissoes/listar.php on line 226
+[24-Oct-2023 19:45:19 America/Sao_Paulo] PHP Warning:  Undefined variable $total_a_pagarF in /home/sistehugo/auroclin.sistemashugo.com.br/painel/paginas/comissoes/listar.php on line 226
+[24-Oct-2023 19:45:21 America/Sao_Paulo] PHP Warning:  Undefined variable $total_a_pagarF in /home/sistehugo/auroclin.sistemashugo.com.br/painel/paginas/comissoes/listar.php on line 226
+[24-Oct-2023 19:45:40 America/Sao_Paulo] PHP Warning:  Undefined variable $total_a_pagarF in /home/sistehugo/auroclin.sistemashugo.com.br/painel/paginas/comissoes/listar.php on line 226
+[24-Oct-2023 19:45:43 America/Sao_Paulo] PHP Warning:  Undefined variable $total_a_pagarF in /home/sistehugo/auroclin.sistemashugo.com.br/painel/paginas/comissoes/listar.php on line 226
+[24-Oct-2023 19:45:52 America/Sao_Paulo] PHP Warning:  Undefined variable $total_a_pagarF in /home/sistehugo/auroclin.sistemashugo.com.br/painel/paginas/comissoes/listar.php on line 226
+[24-Oct-2023 19:45:55 America/Sao_Paulo] PHP Warning:  Undefined variable $total_a_pagarF in /home/sistehugo/auroclin.sistemashugo.com.br/painel/paginas/comissoes/listar.php on line 226
+[24-Oct-2023 19:45:58 America/Sao_Paulo] PHP Warning:  Undefined variable $total_a_pagarF in /home/sistehugo/auroclin.sistemashugo.com.br/painel/paginas/comissoes/listar.php on line 226
+[24-Oct-2023 19:46:01 America/Sao_Paulo] PHP Warning:  Undefined variable $total_a_pagarF in /home/sistehugo/auroclin.sistemashugo.com.br/painel/paginas/comissoes/listar.php on line 226
+[24-Oct-2023 19:46:04 America/Sao_Paulo] PHP Warning:  Undefined variable $total_a_pagarF in /home/sistehugo/auroclin.sistemashugo.com.br/painel/paginas/comissoes/listar.php on line 226
+[24-Oct-2023 19:46:06 America/Sao_Paulo] PHP Warning:  Undefined variable $total_a_pagarF in /home/sistehugo/auroclin.sistemashugo.com.br/painel/paginas/comissoes/listar.php on line 226

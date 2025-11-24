@@ -2,18 +2,17 @@
 @session_start();
 $visualizar_usuario = @$_SESSION['visualizar'];
 $id_usuario = @$_SESSION['id'];
-$nivel_usu = @$_SESSION['nivel']; 
 require_once("../../conexao.php");
 
-$dataInicial = $_POST['dataInicial'];
-$dataFinal = $_POST['dataFinal'];
-$cliente = $_POST['cliente'];
-$corretor = @$_POST['corretor'];
+
+$dataInicial = $_POST['data-inicial'];
+$dataFinal = $_POST['data-final'];
+$funcionario = $_POST['funcionario'];
+$pago = $_POST['buscar-contas'];
 
 ob_start();
-include("lucro.php");
+include("comissoes.php");
 $html = ob_get_clean();
-
 
 //CARREGAR DOMPDF
 require_once '../dompdf/autoload.inc.php';
@@ -41,7 +40,7 @@ $pdf->render();
 
 
 $pdf->stream(
-	'emprestimos.pdf',
+	'comissoes.pdf',
 	array("Attachment" => false)
 );
 

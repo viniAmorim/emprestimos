@@ -1,8 +1,11 @@
 <?php 
-include('../../conexao.php');
 include('data_formatada.php');
 
-$id_usuario = $_GET['id_usuario'];
+if($visualizar_usuario == 'Não'){
+	$sql_visualizar = " and usuario = '$id_usuario' ";
+}else{
+	$sql_visualizar = " ";
+}
 
 ?>
 <!DOCTYPE html>
@@ -31,30 +34,19 @@ body {font-family: 'Tw Cen MT', sans-serif;}
 
 </head>
 <body>
-<?php
-if ($marca_dagua == 'Sim') {
-    $img_path = '../../img/logo.jpg'; 
-    $img_data = base64_encode(file_get_contents($img_path));
-    $src = 'data:image/jpeg;base64,' . $img_data;
-?>
-    <img class="marca" src="<?= $src ?>">
+<?php 
+if($marca_dagua == 'Sim'){ ?>
+<img class="marca" src="<?php echo $url_sistema ?>img/logo.jpg">	
 <?php } ?>
 
 
 <div id="header" >
 
-
-<?php
-$img_path = '../../img/logo.jpg'; 
-$img_data = base64_encode(file_get_contents($img_path));
-$src_logo = 'data:image/jpeg;base64,' . $img_data;
-?>
-
 	<div style="border-style: solid; font-size: 10px; height: 50px;">
 		<table style="width: 100%; border: 0px solid #ccc;">
 			<tr>
 				<td style="border: 1px; solid #000; width: 7%; text-align: left;">
-					<img style="margin-top: 7px; margin-left: 7px;" id="imag" src="<?= $src_logo ?>" width="170px">
+					<img style="margin-top: 7px; margin-left: 7px;" id="imag" src="<?php echo $url_sistema ?>img/logo.jpg" width="170px">
 				</td>
 				<td style="width: 30%; text-align: left; font-size: 13px;">
 					
@@ -108,7 +100,7 @@ $src_logo = 'data:image/jpeg;base64,' . $img_data;
 
 $total_ina = 0;
 $total_inaF = 0;
-$query9 = $pdo->query("SELECT * from clientes order by nome asc");
+$query9 = $pdo->query("SELECT * from clientes where id > 0 $sql_visualizar order by nome asc");
 $res9 = $query9->fetchAll(PDO::FETCH_ASSOC);
 $linhas9 = @count($res9);
 if($linhas9 > 0){

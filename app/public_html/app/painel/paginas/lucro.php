@@ -1,4 +1,7 @@
 <?php
+@session_start();
+$visualizar_usuario = @$_SESSION['visualizar'];
+$id_usuario = @$_SESSION['id'];
 require_once("cabecalho.php");
 require_once("rodape.php");
 
@@ -8,14 +11,18 @@ $valor_do_lucro_total = 0;
 $pag = 'emprestimos';
 $itens_pag = 10;
 
-$status = '';
-$classe_lucro_final = '';
-
 $cliente = @$_POST['cliente_busca'];
 $ativo = @$_POST['ativo']; // Adicionar esta linha para capturar o valor do filtro
 $corretor = @$_POST['corretor'];
 $dataInicial = @$_POST['dataInicial'];
 $dataFinal = @$_POST['dataFinal'];
+
+
+if($visualizar_usuario == 'Não'){
+  $sql_visualizar = " and usuario = '$id_usuario' ";
+}else{
+  $sql_visualizar = " ";
+}
 
 if($dataInicial == ""){
   $dataInicial = $data_mes;
@@ -63,7 +70,7 @@ $pag_proxima = $pagina + 1;
 
 
 //totalizar páginas
-$query2 = $pdo->query("SELECT * from $pag where id > 0 $sql_corretor $sql_cliente order by id desc");
+$query2 = $pdo->query("SELECT * from $pag where id > 0 $sql_corretor $sql_cliente $sql_visualizar order by id desc");
 $res2 = $query2->fetchAll(PDO::FETCH_ASSOC);
 $linhas2 = @count($res2);
 
@@ -76,6 +83,8 @@ if ($pag_proxima == $num_paginas) {
   $pag_inativa_prox = '';
 
 }
+
+
 
 
 ?>
@@ -114,7 +123,7 @@ if ($pag_proxima == $num_paginas) {
       <select class="sel_nulo rounded-xs ps-5 pe-5" name="cliente_busca" id="cliente_busca" onchange="$('#btn_filtrar').click()" style="width:100%;">
         <option value="" data-cor="">Selecionar Cliente</option>
         <?php 
-          $query = $pdo->query("SELECT * from clientes order by id asc");
+          $query = $pdo->query("SELECT * from clientes where id > 0 $sql_visualizar order by id asc");
           $res = $query->fetchAll(PDO::FETCH_ASSOC);
           $linhas = @count($res);
           if($linhas > 0){
@@ -184,7 +193,7 @@ if ($pag_proxima == $num_paginas) {
   <div class="card card-style">
     <div class="content">
       <?php
-      $query = $pdo->query("SELECT * from $pag where data_venc >= '$dataInicial' and data_venc <= '$dataFinal' $sql_corretor $sql_cliente  ORDER BY id desc LIMIT $limite, $itens_pag");
+      $query = $pdo->query("SELECT * from $pag where data_venc >= '$dataInicial' and data_venc <= '$dataFinal' $sql_corretor $sql_cliente $sql_visualizar ORDER BY id desc LIMIT $limite, $itens_pag");
       $res = $query->fetchAll(PDO::FETCH_ASSOC);
       $linhas = @count($res);
       if ($linhas > 0) {

@@ -45,6 +45,33 @@ $data_venc = @$res2[0]['data_venc'];
 $dias_frequencia = @$res2[0]['frequencia'];
 $descricao = @$res2[0]['descricao'];
 $pago = @$res2[0]['pago'];
+$parcela_sem_juros = @$res2[0]['parcela_sem_juros'];
+
+
+//totalizar comissão ao baixar
+$total_comissao = 0;
+$total_valor_comissao = 0;
+if($referencia == "Empréstimo"){
+    $query2 = $pdo->query("SELECT * from emprestimos where id = '$id_ref'");
+    $res2 = $query2->fetchAll(PDO::FETCH_ASSOC);
+    $total_comissao = @$res2[0]['comissao'];
+    $usuario_emprestimo = @$res2[0]['usuario'];
+
+    $query2 = $pdo->query("SELECT * from usuarios where id = '$usuario_emprestimo'");
+    $res2 = $query2->fetchAll(PDO::FETCH_ASSOC);
+    $nome_usuario = @$res2[0]['nome'];
+
+    if($total_comissao > 0){
+        $total_lucro = $valor - $parcela_sem_juros;
+        $total_valor_comissao = $total_lucro * $total_comissao / 100;
+
+        $descricao_comissao = 'Comissão: '.$nome_usuario;
+
+        //lançar o valor da comissão na tabela de contas a pagar
+        $pdo->query("INSERT INTO pagar SET descricao = '$descricao_comissao', valor = '$total_valor_comissao', data = curDate(), data_venc = curDate(), usuario_lanc = '0', referencia = 'Comissão', pago = 'Não', funcionario = '$usuario_emprestimo' ");
+    }
+    
+}
 
 
 if($referencia == "Empréstimo" and $juros_amortizacao != 'Não'){
@@ -130,6 +157,10 @@ if($recorrencia == 'Sim'){
 
         //verificação de feriados
     require("verificar_feriados.php");
+
+    if($parcela_sem_juros > 0){
+        $valor = $parcela_sem_juros;
+    }
 
     //criar outra conta a receber na mesma data de vencimento com a frequência associada
     $pdo->query("INSERT INTO receber SET cliente = '$cliente', referencia = '$referencia', id_ref = '$id_ref', valor = '$valor', parcela = '$nova_parcela', usuario_lanc = '0', data = curDate(), data_venc = '$novo_vencimento', pago = 'Não', descricao = '$descricao', frequencia = '$dias_frequencia', recorrencia = 'Sim', hora_alerta = '$hora_random' ");

@@ -1,5 +1,14 @@
 <?php 
+@session_start();
+$visualizar_usuario = @$_SESSION['visualizar'];
+$id_usuario = @$_SESSION['id'];
 $pag = 'lucro';
+
+if($visualizar_usuario == 'Não'){
+	$sql_visualizar = " and usuario = '$id_usuario' ";
+}else{
+	$sql_visualizar = " ";
+}
 
 
 if(@$lucro == 'ocultar'){
@@ -28,16 +37,11 @@ if(@$lucro == 'ocultar'){
 			<div style="margin-left: 30px" class="col-md-2 " align="right">		
 				<select class="sel2" name="cliente" id="cliente" style="width:100%;" onchange="buscar()"> 
 
-
-
-
-
-
 					<option value="">Todos os Clientes</option>
 					<?php 
 
 				
-						$query = $pdo->query("SELECT * FROM clientes order by nome asc");
+						$query = $pdo->query("SELECT * FROM clientes where id > 0 $sql_visualizar order by nome asc");
 
 						$res = $query->fetchAll(PDO::FETCH_ASSOC);
 

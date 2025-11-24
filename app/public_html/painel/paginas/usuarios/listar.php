@@ -35,8 +35,8 @@ for($i=0; $i<$linhas; $i++){
 	$ativo = $res[$i]['ativo'];
 	$data = $res[$i]['data'];
 	$visualizar = $res[$i]['visualizar'];
-	$comissao = $res[$i]['comissao'] ?? '';;
-	$pagamento = $res[$i]['pagamento'] ?? '';;
+	$comissao = $res[$i]['comissao'];
+	$pagamento = $res[$i]['pagamento'];
 
 	$dataF = implode('/', array_reverse(explode('-', $data)));
 

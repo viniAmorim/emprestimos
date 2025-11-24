@@ -236,6 +236,8 @@ if($linhas > 0){
 
 									<li class="<?php echo @$receber ?>"><a href="receber"><i class="fa fa-angle-right"></i> Entradas / Recebimentos</a></li>
 
+                  <li class="<?php echo @$comissoes ?>"><a href="comissoes"><i class="fa fa-angle-right"></i> Comissões</a></li>
+                  
 									<li class="<?php echo @$receber_vencidas ?>"><a href="receber_vencidas"><i class="fa fa-angle-right"></i> Receber Vencidas</a></li>
                  
                   <li class="<?php echo @$clientes_debitos ?>"><a href="clientes_debitos"><i class="fa fa-angle-right"></i> Clientes Débitos</a></li>
@@ -1041,7 +1043,7 @@ $nome_cliente = @$res2[0]['nome'];
 						<option value="Conta">Despesas</option>
 						<option value="Empréstimo">Empréstimos</option>
 						<option value="Cobrança">Cobranças Recorrentes</option>
-						
+						<option value="Comissão">Comissões</option>
 					</select>
 				</div>
 				<div class="col-md-4">
