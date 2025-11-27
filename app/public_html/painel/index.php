@@ -234,7 +234,7 @@ if($linhas > 0){
 								<ul class="treeview-menu">
 									<li class="<?php echo @$pagar ?>"><a href="pagar"><i class="fa fa-angle-right"></i> Despesas / Saídas</a></li>
 
-									<li class="<?php echo @$receber ?>"><a href="receber"><i class="fa fa-angle-right"></i> Entradas / Recebimentos</a></li>
+									<!-- <li class="<?php echo @$receber ?>"><a href="receber"><i class="fa fa-angle-right"></i> Entradas / Recebimentos</a></li> -->
 
                   <li class="<?php echo @$comissoes ?>"><a href="comissoes"><i class="fa fa-angle-right"></i> Comissões</a></li>
                   
@@ -242,7 +242,7 @@ if($linhas > 0){
                  
                   <li class="<?php echo @$clientes_debitos ?>"><a href="clientes_debitos"><i class="fa fa-angle-right"></i> Clientes Débitos</a></li>
                   
-									<li class="<?php echo @$relatorios_financeiro ?>"><a href="" data-toggle="modal" data-target="#modalRelFin"><i class="fa fa-angle-right"></i> Relatórios Financeiro</a></li>
+									<!-- <li class="<?php echo @$relatorios_financeiro ?>"><a href="" data-toggle="modal" data-target="#modalRelFin"><i class="fa fa-angle-right"></i> Relatórios Financeiro</a></li> -->
 
 
 										<li class="<?php echo @$relatorios_debitos ?>"><a href="rel/debitos_class.php" target="_blank"><i class="fa fa-angle-right"></i> Relatórios Débitos</a></li>
@@ -269,18 +269,18 @@ if($linhas > 0){
 							</li>
 
 
-							<li class="treeview <?php echo @$verificar_pgtos ?>">
+							<!-- <li class="treeview <?php echo @$verificar_pgtos ?>">
 								<a href="#" onclick="verificarPg()">
 									<i class="fa fa-spinner"></i> <span>Verificar Pagamentos</span>
 								</a>
-							</li>
+							</li> -->
 
 
-							<li class="treeview <?php echo @$gestao_mensagens ?>">
+							<!-- <li class="treeview <?php echo @$gestao_mensagens ?>">
 								<a href="#" onclick="verificarMensagens()">
 									<i class="fa fa-whatsapp"></i> <span>Gestão Mensagens</span>
 								</a>
-							</li>
+							</li> -->
 
 
 								<li class="treeview <?php echo @$dispositivos ?>">				
